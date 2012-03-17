@@ -44,18 +44,6 @@
 <Adjective nr="21"/>
 </Cluster>
 </RCluster>
-<RCluster aid="CARD_FIN" nr="2">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="7"/>
-<Adjective nr="21"/>
-</Cluster>
-</RCluster>
 <FCluster aid="CARD_FIN" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -140,7 +128,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="238">
+<Func kind="K" nr="239">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -150,4 +138,20 @@
 <Adjective nr="21"/>
 </Cluster>
 </FCluster>
+<CCluster aid="CARD_FIN" nr="1">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="21"/>
+</Cluster>
+</CCluster>
 </Registrations>

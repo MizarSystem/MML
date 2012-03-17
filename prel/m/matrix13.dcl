@@ -105,7 +105,7 @@
 <Adjective nr="101">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="125"/>
+<Adjective nr="127"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MATRIX13" nr="1">

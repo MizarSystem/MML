@@ -682,29 +682,24 @@
 <CCluster aid="TREES_3" nr="1">
 <ArgTypes/>
 <Cluster>
+<Adjective nr="7"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="33"/>
+<Adjective nr="34"/>
+<Adjective nr="35"/>
+</Cluster>
+</CCluster>
+<CCluster aid="TREES_3" nr="2">
+<ArgTypes/>
+<Cluster>
 <Adjective nr="34"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="33"/>
-</Cluster>
-</CCluster>
-<CCluster aid="TREES_3" nr="2">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="33"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Cluster/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="24">
-<LocusVar nr="1"/>
-</Func>
 </Typ>
 <Cluster>
 <Adjective nr="33"/>
@@ -714,6 +709,25 @@
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
+<Adjective nr="33"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster/>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="24">
+<LocusVar nr="1"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="33"/>
+</Cluster>
+</CCluster>
+<CCluster aid="TREES_3" nr="4">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
 <Adjective nr="34"/>
 </Cluster>
 </Typ>
@@ -729,7 +743,7 @@
 <Adjective nr="34"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="4">
+<CCluster aid="TREES_3" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -748,7 +762,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="5">
+<CCluster aid="TREES_3" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -765,7 +779,7 @@
 <Adjective nr="35"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="6">
+<CCluster aid="TREES_3" nr="7">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -800,7 +814,25 @@
 <Adjective nr="32"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="7">
+<CCluster aid="TREES_3" nr="8">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="36"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
+</Cluster>
+</CCluster>
+<CCluster aid="TREES_3" nr="9">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -816,7 +848,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="8">
+<CCluster aid="TREES_3" nr="10">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -834,7 +866,7 @@
 <Adjective nr="36"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="9">
+<CCluster aid="TREES_3" nr="11">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -852,7 +884,7 @@
 <Adjective nr="37"/>
 </Cluster>
 </CCluster>
-<CCluster aid="TREES_3" nr="10">
+<CCluster aid="TREES_3" nr="12">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>

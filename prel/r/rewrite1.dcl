@@ -23,36 +23,6 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</RCluster>
-<RCluster aid="REWRITE1" nr="2">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</RCluster>
-<RCluster aid="REWRITE1" nr="3">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-</Cluster>
-</RCluster>
-<RCluster aid="REWRITE1" nr="4">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="1" value="false"/>
 <Adjective nr="4"/>
 <Adjective nr="41"/>

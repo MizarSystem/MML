@@ -7,19 +7,20 @@
 environ
 
  vocabularies RELAT_1, ARYTM_1, BOOLE, FINSEQ_1, FUNCT_1, TARSKI, EQREL_1,
-      T_1TOPSP, ARYTM, FUNCT_2, SEQM_3, CARD_4, ORDINAL2, HENMODEL, NEWTON,
-      FINSET_1, CARD_1, GR_CY_1, BORSUK_1, GROUP_10, RAMSEY_1;
+      T_1TOPSP, ARYTM, FUNCT_2, SEQM_3, ORDINAL2, HENMODEL, NEWTON, FINSET_1,
+      CARD_1, GR_CY_1, BORSUK_1, GROUP_10, RAMSEY_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, XCMPLX_0, XXREAL_0, RELAT_1,
       RELSET_1, FUNCT_1, FINSEQ_1, NAT_1, NAT_3, NUMBERS, PARTFUN1, SEQM_3,
-      EQREL_1, ORDINAL1, FINSET_1, CARD_1, FUNCT_2, CARD_4, XREAL_0, REAL_1,
-      MEMBERED, WELLORD2, BORSUK_1, GROUP_10, POLYNOM1, NEWTON, NAT_D,
-      SEQ_1, RVSUM_1;
+      EQREL_1, ORDINAL1, FINSET_1, CARD_1, FUNCT_2, CARD_3, XREAL_0, REAL_1,
+      MEMBERED, WELLORD2, BORSUK_1, GROUP_10, POLYNOM1, NEWTON, NAT_D, SEQ_1,
+      RVSUM_1;
  constructors SETFAM_1, PARTFUN1, XXREAL_0, XREAL_0, NAT_1, NAT_3, FINSEQ_1,
       EQREL_1, NUMBERS, XCMPLX_0, CARD_1, MEMBERED, WELLORD2, FUNCT_2, RELAT_1,
-      FUNCT_1, BORSUK_1, CARD_4, GROUP_10, SEQM_3, POLYNOM1, NEWTON, NAT_D,
-      REAL_1, BINOP_2, INT_2, FINSOP_1, SEQ_1, RVSUM_1;
+      FUNCT_1, BORSUK_1, CARD_3, GROUP_10, SEQM_3, POLYNOM1, NEWTON, NAT_D,
+      REAL_1, BINOP_2, INT_2, FINSOP_1, SEQ_1, RVSUM_1, CARD_5, CARD_2,
+      ORDINAL2;
  registrations XBOOLE_0, SUBSET_1, PARTFUN1, XXREAL_0, XREAL_0, FINSEQ_1,
-      RELAT_1, ORDINAL1, EQREL_1, NUMBERS, REAL_1, CARD_4, CARD_5, NAT_1,
+      RELAT_1, ORDINAL1, EQREL_1, NUMBERS, REAL_1, CARD_3, CARD_5, NAT_1,
       NAT_2, NAT_3, CARD_1, MEMBERED, FINSET_1, FUNCT_1, FUNCT_2, BORSUK_1,
       GROUP_10, SEQM_3, POLYNOM1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
@@ -27,9 +28,9 @@ environ
       FUNCT_1, FUNCT_2, RELAT_1, FINSET_1, INT_1, NAT_1, ORDINAL1, MEMBERED,
       GROUP_10;
  theorems TARSKI, XBOOLE_0, XBOOLE_1, EQREL_1, BORSUK_1, CARD_1, WELLORD2,
-      FUNCT_1, FUNCT_2, RELAT_1, GROUP_10, FINSET_1, ZFMISC_1, INT_1, CARD_4,
-      CARD_2, NAT_1, XREAL_1, ORDINAL1, XXREAL_0, STIRL2_1, WAYBEL12, COMPL_SP,
-      CARD_FIL, FINSEQ_1, BINARITH, NEWTON, ENUMSET1, NAT_D, XREAL_0;
+      FUNCT_1, FUNCT_2, RELAT_1, GROUP_10, ZFMISC_1, INT_1, CARD_2, NAT_1,
+      XREAL_1, ORDINAL1, XXREAL_0, STIRL2_1, WAYBEL12, COMPL_SP, CARD_FIL,
+      FINSEQ_1, NEWTON, ENUMSET1, NAT_D, XREAL_0, CARD_3;
  schemes NAT_1, FUNCT_1, FUNCT_2, RECDEF_2;
 
 begin :: Preliminaries
@@ -52,14 +53,15 @@ registration
   cluster the_subsets_of_card(n,X) -> non empty;
   correctness
   proof
-    Card n c= Card X;
+     not card X c= card n;
+     then card n c= card X;
     hence thesis by GROUP_10:2;
   end;
 end;
 
 definition
   let n,X,Y,f;
-  assume A1: f is one-to-one & Card n c= Card X &
+  assume A1: f is one-to-one & card n c= card X &
              X is non empty & Y is non empty;
   func f ||^ n ->
     Function of the_subsets_of_card(n,X), the_subsets_of_card(n,Y) means :Def2:
@@ -79,7 +81,7 @@ definition
       consider x be set such that
       A3: x in dom IT & y = IT.x by FUNCT_1:def 5;
       consider x' be Subset of X such that
-      A4: x=x' & Card x' = n by A3,A2;
+      A4: x=x' & card x' = n by A3,A2;
       reconsider x as Element of D by A3,A2;
       A5: y = f .: x by A3,A2;
       f in Funcs(X, Y) by A1,FUNCT_2:11; then
@@ -88,7 +90,7 @@ definition
       f .: x c= rng f by RELAT_1:144; then
       reconsider y'=y as Subset of Y by A6,A5,XBOOLE_1:1;
       x, f.: x are_equipotent by A6,A4,A1,CARD_1:60; then
-      Card y' = n by A5,A4,CARD_1:21;
+      card y' = n by A5,A4,CARD_1:21;
       hence y in the_subsets_of_card(n,Y);
     end; then
     rng IT c= the_subsets_of_card(n,Y) by TARSKI:def 3; then
@@ -122,24 +124,24 @@ proof
     let x be set;
     assume x in the_subsets_of_card(Z,X); then
     consider x' be Subset of X such that
-    A2: x'=x & Card x' = Z;
+    A2: x'=x & card x' = Z;
     reconsider x''=x' as Subset of Y by A1,XBOOLE_1:1;
-    x''=x & Card x'' = Z by A2;
+    x''=x & card x'' = Z by A2;
     hence x in the_subsets_of_card(Z,Y);
   end;
   hence thesis by TARSKI:def 3;
 end;
 
 theorem Th1:
-  f is one-to-one & Card n c= Card X & X is non empty & Y is non empty
+  f is one-to-one & card n c= card X & X is non empty & Y is non empty
   implies the_subsets_of_card(n,f .: H) = (f||^n) .: the_subsets_of_card(n,H)
 proof
-  assume A1: f is one-to-one & Card n c= Card X &
+  assume A1: f is one-to-one & card n c= card X &
              X is non empty & Y is non empty; then
   f in Funcs(X, Y) by FUNCT_2:11; then
   consider f' be Function such that
   A2: f=f' & dom f'=X & rng f' c= Y by FUNCT_2:def 2;
-  A3: Card X c= Card Y by A2,A1,CARD_1:26;
+  A3: card X c= card Y by A2,A1,CARD_1:26;
   consider f1 be Function such that
   A4: n c= f1 .: X by A1,CARD_2:2;
   consider f2 be Function such that
@@ -147,7 +149,7 @@ proof
   f1 .: X c= f1 .:(f2 .: Y) by A5,RELAT_1:156; then
   n c= f1 .:(f2 .: Y) by A4,XBOOLE_1:1; then
   n c= (f1*f2) .: Y by RELAT_1:159; then
-  Card n c= Card Y by CARD_2:2; then
+  card n c= card Y by CARD_2:2; then
   the_subsets_of_card(n,Y) is non empty by A1,GROUP_10:2; then
   f||^n in Funcs(the_subsets_of_card(n,X), the_subsets_of_card(n,Y))
     by FUNCT_2:11; then
@@ -161,7 +163,7 @@ proof
     hereby
       assume y in the_subsets_of_card(n,f.:H); then
       consider X' be Subset of f.:H such that
-      A7: y=X' & Card X' = n;
+      A7: y=X' & card X' = n;
       A8: f.:H c= rng f by RELAT_1:144;
       ex x being set st x in dom(f||^n) & x in the_subsets_of_card(n,H)
       & y = (f||^n).x
@@ -172,7 +174,7 @@ proof
         A10: x c= dom f by RELAT_1:167;
         reconsider x'=x as Subset of H by A9,A7,A10,A1,FUNCT_1:157;
         x, f.: x are_equipotent by A10,A1,CARD_1:60; then
-        A11: Card x' = n by A7,A9,CARD_1:21; then
+        A11: card x' = n by A7,A9,CARD_1:21; then
         A12: x in the_subsets_of_card(n,H);
         A13: the_subsets_of_card(n,H) c= the_subsets_of_card(n,X) by Lm1;
         thus x in dom(f||^n) by A6,A13,A12;
@@ -189,10 +191,10 @@ proof
     reconsider x as Element of the_subsets_of_card(n,X) by A14;
     A15: y = f .: x by A14,A1,Def2;
     consider x' be Subset of H such that
-    A16: x'=x & Card x' = n by A14;
+    A16: x'=x & card x' = n by A14;
     reconsider X'=y as Subset of f.:H by A15,A16,RELAT_1:156;
     x, f.: x are_equipotent by A1,A2,A16,CARD_1:60,XBOOLE_1:1; then
-    Card X' = n by A16,A15,CARD_1:21;
+    card X' = n by A16,A15,CARD_1:21;
     hence y in the_subsets_of_card(n,f.:H);
   end;
   hence thesis by TARSKI:2;
@@ -207,29 +209,29 @@ proof
     hereby
       assume x in the_subsets_of_card(0,X); then
       consider x' be Subset of X such that
-      A1: x'=x & Card x' = 0;
+      A1: x'=x & card x' = 0;
       thus x=0 by A1;
     end;
     assume A2: x=0; then
     reconsider x'=x as Subset of X by XBOOLE_1:2;
-    Card x' = 0 by A2;
+    card x' = 0 by A2;
     hence x in the_subsets_of_card(0,X);
   end;
   hence thesis by TARSKI:def 1;
 end;
 
-Lm3: for X,Y being finite set st Card Y = X
+Lm3: for X,Y being finite set st card Y = X
   holds the_subsets_of_card(X,Y) = {Y}
 proof
   let X,Y be finite set;
-  assume A1: Card Y = X;
+  assume A1: card Y = X;
   for x being set holds x in the_subsets_of_card(X,Y) iff x = Y
   proof
     let x be set;
     hereby
       assume x in the_subsets_of_card(X,Y); then
       consider X' be Subset of Y such that
-      A2: X'=x & Card X' = X;
+      A2: X'=x & card X' = X;
       reconsider X' as finite Subset of Y;
       card(Y \ X') = card Y - card X' by CARD_2:63
       .= 0 by A2,A1; then
@@ -247,11 +249,10 @@ proof
 end;
 
 theorem Th2:
-  X is infinite & X c= omega implies Card X = omega
+  X is infinite & X c= omega implies card X = omega
 proof
   assume A1: X is infinite & X c= omega;
-  X is countable by A1;
-  then NAT,X are_equipotent by A1,WAYBEL12:3;
+  NAT,X are_equipotent by A1,WAYBEL12:3;
   hence thesis by CARD_1:21,84;
 end;
 
@@ -260,8 +261,8 @@ theorem Th3:
 proof
   assume A1: X is infinite;
   assume A2: X \/ Y is finite;
-  Card X c= Card(X \/ Y) by CARD_1:27,XBOOLE_1:7;
-  hence contradiction by A2,A1,CARD_2:68;
+  card X c= card(X \/ Y) by CARD_1:27,XBOOLE_1:7;
+  hence contradiction by A2,A1;
 end;
 
 theorem Th4:
@@ -288,13 +289,13 @@ registration
 end;
 
 Lm5: for F being Function of (the_subsets_of_card(n,X)),k
-  st Card X = omega & X c= omega & k<>0
+  st card X = omega & X c= omega & k<>0
   holds ex H st H is infinite & F|the_subsets_of_card(n,H) is constant
 proof
   defpred P[natural number] means
   for k being natural number, X being set,
       F being Function of (the_subsets_of_card($1,X)),k
-  st Card X = omega & X c= omega & k<>0
+  st card X = omega & X c= omega & k<>0
   holds ex H being Subset of X
     st H is infinite & F|the_subsets_of_card($1,H) is constant;
 A1: P[0]
@@ -302,7 +303,7 @@ A1: P[0]
     let k be natural number;
     let X be set;
     let F be Function of (the_subsets_of_card(0,X)),k;
-    assume A2: Card X = omega;
+    assume A2: card X = omega;
     assume X c= omega;
     assume k<>0;
     set H = X;
@@ -335,10 +336,10 @@ A6: for n be natural number st P[n] holds P[n + 1]
       let k be natural number;
       let X be set;
       let F be Function of (the_subsets_of_card(n+1,X)),k;
-      assume A8: Card X = omega;
+      assume A8: card X = omega;
       assume A9: X c= omega;
       assume A10: k<>0;
-      A11: for Y being set,a being Element of Y st Card Y = omega & Y c= X
+      A11: for Y being set,a being Element of Y st card Y = omega & Y c= X
         ex Fa being Function of the_subsets_of_card(n,Y\{a}),k,
            Ha being Subset of Y\{a}
         st Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
@@ -347,7 +348,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
       proof
         let Y be set;
         let a be Element of Y;
-        assume A12: Card Y = omega;
+        assume A12: card Y = omega;
         assume A13: Y c= X;
         set Y1 = the_subsets_of_card(n,Y\{a});
         A14: Y is infinite by A12;
@@ -360,7 +361,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
           let x be Element of Y1;
           x in Y1; then
           consider x' be Subset of Y\{a} such that
-          A19: x=x' & Card x'=n;
+          A19: x=x' & card x'=n;
           x \/ {a} c= (Y\{a}) \/ {a} by A19,XBOOLE_1:9; then
           x \/ {a} c= Y \/ {a} by XBOOLE_1:39; then
           reconsider y=x \/ {a} as Subset of Y by A15,XBOOLE_1:12;
@@ -373,7 +374,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
           end;
           A21: the_subsets_of_card(n+1,Y) c= the_subsets_of_card(n+1,X)
             by A13,Lm1;
-          Card y = n+1 by A19,A20,CARD_2:54; then
+          card y = n+1 by A19,A20,CARD_2:54; then
           x \/ {a} in the_subsets_of_card(n+1,Y);
           hence F1(x) in k by A10,A21,FUNCT_2:7;
         end;
@@ -383,7 +384,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
         reconsider Fa as Function of the_subsets_of_card(n,Y\{a}),k;
         set Y'=Y\{a};
         A23: Y c= omega by A9,A13,XBOOLE_1:1;
-        Card(Y\{a}) = omega by A14,A23,Th2,XBOOLE_1:1; then
+        card(Y\{a}) = omega by A14,A23,Th2,XBOOLE_1:1; then
         consider Ha be Subset of Y\{a} such that
         A25: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant
           by A7,A10,A23,XBOOLE_1:1;
@@ -421,7 +422,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
           reconsider a'=y'' as Element of x'';
           x'' in A; then
           consider x''' be Subset of X such that
-          A29: x'''=x'' & Card x''' = omega;
+          A29: x'''=x'' & card x''' = omega;
           consider Fa be Function of the_subsets_of_card(n,x''\{a'}),k,
                    Ha be Subset of x''\{a'} such that
           A30: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
@@ -430,7 +431,7 @@ A6: for n be natural number st P[n] holds P[n + 1]
           Ha c= x'' by XBOOLE_1:1; then
           A31: Ha c= X by A29,XBOOLE_1:1; then
           A32: Ha c= omega by A9,XBOOLE_1:1;
-          Card Ha = omega by A30,Th2,A9,A31,XBOOLE_1:1; then
+          card Ha = omega by A30,Th2,A9,A31,XBOOLE_1:1; then
           Ha in A by A31; then
           reconsider x1''=Ha as Element of A;
           set y1''=min* {y2' where y2' is Element of omega:
@@ -785,7 +786,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
       A90: a is one-to-one by FUNCT_1:def 8;
       A91: NAT = dom a by FUNCT_2:def 1;
       A92: for i being Element of NAT holds
-        Card {x' where x' is Element of omega:
+        card {x' where x' is Element of omega:
               ex j being Element of NAT st a.j=x' & j>i} = omega
       proof
         let i be Element of NAT;
@@ -830,7 +831,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
           thus z in NAT by A99;
         end; then
               Z c= NAT by TARSKI:def 3;
-        hence Card Z = omega by A97,A93,Th2,A98,CARD_1:97;
+        hence card Z = omega by A97,A93,Th2,A98,CARD_1:97;
       end;
       defpred P4[set,set] means
       for Y being set, i being Element of NAT,
@@ -850,7 +851,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
         reconsider a' = a.i' as Element of Y' by A56;
         Y' in A; then
         consider Y'' be Subset of X such that
-        A102: Y''=Y' & Card Y'' = omega;
+        A102: Y''=Y' & card Y'' = omega;
         consider Fa be Function of the_subsets_of_card(n,Y'\{a'}),k,
                  Ha be Subset of Y'\{a'} such that
         A103: Ha is infinite & Fa|the_subsets_of_card(n,Ha) is constant &
@@ -874,8 +875,9 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
           by Lm1;
         A108: Fa|the_subsets_of_card(n,Z) is
           Function of the_subsets_of_card(n,Z),k by A10,A107,FUNCT_2:38;
-        Card Z = omega by A92; then
-        Card n c= Card Z & Z is non empty; then
+        card Z = omega by A92;
+        then not card Z c= card n;
+        then card n c= card Z & Z is non empty; then
         the_subsets_of_card(n,Z) is non empty by GROUP_10:2; then
         consider y be Element of k such that
         A109: rng(Fa|the_subsets_of_card(n,Z)) = {y}
@@ -932,7 +934,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
       set H = a.:(g"{k'});
       A118: g"{k'} c= dom g by RELAT_1:167;
       g"{k'}, H are_equipotent by A90,A91,A118,CARD_1:60,XBOOLE_1:1; then
-      A119: Card(g"{k'}) = Card H by CARD_1:21;
+      A119: card(g"{k'}) = card H by CARD_1:21;
       now
         let y be set;
         assume y in H; then
@@ -943,7 +945,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
         A123: y in S.i by A122,A56;
         S.i in the_subsets_of_card(omega,X); then
         consider Xi be Subset of X such that
-        A124: S.i=Xi & Card Xi = omega;
+        A124: S.i=Xi & card Xi = omega;
         thus y in X by A124,A123;
       end; then
       reconsider H as Subset of X by TARSKI:def 3;
@@ -956,7 +958,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
         assume y in dom(F|the_subsets_of_card(n+1,H)); then
         A126: y in dom F & y in the_subsets_of_card(n+1,H) by RELAT_1:86; then
         consider Y be Subset of H such that
-        A127: y=Y & Card Y = n+1;
+        A127: y=Y & card Y = n+1;
         set y0 = min* Y;
         Y c= X by XBOOLE_1:1; then
         A128: Y c= NAT by A9,XBOOLE_1:1; then
@@ -971,7 +973,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
         reconsider a' = a.x0 as Element of S.x0 by A56;
         S.x0 in the_subsets_of_card(omega,X); then
         consider S0 be Subset of X such that
-        A133: S0=S.x0 & Card S0 = omega;
+        A133: S0=S.x0 & card S0 = omega;
         consider F0 be Function of the_subsets_of_card(n,S.x0\{a'}),k,
                  H0 be Subset of S.x0\{a'} such that
         A134: H0 is infinite & F0|the_subsets_of_card(n,H0) is constant &
@@ -1022,7 +1024,7 @@ B39:            A'' c= Segm(y''+1) by TARSKI:def 3;
         A148: Y' \/ {a.x0}
         = y by A130,A147,XBOOLE_1:45;
         reconsider y'=y as finite set by A127;
-        Card Y' c= Card y' by CARD_1:27; then
+        card Y' c= card y' by CARD_1:27; then
         reconsider Y''=Y' as finite set;
         y0 in {y0} by TARSKI:def 1; then
         A149: not a.x0 in Y' by A130,XBOOLE_0:def 5;
@@ -1071,9 +1073,9 @@ proof
   consider x be set such that
   A2: x in the_subsets_of_card(n, X) by XBOOLE_0:def 1;
   consider X' be Subset of X such that
-  A3: x=X' & Card X' = n by A2;
-  A4: Card Seg n = n by FINSEQ_1:78;
-  Card Seg n c= Card X by A3,A4,CARD_1:27; then
+  A3: x=X' & card X' = n by A2;
+  A4: card Seg n = n by FINSEQ_1:78;
+  card Seg n c= card X by A3,A4,CARD_1:27; then
   card Seg n <= card X by NAT_1:40;
   hence contradiction by A1,FINSEQ_1:78;
 end;
@@ -1082,7 +1084,7 @@ theorem
   X c= Y implies the_subsets_of_card(Z,X) c= the_subsets_of_card(Z,Y) by Lm1;
 
 theorem
-  X is finite & Y is finite & Card Y = X implies
+  X is finite & Y is finite & card Y = X implies
   the_subsets_of_card(X,Y) = {Y} by Lm3;
 
 theorem
@@ -1096,9 +1098,9 @@ proof
   let X be finite set;
   assume k <= card X; then
   card k <= card X by CARD_1:def 5; then
-  Card k c= Card X by NAT_1:40; then
+  card k c= card X by NAT_1:40; then
   consider Y be set such that
-  A1: Y c= X & Card Y = Card k by CARD_FIL:36;
+  A1: Y c= X & card Y = card k by CARD_FIL:36;
   reconsider Y as Subset of X by A1;
   take Y;
   thus card Y = k by A1,CARD_1:def 5;
@@ -1231,7 +1233,7 @@ proof
   let F be Function of the_subsets_of_card(n,X),k;
   assume A1: k<>0 & X is infinite;
   consider Y be set such that
-  A2: Y c= X & Card Y = omega by A1,CARD_4:14;
+  A2: Y c= X & card Y = omega by A1,CARD_3:104;
   reconsider Y as non empty set by A2;
   Y,omega are_equipotent by A2,CARD_1:21,84; then
   consider f be Function such that
@@ -1241,8 +1243,11 @@ proof
   F in Funcs(the_subsets_of_card(n,X),k) by A1,FUNCT_2:11; then
   consider g1 be Function such that
   A4: F=g1 & dom g1=the_subsets_of_card(n,X) & rng g1 c= k by FUNCT_2:def 2;
-  A5: Card n c= Card omega;
-  Card n c= Card Y by A2; then
+  not card omega c= card n;
+  then
+  A5: card n c= card omega;
+  not card Y c= card n by A2;
+  then card n c= card Y; then
   the_subsets_of_card(n,Y) is non empty by GROUP_10:2; then
   f||^n in Funcs(the_subsets_of_card(n,omega), the_subsets_of_card(n,Y))
     by FUNCT_2:11; then
@@ -1292,13 +1297,13 @@ end;
 theorem
   for X being infinite set,
       P being a_partition of the_subsets_of_card(n,X)
-  st Card P = k holds
+  st card P = k holds
      ex H being Subset of X st H is infinite & H is_homogeneous_for P
 proof
   let X be infinite set;
   let P be a_partition of the_subsets_of_card(n,X);
   assume
-Z:  Card P = k; then
+Z:  card P = k; then
       P,k are_equipotent by CARD_1:def 5; then
   consider F1 be Function such that
   A2: F1 is one-to-one & dom F1 = P & rng F1 = k by WELLORD2:def 4;
@@ -1430,7 +1435,7 @@ proof
       let F be Function of the_subsets_of_card(2,X), Seg 2;
       assume A10: card X >= r;
       F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FINSEQ_1:4,FUNCT_2:11; then
+        by FUNCT_2:11; then
       consider f be Function such that
       A11: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
         by FUNCT_2:def 2;
@@ -1440,7 +1445,7 @@ proof
         A13: card S = r by A10,Th10;
         A14: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
         card 2 <= card S by A5,A13,CARD_1:def 5; then
-        A15: Card 2 c= Card S by NAT_1:40;
+        A15: card 2 c= card S by NAT_1:40;
         the_subsets_of_card(2,S) is non empty
           by A15,A13,CARD_1:47,GROUP_10:2; then
         consider x be set such that
@@ -1473,9 +1478,9 @@ proof
       suppose 1 in rng F; then
         consider S be set such that
         A24: S in dom F & 1 = F.S by FUNCT_1:def 5;
-        S in {X' where X' is Subset of X: Card X' = 2} by A24; then
+        S in {X' where X' is Subset of X: card X' = 2} by A24; then
         consider X' be Subset of X such that
-        A25: S=X' & Card X' = 2;
+        A25: S=X' & card X' = 2;
         reconsider S as Subset of X by A25;
         A26: {S} c= dom F by A24,ZFMISC_1:37;
         the_subsets_of_card(2,S) = {S} by A25,Lm3; then
@@ -1504,7 +1509,7 @@ proof
       let F be Function of the_subsets_of_card(2,X), Seg 2;
       assume A34: card X >= r;
       F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FINSEQ_1:4,FUNCT_2:11; then
+        by FUNCT_2:11; then
       consider f be Function such that
       A35: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
         by FUNCT_2:def 2;
@@ -1514,7 +1519,7 @@ proof
         A37: card S = r by A34,Th10;
         A38: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
         card 2 <= card S by A5,A37,CARD_1:def 5; then
-        A39: Card 2 c= Card S by NAT_1:40;
+        A39: card 2 c= card S by NAT_1:40;
         the_subsets_of_card(2,S) is non empty
           by A39,A37,CARD_1:47,GROUP_10:2; then
         consider x be set such that
@@ -1547,9 +1552,9 @@ proof
       suppose 2 in rng F; then
         consider S be set such that
         A48: S in dom F & 2 = F.S by FUNCT_1:def 5;
-        S in {X' where X' is Subset of X: Card X' = 2} by A48; then
+        S in {X' where X' is Subset of X: card X' = 2} by A48; then
         consider X' be Subset of X such that
-        A49: S=X' & Card X' = 2;
+        A49: S=X' & card X' = 2;
         reconsider S as Subset of X by A49;
         A50: {S} c= dom F by A48,ZFMISC_1:37;
         the_subsets_of_card(2,S) = {S} by A49,Lm3; then
@@ -1610,7 +1615,7 @@ proof
       consider S be Subset of X such that
       A66: card S = r by Th10;
       F in Funcs(the_subsets_of_card(2,X), Seg 2)
-        by FINSEQ_1:4,FUNCT_2:11; then
+        by FUNCT_2:11; then
       consider f be Function such that
       A67: F = f & dom f = the_subsets_of_card(2,X) & rng f c= Seg 2
         by FUNCT_2:def 2;
@@ -1645,7 +1650,7 @@ proof
               {s,s'} = {s} \/ {s'} by ENUMSET1:41 .= {s} by A77,A78; then
               {s} in the_subsets_of_card(2,X) by A77; then
               consider X' be Subset of X such that
-              A79: X'={s} & Card X' = 2;
+              A79: X'={s} & card X' = 2;
               thus contradiction by A79,CARD_1:50;
             end;
             hence x in S \ {s} by A66,A55,A77,CARD_1:47,XBOOLE_0:def 5;
@@ -1659,7 +1664,7 @@ proof
               {s,s'} = {s} \/ {s'} by ENUMSET1:41 .= {s} by A80,A81; then
               {s} in the_subsets_of_card(2,X) by A80; then
               consider X' be Subset of X such that
-              A82: X'={s} & Card X' = 2;
+              A82: X'={s} & card X' = 2;
               thus contradiction by A82,CARD_1:50;
             end;
             hence x in S \ {s} by A66,A55,A80,CARD_1:47,XBOOLE_0:def 5;
@@ -1671,7 +1676,7 @@ proof
         A84: {s,s'} is Subset of X by XBOOLE_1:1;
         not s' in {s} by A83,XBOOLE_0:def 5; then
         s<>s' by TARSKI:def 1; then
-        Card {s,s'} = 2 by CARD_2:76; then
+        card {s,s'} = 2 by CARD_2:76; then
         A85: {s,s'} in dom F by A84,A67; then
         A86: F.{s,s'} in rng F by FUNCT_1:12;
         per cases by A86,A67,FINSEQ_1:4,TARSKI:def 2;
@@ -1743,10 +1748,10 @@ proof
               A103: y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:def 5;
               A104: x in the_subsets_of_card(2,S'') & x in dom F
                 by A102,RELAT_1:86;
-              x in {S''' where S''' is Subset of S'': Card S''' = 2}
+              x in {S''' where S''' is Subset of S'': card S''' = 2}
                 by A102,RELAT_1:86; then
               consider S''' be Subset of S'' such that
-              A105: x=S''' & Card S''' = 2;
+              A105: x=S''' & card S''' = 2;
               consider s1,s2 be set such that
               A106: s1 <> s2 & S''' = {s1,s2} by A105,CARD_2:79;
               A107: s1 in S''' & s2 in S''' by A106,TARSKI:def 2;
@@ -1809,7 +1814,7 @@ proof
             A120: {s,s} = {s} \/ {s} by ENUMSET1:41 .= {s};
             {s} in the_subsets_of_card(2,X) by A119,A120; then
             consider X' be Subset of X such that
-            A121: X'={s} & Card X' = 2;
+            A121: X'={s} & card X' = 2;
             thus contradiction by A121,CARD_1:50;
           end;
           take S'';
@@ -1857,10 +1862,10 @@ proof
               A133: y = (F|the_subsets_of_card(2,S'')).x by FUNCT_1:def 5;
               A134: x in the_subsets_of_card(2,S'') & x in dom F
                 by A132,RELAT_1:86;
-              x in {S''' where S''' is Subset of S'': Card S''' = 2}
+              x in {S''' where S''' is Subset of S'': card S''' = 2}
                 by A132,RELAT_1:86; then
               consider S''' be Subset of S'' such that
-              A135: x=S''' & Card S''' = 2;
+              A135: x=S''' & card S''' = 2;
               consider s1,s2 be set such that
               A136: s1 <> s2 & S''' = {s1,s2} by A135,CARD_2:79;
               A137: s1 in S''' & s2 in S''' by A136,TARSKI:def 2;
@@ -1923,7 +1928,7 @@ proof
             A150: {s,s} = {s} \/ {s} by ENUMSET1:41 .= {s};
             {s} in the_subsets_of_card(2,X) by A149,A150; then
             consider X' be Subset of X such that
-            A151: X'={s} & Card X' = 2;
+            A151: X'={s} & card X' = 2;
             thus contradiction by A151,CARD_1:50;
           end;
           take S'';
@@ -1941,7 +1946,7 @@ theorem
   ex r being natural number st
     for X being finite set,
         P being a_partition of the_subsets_of_card(2,X)
-    st card X >= r & Card P = 2 holds
+    st card X >= r & card P = 2 holds
     ex S being Subset of X st card S >= m & S is_homogeneous_for P
 proof
   let m be natural number;
@@ -1954,7 +1959,7 @@ proof
     let X be finite set;
     let P be a_partition of the_subsets_of_card(2,X);
     assume A2: card X >= r;
-    assume Card P = 2;
+    assume card P = 2;
     consider x be set such that
     A3: x in X by A2,CARD_1:47,XBOOLE_0:def 1;
     reconsider S = {x} as Subset of X by A3,ZFMISC_1:37;
@@ -1970,7 +1975,7 @@ proof
     end;
     hence S is_homogeneous_for P by Def1;
   end;
-  suppose A5: m>=2; then
+  suppose  m>=2; then
     consider r be natural number such that
     A6: r <= (m + m -' 2) choose (m -' 1) & r >= 2 and
     A7: for X being finite set,
@@ -1981,15 +1986,15 @@ proof
     take r;
     let X be finite set;
     let P be a_partition of the_subsets_of_card(2,X);
-    assume A8: card X >= r & Card P = 2; then
+    assume A8: card X >= r & card P = 2; then
     2 <= card X  by A6,XXREAL_0:2; then
     card Seg 2 <= card X by FINSEQ_1:78; then
-    Card Seg 2 c= Card X by NAT_1:40; then
-    A9: Card 2 c= Card X by FINSEQ_1:76;
+    card Seg 2 c= card X by NAT_1:40; then
+    A9: card 2 c= card X by FINSEQ_1:76;
     reconsider X' = the_subsets_of_card(2,X) as non empty set
       by A8,A6,A9,CARD_1:47,GROUP_10:2;
     reconsider P'=P as a_partition of X';
-B10:Card P' = Card Seg 2 by A8,FINSEQ_1:78; then
+card P' = card Seg 2 by A8,FINSEQ_1:78; then
          P', Seg 2 are_equipotent by CARD_1:21; then
     consider F1 be Function such that
     A11: F1 is one-to-one & dom F1 = P' & rng F1 = Seg 2 by WELLORD2:def 4;
@@ -2003,12 +2008,8 @@ B10:Card P' = Card Seg 2 by A8,FINSEQ_1:78; then
     thus card S >= m by A12;
     consider h be Element of the_subsets_of_card(2,S);
     A13: the_subsets_of_card(2,S) c= the_subsets_of_card(2,X) by Lm1;
-    2 <= card S by A5,A12,XXREAL_0:2; then
-    card Seg 2 <= card S by FINSEQ_1:78; then
-    Card Seg 2 c= Card S by NAT_1:40; then
-    Card 2 c= Card S by FINSEQ_1:76; then
     A14: the_subsets_of_card(2,S) is non empty
-      by A5,A12,CARD_1:47,GROUP_10:2; then
+      by A12; then
     h in the_subsets_of_card(2,S); then
     reconsider h as Element of X' by A13;
     A15: F|the_subsets_of_card(2,S) is constant
@@ -2016,8 +2017,8 @@ B10:Card P' = Card Seg 2 by A8,FINSEQ_1:78; then
       A16: 1 is Element of Seg 2 & 2 is Element of Seg 2
         by FINSEQ_1:4,TARSKI:def 2;
       F|the_subsets_of_card(2,S) is Function of the_subsets_of_card(2,S),Seg 2
-        by A13,FINSEQ_1:4,FUNCT_2:38;
-      hence thesis by A16,A14,A12,FUNCT_2:188,FINSEQ_1:4;
+        by A13,FUNCT_2:38;
+      hence thesis by A16,A14,A12,FUNCT_2:188;
     end;
     set E = EqClass(h,P');
     reconsider E as Element of P by EQREL_1:def 8;
@@ -2028,7 +2029,6 @@ B10:Card P' = Card Seg 2 by A8,FINSEQ_1:78; then
       reconsider x'=x as Element of the_subsets_of_card(2,X) by A13;
       reconsider x''=x as Element of X' by A17,A13;
       A18: h in E by EQREL_1:def 8;
-      Seg 2 <> {} by B10; then
       A19: dom F = the_subsets_of_card(2,X) by FUNCT_2:def 1;
       x' in dom F /\ the_subsets_of_card(2,S) by A19,A17,XBOOLE_0:def 4; then
       A20: x' in dom(F|the_subsets_of_card(2,S)) by RELAT_1:90;

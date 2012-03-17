@@ -82,59 +82,21 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="56">
-<Func kind="K" nr="290">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="136">
-<Func kind="K" nr="290">
+<Adjective nr="137">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="137" value="false"/>
 <Adjective nr="138" value="false"/>
+<Adjective nr="139" value="false"/>
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="290">
-<Num nr="2"/>
-</Func>
-</Func>
-</Func>
-</Typ>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="47"/>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="315">
-<LocusVar nr="1"/>
-<LocusVar nr="2"/>
-</Func>
-<Cluster>
-<Adjective nr="147"/>
-</Cluster>
-</FCluster>
-<FCluster aid="JORDAN1G" nr="3">
-<ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster>
-<Adjective nr="56">
-<Func kind="K" nr="290">
-<Num nr="2"/>
-</Func>
-</Adjective>
-<Adjective nr="136">
-<Func kind="K" nr="290">
-<Num nr="2"/>
-</Func>
-</Adjective>
-<Adjective nr="137" value="false"/>
-<Adjective nr="138" value="false"/>
-</Cluster>
-<Func kind="K" nr="24">
-<Func kind="U" nr="1">
-<Func kind="K" nr="290">
+<Func kind="K" nr="291">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -150,7 +112,45 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="147"/>
+<Adjective nr="148"/>
+</Cluster>
+</FCluster>
+<FCluster aid="JORDAN1G" nr="3">
+<ArgTypes>
+<Typ kind="M" nr="2">
+<Cluster>
+<Adjective nr="56">
+<Func kind="K" nr="291">
+<Num nr="2"/>
+</Func>
+</Adjective>
+<Adjective nr="137">
+<Func kind="K" nr="291">
+<Num nr="2"/>
+</Func>
+</Adjective>
+<Adjective nr="138" value="false"/>
+<Adjective nr="139" value="false"/>
+</Cluster>
+<Func kind="K" nr="24">
+<Func kind="U" nr="1">
+<Func kind="K" nr="291">
+<Num nr="2"/>
+</Func>
+</Func>
+</Func>
+</Typ>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="47"/>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="317">
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Func>
+<Cluster>
+<Adjective nr="148"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -13,7 +13,9 @@
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="FRAENKEL"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="STRUCT_0"/>
@@ -29,7 +31,7 @@
 <Cluster>
 <Adjective nr="7" value="false"/>
 <Adjective nr="17"/>
-<Adjective nr="18"/>
+<Adjective nr="25"/>
 </Cluster>
 </RCluster>
 <FCluster aid="HEYTING2" nr="1">
@@ -39,17 +41,17 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="18"/>
+<Adjective nr="25"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="119">
+<Func kind="K" nr="132">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="45"/>
-<Adjective nr="62"/>
+<Adjective nr="54"/>
+<Adjective nr="71"/>
 </Cluster>
 </FCluster>
 </Registrations>

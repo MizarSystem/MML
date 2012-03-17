@@ -197,7 +197,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="28" value="false"/>
-<Adjective nr="103"/>
+<Adjective nr="105"/>
 </Cluster>
 </CCluster>
 </Registrations>

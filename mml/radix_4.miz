@@ -17,9 +17,9 @@ environ
       XBOOLE_0, VALUED_0;
  requirements REAL, SUBSET, BOOLE, NUMERALS, ARITHM;
  definitions RADIX_1;
- theorems REAL_2, RADIX_1, POWER, NAT_1, INT_1, BINARITH, FINSEQ_1,
-      FINSEQ_2, NEWTON, RVSUM_1, PREPOWER, JORDAN12, EULER_2, RADIX_3, XREAL_1,
-      XXREAL_0, NAT_D, ORDINAL1, PARTFUN1, XREAL_0;
+ theorems RADIX_1, POWER, NAT_1, INT_1, FINSEQ_1, FINSEQ_2, NEWTON, RVSUM_1,
+      PREPOWER, JORDAN12, EULER_2, RADIX_3, XREAL_1, XXREAL_0, NAT_D, ORDINAL1,
+      PARTFUN1, XREAL_0;
  schemes FINSEQ_2, NAT_1;
 
 begin :: Some Useful Theorems
@@ -46,7 +46,7 @@ A3: 2 <= kk & 2 < Radix(kk);
 A4: Radix(kk + 1) = 2 to_power (1) * 2 to_power (kk) by POWER:32
       .= 2 * Radix(kk) by POWER:30;
     Radix(kk) > 1 by A3,XXREAL_0:2;
-    hence thesis by A4,REAL_2:144;
+    hence thesis by A4,XREAL_1:157;
   end;
   for k be Nat holds 2 <= k implies P[k] from NAT_1:sch 8(A1,A2);
   hence thesis;
@@ -296,10 +296,10 @@ X: dom k1 = Seg n by A7,FINSEQ_1:def 3;
       let j be Nat;
       assume
 A8:   j in dom k1;
-      then k1.j = DigA_SDSub(k1,j) by RADIX_3:def 5,X
+      then k1.j = DigA_SDSub(k1,j) by X,RADIX_3:def 5
         .= SDSubAddDigit(x,y,j,k) by A5,A8,X
         .= DigA_SDSub(k2,j) by A6,A8,X
-        .= k2.j by A8,RADIX_3:def 5,X;
+        .= k2.j by A8,X,RADIX_3:def 5;
       hence k1.j = k2.j;
     end;
     hence k1 = k2 by A7,FINSEQ_2:10;
@@ -417,7 +417,7 @@ A4: 1 in Seg (1+1) by FINSEQ_1:3;
 A5: DigA_SDSub(X '+' Y, 1) = SDSubAddDigit(X,Y,1,k) by Def2
       .= SDSub_Add_Data( DigA_SDSub(X,1) + DigA_SDSub(Y,1), k )
     + SDSub_Add_Carry( DigA_SDSub(X,1-'1)+DigA_SDSub(Y,1 -'1), k)
-    by A3,A4,Def1,XXREAL_0 :2
+    by A3,A4,Def1,XXREAL_0:2
       .= SDSub_Add_Data( DigA_SDSub(X,1) + DigA_SDSub(Y,1), k )
     + SDSub_Add_Carry( DigA_SDSub(X,0)+DigA_SDSub(Y,1 -'1), k) by XREAL_1:234
       .= SDSub_Add_Data( DigA_SDSub(X,1) + DigA_SDSub(Y,1), k )
@@ -427,7 +427,7 @@ A5: DigA_SDSub(X '+' Y, 1) = SDSubAddDigit(X,Y,1,k) by Def2
       .= SDSub_Add_Data( DigA_SDSub(X,1) + DigA_SDSub(Y,1), k )
     + SDSub_Add_Carry(0 + 0, k) by RADIX_3:def 5
       .= SDSub_Add_Data( DigA_SDSub(X,1) + DigA_SDSub(Y,1), k ) + 0
-    by A3,RADIX_3:17,XXREAL_0 :2
+    by A3,RADIX_3:17,XXREAL_0:2
       .= DigA_SDSub(X,1) + DigA_SDSub(Y,1) - Radix(k) * CRY1 by RADIX_3:def 4;
     2 - 1 = 1;
     then
@@ -437,11 +437,11 @@ A7: 2 in Seg (1+1) by FINSEQ_1:3;
 A8: DigA_SDSub(X '+' Y, 2) = SDSubAddDigit(X,Y,2,k) by Def2
       .= SDSub_Add_Data( DigA_SDSub(X,2) + DigA_SDSub(Y,2), k )
     + SDSub_Add_Carry( DigA_SDSub(X,2-'1)+DigA_SDSub(Y,2 -'1), k)
-    by A3,A7,Def1,XXREAL_0 :2
+    by A3,A7,Def1,XXREAL_0:2
       .= SDSub_Add_Data( SDSub_Add_Carry(x,k) + DigA_SDSub(Y,2), k )
     + CRY1 by A3,A6,Th4,XXREAL_0:2
       .= SDSub_Add_Data( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k )
-    + CRY1 by A3,Th4,XXREAL_0 :2
+    + CRY1 by A3,Th4,XXREAL_0:2
       .= SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k) - Radix(k)
     * SDSub_Add_Carry( SDSub_Add_Carry(x,k) + SDSub_Add_Carry(y,k), k )
     + CRY1 by RADIX_3:def 4
@@ -505,8 +505,7 @@ A20: Radix(k) > 0 by POWER:39;
 A21: x = (x div (Radix(k) |^ n))*(Radix(k) |^ n)
     + (x mod (Radix(k) |^ n)) by NAT_D:2,PREPOWER:13;
     xn < Radix(k) |^ n & yn < Radix(k) |^ n by A20,NAT_D:1,PREPOWER:13;
-    then xn is_represented_by n,k & yn is_represented_by n,k by
-    RADIX_1:def 12;
+    then xn is_represented_by n,k & yn is_represented_by n,k by RADIX_1:def 12;
     then
 A22: xn + yn = SDSub2IntOut(zn) by A15,A18
       .= Sum SDSub2INT(zn) by RADIX_3:def 12;
@@ -669,7 +668,7 @@ A61: Sum SDSub2INT(z)
       .= Sum (znpp) + SDSub2INTDigit(z,(n+1),k)
     + SDSub2INTDigit(z,(n+1)+1,k) by A42,A55,RVSUM_1:104;
 A62: (xn + yn) + 0 = Sum (znpp) + SDSub2INTDigit(zn,n+1,k) by A22,A47,
-    RVSUM_1:104;
+RVSUM_1:104;
     set SDN11 = DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1+1)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1+1);
     set SDN1 = DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
@@ -687,7 +686,7 @@ A63: SDSub2INTDigit(z,n+1+1,k)
       .= RN1* (SDSub_Add_Data(SDN11, k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1+1-'1)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1+1-'1), k))
-    by A18,A24,Def1,XXREAL_0 :2
+    by A18,A24,Def1,XXREAL_0:2
       .= RN1* (SDSub_Add_Data(SDN11, k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1+1-'1), k)) by NAT_D:34
@@ -703,7 +702,7 @@ A64: SDSub2INTDigit(z,n+1,k)
       .= RN* (SDSub_Add_Data(SDN1, k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1-'1)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1-'1), k)) by A18,A23,Def1,
-    XXREAL_0:2
+XXREAL_0:2
       .= RN* (SDSub_Add_Data(SDN1, k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1-'1), k)) by NAT_D:34
@@ -726,8 +725,7 @@ A65: SDSub2INTDigit(zn,n+1,k)
       .= RN * (SDSub_Add_Data( DigA_SDSub(SD2SDSub(DecSD(xn,n,k)),n+1)
     +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n+1), k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(xn,n,k)),n+1-'1)
-    +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n+1-'1), k)) by A17,A18,Def1,
-    XXREAL_0:2
+    +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n+1-'1), k)) by A17,A18,Def1,XXREAL_0:2
       .= RN * (SDSub_Add_Data(
     DigA_SDSub(SD2SDSub(DecSD(xn,n,k)),n+1)
     +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n+1), k) + SDSub_Add_Carry(
@@ -748,8 +746,8 @@ A65: SDSub2INTDigit(zn,n+1,k)
       .= RN * (SDSub_Add_Data( SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k)
     +SDSub_Add_Carry(DigA(DecSD(y,n,k),n),k), k) + SDSub_Add_Carry(
     DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n)
-    +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n), k)) by A16,A18,RADIX_3:21,
-    XXREAL_0:2
+    +DigA_SDSub(SD2SDSub(DecSD(yn,n,k)),n), k)) by A16,A18,RADIX_3:21
+,XXREAL_0:2
       .= RN * (SDSub_Add_Data(
     SDSub_Add_Carry(DigA(DecSD(x,n,k),n),k)
     +SDSub_Add_Carry(DigA(DecSD(y,n,k),n),k), k)
@@ -774,15 +772,15 @@ A68: RN1SD11 = RN1 * ( DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1+1)
     +DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1+1), k)) by RADIX_3:def 4;
 A69: DigA_SDSub(SD2SDSub(DecSD(x,n+1,k)),n+1+1)
     = SD2SDSubDigitS(DecSD(x,n+1,k),n+1+1,k) by A24,RADIX_3:def 8
-      .= SD2SDSubDigit(DecSD(x,n+1,k),n+1+1,k) by A18,A24,RADIX_3:def 7,
-    XXREAL_0:2
+      .= SD2SDSubDigit(DecSD(x,n+1,k),n+1+1,k) by A18,A24,RADIX_3:def 7
+,XXREAL_0:2
       .= SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n+1+1-'1),k)
     by RADIX_3:def 6
       .= SDSub_Add_Carry(DigA(DecSD(x,n+1,k),n+1),k) by NAT_D:34;
 A70: DigA_SDSub(SD2SDSub(DecSD(y,n+1,k)),n+1+1)
     = SD2SDSubDigitS(DecSD(y,n+1,k),n+1+1,k) by A24,RADIX_3:def 8
-      .= SD2SDSubDigit(DecSD(y,n+1,k),n+1+1,k) by A18,A24,RADIX_3:def 7,
-    XXREAL_0:2
+      .= SD2SDSubDigit(DecSD(y,n+1,k),n+1+1,k) by A18,A24,RADIX_3:def 7
+,XXREAL_0:2
       .= SDSub_Add_Carry(DigA(DecSD(y,n+1,k),n+1+1-'1),k)
     by RADIX_3:def 6
       .= SDSub_Add_Carry(DigA(DecSD(y,n+1,k),n+1),k) by NAT_D:34;

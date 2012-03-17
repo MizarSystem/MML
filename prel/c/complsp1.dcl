@@ -36,7 +36,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="219">
+<Func kind="K" nr="220">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -64,8 +64,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="53" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="54" value="false"/>
+<Adjective nr="66"/>
 </Cluster>
 </FCluster>
 <FCluster aid="COMPLSP1" nr="3">
@@ -75,13 +75,13 @@
 <Func kind="K" nr="86"/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="234">
+<Func kind="K" nr="235">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="53" value="false"/>
-<Adjective nr="65"/>
+<Adjective nr="54" value="false"/>
 <Adjective nr="66"/>
+<Adjective nr="67"/>
 </Cluster>
 </FCluster>
 </Registrations>

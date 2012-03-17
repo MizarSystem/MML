@@ -7,21 +7,20 @@
 environ
 
  vocabularies FUNCT_1, BOOLE, RELAT_1, PARTFUN1, RELAT_2, FINSET_1, ORDERS_1,
-      FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1, MSAFREE2, STRUCT_0,
-      AMI_1, CAT_1, VECTSP_2;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1,
-      RELSET_1, FUNCT_2, FUNCT_5,
-      FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS, NAT_1, MCART_1, XXREAL_0,
-      STRUCT_0;
+      FINSEQ_1, CARD_1, FUNCT_2, MCART_1, GRAPH_1, MSAFREE2, STRUCT_0, AMI_1,
+      CAT_1, VECTSP_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      FUNCT_2, FUNCT_5, FINSEQ_1, FINSET_1, PARTFUN1, CARD_1, NUMBERS, NAT_1,
+      MCART_1, XXREAL_0, STRUCT_0;
  constructors PARTFUN1, FUNCT_2, XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0,
       FUNCT_5;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, FINSET_1,
-      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1;
+      XREAL_0, FINSEQ_1, ORDINAL1, STRUCT_0, CARD_1, FUNCT_2;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions FUNCT_1, TARSKI;
- theorems FUNCT_2, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, FINSET_1, ZFMISC_1,
-      MCART_1, TARSKI, RELAT_1, FINSEQ_3, RELSET_1, XBOOLE_0, XBOOLE_1,
-      XREAL_1, XXREAL_0, CARD_1, STRUCT_0;
+ theorems FUNCT_2, FUNCT_1, PARTFUN1, FINSEQ_1, NAT_1, ZFMISC_1, MCART_1,
+      TARSKI, RELAT_1, FINSEQ_3, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
+      XXREAL_0, CARD_1;
  schemes FUNCT_2, TARSKI, XBOOLE_0;
 
 begin
@@ -360,7 +359,7 @@ registration
   existence
   proof
     set V = {1};
-    reconsider empty1 = {} as Function of {}, V by FUNCT_2:55,RELAT_1:60;
+    reconsider empty1 = {} as Function of {}, V by RELSET_1:25;
     reconsider G = MultiGraphStruct(# V, {}, empty1, empty1 #)
     as Graph;
     take G;
@@ -506,31 +505,30 @@ definition
   let G be Graph;
   let IT be Chain of G;
   attr IT is oriented means
-  :Def12:
   for n st 1 <= n & n < len IT holds
   (the Source of G).(IT.(n+1)) = (the Target of G).(IT.n);
 end;
 
 registration
   let G be Graph;
-  cluster oriented Chain of G;
+  cluster empty Chain of G;
   existence
   proof
-    reconsider p = {} as Chain of G by Lm3;
-    take p;
-    let n;
-    thus thesis by CARD_1:47,XXREAL_0:2;
+    {} is Chain of G by Lm3;
+   hence thesis;
   end;
 end;
 
-Lm4: for G holds {} is oriented Chain of G
-proof
-  let G;
-  reconsider p = {} as Chain of G by Lm3;
-  for n st 1 <= n & n < len p holds
-  (the Source of G).(p.(n+1)) = (the Target of G).(p.n)
-   by CARD_1:47,XXREAL_0:2;
-  hence thesis by Def12;
+registration
+  let G be Graph;
+  cluster empty -> oriented Chain of G;
+  coherence
+  proof let C be Chain of G;
+    assume
+Z:    C is empty;
+    let n;
+    thus thesis by CARD_1:47,XXREAL_0:2,Z;
+  end;
 end;
 
 definition
@@ -578,34 +576,9 @@ A6:   x' <> y';
   end;
 end;
 
-registration
-  let G be Graph;
-  cluster one-to-one Chain of G;
-  existence
-  proof
-    reconsider p = {} as Chain of G by Lm3;
-    take p;
-    let n,m;
-    assume 1 <= n & n < m & m <= len p;
-    then 1 < m & m <= len p by XXREAL_0:2;
-    hence thesis by CARD_1:47,XXREAL_0:2;
-  end;
-end;
-
 definition
   let G be Graph;
   mode Path of G is one-to-one Chain of G;
-end;
-
-registration
-  let G be Graph;
-  cluster one-to-one oriented Chain of G;
-  existence
-  proof
-    reconsider p = {} as oriented Chain of G by Lm4;
-    take p;
-    thus thesis;
-  end;
 end;
 
 definition
@@ -618,7 +591,6 @@ definition
   let IT be Path of G;
   canceled;
   attr IT is cyclic means
-  :Def15:
   ex p being FinSequence st
   len p = len IT + 1 &
   (for n st 1 <= n & n <= len p holds p.n in the carrier of G) &
@@ -629,15 +601,15 @@ end;
 
 registration
   let G be Graph;
-  cluster cyclic Path of G;
-  existence
-  proof
-    reconsider p = {} as Path of G by Lm3;
-    take p;
+  cluster empty -> cyclic Path of G;
+  coherence
+  proof let p be Path of G;
+   assume
+Z:  p is empty;
     consider x being Vertex of G;
 A1: x in the carrier of G;
     take <*x*>;
-    thus len <*x*> = len p + 1 by CARD_1:47,FINSEQ_1:56;
+    thus len <*x*> = len p + 1 by CARD_1:47,FINSEQ_1:56,Z;
     thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the carrier of G
     proof
       let n;
@@ -648,7 +620,8 @@ A1: x in the carrier of G;
     end;
     thus for n st 1 <= n & n <= len p
     ex x', y' being Vertex of G st
-    x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y' by CARD_1:47,XXREAL_0:2;
+    x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y'
+      by Z,CARD_1:47,XXREAL_0:2;
     thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
   end;
 end;
@@ -656,47 +629,6 @@ end;
 definition
   let G be Graph;
   mode Cycle of G is cyclic Path of G;
-end;
-
-Lm5: for G holds {} is Cycle of G
-proof
-  let G;
-  reconsider p = {} as Path of G by Lm3;
-  ex q being FinSequence st len q = len p + 1 &
-  (for n st 1 <= n & n <= len q holds q.n in the carrier of G) &
-  (for n st 1 <= n & n <= len p
-  ex x', y' being Vertex of G st
-  x' = q.n & y' = q.(n+1) & p.n joins x', y') & q.1 = q.(len q)
-  proof
-    consider x being Vertex of G;
-A1: x in the carrier of G;
-    take <*x*>;
-    thus len <*x*> = len p + 1 by CARD_1:47,FINSEQ_1:56;
-    thus for n st 1 <= n & n <= len <*x*> holds <*x*>.n in the carrier of G
-    proof
-      let n;
-      assume 1 <= n & n <= len <*x*>;
-      then 1 <= n & n <= 1 by FINSEQ_1:56;
-      then n = 1 by XXREAL_0:1;
-      hence <*x*>.n in the carrier of G by A1,FINSEQ_1:57;
-    end;
-    thus for n st 1 <= n & n <= len p
-    ex x', y' being Vertex of G st
-    x' = <*x*>.n & y' = <*x*>.(n+1) & p.n joins x', y' by CARD_1:47,XXREAL_0:2;
-    thus <*x*>.1 = <*x*>.(len <*x*>) by FINSEQ_1:56;
-  end;
-  hence thesis by Def15;
-end;
-
-registration
-  let G be Graph;
-  cluster cyclic OrientedPath of G;
-  existence
-  proof
-    reconsider p = {} as OrientedPath of G by Lm4;
-    take p;
-    thus p is cyclic by Lm5;
-  end;
 end;
 
 definition
@@ -1789,7 +1721,7 @@ A1: G1 c= G & G2 c= G & G3 c= G;
 end;
 
 theorem
-  {} is cyclic oriented Path of G by Lm4,Lm5;
+ {} is Chain of G by Lm3;
 
 theorem
   for H1, H2 being strict Subgraph of G st

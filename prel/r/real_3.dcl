@@ -39,7 +39,7 @@
 <Adjective nr="24"/>
 <Adjective nr="25"/>
 <Adjective nr="27"/>
-<Adjective nr="34">
+<Adjective nr="35">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>

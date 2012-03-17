@@ -19,8 +19,8 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FINSET_1, FUNCT_1, WELLORD2, XBOOLE_0, RELAT_1, FRAENKEL;
  theorems TARSKI, AXIOMS, FUNCT_1, NAT_1, ZFMISC_1, RELAT_1, RELSET_1,
-      WELLORD2, ORDINAL1, CARD_1, FINSET_1, XBOOLE_0, XBOOLE_1,
-      FUNCOP_1, XREAL_1, XXREAL_0, FUNCT_4, CARD_2;
+      WELLORD2, ORDINAL1, CARD_1, FINSET_1, XBOOLE_0, XBOOLE_1, FUNCOP_1,
+      XREAL_1, XXREAL_0;
  schemes FUNCT_1, SUBSET_1, NAT_1, XBOOLE_0, WELLORD2, RELAT_1, CLASSES1;
 
 begin
@@ -30,11 +30,9 @@ reserve k,l,m,n,k1 for Nat,
   x,y,z,y1,y2,X,Y for set,
   f,g for Function;
 
-::::::::::::::::::::::::::::::::::::::
 ::                                  ::
 ::   Segments of Natural Numbers    ::
 ::                                  ::
-::::::::::::::::::::::::::::::::::::::
 
 definition
   let n be Nat;
@@ -229,11 +227,13 @@ definition
 end;
 
 registration
-  cluster FinSequence-like Function;
-  existence
-  proof
-    take f = {} --> 0, 0;
-    thus thesis by Th4;
+  cluster empty -> FinSequence-like Relation;
+  coherence
+  proof let R be Relation;
+   assume
+Z:  R is empty;
+    take 0;
+    thus thesis by Th4,Z;
   end;
 end;
 
@@ -349,14 +349,14 @@ A10:  x = n+1 & n <= n by A9,TARSKI:def 1;
   hence thesis;
 end;
 
-Lm2: Card Seg n = Card n
+Lm2: card Seg n = card n
 proof Seg n,n are_equipotent by Lm1;
-  hence Card Seg n = Card n by CARD_1:21;
+  hence card Seg n = card n by CARD_1:21;
 end;
 
 notation
   let p;
-  synonym len p for Card p;
+  synonym len p for card p;
 end;
 
 definition
@@ -365,7 +365,7 @@ definition
   :Def3:
   Seg it = dom p;
   coherence
-  proof Card p = card p;
+  proof card p = card p;
     hence thesis;
   end;
   compatibility
@@ -409,17 +409,17 @@ A7:   x in dom p & y = p.x by FUNCT_1:8;
       hence [x,y] in rng g by A2,A7,FUNCT_1:def 5;
     end;
     then
-A8: Card p = Card dom p by CARD_1:21;
-    thus k = Card p implies Seg k = dom p
+A8: card p = card dom p by CARD_1:21;
+    thus k = card p implies Seg k = dom p
     proof
-      assume k = Card p;
-      then k = Card n by A1,A8,Lm2;
+      assume k = card p;
+      then k = card n by A1,A8,Lm2;
       hence thesis by A1,CARD_1:def 5;
     end;
     assume
 A9: Seg k = dom p;
-    thus k = Card k by CARD_1:def 5
-      .= Card p by A8,A9,Lm2;
+    thus k = card k by CARD_1:def 5
+      .= card p by A8,A9,Lm2;
   end;
 end;
 
@@ -434,13 +434,8 @@ end;
 
 canceled;
 
-theorem Th14:
-  {} is FinSequence
-proof
-  set f = {} --> 0;
-  dom f = {} & for x st x in {} holds f.x = 0;
-  hence thesis by Def2,Th4;
-end;
+theorem
+  {} is FinSequence;
 
 theorem
   (ex k st dom f c= Seg k) implies ex p st f c= p
@@ -556,11 +551,9 @@ A2: a <= len p & q = p|(Seg a);
   hence thesis by A1,Def3;
 end;
 
-:::::::::::::::::::::::::::::::::
 ::                             ::
 ::    FinSequences of D        ::
 ::                             ::
-:::::::::::::::::::::::::::::::::
 
 definition
   let D be set;
@@ -570,7 +563,7 @@ definition
   existence
   proof
     rng {} c= D by XBOOLE_1:2;
-    hence thesis by Th14;
+    hence thesis;
   end;
 end;
 
@@ -583,8 +576,8 @@ A1: dom f c= NAT;
 end;
 
 registration
-  cluster {} -> FinSequence-like;
-  coherence by Th14;
+  cluster empty -> FinSequence-like Relation;
+  coherence;
 end;
 
 registration
@@ -633,16 +626,9 @@ A2: rng p c= {y} by FUNCOP_1:19;
   thus thesis by A1,Def3;
 end;
 
-::::::::::::::::::::::::::::::::::::
 ::                                ::
 ::    The Empty FinSequence       ::
 ::                                ::
-::::::::::::::::::::::::::::::::::::
-
-registration
-  cluster empty FinSequence;
-  existence by Th14;
-end;
 
 canceled 3;
 
@@ -653,8 +639,6 @@ theorem
 proof
   hereby
     assume p <> {};
-    then len p <> 0;
-    then len p > 0;
     then len p+1 > 0+1 by XREAL_1:10;
     hence len p >=1 by NAT_1:13;
   end;
@@ -1118,7 +1102,6 @@ theorem Th47:
 proof
 A1: dom(p^{}) = Seg len (p^{}) by Def3
     .= Seg (len p + len {}) by Th35
-    .= Seg (len p + 0)
     .= dom p by Def3;
   thus p^{} = p
   proof
@@ -1127,7 +1110,6 @@ A1: dom(p^{}) = Seg len (p^{}) by Def3
   end;
 A2: dom({}^p) = Seg len ({}^p) by Def3
     .= Seg (len {} + len p) by Th35
-    .= Seg (0 + len p)
     .= dom p by Def3;
   thus {}^p=p
   proof
@@ -1136,8 +1118,7 @@ A2: dom({}^p) = Seg len ({}^p) by Def3
       let k;
       assume
 A3:   k in dom p;
-      thus ({}^p).k = ({}^p).(0 + k)
-        .=({}^p).(len {} + k)
+      thus ({}^p).k =({}^p).(len {} + k)
         .=p.k by A3,Def7;
     end;
     hence {}^p=p by A2,Th17;
@@ -1150,7 +1131,6 @@ proof
   assume p^q={};
   then 0 = len (p^q)
     .= len p + len q by Th35;
-  then len p = 0 & len q = 0;
   hence thesis;
 end;
 
@@ -1452,7 +1432,6 @@ theorem Th63:
   p <> {} implies ex q,x st p=q^<*x*>
 proof
   assume p <> {};
-  then len p <> 0;
   then consider n be Nat such that
 A1: len p = n + 1 by NAT_1:6;
   reconsider n as Element of NAT by ORDINAL1:def 13;
@@ -1521,9 +1500,7 @@ definition
   end;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::
 :: scheme of induction for finite sequences ::
-::::::::::::::::::::::::::::::::::::::::::::::
 
 scheme IndSeq{P[FinSequence]}: for p holds P[p]
 provided
@@ -1577,13 +1554,11 @@ proof
 A1: S[{}]
   proof
     let p,q,s;
-    assume p^q={}^s & len p <= len {};
-    then len p <= 0;
-    then
-A2: len p = 0;
+    assume
+B2:  p^q={}^s & len p <= len {};
     take {};
     thus p^{} = p by Th47
-      .= {} by A2;
+      .= {} by B2;
   end;
 A3: for r,x st S[r] holds S[r^<*x*>]
   proof
@@ -1616,12 +1591,11 @@ A9:     k in dom p;
       then
 A10:  len p <> len r + 1 by Th56;
       len p <= len r + len <*x*> by A5,Th35;
-      then len p <= len r + 1 by Th56;
       then
-A11:  len p <= len r by A10,NAT_1:8;
+B11:   len p <= len r + 1 by Th56;
       p^q=r^(<*x*>^s) by A5,Th45;
       then consider t being FinSequence such that
-A12:  p^t = r by A4,A11;
+A12:  p^t = r by A4,B11,A10,NAT_1:8;
       p^(t^<*x*>) = r^<*x*> by A12,Th45;
       hence thesis;
     end;
@@ -2011,11 +1985,9 @@ A1: x in Y iff x in D()* & R[x] from XBOOLE_0:sch 1;
   hence thesis;
 end;
 
-:::::::::::::::::::::::::::::::
 ::                           ::
 ::        Subsequences       ::
 ::                           ::
-:::::::::::::::::::::::::::::::
 
 definition
   let IT be Function;
@@ -2257,8 +2229,7 @@ A39:      1 <= k & k < len(p^<*x*>) & len(p^<*x*>) <= len(p^<*x *>) by Th35;
       len q <> 0
       proof
         assume len q = 0;
-        then X = {} by A32,Lm4,RELAT_1:60;
-        then p^<*x*> = {} by A31;
+        then p^<*x*> = {} by A31,A32,Lm4,RELAT_1:60;
         then 0 = len (p^<*x*>)
           .= len p + len <*x*> by Th35
           .= 1 + len p by Th56;
@@ -2721,7 +2692,7 @@ theorem
   Seg n,n are_equipotent by Lm1;
 
 theorem
-  Card Seg n = Card n by Lm2;
+  card Seg n = card n by Lm2;
 
 theorem
   X is finite implies ex n st X,Seg n are_equipotent
@@ -2738,12 +2709,9 @@ theorem
   for n being Nat holds card Seg n = n
 proof
   let n be Nat;
-  Seg n is finite & n is finite & Card n is finite & Seg n,n are_equipotent
+  Seg n is finite & n is finite & card n is finite & Seg n,n are_equipotent
   by Lm1;
-  then Card card n = Card n & card Seg n = card n &
-  Card n = n & Card n = n & Card card Card n = Card Card n &
-  Card Card n = Card n by CARD_1:21,def 5;
-  hence thesis;
+  hence thesis by CARD_1:def 5;
 end;
 
 begin :: Addenda
@@ -2827,9 +2795,9 @@ definition
 end;
 
 registration
-  let D be set, f be FinSequence of D;
+  let f be FinSequence;
   cluster f|0 -> empty;
-  coherence by Th4,RELAT_1:110;
+  coherence by Th4;
 end;
 
 theorem
@@ -3153,21 +3121,15 @@ end;
 
 :: from SCMFSA_7, 2006.03.14, A.T.
 
-theorem Th93:
-  for p being FinSequence holds p | Seg 0 = {}
-proof
-  let p be FinSequence;
-  (dom p) /\ Seg 0 = {} by Th4;
-  then (dom p) misses Seg 0 by XBOOLE_0:def 7;
-  hence p | Seg 0 = {} by RELAT_1:95;
-end;
+theorem
+  for p being FinSequence holds p | Seg 0 = {} by Th4;
 
 theorem
   for f,g being FinSequence holds f | Seg 0 = g | Seg 0
 proof
   let f,g be FinSequence;
-  f | Seg 0 = {} by Th93;
-  hence thesis by Th93;
+  f | Seg 0 = {} by Th4;
+  hence thesis by Th4;
 end;
 
 theorem
@@ -3245,9 +3207,8 @@ proof
   let p,r be FinSequence;
   assume
 A1: r = p|Seg n;
-  then len r <= len p by Th100;
   then consider m be Nat such that
-A2: len p = len r + m by NAT_1:10;
+A2: len p = len r + m by NAT_1:10,Th100;
   deffunc U(Nat) = p.(len r + $1);
   consider q being FinSequence such that
 A3: len q = m & for k st k in dom q holds q.k = U(k) from SeqLambda;
@@ -3272,8 +3233,7 @@ A9:   k = len r + j by NAT_1:10;
       then
 A10:  (r^q).k = q.j by A4,A5,A8,Th37;
       j <> 0 by A8,A9;
-      then 0 < j & k <= len r + len q by A2,A3,A5;
-      then 0+1 <= j & j <= len q by A9,NAT_1:13,XREAL_1:8;
+      then 0+1 <= j & j <= len q by A9,NAT_1:13,XREAL_1:8,A2,A3,A5;
       then j in Seg m by A3,Th3;
         then j in dom q by A3,Def3;
       hence p.k = (r^q).k by A3,A9,A10;
@@ -3307,10 +3267,10 @@ end;
 :: from MATRIX_1, 2007.07.22, A.T generalized
 
 theorem
-  for M1, M2 being set st Card M1 = 0 & Card M2 = 0 holds M1 = M2
+  for M1, M2 being set st card M1 = 0 & card M2 = 0 holds M1 = M2
 proof
   let M1, M2 be set;
-  assume Card M1 = {} & Card M2 = {};
+  assume card M1 = {} & card M2 = {};
    then M1 = {} & M2 = {};
   hence thesis;
 end;
@@ -3322,7 +3282,7 @@ registration
   coherence by Th4;
 end;
 
-:: fom CHAIN_1, 2008.08.31, A.K.
+:: from CHAIN_1, 2008.08.31, A.K.
 
 registration
   let n be non zero Nat;
@@ -3333,5 +3293,46 @@ registration
     then 1 in Seg n;
     hence thesis;
   end;
+end;
+
+:: from GROEB_2, 2008.10.08, A.T.
+
+theorem
+  for p being FinSequence, n,m being Nat st m <= n
+   holds p|n|m = p|m
+proof let p be FinSequence, n,m be Nat;
+ assume m <= n;
+  then  Seg m c= Seg n by Th7;
+ hence p|n|m = p|m by RELAT_1:103;
+end;
+
+:: from CARD_5, 2008.10.08, A.T.
+
+reserve m for Element of NAT;
+
+theorem
+  Seg n = (n+1) \ {0}
+proof
+A1: n+1 = {m: m < n+1} by AXIOMS:30;
+  thus Seg n c= (n+1) \ {0}
+  proof
+    let x;
+    assume x in Seg n;
+    then consider k being Element of NAT such that
+A2: x = k & 1 <= k & k <= n;
+    k < n+1 & x <> 0 by A2,NAT_1:13;
+    then x in n+1 & not x in {0} by A1,A2,TARSKI:def 1;
+    hence thesis by XBOOLE_0:def 5;
+  end;
+  let x;
+  assume x in (n+1) \ {0};
+  then
+A3: x in n+1 & not x in {0} by XBOOLE_0:def 5;
+  then consider m such that
+A4: x = m & m < n+1 by A1;
+  x <> 0 & m >= 0 by A3,TARSKI:def 1;
+  then m > 0 & 0+1 = 1 by A4;
+  then 1 <= m & m <= n by A4,NAT_1:13;
+  hence thesis by A4;
 end;
 

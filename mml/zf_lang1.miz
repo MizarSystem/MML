@@ -7,18 +7,18 @@
 environ
 
  vocabularies ZF_LANG, FUNCT_1, FINSEQ_1, BOOLE, ZF_MODEL, ARYTM_3, QC_LANG1,
-      RELAT_1, FINSET_1, QC_LANG3, ARYTM;
+      RELAT_1, FINSET_1, QC_LANG3, ARYTM, FUNCT_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, NAT_1,
       RELAT_1, FUNCT_1, FUNCT_2, FINSEQ_1, FINSET_1, ZF_LANG, ZF_MODEL,
-      XXREAL_0;
- constructors ENUMSET1, XXREAL_0, XREAL_0, NAT_1, ZF_MODEL;
+      XXREAL_0, FUNCT_7;
+ constructors ENUMSET1, XXREAL_0, XREAL_0, NAT_1, ZF_MODEL, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FINSET_1, XXREAL_0,
       XREAL_0, NAT_1, FINSEQ_1, ZF_LANG;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, ZF_LANG, ZF_MODEL, XBOOLE_0;
  theorems TARSKI, ZFMISC_1, ENUMSET1, NAT_1, FINSEQ_1, FINSEQ_3,
       FUNCT_1, FUNCT_2, ZF_LANG, ZF_MODEL, ZFMODEL1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, XXREAL_0, ORDINAL1;
+      XBOOLE_0, XBOOLE_1, XXREAL_0, ORDINAL1, FUNCT_7;
  schemes PARTFUN1, ZF_LANG;
 
 begin
@@ -30,14 +30,14 @@ reserve p,p1,p2,q,r,F,G,G1,G2,H,H1,H2 for ZF-formula,
 
 theorem Th1:
   Var1 (x '=' y) = x & Var2 (x '=' y) = y
-proof x '=' y is_equality by ZF_LANG:16;
+proof x '=' y is being_equality by ZF_LANG:16;
   then x '=' y = (Var1 (x '=' y)) '=' (Var2 (x '=' y)) by ZF_LANG:53;
   hence thesis by ZF_LANG:6;
 end;
 
 theorem Th2:
   Var1 (x 'in' y) = x & Var2 (x 'in' y) = y
-proof x 'in' y is_membership by ZF_LANG:16;
+proof x 'in' y is being_membership by ZF_LANG:16;
   then x 'in' y = (Var1 (x 'in' y)) 'in' (Var2 (x 'in' y)) by ZF_LANG:54;
   hence thesis by ZF_LANG:7;
 end;
@@ -352,9 +352,9 @@ A2: the_argument_of H = All(bound_in H, 'not' the_scope_of H) by A1,Th3;
 end;
 
 theorem
-  not (H is_equality & (H is_membership or H is negative or
+  not (H is being_equality & (H is being_membership or H is negative or
   H is conjunctive or H is universal)) &
-  not (H is_membership & (H is negative or H is conjunctive or
+  not (H is being_membership & (H is negative or H is conjunctive or
   H is universal)) &
   not (H is negative & (H is conjunctive or H is universal)) &
   not (H is conjunctive & H is universal)
@@ -614,7 +614,7 @@ end;
 theorem Th63:
   Free (x '=' y) = {x,y}
 proof
-  x '=' y is_equality & Var1 (x '=' y) = x & Var2 (x '=' y) = y
+  x '=' y is being_equality & Var1 (x '=' y) = x & Var2 (x '=' y) = y
   by Th1,ZF_LANG:16;
   hence thesis by ZF_MODEL:1;
 end;
@@ -622,7 +622,7 @@ end;
 theorem Th64:
   Free (x 'in' y) = {x,y}
 proof
-  x 'in' y is_membership & Var1 (x 'in' y) = x & Var2 (x 'in' y) = y
+  x 'in' y is being_membership & Var1 (x 'in' y) = x & Var2 (x 'in' y) = y
   by Th2,ZF_LANG:16;
   hence thesis by ZF_MODEL:1;
 end;
@@ -735,14 +735,14 @@ proof
 A5: for H st H is atomic holds P[H]
   proof
     let H such that
-A6: H is_equality or H is_membership;
-A7: H is_equality implies thesis
+A6: H is being_equality or H is being_membership;
+A7: H is being_equality implies thesis
     proof
       given x1,x2 such that
 A8:   H = x1 '=' x2;
       thus thesis by A1,A8;
     end;
-    H is_membership implies thesis
+    H is being_membership implies thesis
     proof
       given x1,x2 such that
 A9:   H = x1 'in' x2;
@@ -783,31 +783,8 @@ reserve M,E for non empty set,
   v,v' for Function of VAR,M;
 
 definition
-  let E,f,x,e;
-  func f / (x,e) -> Function of VAR,E means
-  :
-  Def1: it.x = e & for y st it.y <> f.y holds x = y;
-  existence
-  proof consider g such that
-A1: g.x = e & for y st y <> x holds g.y = f.y by ZF_MODEL:21;
-    take g; thus thesis by A1;
-  end;
-  uniqueness
-  proof
-    let g1,g2 be Function of VAR,E such that
-A2: g1.x = e & for y st g1.y <> f.y holds x = y and
-A3: g2.x = e & for y st g2.y <> f.y holds x = y;
-    now
-      let y be Element of VAR;
-      g1.y = e & g2.y = e or g1.y = f.y & g2.y = f.y by A2,A3;
-      hence g1.y = g2.y;
-    end;
-    hence thesis by FUNCT_2:113;
-  end;
-end;
-
-definition
   let D,D1,D2 be non empty set, f be Function of D,D1;
+ canceled;
   assume
 A1: D1 c= D2;
   func D2!f -> Function of D,D2 equals
@@ -823,40 +800,24 @@ end;
 
 canceled 2;
 
-theorem Th78:
-  (v/(x,m'))/(x,m) = v/(x,m) & v/(x,v.x) = v
-proof
-  now
-    let y;
-    assume x <> y;
-    then (v/(x,m'))/(x,m).y = v/(x,m').y & v/(x,m').y = v.y by Def1;
-    hence (v/(x,m'))/(x,m).y = v.y;
-  end;
-  then
-A1: for y st (v/(x,m'))/(x,m).y <> v.y holds x = y;
-  (v/(x,m'))/(x,m).x = m by Def1;
-  hence (v/(x,m'))/(x,m) = v/(x,m) by A1,Def1;
-  v.x = v.x & for y st v.y <> v.y holds x = y;
-  hence v/(x,v.x) = v by Def1;
+notation
+  let E be non empty set, f be Function of VAR,E,
+      x be Variable, e be Element of E;
+  synonym f / (x,e) for f+*(x,e);
 end;
 
-theorem
-  x <> y implies (v/(x,m))/(y,m') = (v/(y,m'))/(x,m)
-proof
-  assume x <> y;
-  then
-A1: (v/(x,m))/(y,m').x = v/(x,m).x by Def1
-    .= m by Def1;
-  now
-    let z such that
-A2: (v/(x,m))/(y,m').z <> v/(y,m').z;
-    z = y or z <> y;
-    then (v/(x,m))/(y,m').z = m' & v/(y,m').z = m' or
-    (v/(x,m))/(y,m').z = v/(x,m).z & v/(y,m').z = v.z by Def1;
-    hence x = z by A2,Def1;
-  end;
-  hence thesis by A1,Def1;
+definition
+  let E be non empty set, f be Function of VAR,E,
+      x be Variable, e be Element of E;
+  redefine func f/(x,e) -> Function of VAR, E;
+  coherence
+   proof
+      f+*(x,e) is Function of VAR, E;
+    hence thesis;
+   end;
 end;
+
+canceled 2;
 
 theorem Th80:
   M,v |= All(x,H) iff for m holds M,v/(x,m) |= H
@@ -866,7 +827,7 @@ proof
     assume
 A1: M,v |= All(x,H);
     let m;
-    for y st (v/(x,m)).y <> v.y holds x = y by Def1;
+    for y st (v/(x,m)).y <> v.y holds x = y by FUNCT_7:34;
     hence thesis by A1,ZF_MODEL:16;
   end;
   assume
@@ -874,7 +835,7 @@ A2: for m holds M,v/(x,m) |= H;
   now
     let v';
     assume for y st v'.y <> v.y holds x = y;
-    then v' = v/(x,v'.x) by Def1;
+    then v' = v/(x,v'.x) by FUNCT_7:131;
     hence M,v' |= H by A2;
   end;
   hence thesis by ZF_MODEL:16;
@@ -883,15 +844,15 @@ end;
 theorem Th81:
   M,v |= All(x,H) iff M,v/(x,m) |= All(x,H)
 proof
-A1: (v/(x,m))/(x,v.x) = v/(x,v.x) by Th78
-    .= v by Th78;
+A1: (v/(x,m))/(x,v.x) = v/(x,v.x) by FUNCT_7:36
+    .= v by FUNCT_7:37;
   for v,m st M,v |= All(x,H) holds M,v/(x,m) |= All(x,H)
   proof
     let v,m such that
 A2: M,v |= All(x,H);
     now
       let m';
-      (v/(x,m))/(x,m') = v/(x,m') by Th78;
+      (v/(x,m))/(x,m') = v/(x,m') by FUNCT_7:36;
       hence M,(v/(x,m))/(x,m') |= H by A2,Th80;
     end;
     hence thesis by Th80;
@@ -908,13 +869,13 @@ proof
     then consider v' such that
 A1: (for y st v'.y <> v.y holds x = y) & M,v' |= H by ZF_MODEL:20;
     take v'.x;
-    thus thesis by A1,Def1;
+    thus thesis by A1,FUNCT_7:131;
   end;
   given m such that
 A2: M,v/(x,m) |= H;
   now
     take v' = v/(x,m);
-    thus for y st v'.y <> v.y holds x = y by Def1;
+    thus for y st v'.y <> v.y holds x = y by FUNCT_7:34;
     thus M,v' |= H by A2;
   end;
   hence thesis by ZF_MODEL:20;
@@ -923,15 +884,15 @@ end;
 theorem
   M,v |= Ex(x,H) iff M,v/(x,m) |= Ex(x,H)
 proof
-A1: (v/(x,m))/(x,v.x) = v/(x,v.x) by Th78
-    .= v by Th78;
+A1: (v/(x,m))/(x,v.x) = v/(x,v.x) by FUNCT_7:36
+    .= v by FUNCT_7:37;
   for v,m st M,v |= Ex(x,H) holds M,v/(x,m) |= Ex(x,H)
   proof
     let v,m;
     assume M,v |= Ex(x,H);
     then consider m' such that
 A2: M,v/(x,m') |= H by Th82;
-    (v/(x,m))/(x,m') = v/(x,m') by Th78;
+    (v/(x,m))/(x,m') = v/(x,m') by FUNCT_7:36;
     hence thesis by A2,Th82;
   end;
   hence thesis by A1;
@@ -1035,7 +996,7 @@ A21:  M,v/(x1,m) |= H & Free All(x1,H) = Free H \ {x1} by A20,Th67,Th80;
         by A21,XBOOLE_0:def 5;
         then v'.x = v.x & x <> x1 or x = x1 by A19,TARSKI:def 1;
         then v'/(x1,m).x = v.x & v.x = v/(x1,m).x or
-        v/(x1,m).x = m & v'/(x1,m).x = m by Def1;
+        v/(x1,m).x = m & v'/(x1,m).x = m by FUNCT_7:34,130;
         hence v'/(x1,m).x = v/(x1,m).x;
       end;
       hence M,v'/(x1,m) |= H by A18,A21;
@@ -1140,7 +1101,7 @@ A2: b in M & not b in {a};
     M,(v/(x,m))/(y,b) |= x '=' y by A1;
     then (v/(x,m))/(y,b).x = (v/(x,m))/(y,b).y & v/(x,m).x = m &
     (v/(x,m))/(y,b).y = b & (v/(x,m))/(y,b).x = v/(x,m).x
-    by A1,Def1,ZF_MODEL:12;
+    by A1,FUNCT_7:34,130,ZF_MODEL:12;
     hence contradiction by A2,TARSKI:def 1;
   end;
   now
@@ -1172,7 +1133,7 @@ A2: X /\ M <> {};
     then not M,(v/(x,a))/(y,m) |= x 'in' y by ZF_MODEL:14;
     then not (v/(x,a))/(y,m).x in (v/(x,a))/(y,m).y & v/(x,a).x = a &
     (v/(x,a))/(y,m).y = m & (v/(x,a))/(y,m).x = v/(x,a).x
-    by A1,Def1,ZF_MODEL:13;
+    by A1,FUNCT_7:34,130,ZF_MODEL:13;
     hence contradiction by A2,XBOOLE_0:def 4;
   end;
   now
@@ -1188,17 +1149,17 @@ A3: for X st X in M holds X misses M;
 end;
 
 theorem
-  H is_equality implies (M,v |= H iff v.Var1 H = v.Var2 H)
+  H is being_equality implies (M,v |= H iff v.Var1 H = v.Var2 H)
 proof
-  assume H is_equality;
+  assume H is being_equality;
   then H = (Var1 H) '=' (Var2 H) by ZF_LANG:53;
   hence thesis by ZF_MODEL:12;
 end;
 
 theorem
-  H is_membership implies (M,v |= H iff v.Var1 H in v.Var2 H)
+  H is being_membership implies (M,v |= H iff v.Var1 H in v.Var2 H)
 proof
-  assume H is_membership;
+  assume H is being_membership;
   then H = (Var1 H) 'in' (Var2 H) by ZF_LANG:54;
   hence thesis by ZF_MODEL:13;
 end;
@@ -1729,7 +1690,7 @@ theorem
 proof
   let v;
   M,v |= All(x,H) implies M,v/(x,v.x) |= H by Th80;
-  then M,v |= All(x,H) implies M,v |= H by Th78;
+  then M,v |= All(x,H) implies M,v |= H by FUNCT_7:37;
   hence thesis by ZF_MODEL:18;
 end;
 
@@ -1738,7 +1699,7 @@ theorem
 proof
   let v;
   M,v/(x,v.x) |= H implies M,v |= Ex(x,H) by Th82;
-  then M,v |= H implies M,v |= Ex(x,H) by Th78;
+  then M,v |= H implies M,v |= Ex(x,H) by FUNCT_7:37;
   hence thesis by ZF_MODEL:18;
 end;
 
@@ -1798,7 +1759,7 @@ A3:   M,v/(x,m) |= H1 by Th82;
       then M,v/(x,m) |= All(x,H2) by A1,ZFMODEL1:10;
       then M,v |= All(x,H2) by Th81;
       then M,v/(x,v.x) |= H2 by Th80;
-      hence M,v |= H2 by Th78;
+      hence M,v |= H2 by FUNCT_7:37;
     end;
     hence M,v |= Ex(x,H1) => H2 by ZF_MODEL:18;
   end;
@@ -1829,7 +1790,7 @@ A2: M,v |= H1 => All(x,H2) by A1;
     assume M,v |= H1;
     then M,v |= All(x,H2) by A2,ZF_MODEL:18;
     then M,v/(x,v.x) |= H2 by Th80;
-    hence M,v |= H2 by Th78;
+    hence M,v |= H2 by FUNCT_7:37;
   end;
   hence M,v |= H1 => H2 by ZF_MODEL:18;
 end;
@@ -1843,7 +1804,7 @@ A1: for v holds M,v |= Ex(x,H1) => H2;
 A2: M,v |= Ex(x,H1) => H2 by A1;
   now
     assume M,v |= H1;
-    then M,v/(x,v.x) |= H1 by Th78;
+    then M,v/(x,v.x) |= H1 by FUNCT_7:37;
     then M,v |= Ex(x,H1) by Th82;
     hence M,v |= H2 by A2,ZF_MODEL:18;
   end;
@@ -2253,7 +2214,7 @@ theorem Th166:
 proof
   set H = x1 '=' x2, Hz = z1 '=' z2;
   set f = H/(y1,y2);
-  H is_equality & Hz is_equality by ZF_LANG:16;
+  H is being_equality & Hz is being_equality by ZF_LANG:16;
   then
 A1: H is atomic & Hz is atomic by ZF_LANG:def 15;
   then
@@ -2369,7 +2330,7 @@ theorem Th168:
 proof
   set H = x1 'in' x2, Hz = z1 'in' z2;
   set f = H/(y1,y2);
-  H is_membership & Hz is_membership by ZF_LANG:16;
+  H is being_membership & Hz is being_membership by ZF_LANG:16;
   then
 A1: H is atomic & Hz is atomic by ZF_LANG:def 15;
   then
@@ -2824,9 +2785,9 @@ proof
 end;
 
 theorem
-  H is_equality iff H/(x,y) is_equality
+  H is being_equality iff H/(x,y) is being_equality
 proof
-  thus H is_equality implies H/(x,y) is_equality
+  thus H is being_equality implies H/(x,y) is being_equality
   proof
     given x1,x2 such that
 A1: H = x1 '=' x2;
@@ -2834,7 +2795,7 @@ A1: H = x1 '=' x2;
     hence thesis by ZF_LANG:16;
   end;
   assume
-A2: H/(x,y) is_equality;
+A2: H/(x,y) is being_equality;
   1 <= 3 & 3 <= len H by ZF_LANG:29;
   then 1 <= 1 & 1 <= len H & dom H = Seg len H by FINSEQ_1:def 3,XXREAL_0:2;
   then
@@ -2845,9 +2806,9 @@ A3: H/(x,y).1 = 0 & y <> 0 & 1 in dom H by A2,Th148,FINSEQ_3:27,ZF_LANG:35;
 end;
 
 theorem
-  H is_membership iff H/(x,y) is_membership
+  H is being_membership iff H/(x,y) is being_membership
 proof
-  thus H is_membership implies H/(x,y) is_membership
+  thus H is being_membership implies H/(x,y) is being_membership
   proof
     given x1,x2 such that
 A1: H = x1 'in' x2;
@@ -2855,7 +2816,7 @@ A1: H = x1 'in' x2;
     hence thesis by ZF_LANG:16;
   end;
   assume
-A2: H/(x,y) is_membership;
+A2: H/(x,y) is being_membership;
   1 <= 3 & 3 <= len H by ZF_LANG:29;
   then 1 <= 1 & 1 <= len H & dom H = Seg len H by FINSEQ_1:def 3,XXREAL_0:2;
   then

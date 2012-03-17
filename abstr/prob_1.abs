@@ -8,10 +8,10 @@ environ
 
  vocabularies FUNCT_1, ARYTM, SEQ_1, ARYTM_1, SEQ_2, ORDINAL2, ABSVALUE,
       SETFAM_1, SUBSET_1, FINSUB_1, BOOLE, RELAT_1, FUNCOP_1, TARSKI, PROB_1,
-      RCOMP_1, SUPINF_1, FUNCT_4;
+      RCOMP_1, SUPINF_1, DYNKIN, REALSET1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, FINSUB_1, RELAT_1, FUNCT_1,
-      REAL_1, FUNCT_2, FUNCOP_1, FUNCT_7, ORDINAL1, CARD_3, NUMBERS, XREAL_0,
-      COMPLEX1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
+      REAL_1, FUNCT_2, FUNCOP_1, FUNCT_7, ORDINAL1, CARD_3, NUMBERS, VALUED_0,
+      XREAL_0, COMPLEX1, NAT_1, SEQ_1, SEQ_2, SETFAM_1, XXREAL_0, XXREAL_1;
  constructors SETFAM_1, FINSUB_1, XXREAL_1, COMPLEX1, REAL_1, SEQ_2, CARD_3,
       MEMBERED, SEQ_1, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, FUNCT_1, ORDINAL1, NUMBERS, XXREAL_0,
@@ -35,10 +35,8 @@ theorem :: PROB_1:3
   for r,seq st (ex n st for m st n <= m holds seq.m = r) holds
   seq is convergent & lim seq = r;
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
 :: DEFINITION AND BASIC PROPERTIES OF              ::
 :: a field of subsets of given nonempty set Omega. ::
-:::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 definition
   let X be set;
@@ -158,7 +156,7 @@ theorem :: PROB_1:29
 
 theorem :: PROB_1:30
   for A, B being Subset of X holds
-  (A1.0 = A & for n st n <> 0 holds A1.n = B) implies Intersection A1 = A /\ B;
+   Intersection(A followed_by B) = A /\ B;
 
 definition
   let f be Function;
@@ -177,7 +175,7 @@ definition
   attr F is sigma-multiplicative means
 :: PROB_1:def 8
 
-  for A1 being SetSequence of X st for n holds A1.n in F
+  for A1 being SetSequence of X st rng A1 c= F
   holds Intersection A1 in F;
 end;
 
@@ -197,7 +195,7 @@ canceled;
 theorem :: PROB_1:32
   for S being non empty set holds S is SigmaField of X iff (S c= bool X) &
   (for A1 being SetSequence of X st
-  (for n holds A1.n in S) holds Intersection A1 in S) &
+  rng A1 c= S holds Intersection A1 in S) &
   (for A being Subset of X st A in S holds A` in S);
 
 canceled 2;
@@ -242,7 +240,7 @@ definition
   mode SetSequence of Si -> SetSequence of X means
 :: PROB_1:def 9
 
-    for n holds it.n in Si;
+    rng it c= Si;
 end;
 
 canceled;
@@ -250,12 +248,14 @@ canceled;
 theorem :: PROB_1:46
   for ASeq being SetSequence of Si holds Union ASeq in Si;
 
+notation
+  let X be set, F be SigmaField of X;
+  synonym Event of F for Element of F;
+end;
+
 definition
   let X be set, F be SigmaField of X;
-  mode Event of F -> Subset of X means
-:: PROB_1:def 10
-
-    it in F;
+  redefine mode Event of F -> Subset of X;
 end;
 
 canceled;
@@ -288,6 +288,7 @@ end;
 
 definition
   let X,Si;
+canceled;
   func [#] Si -> Event of Si equals
 :: PROB_1:def 11
 
@@ -349,12 +350,12 @@ end;
 
 reserve P for Probability of Sigma;
 
-canceled;
+registration
+  let Omega,Sigma;
+ cluster -> zeroed Probability of Sigma;
+end;
 
-theorem :: PROB_1:64
-  P.{} = 0;
-
-canceled;
+canceled 3;
 
 theorem :: PROB_1:66
   P.([#] Sigma) = 1;
@@ -426,3 +427,6 @@ definition
   sigma(Family_of_halflines);
 end;
 
+theorem :: PROB_1:77
+  for A, B being Subset of X holds
+   Complement (A followed_by B) = A` followed_by B`;

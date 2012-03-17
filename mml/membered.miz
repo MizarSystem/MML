@@ -15,7 +15,8 @@ environ
  requirements BOOLE, SUBSET;
  definitions XCMPLX_0, XREAL_0, INT_1, TARSKI, RAT_1, XBOOLE_0, XXREAL_0;
  theorems INT_1, XBOOLE_0, XREAL_0, XCMPLX_0, RAT_1, SUBSET_1, ORDINAL1,
-      TARSKI, ENUMSET1, XBOOLE_1, SETFAM_1, NUMBERS, CARD_1, XXREAL_0;
+      TARSKI, ENUMSET1, XBOOLE_1, SETFAM_1, NUMBERS, CARD_1, XXREAL_0,
+      AXIOMS;
  schemes XBOOLE_0;
 
 begin
@@ -553,16 +554,12 @@ A1: X c= Y;
 end;
 
 registration
-  cluster {} -> natural-membered;
-  coherence
-  proof
-    let x; thus thesis;
-  end;
-end;
-
-registration
   cluster empty -> natural-membered set;
-  coherence;
+  coherence
+  proof let X be set such that
+Z:  X is empty;
+    let x; thus thesis by Z;
+  end;
 end;
 
 registration
@@ -1531,5 +1528,34 @@ registration
     n c= omega by ORDINAL1:def 2;
     hence thesis;
   end;
+end;
+
+:: From REAL_2, AG, 19.12.2008
+
+reserve a,b,d,e for real number;
+
+theorem
+  for X,Y being real-membered set st
+  X<>{} & Y<>{} & for a,b st a in X & b in Y holds a<=b holds
+  ex d st (for a st a in X holds a<=d) & for b st b in Y holds d<=b
+proof
+  let X,Y be real-membered set;
+  assume
+A1: X<>{} & Y<>{};
+  assume
+A2: for a,b st a in X & b in Y holds a<=b;
+  consider x being Element of X;
+  reconsider a=x as real number by A1,TARSKI:def 3;
+A3: a in X by A1;
+  consider y being Element of Y;
+  reconsider b=y as real number by A1,TARSKI:def 3;
+A4: b in Y by A1;
+  X c= REAL & Y c= REAL by Th3; then
+  consider d being real number such that
+A5: for a,b being real number st a in X & b in Y holds a<=d & d<=b
+  by A2,AXIOMS:26;
+  reconsider d as real number by XREAL_0:def 1;
+  take d;
+  thus thesis by A3,A4,A5;
 end;
 

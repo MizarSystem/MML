@@ -13,432 +13,669 @@ environ
 
 begin :: Definition of Logical Values and Logic Gates
 
-notation
-  let a be set;
-  antonym $a for a is empty;
-end;
-
-theorem
-  $ {{}};
-
-canceled;
+canceled 2;
 
 definition
   let a be set;
   func NOT1 a equals
   :Def1:
-  {} if $a otherwise {{}};
+  {} if a is non empty otherwise {{}};
   correctness;
+end;
+
+registration let a be empty set;
+ cluster NOT1 a -> non empty;
+ coherence by Def1;
+end;
+
+registration let a be non empty set;
+ cluster NOT1 a -> empty;
+ coherence by Def1;
 end;
 
 theorem
   NOT1 {{}} = {} & NOT1 {} = {{}} by Def1;
 
-theorem Th4:
-  for a being set holds $NOT1 a iff not($a) by Def1;
+theorem
+  for a being set holds NOT1 a is non empty iff not(a is non empty);
 
 reserve a,b,c,d,e,f,g,h for set;
 
-theorem Th5:
-  $ NOT1 {} by Th4;
+theorem
+   NOT1 {} is non empty;
 
 definition
   let a,b be set;
   func AND2(a,b) equals
   :Def2:
-  NOT1 {} if $a & $b otherwise {};
+  NOT1 {} if a is non empty & b is non empty otherwise {};
   correctness;
   commutativity;
 end;
 
+registration let a,b be non empty set;
+ cluster AND2(a,b) -> non empty;
+ coherence by Def2;
+end;
+
+registration let a be empty set, b be set;
+ cluster AND2(a,b) -> empty;
+ coherence by Def2;
+end;
+
 theorem
-  $AND2(a,b) iff ($a & $b) by Def2,Th5;
+  AND2(a,b) is non empty iff (a is non empty & b is non empty);
 
 definition
   let a,b be set;
   func OR2(a, b) equals
   :Def3:
-  NOT1 {} if ($a or $b) otherwise {};
+  NOT1 {} if (a is non empty or b is non empty) otherwise {};
   correctness;
   commutativity;
 end;
 
-theorem Th7:
-  $OR2(a,b) iff ($a or $b) by Def3,Th5;
+registration let a be set,b be non empty set;
+ cluster OR2(a,b) -> non empty;
+ coherence by Def3;
+end;
+
+registration let a,b be empty set;
+ cluster OR2(a,b) -> empty;
+ coherence by Def3;
+end;
+
+theorem
+  OR2(a,b) is non empty iff (a is non empty or b is non empty);
 
 definition
   let a,b be set;
   func XOR2(a,b) equals
   :Def4:
-  NOT1 {} if ($a & not $b) or (not $a & $b)
+  NOT1 {} if (a is non empty & not b is non empty)
+   or (not a is non empty & b is non empty)
   otherwise {};
   correctness;
   commutativity;
 end;
 
-theorem
-  $XOR2(a, b) iff ($a & not $b) or (not $a & $b) by Def4,Th5;
+registration let a be empty set,b be non empty set;
+ cluster XOR2(a,b) -> non empty;
+ coherence by Def4;
+end;
+
+registration let a,b be empty set;
+ cluster XOR2(a,b) -> empty;
+ coherence by Def4;
+end;
+
+registration let a,b be non empty set;
+ cluster XOR2(a,b) -> empty;
+ coherence by Def4;
+end;
 
 theorem
-  not $XOR2(a,a)
-proof $XOR2(a,a) iff ($a & not $a) or (not $a & $a) by Def4;
+  XOR2(a, b) is non empty iff (a is non empty & not b is non empty)
+   or (not a is non empty & b is non empty);
+
+theorem
+  not XOR2(a,a) is non empty
+proof XOR2(a,a) is non empty iff (a is non empty & not a is non empty)
+ or (not a is non empty & a is non empty);
   hence thesis;
 end;
 
 theorem
-  $XOR2(a,{}) iff $a by Def4,Th5;
+  XOR2(a,{}) is non empty iff a is non empty;
 
 theorem
-  $XOR2(a,b) iff $XOR2(b,a);
+  XOR2(a,b) is non empty iff XOR2(b,a) is non empty;
 
 definition
   let a,b be set;
   func EQV2(a, b) equals
   :Def5:
-  NOT1 {} if ($a iff $b) otherwise {};
+  NOT1 {} if (a is non empty iff b is non empty) otherwise {};
   correctness;
   commutativity;
 end;
 
-theorem
-  $EQV2(a, b) iff ($a iff $b) by Def5,Th5;
+registration let a be empty set,b be non empty set;
+ cluster EQV2(a,b) -> empty;
+ coherence by Def5;
+end;
+
+registration let a,b be empty set;
+ cluster EQV2(a,b) -> non empty;
+ coherence by Def5;
+end;
+
+registration let a,b be non empty set;
+ cluster EQV2(a,b) -> non empty;
+ coherence by Def5;
+end;
 
 theorem
-  $EQV2(a,b) iff not $XOR2(a,b)
+  EQV2(a, b) is non empty iff (a is non empty iff b is non empty);
+
+theorem
+  EQV2(a,b) is non empty iff not XOR2(a,b) is non empty
 proof
-  $EQV2(a,b) iff ($a iff $b) by Def5,Th5;
-  hence thesis by Def4,Th5;
+  EQV2(a,b) is non empty iff (a is non empty iff b is non empty);
+  hence thesis;
 end;
 
 definition
   let a,b be set;
   func NAND2(a, b) equals
   :Def6:
-  NOT1 {} if not ($a & $b) otherwise {};
+  NOT1 {} if not (a is non empty & b is non empty) otherwise {};
   correctness;
   commutativity;
 end;
 
+registration let a be empty set, b be set;
+ cluster NAND2(a,b) -> non empty;
+ coherence by Def6;
+end;
+
+registration let a,b be non empty set;
+ cluster NAND2(a,b) -> empty;
+ coherence by Def6;
+end;
+
 theorem
-  $NAND2(a, b) iff not ($a & $b) by Def6,Th5;
+  NAND2(a, b) is non empty iff not (a is non empty & b is non empty);
 
 definition
   let a,b be set;
   func NOR2(a, b) equals
   :Def7:
-  NOT1 {} if not ($a or $b) otherwise {};
+  NOT1 {} if not (a is non empty or b is non empty) otherwise {};
   correctness;
   commutativity;
 end;
 
+registration let a,b be empty set;
+ cluster NOR2(a,b) -> non empty;
+ coherence by Def7;
+end;
+
+registration let a be non empty set, b be set;
+ cluster NOR2(a,b) -> empty;
+ coherence by Def7;
+end;
+
 theorem
-  $NOR2(a,b) iff not ($a or $b) by Def7,Th5;
+  NOR2(a,b) is non empty iff not (a is non empty or b is non empty);
 
 definition
   let a,b,c be set;
   func AND3(a,b,c) equals
   :Def8:
-  NOT1 {} if $a & $b & $c otherwise {};
+  NOT1 {} if a is non empty & b is non empty & c is non empty otherwise {};
   correctness;
 end;
 
+registration let a,b,c be non empty set;
+ cluster AND3(a,b,c) -> non empty;
+ coherence by Def8;
+end;
+
+registration let a be empty set, b,c be set;
+ cluster AND3(a,b,c) -> empty;
+ coherence by Def8;
+ cluster AND3(b,a,c) -> empty;
+ coherence by Def8;
+ cluster AND3(b,c,a) -> empty;
+ coherence by Def8;
+end;
+
 theorem
-  $AND3(a,b,c) iff $a & $b & $c by Def8,Th5;
+  AND3(a,b,c) is non empty iff a is non empty & b is non empty
+   & c is non empty;
 
 definition
   let a,b,c be set;
   func OR3(a,b,c) equals
   :Def9:
-  NOT1 {} if $a or $b or $c otherwise {};
+  NOT1 {} if a is non empty or b is non empty or c is non empty otherwise {};
   correctness;
 end;
 
+registration let a,b,c be empty set;
+ cluster OR3(a,b,c) -> empty;
+ coherence by Def9;
+end;
+
+registration let a be non empty set, b,c be set;
+ cluster OR3(a,b,c) -> non empty;
+ coherence by Def9;
+ cluster OR3(b,a,c) -> non empty;
+ coherence by Def9;
+ cluster OR3(b,c,a) -> non empty;
+ coherence by Def9;
+end;
+
 theorem
-  $OR3(a,b,c) iff $a or $b or $c by Def9,Th5;
+  OR3(a,b,c) is non empty iff a is non empty or b is non empty
+   or c is non empty;
 
 definition
   let a,b,c be set;
   func XOR3(a,b,c) equals
   :Def10:
   NOT1 {} if
-  (($a & not $b) or (not $a & $b)) & not $c or
-  not (($a & not $b) or (not $a & $b)) & $c otherwise {};
+  ((a is non empty & not b is non empty)
+   or (not a is non empty & b is non empty)) & not c is non empty or
+  not ((a is non empty & not b is non empty) or
+   (not a is non empty & b is non empty)) & c is non empty otherwise {};
   correctness;
 end;
 
-theorem Th18:
-  $XOR3(a,b,c) iff (($a & not $b) or (not $a & $b)) & not $c or
-  not (($a & not $b) or (not $a & $b)) & $c by Def10,Th5;
+registration let a,b,c be empty set;
+ cluster XOR3(a,b,c) -> empty;
+ coherence by Def10;
+end;
+
+registration let a,b be empty set, c be non empty set;
+ cluster XOR3(a,b,c) -> non empty;
+ coherence by Def10;
+ cluster XOR3(a,c,b) -> non empty;
+ coherence by Def10;
+ cluster XOR3(c,a,b) -> non empty;
+ coherence by Def10;
+end;
+
+registration let a,b be non empty set, c be empty set;
+ cluster XOR3(a,b,c) -> empty;
+ coherence by Def10;
+ cluster XOR3(a,c,b) -> empty;
+ coherence by Def10;
+ cluster XOR3(c,a,b) -> empty;
+ coherence by Def10;
+end;
+
+registration let a,b,c be non empty set;
+ cluster XOR3(a,b,c) -> non empty;
+ coherence by Def10;
+end;
+
+theorem
+  XOR3(a,b,c) is non empty iff ((a is non empty & not b is non empty) or
+   (not a is non empty & b is non empty)) & not c is non empty or
+  not ((a is non empty & not b is non empty)
+   or (not a is non empty & b is non empty)) & c is non empty;
 
 definition
   let a,b,c be set;
   func MAJ3(a,b,c) equals
   :Def11:
-  NOT1 {} if $a & $b or $b & $c or $c & $a
+  NOT1 {} if a is non empty & b is non empty or
+   b is non empty & c is non empty or c is non empty & a is non empty
   otherwise {};
   correctness;
 end;
 
-theorem Th19:
-  $MAJ3(a,b,c) iff $a & $b or $b & $c or $c & $a by Def11,Th5;
+registration let a,b be non empty set, c be set;
+ cluster MAJ3(a,b,c) -> non empty;
+ coherence by Def11;
+ cluster MAJ3(a,c,b) -> non empty;
+ coherence by Def11;
+ cluster MAJ3(c,a,b) -> non empty;
+ coherence by Def11;
+end;
+
+registration let a,b be empty set, c be set;
+ cluster MAJ3(a,b,c) -> empty;
+ coherence by Def11;
+ cluster MAJ3(a,c,b) -> empty;
+ coherence by Def11;
+ cluster MAJ3(c,a,b) -> empty;
+ coherence by Def11;
+end;
+
+theorem
+  MAJ3(a,b,c) is non empty iff a is non empty & b is non empty or
+   b is non empty & c is non empty or c is non empty & a is non empty;
 
 definition
   let a,b,c be set;
   func NAND3(a,b,c) equals
   :Def12:
-  NOT1 {} if not ($a & $b & $c) otherwise {};
+  NOT1 {} if not (a is non empty & b is non empty & c is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND3(a,b,c) iff not ($a & $b & $c) by Def12,Th5;
+  NAND3(a,b,c) is non empty iff not (a is non empty & b is non empty
+   & c is non empty)
+   by Def12;
 
 definition
   let a,b,c be set;
   func NOR3(a,b,c) equals
   :Def13:
-  NOT1 {} if not ($a or $b or $c)
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty)
   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR3(a,b,c) iff not ($a or $b or $c) by Def13,Th5;
+  NOR3(a,b,c) is non empty iff not (a is non empty or b is non empty
+   or c is non empty)
+   by Def13;
 
 definition
   let a,b,c,d be set;
   func AND4(a,b,c,d) equals
   :Def14:
-  NOT1 {} if $a & $b & $c & $d otherwise {};
+  NOT1 {} if a is non empty & b is non empty & c is non empty &
+   d is non empty otherwise {};
   correctness;
 end;
 
 theorem
-  $AND4(a,b,c,d) iff $a & $b & $c & $d by Def14,Th5;
+  AND4(a,b,c,d) is non empty iff a is non empty & b is non empty &
+   c is non empty & d is non empty
+   by Def14;
 
 definition
   let a,b,c,d be set;
   func OR4(a,b,c,d) equals
   :Def15:
-  NOT1 {} if $a or $b or $c or $d
+  NOT1 {} if a is non empty or b is non empty or c is non empty or
+   d is non empty
   otherwise {};
   correctness;
 end;
 
 theorem
-  $OR4(a,b,c,d) iff $a or $b or $c or $d by Def15,Th5;
+  OR4(a,b,c,d) is non empty iff a is non empty or b is non empty or
+   c is non empty or d is non empty
+   by Def15;
 
 definition
   let a,b,c,d be set;
   func NAND4(a,b,c,d) equals
   :Def16:
-  NOT1 {} if not ($a & $b & $c & $d)
+  NOT1 {} if not (a is non empty & b is non empty & c is non empty &
+   d is non empty)
   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND4(a,b,c,d) iff not ($a & $b & $c & $d) by Def16,Th5;
+  NAND4(a,b,c,d) is non empty iff not (a is non empty & b is non empty &
+   c is non empty & d is non empty)
+   by Def16;
 
 definition
   let a,b,c,d be set;
   func NOR4(a,b,c,d) equals
   :Def17:
-  NOT1 {} if not ($a or $b or $c or $d)
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty or
+   d is non empty)
   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR4(a,b,c,d) iff not ($a or $b or $c or $d) by Def17,Th5;
+  NOR4(a,b,c,d) is non empty iff not (a is non empty or b is non empty
+   or c is non empty or d is non empty)
+   by Def17;
 
 definition
   let a,b,c,d,e be set;
   func AND5(a,b,c,d,e) equals
   :Def18:
-  NOT1 {} if $a & $b & $c & $d & $e
+  NOT1 {} if a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty
   otherwise {};
   correctness;
 end;
 
 theorem
-  $AND5(a,b,c,d,e) iff $a & $b & $c & $d & $e by Def18,Th5;
+  AND5(a,b,c,d,e) is non empty iff a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty by Def18;
 
 definition
   let a,b,c,d,e be set;
   func OR5(a,b,c,d,e) equals
   :Def19:
-  NOT1 {} if $a or $b or $c or $d or $e
+  NOT1 {} if a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty
   otherwise {};
   correctness;
 end;
 
 theorem
-  $OR5(a,b,c,d,e) iff $a or $b or $c or $d or $e by Def19,Th5;
+  OR5(a,b,c,d,e) is non empty iff a is non empty or b is non empty or
+   c is non empty or d is non empty or e is non empty
+   by Def19;
 
 definition
   let a,b,c,d,e be set;
   func NAND5(a,b,c,d,e) equals
   :Def20:
-  NOT1 {} if not ($a & $b & $c & $d & $e)
+  NOT1 {} if not (a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty)
   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND5(a,b,c,d,e) iff not ($a & $b & $c & $d & $e) by Def20,Th5;
+  NAND5(a,b,c,d,e) is non empty iff not (a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty)
+   by Def20;
 
 definition
   let a,b,c,d,e be set;
   func NOR5(a,b,c,d,e) equals
   :Def21:
-  NOT1 {} if not ($a or $b or $c or $d or $e) otherwise {};
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR5(a,b,c,d,e) iff not ($a or $b or $c or $d or $e) by Def21,Th5;
+  NOR5(a,b,c,d,e) is non empty iff not (a is non empty or b is non empty or
+   c is non empty or d is non empty or e is non empty)
+   by Def21;
 
 definition
   let a,b,c,d,e,f be set;
   func AND6(a,b,c,d,e,f) equals
   :Def22:
-  NOT1 {} if $a & $b & $c & $d & $e &$f
+  NOT1 {} if a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty &f is non empty
   otherwise {};
   correctness;
 end;
 
 theorem
-  $AND6(a,b,c,d,e,f) iff $a & $b & $c & $d & $e &$f by Def22,Th5;
+  AND6(a,b,c,d,e,f) is non empty iff a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty &f is non empty
+   by Def22;
 
 definition
   let a,b,c,d,e,f be set;
   func OR6(a,b,c,d,e,f) equals
   :Def23:
-  NOT1 {} if $a or $b or $c or $d or $e or $f otherwise {};
+  NOT1 {} if a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty
+   or f is non empty otherwise {};
   correctness;
 end;
 
 theorem
-  $OR6(a,b,c,d,e,f) iff $a or $b or $c or $d or $e or $f by Def23,Th5;
+  OR6(a,b,c,d,e,f) is non empty iff a is non empty or b is non empty or
+   c is non empty or d is non empty or e is non empty or f is non empty
+   by Def23;
 
 definition
   let a,b,c,d,e,f be set;
   func NAND6(a,b,c,d,e,f) equals
   :Def24:
-  NOT1 {} if not ($a & $b & $c & $d & $e &$f) otherwise {};
+  NOT1 {} if not (a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty &f is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND6(a,b,c,d,e,f) iff not ($a & $b & $c & $d & $e &$f) by Def24,Th5;
+  NAND6(a,b,c,d,e,f) is non empty iff not (a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty &f is non empty)
+   by Def24;
 
 definition
   let a,b,c,d,e,f be set;
   func NOR6(a,b,c,d,e,f) equals
   :Def25:
-  NOT1 {} if not ($a or $b or $c or $d or $e or $f) otherwise {};
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR6(a,b,c,d,e,f) iff not ($a or $b or $c or $d or $e or $f) by Def25,Th5;
+  NOR6(a,b,c,d,e,f) is non empty iff not (a is non empty or b is non empty
+   or c is non empty or d is non empty or e is non empty or f is non empty)
+   by Def25;
 
 definition
   let a,b,c,d,e,f,g be set;
   func AND7(a,b,c,d,e,f,g) equals
   :Def26:
-  NOT1 {} if $a & $b & $c & $d & $e & $f & $g otherwise {};
+  NOT1 {} if a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty & f is non empty & g is non empty
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $AND7(a,b,c,d,e,f,g) iff $a & $b & $c & $d & $e & $f & $g by Def26,Th5;
+  AND7(a,b,c,d,e,f,g) is non empty iff a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty & f is non empty &
+    g is non empty by Def26;
 
 definition
   let a,b,c,d,e,f,g be set;
   func OR7(a,b,c,d,e,f,g) equals
   :Def27:
-  NOT1 {} if $a or $b or $c or $d or $e or $f or $g otherwise {};
+  NOT1 {} if a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty or g is non empty
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $OR7(a,b,c,d,e,f,g) iff $a or $b or $c or $d or $e or $f or $g by Def27,Th5;
+  OR7(a,b,c,d,e,f,g) is non empty iff a is non empty or b is non empty
+   or c is non empty
+   or d is non empty or e is non empty or f is non empty or g is non empty
+   by Def27;
 
 definition
   let a,b,c,d,e,f,g be set;
   func NAND7(a,b,c,d,e,f,g) equals
   :Def28:
-  NOT1 {} if not ($a & $b & $c & $d & $e & $f & $g) otherwise {};
+  NOT1 {} if not (a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty & f is non empty & g is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND7(a,b,c,d,e,f,g) iff
-  not ($a & $b & $c & $d & $e & $f & $g) by Def28,Th5;
+  NAND7(a,b,c,d,e,f,g) is non empty iff
+  not (a is non empty & b is non empty & c is non empty & d is non empty &
+   e is non empty & f is non empty & g is non empty)
+   by Def28;
 
 definition
   let a,b,c,d,e,f,g be set;
   func NOR7(a,b,c,d,e,f,g) equals
   :Def29:
-  NOT1 {} if not ($a or $b or $c or $d or $e or $f or $g) otherwise {};
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty or g is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR7(a,b,c,d,e,f,g) iff
-  not ($a or $b or $c or $d or $e or $f or $g) by Def29,Th5;
+  NOR7(a,b,c,d,e,f,g) is non empty iff
+  not (a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty or g is non empty)
+   by Def29;
 
 definition
   let a,b,c,d,e,f,g,h be set;
   func AND8(a,b,c,d,e,f,g,h) equals
   :Def30:
-  NOT1 {} if $a & $b & $c & $d & $e & $f & $g & $h otherwise {};
+  NOT1 {} if a is non empty & b is non empty & c is non empty &
+   d is non empty & e is non empty & f is non empty & g is non empty &
+    h is non empty
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $AND8(a,b,c,d,e,f,g,h) iff $a & $b & $c & $d & $e & $f & $g & $h
-  by Def30,Th5;
+  AND8(a,b,c,d,e,f,g,h) is non empty iff a is non empty & b is non empty &
+   c is non empty & d is non empty & e is non empty & f is non empty &
+    g is non empty & h is non empty
+  by Def30;
 
 definition
   let a,b,c,d,e,f,g,h be set;
   func OR8(a,b,c,d,e,f,g,h) equals
   :Def31:
   NOT1 {} if
-  $a or $b or $c or $d or $e or $f or $g or $h otherwise {};
+  a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty or g is non empty or
+    h is non empty otherwise {};
   correctness;
 end;
 
 theorem
-  $OR8(a,b,c,d,e,f,g,h) iff
-  $a or $b or $c or $d or $e or $f or $g or $h by Def31,Th5;
+  OR8(a,b,c,d,e,f,g,h) is non empty iff
+  a is non empty or b is non empty or c is non empty or d is non empty or
+   e is non empty or f is non empty or g is non empty or h is non empty
+   by Def31;
 
 definition
   let a,b,c,d,e,f,g,h be set;
   func NAND8(a,b,c,d,e,f,g,h) equals
   :Def32:
   NOT1 {} if
-  not ($a & $b & $c & $d & $e & $f & $g & $h) otherwise {};
+  not (a is non empty & b is non empty & c is non empty & d is non empty &
+   e is non empty & f is non empty & g is non empty & h is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NAND8(a,b,c,d,e,f,g,h) iff
-  not ($a & $b & $c & $d & $e & $f & $g & $h) by Def32,Th5;
+  NAND8(a,b,c,d,e,f,g,h) is non empty iff
+  not (a is non empty & b is non empty & c is non empty & d is non empty &
+   e is non empty & f is non empty & g is non empty & h is non empty)
+   by Def32;
 
 definition
   let a,b,c,d,e,f,g,h be set;
   func NOR8(a,b,c,d,e,f,g,h) equals
   :Def33:
-  NOT1 {} if not ($a or $b or $c or $d or $e or $f or $g or $h) otherwise {};
+  NOT1 {} if not (a is non empty or b is non empty or c is non empty
+   or d is non empty or e is non empty or f is non empty or g is non empty
+    or h is non empty)
+   otherwise {};
   correctness;
 end;
 
 theorem
-  $NOR8(a,b,c,d,e,f,g,h) iff
-  not ($a or $b or $c or $d or $e or $f or $g or $h) by Def33,Th5;
+  NOR8(a,b,c,d,e,f,g,h) is non empty iff
+  not (a is non empty or b is non empty or c is non empty or
+   d is non empty or e is non empty or f is non empty or g is non empty or
+    h is non empty)
+   by Def33;
 
 begin :: Logical Equivalence of 4 Bits Adders
 
@@ -450,50 +687,53 @@ theorem
   for c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b being set holds
 
 ::Specification of Normal 4 Bit Adder
-  ($MAJ3(x1,y1,c1) implies $c2) & ($MAJ3(x2,y2,c2) implies $c3) &
-  ($MAJ3(x3,y3,c3) implies $c4) & ($MAJ3(x4,y4,c4) implies $c5) &
+  (MAJ3(x1,y1,c1) is non empty implies c2 is non empty) &
+   (MAJ3(x2,y2,c2) is non empty
+   implies c3 is non empty) &
+  (MAJ3(x3,y3,c3) is non empty implies c4 is non empty) &
+   (MAJ3(x4,y4,c4) is non empty implies c5 is non empty) &
 
 ::Specification of Carry Skip Adder
-  ($n1 implies $OR2(x1,y1))& ($n2 implies $OR2(x2,y2))&
-  ($n3 implies $OR2(x3,y3))& ($n4 implies $OR2(x4,y4))&
-  ($n implies $AND5(c1,n1,n2,n3,n4))& ($c5b iff $OR2(c5,n))
-  implies ($c5 iff $c5b)
+  (n1 is non empty implies OR2(x1,y1) is non empty)& (n2 is non empty
+   implies OR2(x2,y2) is non empty)&
+  (n3 is non empty implies OR2(x3,y3) is non empty)&
+  (n4 is non empty implies OR2(x4,y4) is non empty)&
+  (n is non empty implies AND5(c1,n1,n2,n3,n4) is non empty)&
+   (c5b is non empty iff OR2(c5,n) is non empty)
+  implies (c5 is non empty iff c5b is non empty)
 proof
   let c1,x1,x2,x3,x4,y1,y2,y3,y4,c2,c3,c4,c5,n1,n2,n3,n4,n,c5b be set;
   assume that
-A1: $MAJ3(x1,y1,c1) implies $c2 and
-A2: $MAJ3(x2,y2,c2) implies $c3 and
-A3: $MAJ3(x3,y3,c3) implies $c4 and
-A4: $MAJ3(x4,y4,c4) implies $c5 and
-A5: $n1 implies $OR2(x1,y1) and
-A6: $n2 implies $OR2(x2,y2) and
-A7: $n3 implies $OR2(x3,y3) and
-A8: $n4 implies $OR2(x4,y4) and
-A9: $n implies $AND5(c1,n1,n2,n3,n4) and
-A10: $c5b implies $OR2(c5,n) and
-A11: $OR2(c5,n) implies $c5b;
-  thus $c5 implies $c5b by A11,Def3,Th5;
-  assume $c5b;
-  then $OR2(c5,n) by A10;
-  then
-A12: $c5 or $n by Th7;
+A1: MAJ3(x1,y1,c1) is non empty implies c2 is non empty and
+A2: MAJ3(x2,y2,c2) is non empty implies c3 is non empty and
+A3: MAJ3(x3,y3,c3) is non empty implies c4 is non empty and
+A4: MAJ3(x4,y4,c4) is non empty implies c5 is non empty and
+A5: n1 is non empty implies OR2(x1,y1) is non empty and
+A6: n2 is non empty implies OR2(x2,y2) is non empty and
+A7: n3 is non empty implies OR2(x3,y3) is non empty and
+A8: n4 is non empty implies OR2(x4,y4) is non empty and
+A9: n is non empty implies AND5(c1,n1,n2,n3,n4) is non empty and
+A10: c5b is non empty implies OR2(c5,n) is non empty and
+A11: OR2(c5,n) is non empty implies c5b is non empty;
+  thus c5 is non empty implies c5b is non empty by A11;
+  assume
+B12: c5b is non empty;
   now
-    assume $n;
-    then $AND5(c1,n1,n2,n3,n4) by A9;
-    then $c1 & $n1 & $n2 & $n3 & $n4 by Def18;
-    then $c1 & ($x1 or $y1) & $n2 & $n3 & $n4 by A5,Th7;
-    then $MAJ3(x1,y1,c1) & $n2 & $n3 & $n4 by Def11,Th5;
-    then $c2 & $n2 & $n3 & $n4 by A1;
-    then $c2 & ($x2 or $y2) & $n3 & $n4 by A6,Th7;
-    then $MAJ3(x2,y2,c2) & $n3 & $n4 by Def11,Th5;
-    then $c3 & $n3 & $n4 by A2;
-    then $c3 & ($x3 or $y3) & $n4 by A7,Th7;
-    then $c3 & $MAJ3(x3,y3,c3) & $n4 by Def11,Th5;
-    then $c4 & $n4 by A3;
-    then $c4 & ($x4 or $y4) by A8,Th7;
-    hence $MAJ3(x4,y4,c4) by Def11,Th5;
+    assume n is non empty;
+    then c1 is non empty & (x1 is non empty or y1 is non empty)
+     & n2 is non empty
+     & n3 is non empty &
+     n4 is non empty by A5,Def18,A9;
+    then c2 is non empty & (x2 is non empty or y2 is non empty) &
+     n3 is non empty &
+     n4 is non empty
+     by A6,A1;
+    then c3 is non empty & (x3 is non empty or y3 is non empty) &
+     n4 is non empty by A7,A2;
+    then c4 is non empty & (x4 is non empty or y4 is non empty) by A8,A3;
+    hence MAJ3(x4,y4,c4) is non empty;
   end;
-  hence $c5 by A4,A12;
+  hence c5 is non empty by A4,B12,A10;
 end;
 
 ::Definition of mod 2 adder used in 'Carry Look Ahead Adder'
@@ -502,13 +742,17 @@ definition
   let a,b be set;
   func MODADD2(a,b) equals
   :Def34:
-  NOT1 {} if not not ($a or $b) & not($a & $b) otherwise {};
+  NOT1 {} if not not (a is non empty or b is non empty) &
+   not(a is non empty & b is non empty)
+   otherwise {};
   correctness;
   commutativity;
 end;
 
 theorem
-  $MODADD2(a,b) iff not not ($a or $b) & not($a & $b) by Def34,Th5;
+  MODADD2(a,b) is non empty iff not not (a is non empty or b is non empty) &
+   not(a is non empty & b is non empty)
+   by Def34;
 
 ::The following two definitions are for normal 1 bit adder.
 
@@ -580,130 +824,170 @@ theorem
   for c1,x1,y1,x2,y2,x3,y3,x4,y4,c4,
   q1,p1,sd1,q2,p2,sd2,q3,p3,sd3,q4,p4,sd4,cb1,cb2,l2,t2,l3,m3,
   t3,l4,m4,n4,t4,l5,m5,n5,o5,s1,s2,s3,s4 being set holds
-  ($q1 iff $NOR2(x1,y1))&($p1 iff $NAND2(x1,y1))& ($sd1 iff $MODADD2(x1,y1))&
-  ($q2 iff $NOR2(x2,y2))&($p2 iff $NAND2(x2,y2))& ($sd2 iff $MODADD2(x2,y2))&
-  ($q3 iff $NOR2(x3,y3))&($p3 iff $NAND2(x3,y3))& ($sd3 iff $MODADD2(x3,y3))&
-  ($q4 iff $NOR2(x4,y4))&($p4 iff $NAND2(x4,y4))& ($sd4 iff $MODADD2(x4,y4))&
-  ($cb1 iff $NOT1 c1)&($cb2 iff $ NOT1 cb1)& ($s1 iff $XOR2(cb2,sd1))&
-  ($l2 iff $AND2(cb1,p1))& ($t2 iff $NOR2(l2,q1))& ($s2 iff $XOR2(t2,sd2))&
-  ($l3 iff $AND2(q1,p2))& ($m3 iff $AND3(p2,p1,cb1))&
-  ($t3 iff $NOR3(l3,m3,q2))& ($s3 iff $XOR2(t3,sd3))& ($l4 iff $AND2(q2,p3))&
-  ($m4 iff $AND3(q1,p3,p2))& ($n4 iff $AND4(p3,p2,p1,cb1))&
-  ($t4 iff $NOR4(l4,m4,n4,q3))& ($s4 iff $XOR2(t4,sd4))&
-  ($l5 iff $AND2(q3,p4))& ($m5 iff $AND3(q2,p4,p3))&
-  ($n5 iff $AND4(q1,p4,p3,p2))& ($o5 iff $AND5(p4,p3,p2,p1,cb1))&
-  ($c4 iff $NOR5(q4,l5,m5,n5,o5))
-  implies ($s1 iff $ADD1(x1,y1,c1))&($s2 iff $ADD2(x2,y2,x1,y1,c1))&
-  ($s3 iff $ADD3(x3,y3,x2,y2,x1,y1,c1))&
-  ($s4 iff $ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1))&
-  ($c4 iff $CARR4(x4,y4,x3,y3,x2,y2,x1,y1,c1))
+  (q1 is non empty iff NOR2(x1,y1) is non empty)&
+  (p1 is non empty iff NAND2(x1,y1) is non empty)&
+   (sd1 is non empty iff MODADD2(x1,y1) is non empty)&
+  (q2 is non empty iff NOR2(x2,y2) is non empty)&
+  (p2 is non empty iff NAND2(x2,y2) is non empty)&
+  (sd2 is non empty iff MODADD2(x2,y2) is non empty)&
+  (q3 is non empty iff NOR2(x3,y3) is non empty)&
+  (p3 is non empty iff NAND2(x3,y3) is non empty)&
+   (sd3 is non empty iff MODADD2(x3,y3) is non empty)&
+  (q4 is non empty iff NOR2(x4,y4) is non empty)&
+  (p4 is non empty iff NAND2(x4,y4) is non empty)&
+  (sd4 is non empty iff MODADD2(x4,y4) is non empty)&
+  (cb1 is non empty iff NOT1 c1 is non empty)&
+  (cb2 is non empty iff  NOT1 cb1 is non empty)&
+  (s1 is non empty iff XOR2(cb2,sd1) is non empty)&
+  (l2 is non empty iff AND2(cb1,p1) is non empty)&
+  (t2 is non empty iff NOR2(l2,q1) is non empty)&
+  (s2 is non empty iff XOR2(t2,sd2) is non empty)&
+  (l3 is non empty iff AND2(q1,p2) is non empty)&
+  (m3 is non empty iff AND3(p2,p1,cb1) is non empty)&
+  (t3 is non empty iff NOR3(l3,m3,q2) is non empty)&
+  (s3 is non empty iff XOR2(t3,sd3) is non empty)&
+  (l4 is non empty iff AND2(q2,p3) is non empty)&
+  (m4 is non empty iff AND3(q1,p3,p2) is non empty)&
+  (n4 is non empty iff AND4(p3,p2,p1,cb1) is non empty)&
+  (t4 is non empty iff NOR4(l4,m4,n4,q3) is non empty)&
+  (s4 is non empty iff XOR2(t4,sd4) is non empty)&
+  (l5 is non empty iff AND2(q3,p4) is non empty)&
+  (m5 is non empty iff AND3(q2,p4,p3) is non empty)&
+  (n5 is non empty iff AND4(q1,p4,p3,p2) is non empty)&
+  (o5 is non empty iff AND5(p4,p3,p2,p1,cb1) is non empty)&
+  (c4 is non empty iff NOR5(q4,l5,m5,n5,o5) is non empty)
+  implies (s1 is non empty iff ADD1(x1,y1,c1) is non empty)&
+  (s2 is non empty
+   iff ADD2(x2,y2,x1,y1,c1) is non empty)&
+  (s3 is non empty iff ADD3(x3,y3,x2,y2,x1,y1,c1) is non empty)&
+  (s4 is non empty iff ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1) is non empty)&
+  (c4 is non empty iff CARR4(x4,y4,x3,y3,x2,y2,x1,y1,c1) is non empty)
 proof
   let c1,x1,y1,x2,y2,x3,y3,x4,y4,c4,
   q1,p1,sd1,q2,p2,sd2,q3,p3,sd3,q4,p4,sd4,cb1,cb2,l2,t2,l3,m3,
   t3,l4,m4,n4,t4,l5,m5,n5,o5,s1,s2,s3,s4 be set;
   assume that
-A1: ($q1 iff $NOR2(x1,y1)) and
-A2: ($p1 iff $NAND2(x1,y1)) and
-A3: ($sd1 iff $MODADD2(x1,y1))and
-A4: ($q2 iff $NOR2(x2,y2))and
-A5: ($p2 iff $NAND2(x2,y2))and
-A6: ($sd2 iff $MODADD2(x2,y2))and
-A7: ($q3 iff $NOR2(x3,y3))and
-A8: ($p3 iff $NAND2(x3,y3))and
-A9: ($sd3 iff $MODADD2(x3,y3))and
-A10: ($q4 iff $NOR2(x4,y4))and
-A11: ($p4 iff $NAND2(x4,y4))and
-A12: ($sd4 iff $MODADD2(x4,y4))and
-A13: ($cb1 iff $NOT1 c1)and
-A14: ($cb2 iff $NOT1 cb1) and
-A15: ($s1 iff $XOR2(cb2,sd1))and
-A16: ($l2 iff $AND2(cb1,p1))and
-A17: ($t2 iff $NOR2(l2,q1))and
-A18: ($s2 iff $XOR2(t2,sd2))and
-A19: ($l3 iff $AND2(q1,p2))and
-A20: ($m3 iff $AND3(p2,p1,cb1))and
-A21: ($t3 iff $NOR3(l3,m3,q2))and
-A22: ($s3 iff $XOR2(t3,sd3))and
-A23: ($l4 iff $AND2(q2,p3))and
-A24: ($m4 iff $AND3(q1,p3,p2))and
-A25: ($n4 iff $AND4(p3,p2,p1,cb1))and
-A26: ($t4 iff $NOR4(l4,m4,n4,q3))and
-A27: ($s4 iff $XOR2(t4,sd4))and
-A28: ($l5 iff $ AND2(q3,p4))and
-A29: ($m5 iff $AND3(q2,p4,p3))and
-A30: ($n5 iff $AND4(q1,p4,p3,p2))and
-A31: ($o5 iff $AND5( p4,p3,p2,p1,cb1))and
-A32: ($c4 iff $NOR5( q4,l5,m5,n5,o5));
-A33: $q1 iff not ($x1 or $y1) by A1,Def7,Th5;
-A34: $p1 iff not ($x1 & $y1) by A2,Def6,Th5;
-A35: $sd1 iff not not ($x1 or $y1) & not($x1 & $y1) by A3,Def34,Th5;
-A36: $q2 iff not($x2 or $y2) by A4,Def7,Th5;
-A37: $p2 iff not($x2 & $y2) by A5,Def6,Th5;
-A38: $sd2 iff not not ($x2 or $y2) & not($x2 & $y2) by A6,Def34,Th5;
-A39: $q3 iff not($x3 or $y3) by A7,Def7,Th5;
-A40: $p3 iff not($x3 & $y3) by A8,Def6,Th5;
-A41: $sd3 iff not not ($x3 or $y3) & not($x3 & $y3) by A9,Def34,Th5;
-A42: $q4 iff not($x4 or $y4) by A10,Def7,Th5;
-A43: $p4 iff not($x4 & $y4) by A11,Def6,Th5;
-A44: $sd4 iff not not ($x4 or $y4) & not($x4 & $y4) by A12,Def34,Th5;
-A45: $cb1 iff not $c1 by A13,Th4;
-A46: $cb2 iff not $cb1 by A14,Th4;
-A47: $s1 iff ($cb2 & not $sd1) or (not $cb2 & $sd1) by A15,Def4,Th5;
-A48: $l2 iff $cb1 & $p1 by A16,Def2,Th5;
-A49: $t2 iff not($l2 or $q1) by A17,Def7,Th5;
-A50: $s2 iff ($t2 & not $sd2) or (not $t2 & $sd2) by A18,Def4,Th5;
-A51: ($l3 iff $q1 & $p2) by A19,Def2,Th5;
-A52: ($m3 iff $p2 & $p1 & $cb1) by A20,Def8,Th5;
-A53: ($t3 iff not($l3 or $m3 or $q2)) by A21,Def13,Th5;
-A54: ($s3 iff $t3 & not $sd3 or not $t3 & $sd3) by A22,Def4,Th5;
-A55: ($l4 iff $q2 & $p3) by A23,Def2,Th5;
-A56: ($m4 iff $q1 & $p3 & $p2) by A24,Def8,Th5;
-A57: ($n4 iff $p3 & $p2 & $p1 & $cb1) by A25,Def14,Th5;
-A58: ($t4 iff not($l4 or $m4 or $n4 or $q3)) by A26,Def17,Th5;
-A59: ($s4 iff $t4 & not $sd4 or not $t4 & $sd4) by A27,Def4,Th5;
-A60: ($l5 iff $q3 & $p4) by A28,Def2,Th5;
-A61: ($m5 iff $q2 & $p4 & $p3) by A29,Def8,Th5;
-A62: ($n5 iff $q1 & $p4 & $p3 & $p2) by A30,Def14,Th5;
-A63: ($o5 iff $p4 & $p3 & $p2 & $p1 & $cb1) by A31,Def18,Th5;
-A64: ($c4 iff not($q4 or $l5 or $m5 or $n5 or $o5)) by A32,Def21,Th5;
-  thus ($s1 iff $ADD1(x1,y1,c1)) by A35,A45,A46,A47,Th18;
-A65: $MAJ3(x1,y1,c1) iff $x1 & $y1 or $y1 & $c1 or $c1 & $x1 by Def11,Th5;
-
-then $s2 iff $XOR3(x2,y2,CARR1(x1,y1,c1)) by A33,A34,A38,A45,A48,A49,A50,Th18;
-  hence ($s2 iff $ADD2(x2,y2,x1,y1,c1));
-A66: $MAJ3(x2,y2,CARR1(x1,y1,c1)) iff
-  $x2 & $y2 or $y2 & $CARR1(x1,y1,c1) or $CARR1(x1,y1,c1) & $x2 by Def11,Th5;
-  then
-A67: $CARR2(x2,y2,x1,y1,c1) iff
-  $x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
-  or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2 by Th19;
-  then $s3 iff $XOR3(x3,y3,CARR2(x2,y2,x1,y1,c1)) by A33,A34,A36,A37,A41,A45
-  ,A51,A52,A53,A54,Th18;
-  hence ($s3 iff $ADD3(x3,y3,x2,y2,x1,y1,c1));
-A68: $MAJ3(x3,y3,CARR2(x2,y2,x1,y1,c1)) iff
-  $x3 & $y3 or $y3 & $CARR2(x2,y2,x1,y1,c1)
-  or $CARR2(x2,y2,x1,y1,c1) & $x3 by Def11,Th5;
+A1: (q1 is non empty iff NOR2(x1,y1) is non empty) and
+A2: (p1 is non empty iff NAND2(x1,y1) is non empty) and
+A3: (sd1 is non empty iff MODADD2(x1,y1) is non empty)and
+A4: (q2 is non empty iff NOR2(x2,y2) is non empty)and
+A5: (p2 is non empty iff NAND2(x2,y2) is non empty)and
+A6: (sd2 is non empty iff MODADD2(x2,y2) is non empty)and
+A7: (q3 is non empty iff NOR2(x3,y3) is non empty)and
+A8: (p3 is non empty iff NAND2(x3,y3) is non empty)and
+A9: (sd3 is non empty iff MODADD2(x3,y3) is non empty)and
+A10: (q4 is non empty iff NOR2(x4,y4) is non empty)and
+A11: (p4 is non empty iff NAND2(x4,y4) is non empty)and
+A12: (sd4 is non empty iff MODADD2(x4,y4) is non empty)and
+A13: (cb1 is non empty iff NOT1 c1 is non empty)and
+A14: (cb2 is non empty iff NOT1 cb1 is non empty) and
+A15: (s1 is non empty iff XOR2(cb2,sd1) is non empty)and
+A16: (l2 is non empty iff AND2(cb1,p1) is non empty)and
+A17: (t2 is non empty iff NOR2(l2,q1) is non empty)and
+A18: (s2 is non empty iff XOR2(t2,sd2) is non empty)and
+A19: (l3 is non empty iff AND2(q1,p2) is non empty)and
+A20: (m3 is non empty iff AND3(p2,p1,cb1) is non empty)and
+A21: (t3 is non empty iff NOR3(l3,m3,q2) is non empty)and
+A22: (s3 is non empty iff XOR2(t3,sd3) is non empty)and
+A23: (l4 is non empty iff AND2(q2,p3) is non empty)and
+A24: (m4 is non empty iff AND3(q1,p3,p2) is non empty)and
+A25: (n4 is non empty iff AND4(p3,p2,p1,cb1) is non empty)and
+A26: (t4 is non empty iff NOR4(l4,m4,n4,q3) is non empty)and
+A27: (s4 is non empty iff XOR2(t4,sd4) is non empty)and
+A28: (l5 is non empty iff  AND2(q3,p4) is non empty)and
+A29: (m5 is non empty iff AND3(q2,p4,p3) is non empty)and
+A30: (n5 is non empty iff AND4(q1,p4,p3,p2) is non empty)and
+A31: (o5 is non empty iff AND5( p4,p3,p2,p1,cb1) is non empty)and
+A32: (c4 is non empty iff NOR5( q4,l5,m5,n5,o5) is non empty);
+A33: q1 is non empty iff not (x1 is non empty or y1 is non empty)
+ by A1;
+A34: p1 is non empty iff not (x1 is non empty & y1 is non empty)
+ by A2;
+A35: sd1 is non empty iff not not (x1 is non empty or y1 is non empty) &
+ not(x1 is non empty & y1 is non empty)
+ by A3,Def34;
+A36: q2 is non empty iff not(x2 is non empty or y2 is non empty)
+ by A4;
+A37: p2 is non empty iff not(x2 is non empty & y2 is non empty) by A5;
+A38: sd2 is non empty iff not not (x2 is non empty or y2 is non empty) &
+ not(x2 is non empty & y2 is non empty)
+ by A6,Def34;
+A39: q3 is non empty iff not(x3 is non empty or y3 is non empty) by A7;
+A40: p3 is non empty iff not(x3 is non empty & y3 is non empty) by A8;
+A41: sd3 is non empty iff not not (x3 is non empty or y3 is non empty) &
+ not(x3 is non empty & y3 is non empty) by A9,Def34;
+A42: q4 is non empty iff not(x4 is non empty or y4 is non empty) by A10;
+A43: p4 is non empty iff not(x4 is non empty & y4 is non empty) by A11;
+A44: sd4 is non empty iff not not (x4 is non empty or y4 is non empty) &
+ not(x4 is non empty &
+ y4 is non empty) by A12,Def34;
+A45: cb1 is non empty iff not c1 is non empty by A13;
+A47: s1 is non empty iff (cb2 is non empty & not sd1 is non empty) or
+ (not cb2 is non empty & sd1 is non empty)
+ by A15;
+A49: t2 is non empty iff not(l2 is non empty or q1 is non empty) by A17;
+A50: s2 is non empty iff (t2 is non empty & not sd2 is non empty) or
+ (not t2 is non empty & sd2 is non empty)
+ by A18;
+A52: (m3 is non empty iff p2 is non empty & p1 is non empty & cb1 is non empty)
+ by A20;
+A53: (t3 is non empty iff not(l3 is non empty or m3 is non empty
+ or q2 is non empty))
+ by A21,Def13;
+A54: (s3 is non empty iff t3 is non empty & not sd3 is non empty or
+ not t3 is non empty & sd3 is non empty)
+ by A22;
+A56: (m4 is non empty iff q1 is non empty & p3 is non empty & p2 is non empty)
+ by A24;
+A57: (n4 is non empty iff
+ p3 is non empty & p2 is non empty & p1 is non empty & cb1 is non empty)
+ by A25,Def14;
+A58: (t4 is non empty iff not(l4 is non empty or m4 is non empty or
+ n4 is non empty
+ or q3 is non empty))
+ by A26,Def17;
+A59: (s4 is non empty iff t4 is non empty & not sd4 is non empty or
+ not t4 is non empty & sd4 is non empty)
+ by A27;
+A61: (m5 is non empty iff q2 is non empty & p4 is non empty & p3 is non empty)
+ by A29;
+A62: (n5 is non empty iff q1 is non empty & p4 is non empty & p3 is non empty &
+ p2 is non empty)
+ by A30,Def14;
+A63: (o5 is non empty iff p4 is non empty & p3 is non empty & p2 is non empty &
+ p1 is non empty & cb1 is non empty)
+ by A31,Def18;
+A64: (c4 is non empty iff not(q4 is non empty or l5 is non empty or
+ m5 is non empty or n5 is non empty or o5 is non empty))
+ by A32,Def21;
+  thus (s1 is non empty iff ADD1(x1,y1,c1) is non empty)
+   by A35,A45,A14,A47;
+  thus (s2 is non empty iff ADD2(x2,y2,x1,y1,c1) is non empty)
+ by A33,A34,A38,A45,A16,A49,A50;
+  thus (s3 is non empty iff ADD3(x3,y3,x2,y2,x1,y1,c1) is non empty)
+   by A33,A34,A36,A37,A41,A45
+  ,A19,A52,A53,A54;
   set b=CARR3(x3,y3,x2,y2,x1,y1,c1);
-A69: $b iff $x3 & $y3 or $y3 & (
-  $x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
-  or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2)
-  or ($x2 & $y2 or $y2 & ($x1 & $y1 or $y1 & $c1 or $c1 & $x1)
-  or ($x1 & $y1 or $y1 & $c1 or $c1 & $x1) & $x2) & $x3 by A65,A66,A68;
-  (not($q2 & $p3 or ($q1 & $p3 & $p2) or ($p3 & $p2 & $p1 & not $c1) or $q3))
-  & not (not not ($x4 or $y4) & not($x4 & $y4)) or
-  not (not($q2 & $p3 or ($q1 & $p3 & $p2) or ($p3 & $p2 & $p1 & not $c1)
-  or $q3)) & (not not ($x4 or $y4) & not($x4 & $y4)) iff
-  (($x4 & not $y4) or (not $x4 & $y4)) & not $b or
-  not (($x4 & not $y4) or (not $x4 & $y4)) & $b
-  by A33,A34,A36,A37,A39,A40,A67,A68;
-  then $s4 iff $XOR3(x4,y4,CARR3(x3,y3,x2,y2,x1,y1,c1)) by A44,A45,A55,A56,A57
-  ,A58,A59,Th18;
-  hence ($s4 iff $ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1));
-  not($q4 or ($q3 & $p4) or ($q2 & $p4 & $p3) or ($q1 & $p4 & $p3 & $p2) or
-  ($p4 & $p3 & $p2 & $p1 & $cb1)) iff $x4 & $y4 or $y4 & $b or $b & $x4
-  by A13,A33,A34,A36,A37,A39,A40,A42,A43,A69,Th4;
-  then $c4 iff $MAJ3(x4,y4,CARR3(x3,y3,x2,y2,x1,y1,c1)) by A60,A61,A62,A63,A64,
-  Th19;
-  hence thesis;
+A69: b is non empty iff x3 is non empty & y3 is non empty or y3 is non empty
+ & (
+  x2 is non empty & y2 is non empty or y2 is non empty &
+   (x1 is non empty & y1 is non empty or
+   y1 is non empty
+   & c1 is non empty or
+   c1 is non empty & x1 is non empty)
+  or (x1 is non empty & y1 is non empty or y1 is non empty & c1 is non empty
+   or c1 is non empty &
+   x1 is non empty) & x2 is non empty)
+  or (x2 is non empty & y2 is non empty or y2 is non empty &
+   (x1 is non empty & y1 is non empty or
+   y1 is non empty
+   & c1 is non empty or
+   c1 is non empty & x1 is non empty)
+  or (x1 is non empty & y1 is non empty or y1 is non empty & c1 is non empty
+   or c1 is non empty &
+   x1 is non empty) & x2 is non empty) & x3 is non empty;
+  thus (s4 is non empty iff ADD4(x4,y4,x3,y3,x2,y2,x1,y1,c1) is non empty)
+   by A44,A45,A23,A56,A57,A58,A59,A33,A34,A36,A37,A39,A40;
+  thus thesis by A28,A61,A62,A63,A64,A13,A33,A34,A36,A37,A39,A40,A42,A43,A69;
 end;
 

@@ -14,6 +14,8 @@
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSEQ_1"/>
 </Signature>
@@ -21,7 +23,7 @@
 <ArgTypes>
 <Typ kind="G" nr="2">
 <Cluster>
-<Adjective nr="24" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -47,7 +49,7 @@
 <Func kind="F" nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="36">
+<Adjective nr="41">
 <Func kind="F" nr="1"/>
 </Adjective>
 </Cluster>
@@ -59,7 +61,7 @@
 <Not>
 <And>
 <Pred kind="R" nr="19">
-<Func kind="K" nr="100">
+<Func kind="K" nr="108">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Func>

@@ -27,13 +27,6 @@
 <ArticleID name="TREES_9"/>
 </Signature>
 <FCluster aid="HILBERT2" nr="1">
-<ArgTypes/>
-<Func kind="K" nr="19"/>
-<Cluster>
-<Adjective nr="36"/>
-</Cluster>
-</FCluster>
-<FCluster aid="HILBERT2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -59,7 +52,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="HILBERT2" nr="3">
+<FCluster aid="HILBERT2" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -83,7 +76,7 @@
 <Adjective nr="39" value="false"/>
 </Cluster>
 </FCluster>
-<FCluster aid="HILBERT2" nr="4">
+<FCluster aid="HILBERT2" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster/>

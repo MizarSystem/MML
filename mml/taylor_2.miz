@@ -20,8 +20,8 @@ environ
  registrations RELSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, MEMBERED, RCOMP_1,
       XBOOLE_0, VALUED_0, VALUED_1, FUNCT_2;
  requirements SUBSET, REAL, BOOLE, NUMERALS, ARITHM;
- definitions TAYLOR_1, VALUED_1;
- theorems XBOOLE_1, ABSVALUE, REAL_2, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
+ definitions TAYLOR_1, VALUED_1, SUBSET_1;
+ theorems XBOOLE_1, ABSVALUE, PARTFUN1, XCMPLX_1, RELAT_1, RCOMP_1,
       SEQ_1, SEQ_2, SIN_COS, SERIES_1, FUNCT_1, RFUNCT_2, NAT_1, NEWTON, POWER,
       FDIFF_1, FDIFF_2, TAYLOR_1, SIN_COS2, XREAL_1, RFUNCT_1, ABIAN, COMPLEX1,
       XXREAL_0, VALUED_1, FUNCT_2;
@@ -80,7 +80,7 @@ A3: x in ].-r, r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].0-r,0+r.[,0,x)).n
   + (diff(f,].0-r,0+r.[).(n+1)).(0+s*(x-0))
-  * (x-0) |^ (n+1) / ((n+1)!) by A1,A2,A3,TAYLOR_1:33,A0;
+  * (x-0) |^ (n+1) / ((n+1)!) by A1,A2,A3,A0,TAYLOR_1:33;
   take s;
   thus thesis by A4,A5;
 end;
@@ -105,7 +105,7 @@ A3: x in ].x0-r,x0+r.[;
 A4: 0 < s & s < 1 and
 A5: f.x=Partial_Sums(Taylor(f, ].x0-r,x0+r.[,x0,x)).n
   + (diff(f,].x0-r,x0+r.[).(n+1)).(x0+s*(x-x0))
-  * (x-x0) |^ (n+1) /((n+1)!) by A1,A2,A3,TAYLOR_1:33,A0;
+  * (x-x0) |^ (n+1) /((n+1)!) by A1,A2,A3,A0,TAYLOR_1:33;
   thus thesis by A4,A5;
 end;
 
@@ -138,7 +138,7 @@ proof
   let f be Function of REAL, REAL;
 A1: dom f = REAL by FUNCT_2:def 1;
   thus dom (f|Z) = dom f /\ Z by FUNCT_1:68
-    .= Z by XBOOLE_1:28,A1;
+    .= Z by A1,XBOOLE_1:28;
 end;
 
 theorem Th5:
@@ -296,7 +296,7 @@ X:    [#]REAL c= dom exp_R by SIN_COS:51;
       exp_R is_differentiable_on [#]REAL &
       (for x0 be Real holds 0 <= diff(exp_R,x0)) by TAYLOR_1:16;
       then
-A7:   exp_R|[#](REAL) is non-decreasing  by FDIFF_2:39,X;
+A7:   exp_R|[#](REAL) is non-decreasing  by X,FDIFF_2:39;
       (s*x) in {p where p is Real : -r<p & p<r} by A4,RCOMP_1:def 2;
       then
 A8:   ex g be Real st g= s*x & -r<g & g<r;
@@ -360,21 +360,21 @@ theorem Th12:
 proof
   let M,L be Real such that
 A1: M >=0 & L >= 0;
-A2: for n be Element of NAT holds M*(L |^ n /(n!))=(M(#)(L ExpSeq)).n
+A2: for n be Element of NAT holds M*(L |^ n /(n!))=(M(#)(L rExpSeq)).n
   proof
     let n be Element of NAT;
-    M*(L |^ n /(n!)) = M*((L ExpSeq).n) by SIN_COS:def 9
-      .= (M(#)(L ExpSeq)).n by SEQ_1:13;
+    M*(L |^ n /(n!)) = M*((L rExpSeq).n) by SIN_COS:def 9
+      .= (M(#)(L rExpSeq)).n by SEQ_1:13;
     hence thesis;
   end;
-  L ExpSeq is summable by SIN_COS:49;
-  then (L ExpSeq) is convergent & lim (L ExpSeq)=0 by SERIES_1:7;
+  L rExpSeq is summable by SIN_COS:49;
+  then (L rExpSeq) is convergent & lim (L rExpSeq)=0 by SERIES_1:7;
   then
-A3: M(#)(L ExpSeq) is convergent & lim (M(#)(L ExpSeq))=M*0 by SEQ_2:21, 22;
+A3: M(#)(L rExpSeq) is convergent & lim (M(#)(L rExpSeq))=M*0 by SEQ_2:21,22;
   let p be Real such that
 A4: p > 0;
   consider n be Element of NAT such that
-A5: for m be Element of NAT st n<=m holds abs((M(#)(L ExpSeq)).m - 0) < p
+A5: for m be Element of NAT st n<=m holds abs((M(#)(L rExpSeq)).m - 0) < p
   by A3,A4,SEQ_2:def 7;
   take n;
   now
@@ -384,7 +384,7 @@ A7: L |^ m >= 0 by A1,POWER:3;
     m! > 0 by NEWTON:23;
     then
 A8: L |^ m / (m!) >= 0 by A7;
-    abs((M(#)(L ExpSeq)).m - 0) = abs(M*(L |^ m /(m!))) by A2
+    abs((M(#)(L rExpSeq)).m - 0) = abs(M*(L |^ m /(m!))) by A2
       .=abs(M)*abs(L |^ m /(m!)) by COMPLEX1:151
       .=M*abs(L |^ m /(m!))
     by A1,ABSVALUE:def 1
@@ -460,27 +460,27 @@ A8: abs(exp_R.x-Partial_Sums(Maclaurin(exp_R,].-r,r.[,x)).m)
 end;
 
 theorem Th15:
-  for x be Real holds x ExpSeq is absolutely_summable
+  for x be Real holds x rExpSeq is absolutely_summable
 proof
   let x be Real;
-  for n be Element of NAT holds abs(x ExpSeq.n) = (abs(x) ExpSeq).n
+  for n be Element of NAT holds abs(x rExpSeq.n) = (abs(x) rExpSeq).n
   proof
     let n be Element of NAT;
 A1: n! > 0 by NEWTON:23;
-    abs(x ExpSeq.n) = abs(x |^ n / (n!)) by SIN_COS:def 9
+    abs(x rExpSeq.n) = abs(x |^ n / (n!)) by SIN_COS:def 9
       .= abs(x |^ n) / abs(n!) by COMPLEX1:153
       .= abs(x |^ n) / (n!) by A1,ABSVALUE:def 1
       .= abs(x) |^ n / (n!) by Th1
-      .= (abs(x) ExpSeq).n by SIN_COS:def 9;
+      .= (abs(x) rExpSeq).n by SIN_COS:def 9;
     hence thesis;
   end;
-  then abs(x) ExpSeq = abs(x ExpSeq) by SEQ_1:16;
-  then abs(x ExpSeq) is summable by SIN_COS:49;
+  then abs(x) rExpSeq = abs(x rExpSeq) by SEQ_1:16;
+  then abs(x rExpSeq) is summable by SIN_COS:49;
   hence thesis by SERIES_1:def 5;
 end;
 
 theorem
-  for r, x be Real st 0 < r holds Maclaurin(exp_R,].-r,r.[,x) = (x ExpSeq)
+  for r, x be Real st 0 < r holds Maclaurin(exp_R,].-r,r.[,x) = (x rExpSeq)
   & Maclaurin(exp_R,].-r,r.[,x) is absolutely_summable
   & exp_R.x=Sum(Maclaurin(exp_R,].-r,r.[,x))
 proof
@@ -490,7 +490,7 @@ A1: r > 0;
   then 0 in ].0-r,0+r.[ by A1,RCOMP_1:8;
   then
 A2: 0 in dom(exp_R | ].-r,r.[) by Th5;
-  Maclaurin(exp_R,].-r,r.[,x) = (x ExpSeq)
+  Maclaurin(exp_R,].-r,r.[,x) = (x rExpSeq)
   proof
     now
       let t be set such that
@@ -500,9 +500,9 @@ A3:   t in NAT;
       = (diff(exp_R,].-r,r.[).n).0 * (x-0) |^ n / (n!) by TAYLOR_1:def 7
         .= (exp_R | ].-r,r.[).0 * x |^ n / (n!) by Th6
         .= exp_R.0 * x |^ n / (n!) by A2,FUNCT_1:70
-        .= (x ExpSeq).t by SIN_COS:def 9,SIN_COS2:13;
+        .= (x rExpSeq).t by SIN_COS:def 9,SIN_COS2:13;
     end;
-    hence thesis by SEQ_1:8;
+    hence thesis by FUNCT_2:18;
   end;
   hence thesis by Th15,SIN_COS:def 26;
 end;
@@ -1057,7 +1057,7 @@ A5: sin is_differentiable_on m+1, ].-r,r.[ &
   cos is_differentiable_on m+1, ].-r,r.[ by Th21;
   dom sin = REAL & dom cos =REAL by FUNCT_2:def 1;
   then
-X: ].-r,r.[ c= dom sin & ].-r,r.[ c= dom cos by FUNCT_2:def 1;
+X: ].-r,r.[ c= dom sin & ].-r,r.[ c= dom cos;
   now
     let x be Real such that
 A6: x in ].-r,r.[;

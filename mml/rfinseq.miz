@@ -6,24 +6,24 @@
 
 environ
 
- vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
-      FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, CAT_1,
-      FUNCT_4, ARYTM;
+ vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, FUNCT_2, FINSET_1, FINSEQ_1,
+      ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, CAT_1, FUNCT_4,
+      ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
-      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, XREAL_0,
-      NAT_1, REAL_1, SEQ_1, SEQM_3,
-      FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1, XXREAL_0;
+      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, XREAL_0, INT_1, NAT_1, REAL_1,
+      SEQ_1, CLASSES1, SEQM_3, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1,
+      XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQM_3,
-      FINSEQ_4, FINSOP_1, RVSUM_1, SEQ_1, FUNCOP_1;
+      FINSEQ_4, FINSOP_1, RVSUM_1, SEQ_1, FUNCOP_1, CLASSES1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, FUNCOP_1, VALUED_0, CARD_1;
+      NAT_1, MEMBERED, FINSEQ_1, FUNCOP_1, VALUED_0, CARD_1, INT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1, FUNCOP_1;
- theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, NAT_1, FUNCT_1,
-      FUNCT_2, FINSET_1, CARD_1, CARD_2, RVSUM_1, WELLORD2, ZFMISC_1, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, FINSOP_1,
-      RELSET_1, SEQM_3, FUNCOP_1, FUNCT_4, ORDINAL1, REAL_2, XREAL_0;
- schemes NAT_1, FINSEQ_1, CLASSES1, WELLORD2;
+ definitions TARSKI, XBOOLE_0, SEQM_3, RVSUM_1, FUNCOP_1, CLASSES1, RELAT_1;
+ theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, NAT_1, FUNCT_1, FUNCT_2,
+      FINSET_1, CARD_1, CARD_2, RVSUM_1, ZFMISC_1, RELAT_1, XBOOLE_0, XBOOLE_1,
+      XCMPLX_1, XREAL_1, FINSEQ_4, XXREAL_0, FINSOP_1, RELSET_1, SEQM_3,
+      FUNCOP_1, FUNCT_4, ORDINAL1, XREAL_0, CLASSES1, INT_1;
+ schemes NAT_1, FINSEQ_1;
 
 begin
 
@@ -31,400 +31,12 @@ reserve x,y for set,
   n,m for Element of NAT,
   r,s for Real;
 
-definition
-  let F,G be Relation;
-  pred F,G are_fiberwise_equipotent means
-  :Def1:
-  for x be set holds Card (F"{x}) = Card (G"{x});
-  reflexivity;
-  symmetry;
+canceled 13;
+
+registration let f be FinSequence, x be set;
+ cluster Coim(f,x) -> finite;
+ coherence;
 end;
-
-Lm1: for F be Function, x be set st not x in rng F holds F"{x} = {}
-proof
-  let F be Function,x;
-  assume
-A1: not x in rng F;
-  now
-    assume rng F meets {x};
-    then consider y being set such that
-A2: y in rng F & y in {x} by XBOOLE_0:3;
-    thus contradiction by A1,A2,TARSKI:def 1;
-  end;
-  hence thesis by RELAT_1:173;
-end;
-
-theorem Th1:
-  for F,G be Function st F,G are_fiberwise_equipotent holds rng F = rng G
-proof
-  let F,G be Function;
-  assume
-A1: F,G are_fiberwise_equipotent;
-  thus rng F c= rng G
-  proof
-    let x;
-    assume that
-A2: x in rng F and
-A3: not x in rng G;
-    Card (F"{x}) = Card (G"{x}) by A1,Def1;
-    then
-A4: F"{x},G"{x} are_equipotent by CARD_1:21;
-    consider y such that
-A5: y in dom F & F.y = x by A2,FUNCT_1:def 5;
-A6: x in {x} by TARSKI:def 1;
-    G"{x} = {} by A3,Lm1;
-    then F"{x} = {} by A4,CARD_1:46;
-    hence contradiction by A5,A6,FUNCT_1:def 13;
-  end;
-  let x;
-  assume that
-A7: x in rng G and
-A8: not x in rng F;
-  Card (G"{x}) = Card (F"{x}) by A1,Def1;
-  then
-A9: G"{x},F"{x} are_equipotent by CARD_1:21;
-  consider y such that
-A10: y in dom G & G.y = x by A7,FUNCT_1:def 5;
-A11: x in {x} by TARSKI:def 1;
-  F"{x} = {} by A8,Lm1;
-  then G"{x} = {} by A9,CARD_1:46;
-  hence contradiction by A10,A11,FUNCT_1:def 13;
-end;
-
-theorem
-  for F,G,H be Function
-  st F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent holds
-  G,H are_fiberwise_equipotent
-proof
-  let F,G,H be Function;
-  assume
-A1: F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent;
-  let x;
-  thus Card(G"{x}) = Card(F"{x}) by A1,Def1
-    .= Card(H"{x}) by A1,Def1;
-end;
-
-theorem Th3:
-  for F,G be Function holds F,G are_fiberwise_equipotent iff
-  ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
-proof
-  let F,G be Function;
-  thus F,G are_fiberwise_equipotent implies
-  ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
-  proof
-    assume
-A1: F,G are_fiberwise_equipotent;
-    defpred P[set,set] means $2 is Function &
-    for f be Function st $2 = f holds dom f = F"{$1} & rng f = G"{$1} &
-    f is one-to-one;
-A2: for x st x in rng F ex y st P[x,y]
-    proof
-      let x;
-      assume x in rng F;
-      Card(F"{x}) = Card(G"{x}) by A1,Def1;
-      then F"{x},G"{x} are_equipotent by CARD_1:21;
-      then consider H be Function such that
-A3:   H is one-to-one & dom H = F"{x} & rng H = G"{x} by WELLORD2:def 4;
-      take H;
-      thus H is Function;
-      let g be Function;
-      assume g = H;
-      hence thesis by A3;
-    end;
-    consider W be Function such that
-A4: dom W = rng F & for x st x in rng F holds P[x,W.x]
-    from CLASSES1:sch 1(A2);
-    defpred Q[set,set] means for H be Function st H = W.(F.$1) holds $2 = H.$1;
-    set df = dom F, dg = dom G;
-A5: for x st x in df ex y st y in dg & Q[x,y]
-    proof
-      let x;
-      assume
-A6:   x in df;
-      then
-A7:   F.x in rng F by FUNCT_1:def 5;
-      then reconsider f = W.(F.x) as Function by A4;
-A8:   dom f = F"{F.x} & rng f = G"{F.x} & f is one-to-one by A4,A7;
-      take y = f.x;
-      F.x in {F.x} by TARSKI:def 1;
-      then x in F"{F.x} by A6,FUNCT_1:def 13;
-      then f.x in G"{F.x} by A8,FUNCT_1:def 5;
-      hence y in dg by FUNCT_1:def 13;
-      let g be Function;
-      assume g = W.(F.x);
-      hence thesis;
-    end;
-    consider IT be Function such that
-A9: dom IT = df & rng IT c= dg & for x st x in df holds Q[x,IT.x]
-    from WELLORD2:sch 1(A5);
-    take IT;
-    thus dom IT = df by A9;
-    dom G c= rng IT
-    proof
-      let x;
-      assume
-A10:  x in dg;
-      then
-A11:  G.x in rng G & rng F = rng G by A1,Th1,FUNCT_1:def 5;
-      then reconsider f = W.(G.x) as Function by A4;
-A12:  f is one-to-one & dom f = F"{G.x} & rng f = G"{G.x} by A4,A11;
-      G.x in {G.x} by TARSKI:def 1;
-      then x in rng f by A10,A12,FUNCT_1:def 13;
-      then consider z be set such that
-A13:  z in dom f & f.z = x by FUNCT_1:def 5;
-A14:  z in df & F.z in {G.x} by A12,A13,FUNCT_1:def 13;
-      then F.z = G.x by TARSKI:def 1;
-      then IT.z = x by A9,A13,A14;
-      hence thesis by A9,A14,FUNCT_1:def 5;
-    end;
-    hence rng IT = dg by A9,XBOOLE_0:def 10;
-    now
-      let x,y;
-      assume
-A15:  x in dom IT & y in dom IT & IT.x = IT.y;
-      then
-A16:  F.x in rng F & F.y in rng F by A9,FUNCT_1:def 5;
-      then reconsider f1 = W.(F.x), f2 = W.(F.y) as Function by A4;
-A17:  IT.x = f1.x & IT.y = f2.y by A9,A15;
-A18:  dom f1 = F"{F.x} & rng f1 = G"{F.x} & f1 is one-to-one &
-      dom f2 = F"{F.y} & rng f2 = G"{F.y} & f2 is one-to-one by A4,A16;
-      F.x in {F.x} & F.y in {F.y} by TARSKI:def 1;
-      then
-A19:  x in F"{F.x} & y in F"{F.y} by A9,A15,FUNCT_1:def 13;
-      then f1.x in rng f1 & f2.y in rng f2 by A18,FUNCT_1:def 5;
-      then f1.x in G"{F.x} /\ G"{F.y} by A15,A17,A18,XBOOLE_0:def 4;
-      then f1.x in G"({F.x} /\ {F.y}) by FUNCT_1:137;
-      then G.(f1.x) in {F.x} /\ {F.y} by FUNCT_1:def 13;
-      then G.(f1.x) in {F.x} & G.(f1.x) in {F.y} by XBOOLE_0:def 4;
-      then G.(f1.x) = F.x & G.(f1.x) = F.y by TARSKI:def 1;
-      hence x = y by A15,A17,A18,A19,FUNCT_1:def 8;
-    end;
-    hence IT is one-to-one by FUNCT_1:def 8;
-A20: dom(G*IT) = df by A9,RELAT_1:46;
-    now
-      let x;
-      assume
-A21:  x in df;
-      then
-A22:  F.x in rng F by FUNCT_1:def 5;
-      then reconsider f = W.(F.x) as Function by A4;
-A23:  f is one-to-one & dom f = F"{F.x} & rng f = G"{F.x} by A4,A22;
-      F.x in {F.x} by TARSKI:def 1;
-      then x in F"{F.x} by A21,FUNCT_1:def 13;
-      then f.x in G"{F.x} by A23,FUNCT_1:def 5;
-      then G.(f.x) in {F.x} by FUNCT_1:def 13;
-      then
-A24:  G.(f.x) = F.x by TARSKI:def 1;
-      IT.x = f.x by A9,A21;
-      hence F.x = (G*IT).x by A9,A21,A24,FUNCT_1:23;
-    end;
-    hence F = G*IT by A20,FUNCT_1:9;
-  end;
-  given H be Function such that
-A25: dom H = dom F & rng H = dom G & H is one-to-one & F = G*H;
-  let x;
-  set t = H|(F"{x});
-A26: t is one-to-one by A25,FUNCT_1:84;
-A27: dom t = F"{x} by A25,RELAT_1:91,167;
-  rng t = G"{x}
-  proof
-    thus rng t c= G"{x}
-    proof
-      let z be set;
-      assume z in rng t;
-      then consider y such that
-A28:  y in dom t & t.y = z by FUNCT_1:def 5;
-      F.y in {x} by A27,A28,FUNCT_1:def 13;
-      then
-A29:  F.y = x by TARSKI:def 1;
-A30:  z = H.y by A28,FUNCT_1:68;
-      dom t = dom H /\ F"{x} by FUNCT_1:68;
-      then
-A31:  y in dom H by A28,XBOOLE_0:def 4;
-      then
-A32:  z in dom G by A25,A30,FUNCT_1:def 5;
-      x = G.z by A25,A29,A30,A31,FUNCT_1:23;
-      then G.z in {x} by TARSKI:def 1;
-      hence thesis by A32,FUNCT_1:def 13;
-    end;
-    let z be set;
-    assume z in G"{x};
-    then
-A33: z in dom G & G.z in {x} by FUNCT_1:def 13;
-    then
-A34: G.z = x by TARSKI:def 1;
-    consider y such that
-A35: y in dom H & H.y = z by A25,A33,FUNCT_1:def 5;
-    F.y = x by A25,A34,A35,FUNCT_1:23;
-    then F.y in {x} by TARSKI:def 1;
-    then
-A36: y in dom t by A25,A27,A35,FUNCT_1:def 13;
-    then t.y in rng t by FUNCT_1:def 5;
-    hence thesis by A35,A36,FUNCT_1:68;
-  end;
-  then F"{x},G"{x} are_equipotent by A26,A27,WELLORD2:def 4;
-  hence thesis by CARD_1:21;
-end;
-
-theorem Th4:
-  for F,G be Function holds
-  F,G are_fiberwise_equipotent iff for X be set holds Card (F"X) = Card (G"X)
-proof
-  let F,G be Function;
-  thus F,G are_fiberwise_equipotent implies
-  for X be set holds Card(F"X) = Card(G"X)
-  proof
-    assume F,G are_fiberwise_equipotent;
-    then consider H be Function such that
-A1: dom H = dom F & rng H = dom G & H is one-to-one & F = G*H by Th3;
-    let X be set;
-    set t = H|(F"X);
-A2: t is one-to-one by A1,FUNCT_1:84;
-A3: dom t = F"X by A1,RELAT_1:91,167;
-    rng t = G"X
-    proof
-      thus rng t c= G"X
-      proof
-        let z be set;
-        assume z in rng t;
-        then consider y such that
-A4:     y in dom t & t.y = z by FUNCT_1:def 5;
-A5:     F.y in X by A3,A4,FUNCT_1:def 13;
-A6:     z = H.y by A4,FUNCT_1:68;
-        dom t = dom H /\ F"X by FUNCT_1:68;
-        then
-A7:     y in dom H by A4,XBOOLE_0:def 4;
-        then
-A8:     z in dom G by A1,A6,FUNCT_1:def 5;
-        G.z in X by A1,A5,A6,A7,FUNCT_1:23;
-        hence thesis by A8,FUNCT_1:def 13;
-      end;
-      let z be set;
-      assume z in G"X;
-      then
-A9:   z in dom G & G.z in X by FUNCT_1:def 13;
-      then consider y such that
-A10:  y in dom H & H.y = z by A1,FUNCT_1:def 5;
-      F.y in X by A1,A9,A10,FUNCT_1:23;
-      then
-A11:  y in dom t by A1,A3,A10,FUNCT_1:def 13;
-      then t.y in rng t by FUNCT_1:def 5;
-      hence thesis by A10,A11,FUNCT_1:68;
-    end;
-    then F"X,G"X are_equipotent by A2,A3,WELLORD2:def 4;
-    hence thesis by CARD_1:21;
-  end;
-  assume for X be set holds Card(F"X) = Card(G"X);
-  hence for x holds Card(F"{x}) = Card(G"{x});
-end;
-
-theorem Th5:
-  for D be non empty set, F,G be Function st rng F c= D & rng G c= D holds
-  F,G are_fiberwise_equipotent iff
-  for d be Element of D holds Card (F"{d}) = Card (G"{d})
-proof
-  let D be non empty set, F,G be Function;
-  assume
-A1: rng F c= D & rng G c= D;
-  thus F,G are_fiberwise_equipotent implies
-  for d be Element of D holds Card(F"{d}) = Card(G"{d}) by Def1;
-  assume
-A2: for d be Element of D holds Card(F"{d}) = Card(G"{d});
-  let x;
-  now per cases;
-    case not x in rng F;
-      then
-A3:   F"{x} = {} by Lm1;
-      now
-        assume
-A4:     x in rng G;
-        then reconsider d = x as Element of D by A1;
-        Card(G"{d}) = Card(F"{d}) by A2;
-        then G"{d},F"{d} are_equipotent by CARD_1:21;
-        then
-A5:     G"{x} = {} by A3,CARD_1:46;
-        consider y such that
-A6:     y in dom G & G.y = x by A4,FUNCT_1:def 5;
-        G.y in {x} by A6,TARSKI:def 1;
-        hence contradiction by A5,A6,FUNCT_1:def 13;
-      end;
-      hence thesis by A3,Lm1;
-    end;
-    case x in rng F;
-      then reconsider d = x as Element of D by A1;
-      Card(F"{d}) = Card(G"{d}) by A2;
-      hence Card(F"{x}) = Card(G"{x});
-    end;
-  end;
-  hence thesis;
-end;
-
-theorem Th6:
-  for F,G be Function st dom F = dom G holds
-  F,G are_fiberwise_equipotent iff ex P be Permutation of dom F st F = G*P
-proof
-  let F,G be Function;
-  assume
-A1: dom F = dom G;
-  thus F,G are_fiberwise_equipotent implies
-  ex P be Permutation of dom F st F = G*P
-  proof
-    assume F,G are_fiberwise_equipotent;
-    then consider I be Function such that
-A2: dom I = dom F & rng I = dom G & I is one-to-one & F = G*I by Th3;
-    reconsider I as Function of dom F,dom F by A1,A2,FUNCT_2:4;
-    reconsider I as Permutation of dom F by A1,A2,FUNCT_2:83;
-    take I;
-    thus thesis by A2;
-  end;
-  given P be Permutation of dom F such that
-A3: F = G*P;
-A4: rng P = dom F & P is one-to-one by FUNCT_2:def 3;
-  P is Function of dom F,dom F & dom F = {} implies dom F ={};
-  then dom P = dom F by FUNCT_2:def 1;
-  hence thesis by A1,A3,A4,Th3;
-end;
-
-theorem
-  for F,G be Function
-  st F,G are_fiberwise_equipotent holds Card (dom F) = Card (dom G)
-proof
-  let F,G be Function;
-  assume F,G are_fiberwise_equipotent;
-  then Card(F"(rng F)) = Card(G"(rng F)) & rng F = rng G by Th1,Th4;
-  hence Card(dom F) = Card(G"(rng G)) by RELAT_1:169
-    .= Card(dom G) by RELAT_1:169;
-end;
-
-canceled;
-
-theorem
-  for F,G be finite Function holds
-  F,G are_fiberwise_equipotent iff for X be set holds card (F"X) = card (G"X)
-  by Th4;
-
-theorem
-  for F,G be finite Function st
-  F,G are_fiberwise_equipotent holds card (dom F) = card (dom G)
-proof
-  let F,G be finite Function;
-  assume F,G are_fiberwise_equipotent;
-  then card(F"(rng F)) = card(G"(rng F)) & rng F = rng G by Th1,Th4;
-  hence card(dom F) = card(G"(rng G)) by RELAT_1:169
-    .= card(dom G) by RELAT_1:169;
-end;
-
-theorem
-  for D be non empty set, F,G be finite Function st rng F c= D & rng G c= D
-  holds F,G are_fiberwise_equipotent iff
-  for d be Element of D holds card (F"{d}) = card (G"{d}) by Th5;
-
-canceled;
-
-theorem
-  for f,g be FinSequence holds
-  f,g are_fiberwise_equipotent iff for X be set holds card (f"X) = card (g"X)
-  by Th4;
 
 theorem Th14:
   for f,g,h be FinSequence holds
@@ -437,22 +49,22 @@ proof
 A1: f,g are_fiberwise_equipotent;
     now
       let y;
-      card (f"{y}) = card (g"{y}) by A1,Def1;
-      hence card ((f^h)"{y}) = card(g"{y}) + card(h"{y}) by FINSEQ_3:63
-        .= card((g^h)"{y}) by FINSEQ_3:63;
+      card Coim(f,y) = card Coim(g,y) by A1,CLASSES1:def 9;
+      hence card Coim(f^h,y) = card Coim(g,y) + card Coim(h,y) by FINSEQ_3:63
+        .= card Coim(g^h,y) by FINSEQ_3:63;
     end;
-    hence thesis by Def1;
+    hence thesis by CLASSES1:def 9;
   end;
   assume
 A2: f^h,g^h are_fiberwise_equipotent;
   now
     let x;
-    card((f^h)"{x}) = card(f"{x})+card(h"{x}) &
-    card((g^h)"{x}) = card(g"{x})+card(h"{x}) &
-    card((f^h)"{x}) = card((g^h)"{x}) by A2,Def1,FINSEQ_3:63;
-    hence card(f"{x}) = card(g"{x});
+    card Coim(f^h,x) = card Coim(f,x)+card Coim(h,x) &
+    card Coim(g^h,x) = card Coim(g,x)+card Coim(h,x) &
+    card Coim(f^h,x) = card Coim(g^h,x) by A2,CLASSES1:def 9,FINSEQ_3:63;
+    hence card Coim(f,x) = card Coim(g,x);
   end;
-  hence thesis by Def1;
+  hence thesis by CLASSES1:def 9;
 end;
 
 theorem
@@ -460,8 +72,8 @@ theorem
 proof
   let f,g be FinSequence;
   let y;
-  thus card((f^g)"{y}) = card(g"{y})+ card(f"{y}) by FINSEQ_3:63
-    .= card((g^f)"{y}) by FINSEQ_3:63;
+  thus card Coim(f^g,y) = card(g"{y})+ card(f"{y}) by FINSEQ_3:63
+    .= card Coim(g^f,y) by FINSEQ_3:63;
 end;
 
 theorem Th16:
@@ -472,7 +84,7 @@ proof
 A1: dom f = Seg len f & Seg len g = dom g by FINSEQ_1:def 3;
   assume f,g are_fiberwise_equipotent;
   then
-A2: card(f"(rng f)) = card(g"(rng f)) & rng f = rng g by Th1,Th4;
+A2: card(f"(rng f)) = card(g"(rng f)) & rng f = rng g by CLASSES1:83,86;
   thus len f = card(Seg len f) by FINSEQ_1:78
     .= card(g"(rng g)) by A1,A2,RELAT_1:169
     .= card(Seg len g) by A1,RELAT_1:169
@@ -480,7 +92,7 @@ A2: card(f"(rng f)) = card(g"(rng f)) & rng f = rng g by Th1,Th4;
   hence thesis by A1;
 end;
 
-theorem
+theorem Th17:
   for f,g be FinSequence holds
   f,g are_fiberwise_equipotent iff ex P be Permutation of dom g st f = g*P
 proof
@@ -491,7 +103,7 @@ proof
     assume
 A1: f,g are_fiberwise_equipotent;
     then dom f = dom g by Th16;
-    hence thesis by A1,Th6;
+    hence thesis by A1,CLASSES1:88;
   end;
   given P be Permutation of dom g such that
 A2: f = g*P;
@@ -499,7 +111,7 @@ A3: rng P c= dom g by RELSET_1:12;
   dom g = {} implies dom g = {};
   then dom P = dom g by FUNCT_2:def 1;
   then dom f = dom g by A2,A3,RELAT_1:46;
-  hence thesis by A2,Th6;
+  hence thesis by A2,CLASSES1:88;
 end;
 
 registration
@@ -524,7 +136,7 @@ A1: dom(F|X) = {};
   let x;
   (F|X)"{x} c= dom(F|X) & A"{x} c= dom A by RELAT_1:167;
   then (F|X)"{x} = {} & A"{x} = {} by A1,XBOOLE_1:3;
-  hence Card((F|X)"{x}) = Card(A"{x});
+  hence card Coim(F|X,x) = card Coim(A,x);
 end;
 
 Lm3: for n st P[n] holds P[n+1]
@@ -577,7 +189,7 @@ A10: F|Y, a are_fiberwise_equipotent by A1;
 A11: {x} c= X & {x} c= dom F by ZFMISC_1:37;
   now
     let y;
-A12: card((F|Y)"{y}) = card(a"{y}) by A10,Def1;
+A12: card Coim(F|Y,y) = card Coim(a,y) by A10,CLASSES1:def 9;
 A13: Y misses {x} by XBOOLE_1:79;
 A14: (F|Y)"{y} /\ (F|{x})"{y} = Y /\ (F"{y}) /\ (F|{x})"{y} by FUNCT_1:139
       .= Y /\ F"{y} /\ ({x} /\ F"{y}) by FUNCT_1:139
@@ -644,11 +256,11 @@ A28:      <*F.x*>"{y} <> {};
         hence card((F|{x})"{y}) = card FF by A25;
       end;
     end;
-    hence card((F|X)"{y}) = card((F|Y)"{y}) + card FF - card {}
+    hence card Coim(F|X,y) = card((F|Y)"{y}) + card FF - card {}
     by A14,A15,CARD_2:64
-      .= card(A"{y}) by A12,FINSEQ_3:63;
+      .= card Coim(A,y) by A12,FINSEQ_3:63;
   end;
-  hence thesis by Def1;
+  hence thesis by CLASSES1:def 9;
 end;
 
 theorem
@@ -662,6 +274,7 @@ A1: for n holds P[n] from NAT_1:sch 1(Lm2,Lm3);
 end;
 
 definition
+ canceled;
   let f be FinSequence, n be Nat;
   func f /^ n -> FinSequence means
   :Def2:
@@ -902,7 +515,7 @@ A3: P[n];
     assume
 A4: f,g are_fiberwise_equipotent & len f = n+1;
     then
-A5: rng f = rng g & len f = len g by Th1,Th16;
+A5: rng f = rng g & len f = len g by CLASSES1:83,Th16;
     0<n+1 by NAT_1:3;
     then 0 qua Nat+1<=n+1 by NAT_1:13;
     then
@@ -935,16 +548,16 @@ A15: len fn = n by A4,FINSEQ_1:80,NAT_1:11;
 A16: f = fn ^ <*a*> by A4,Th20;
     now
       let x;
-      card(f"{x}) = card(g"{x}) by A4,Def1;
+      card Coim(f,x) = card Coim(g,x) by A4,CLASSES1:def 9;
       then card(fn"{x}) + card(<*a*>"{x}) = card(((g|m1)^<*a*>^(g/^m))"{x})
       by A8,A12,A14,A16,FINSEQ_3:63
         .= card(((g|m1)^<*a*>)"{x}) + card((g/^m)"{x}) by FINSEQ_3:63
         .= card((g|m1)"{x})+ card(<*a*>"{x}) + card((g/^m)"{x}) by FINSEQ_3:63
         .= card((g|m1)"{x}) + card((g/^m)"{x})+ card(<*a*>"{x})
         .= card(((g|m1)^(g/^m))"{x})+ card(<*a*>"{x}) by FINSEQ_3:63;
-      hence card(fn"{x}) = card(((g|m1)^(g/^m))"{x});
+      hence card Coim(fn,x) = card Coim((g|m1)^(g/^m),x);
     end;
-    then fn, (g|m1)^(g/^m) are_fiberwise_equipotent by Def1;
+    then fn, (g|m1)^(g/^m) are_fiberwise_equipotent by CLASSES1:def 9;
     then Sum fn = Sum((g|m1)^gg) by A3,A15;
     hence Sum f = Sum((g|m1)^gg) + Sum <*a*> by A16,RVSUM_1:105
       .= Sum(g|m1) + Sum gg+ Sum <*a*> by RVSUM_1:105
@@ -1601,7 +1214,7 @@ A2: n+1 in dom f & n+1 in dom g by A1,FINSEQ_3:27;
 A3: now
     assume
 A4: r <> s;
-A5: rng f = rng g by A1,Th1;
+A5: rng f = rng g by A1,CLASSES1:83;
     now per cases by A4,XXREAL_0:1;
       case
 A6:     r>s;
@@ -1644,12 +1257,12 @@ A11:    1<=m & m<=len g by A10,FINSEQ_3:27;
 A12: f = (f|n)^<*r*> & g = (g|n)^<*r*> by A1,A3,Th20;
   now
     let x;
-    card((f|n)"{x}) + card(<*r*>"{x}) = card (f"{x}) by A12,FINSEQ_3:63
-      .= card(g"{x}) by A1,Def1
-      .= card((g|n)"{x}) + card(<*r*>"{x}) by A12,FINSEQ_3:63;
-    hence card((f|n)"{x}) = card((g|n)"{x});
+    card Coim(f|n,x) + card(<*r*>"{x}) = card Coim(f,x) by A12,FINSEQ_3:63
+      .= card Coim(g,x) by A1,CLASSES1:def 9
+      .= card Coim(g|n,x) + card(<*r*>"{x}) by A12,FINSEQ_3:63;
+    hence card Coim(f|n,x) = card Coim(g|n,x);
   end;
-  hence thesis by Def1;
+  hence thesis by CLASSES1:def 9;
 end;
 defpred P[Nat] means for R be FinSequence of REAL st $1 = len R
 ex b be non-increasing FinSequence of REAL st R,b are_fiberwise_equipotent;
@@ -1687,7 +1300,7 @@ A5: dom fn = dom R /\ Seg n by FUNCT_1:68;
 A6: len fn = n by FINSEQ_1:def 3;
   then consider a be non-increasing FinSequence of REAL such that
 A7: fn,a are_fiberwise_equipotent by A1;
-A8: rng fn = rng a & len fn = len a by A7,Th1,Th16;
+A8: rng fn = rng a & len fn = len a by A7,CLASSES1:83,Th16;
   0<=n by NAT_1:2;
   then 0 qua Nat+1<=n+1 by XREAL_1:9;
   then
@@ -1879,17 +1492,17 @@ A56:                b.(m+1) = (a/^k).(l+1) by A23,A28,A43,A44,FINSEQ_1:37
       take b;
       now
         let x;
-A57:    card(fn"{x}) = card(a"{x}) by A7,Def1;
-        thus card (b"{x}) = card (((a|k)^<*q*>)"{x}) + card(ak"{x})
+A57:    card Coim(fn,x) = card Coim(a,x) by A7,CLASSES1:def 9;
+        thus card Coim(b,x) = card (((a|k)^<*q*>)"{x}) + card(ak"{x})
         by FINSEQ_3:63
           .= card((a|k)"{x}) + card(<*q*>"{x}) + card(ak"{x}) by FINSEQ_3:63
           .= card((a|k)"{x}) + card(ak"{x}) + card(<*q*>"{x})
           .= card(((a|k)^ak)"{x}) + card(<*q*>"{x}) by FINSEQ_3:63
           .= card(fn"{x}) + card(<*q*>"{x}) by A57,Th21
           .= card((fn^<*q*>)"{x}) by FINSEQ_3:63
-          .= card(R"{x}) by A2,A4,Th20;
+          .= card Coim(R,x) by A2,A4,Th20;
       end;
-      hence R,b are_fiberwise_equipotent by Def1;
+      hence R,b are_fiberwise_equipotent by CLASSES1:def 9;
     end;
   end;
   hence thesis;
@@ -2026,11 +1639,11 @@ A3: g is one-to-one;
   let x;
   per cases;
   suppose x in rng f;
-    then Card(f"{x}) = 1 & Card(g"{x}) = 1 by A1,A2,A3,FINSEQ_4:88;
+    then card(f"{x}) = 1 & card(g"{x}) = 1 by A1,A2,A3,FINSEQ_4:88;
     hence thesis;
   end;
   suppose not x in rng f;
-    then Card(f"{x}) = 0 & Card(g"{x}) = 0 by A1,CARD_1:47,FUNCT_1:142;
+    then card(f"{x}) = 0 & card(g"{x}) = 0 by A1,CARD_1:47,FUNCT_1:142;
     hence thesis;
   end;
 end;
@@ -2152,7 +1765,7 @@ A35:      x<>n;
     end;
   end;
   then f=g*p by A31,FUNCT_1:9;
-  hence thesis by A9,A29,A30,Th3;
+  hence thesis by A9,A29,A30,CLASSES1:85;
 end;
 
 :: form BINARITH, 2008.08.20, A.T.
@@ -2174,9 +1787,153 @@ A1: k<=len f;
 A2: k>len f;
     then (f/^k)=<*>D by Def2;
     then
-A3: len (f/^k)=0 by FINSEQ_1:32;
-    len f-k<0 by A2,REAL_2:105;
+A3: len (f/^k)=0;
+    len f-k<0 by A2,XREAL_1:51;
     hence len (f/^k)=len f-'k by A3,XREAL_0:def 2;
   end;
+end;
+
+:: from SCPQSORT, 2008.10.12, A.T.
+
+theorem Th9:  :: RFINSEQ:17
+  for f,g be FinSequence,x be set st x in dom g & f,g are_fiberwise_equipotent
+  holds ex y be set st y in dom g & f.x=g.y
+proof
+  let f,g be FinSequence,x be set;
+  assume
+A1: x in dom g & f,g are_fiberwise_equipotent;
+  then consider P be Permutation of dom g such that
+A2: f = g*P by Th17;
+  take y=P.x;
+  thus y in dom g by A1,FUNCT_2:7;
+  thus f.x=g.y by A1,A2,FUNCT_2:21;
+end;
+
+theorem Th10:   ::Th14
+  for f,g,h be FinSequence holds
+  f,g are_fiberwise_equipotent iff h^f, h^g are_fiberwise_equipotent
+proof
+  let f,g,h be FinSequence;
+  thus f,g are_fiberwise_equipotent implies h^f, h^g are_fiberwise_equipotent
+  proof
+    assume
+A1: f,g are_fiberwise_equipotent;
+    now
+      let y be set;
+      card Coim(f,y) = card Coim(g,y) by A1,CLASSES1:def 9;
+      hence card Coim(h^f,y) = card(g"{y}) + card(h"{y}) by FINSEQ_3:63
+        .= card Coim(h^g,y) by FINSEQ_3:63;
+    end;
+    hence thesis by CLASSES1:def 9;
+  end;
+  assume
+A2: h^f,h^g are_fiberwise_equipotent;
+  now
+    let x be set;
+    card Coim(h^f,x) = card Coim(f,x)+card(h"{x}) &
+    card((h^g)"{x}) = card(g"{x})+card(h"{x}) &
+    card Coim(h^f,x) = card Coim(h^g,x) by A2,CLASSES1:def 9,FINSEQ_3:63;
+    hence card Coim(f,x) = card Coim(g,x);
+  end;
+  hence thesis by CLASSES1:def 9;
+end;
+
+theorem
+  for f,g be FinSequence,m,n,j be Element of NAT
+  st f,g are_fiberwise_equipotent &
+  m<=n & n <= len f & (for i be Element of NAT st 1<=i & i<=m holds f.i=g.i) &
+  (for i be Element of NAT st n<i & i<=len f holds f.i=g.i) & (m<j & j<=n)
+  holds ex k be Element of NAT st m<k & k<=n & f.j=g.k
+proof
+  let f,g be FinSequence,m,n,j be Element of NAT;
+  assume
+A1: f,g are_fiberwise_equipotent;
+  assume
+A2: m<=n & n <= len f;
+  assume
+A3: for i be Element of NAT st 1<=i & i<=m holds f.i=g.i;
+  assume
+A4: for i be Element of NAT st n<i & i<=len f holds f.i=g.i;
+  assume
+A5: m<j & j<=n;
+  reconsider m2=n-m as Element of NAT by A2,INT_1:16,XREAL_1:50;
+  reconsider m3=len f-n as Element of NAT by A2,INT_1:16,XREAL_1:50;
+A6: len f=n+m3;
+A7: len g=n+m3 by A1,Th16;
+  consider s1,r1 be FinSequence such that
+A8: len s1 = n & len r1 = m3 & f = s1^r1 by A6,FINSEQ_2:25;
+  consider s2,r2 be FinSequence such that
+A9: len s2 = n & len r2 = m3 & g = s2^r2 by A7,FINSEQ_2:25;
+  len s1=m+m2 by A8;
+  then consider p1,q1 be FinSequence such that
+A10: len p1 = m & len q1 = m2 & s1 = p1^q1 by FINSEQ_2:25;
+  len s2=m+m2 by A9;
+  then consider p2,q2 be FinSequence such that
+A11: len p2 = m & len q2 = m2 & s2 = p2^q2 by FINSEQ_2:25;
+A12: f=p1^(q1^r1) by A8,A10,FINSEQ_1:45;
+A13: g=p2^(q2^r2) by A9,A11,FINSEQ_1:45;
+A15: Seg m = dom p2 by A11,FINSEQ_1:def 3;
+X: dom r1 = Seg m3 by A8,FINSEQ_1:def 3;
+  now
+    let i be Nat;
+    reconsider a = i as Element of NAT by ORDINAL1:def 13;
+    assume
+A16: i in dom r1;
+A18: i in dom r2 by A9,A16,X,FINSEQ_1:def 3;
+A19: 1 <= i & i <= m3 by A16,X,FINSEQ_1:3;
+    then
+A20: n+1 <= n+i by XREAL_1:8;
+    n < n+1 by XREAL_1:31;
+    then
+A21: n< i+n by A20,XXREAL_0:2;
+A22: len s1+i <= len f by A6,A8,A19,XREAL_1:8;
+    thus r1.i=f.(len s1+i) by A8,A16,FINSEQ_1:def 7
+      .=g.(len s2+a) by A4,A8,A9,A21,A22
+      .=r2.i by A9,A18,FINSEQ_1:def 7;
+  end;
+  then r1=r2 by A8,A9,FINSEQ_2:10;
+  then
+A23: s1,s2 are_fiberwise_equipotent by A1,A8,A9,Th14;
+X: dom p1 = Seg m by A10,FINSEQ_1:def 3;
+  now
+    let i be Nat;
+    reconsider a = i as Element of NAT by ORDINAL1:def 13;
+    assume
+A24: i in dom p1;
+    then
+A25: 1<= i & i <= m by X,FINSEQ_1:3;
+    thus p1.i=f.i by A12,A24,FINSEQ_1:def 7
+      .=g.a by A3,A25
+      .=p2.i by A13,A15,A24,X,FINSEQ_1:def 7;
+  end;
+  then p1=p2 by A10,A11,FINSEQ_2:10;
+  then
+A26: q1,q2 are_fiberwise_equipotent by A10,A11,A23,Th10;
+  j-len p1 > 0 by A5,A10,XREAL_1:52;
+  then reconsider x=j-len p1 as Element of NAT by INT_1:16;
+A27: Seg m2 = dom q1 by A10,FINSEQ_1:def 3;
+A28: Seg m2 = dom q2 by A11,FINSEQ_1:def 3;
+A29: 1+ 0<= x by A5,A10,INT_1:20,XREAL_1:52;
+A30: x <= n-len p1 by A5,XREAL_1:11;
+  then x in dom q2 by A10,A28,A29,FINSEQ_1:3;
+  then consider y be set such that
+A31: y in dom q2 & q1.x=q2.y by A26,Th9;
+  reconsider y as Element of NAT by A31;
+A32: 1<=y & y<=m2 by A28,A31,FINSEQ_1:3;
+  reconsider k=len p2+y as Element of NAT by ORDINAL1:def 13;
+  take k;
+A33: k>=len p2+1 by A32,XREAL_1:8;
+  m+1 > m by XREAL_1:31;
+  hence m<k by A11,A33,XXREAL_0:2;
+  k <= m2+len p2 by A32,XREAL_1:8;
+  hence k<=n by A11;
+A34: x in dom q1 by A10,A27,A29,A30,FINSEQ_1:3;
+  then
+A35: len p1 + x in dom s1 by A10,FINSEQ_1:41;
+A36: len p2 + y in dom s2 by A11,A31,FINSEQ_1:41;
+  thus f.j=s1.(len p1+x) by A8,A35,FINSEQ_1:def 7
+    .=q2.y by A10,A31,A34,FINSEQ_1:def 7
+    .=s2.(len p2+y) by A11,A31,FINSEQ_1:def 7
+    .=g.k by A9,A36,FINSEQ_1:def 7;
 end;
 

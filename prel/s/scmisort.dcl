@@ -51,56 +51,56 @@
 <ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="120"/>
+<Adjective nr="123"/>
 </Cluster>
 <Func kind="U" nr="8">
-<Func kind="K" nr="300"/>
+<Func kind="K" nr="306"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="90"/>
-<Func kind="K" nr="294">
+<Func kind="K" nr="300">
 <Func kind="K" nr="90"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="322"/>
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="416">
+<Func kind="K" nr="422">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="38"/>
-<Adjective nr="98">
-<Func kind="K" nr="300"/>
+<Adjective nr="39"/>
+<Adjective nr="101">
+<Func kind="K" nr="306"/>
 <Func kind="K" nr="2">
 <Func kind="K" nr="90"/>
-<Func kind="K" nr="294">
+<Func kind="K" nr="300">
 <Func kind="K" nr="90"/>
 </Func>
 </Func>
-<Func kind="K" nr="316"/>
+<Func kind="K" nr="322"/>
 </Adjective>
-<Adjective nr="113"/>
-<Adjective nr="115"/>
+<Adjective nr="116"/>
+<Adjective nr="118"/>
 </Cluster>
 </FCluster>
 <FCluster aid="SCMISORT" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="34">
 <Cluster>
-<Adjective nr="116" value="false"/>
+<Adjective nr="119" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="34">
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="323">
+<Func kind="K" nr="329">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="120"/>
+<Adjective nr="123"/>
 </Cluster>
 </FCluster>
 </Registrations>

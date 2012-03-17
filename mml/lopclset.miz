@@ -8,22 +8,21 @@ environ
 
  vocabularies PRE_TOPC, SETFAM_1, BOOLE, BINOP_1, FUNCT_1, LATTICES, SUBSET_1,
       REALSET1, FILTER_0, RELAT_1, TARSKI, FINSUB_1, LATTICE2, SETWISEO,
-      FINSET_1, RFINSEQ, CARD_1, GROUP_6, WELLORD1, LOPCLSET,
-      SGRAPH1;
+      FINSET_1, RFINSEQ, CARD_1, GROUP_6, WELLORD1, LOPCLSET, SGRAPH1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
       RELSET_1, PARTFUN1, FUNCT_2, BINOP_1, FINSUB_1, STRUCT_0, PRE_TOPC,
-      LATTICES, LATTICE2, FILTER_0, FINSET_1, SETWISEO, LATTICE4, RFINSEQ,
-      CARD_1;
+      LATTICES, LATTICE2, FILTER_0, FINSET_1, SETWISEO, LATTICE4, CLASSES1,
+      RFINSEQ, CARD_1;
  constructors SETFAM_1, BINOP_1, SETWISEO, RFINSEQ, PRE_TOPC, LATTICE2,
-      FILTER_1, LATTICE4;
+      FILTER_1, CLASSES1, LATTICE4;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1,
       FINSUB_1, STRUCT_0, LATTICES, PRE_TOPC, CARD_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, LATTICES, BINOP_1, STRUCT_0, XBOOLE_0, SUBSET_1;
  theorems TARSKI, SETFAM_1, LATTICES, FINSUB_1, TOPS_1, PRE_TOPC, SUBSET_1,
       LATTICE2, LATTICE4, FILTER_0, FUNCT_1, FUNCT_2, ZFMISC_1, BORSUK_1,
-      GROUP_6, SETWISEO, RFINSEQ, CARD_4, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, STRUCT_0;
+      GROUP_6, SETWISEO, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, STRUCT_0,
+      CLASSES1;
  schemes BINOP_1, FRAENKEL, FUNCT_1, SETWISEO, BINOP_2;
 
 begin
@@ -356,16 +355,16 @@ definition
   let BL;
   func ultraset BL -> Subset-Family of BL equals
 
-  {F : F is_ultrafilter};
+  {F : F is being_ultrafilter};
   coherence
   proof
-    set US = {F: F is_ultrafilter};
+    set US = {F: F is being_ultrafilter};
     US c= bool the carrier of BL
     proof
       let x;
       assume x in US;
       then consider UF such that
-A1:   UF = x & UF is_ultrafilter;
+A1:   UF = x & UF is being_ultrafilter;
       thus thesis by A1;
     end;
     hence thesis;
@@ -377,14 +376,14 @@ registration
   cluster ultraset BL -> non empty;
   coherence
   proof
-    set US = {F: F is_ultrafilter};
+    set US = {F: F is being_ultrafilter};
     consider p1,p2 being Element of BL such that
 A1: p1<>p2 by STRUCT_0:def 10;
     p1 <> Bottom BL or p2 <> Bottom BL by A1;
     then consider p being Element of BL such that
 A2: p<>Bottom BL;
     consider H being Filter of BL such that
-A3: p in H & H is_ultrafilter by A2,FILTER_0:24;
+A3: p in H & H is being_ultrafilter by A2,FILTER_0:24;
     H in US by A3;
     hence thesis;
   end;
@@ -393,16 +392,16 @@ end;
 canceled;
 
 theorem
-  x in ultraset BL iff (ex UF st UF = x & UF is_ultrafilter);
+  x in ultraset BL iff (ex UF st UF = x & UF is being_ultrafilter);
 
 theorem Th19:
-  for a holds { F :F is_ultrafilter & a in F} c= ultraset BL
+  for a holds { F :F is being_ultrafilter & a in F} c= ultraset BL
 proof
   let a;
   let x;
-  assume x in { F :F is_ultrafilter & a in F};
+  assume x in { F :F is being_ultrafilter & a in F};
   then consider UF such that
-A1: UF = x & UF is_ultrafilter & a in UF;
+A1: UF = x & UF is being_ultrafilter & a in UF;
   thus x in ultraset BL by A1;
 end;
 
@@ -411,10 +410,11 @@ definition
   func UFilter BL -> Function means
   :Def6:
   dom it = the carrier of BL &
-  for a being Element of BL holds it.a = {UF:  UF is_ultrafilter & a in UF };
+  for a being Element of BL
+   holds it.a = {UF:  UF is being_ultrafilter & a in UF };
   existence
   proof
-    deffunc U(set) = { F :F is_ultrafilter & $1 in F};
+    deffunc U(set) = { F :F is being_ultrafilter & $1 in F};
     consider f being Function such that
 A1: dom f = the carrier of BL and
 A2: for x st x in the carrier of BL holds f.x = U(x) from FUNCT_1:sch 3;
@@ -426,14 +426,14 @@ A2: for x st x in the carrier of BL holds f.x = U(x) from FUNCT_1:sch 3;
     let f1,f2 be Function;
     assume that
 A3: dom f1= the carrier of BL &
-    for a holds f1.a={F:  F is_ultrafilter & a in F } and
+    for a holds f1.a={F:  F is being_ultrafilter & a in F } and
 A4: dom f2= the carrier of BL &
-    for a holds f2.a={F:  F is_ultrafilter & a in F };
+    for a holds f2.a={F:  F is being_ultrafilter & a in F };
     now
       let x;
       assume x in the carrier of BL;
       then reconsider a = x as Element of BL;
-      thus f1.x = {F: F is_ultrafilter & a in F } by A3
+      thus f1.x = {F: F is being_ultrafilter & a in F } by A3
         .= f2.x by A4;
     end;
     hence f1=f2 by A3,A4,FUNCT_1:9;
@@ -441,43 +441,43 @@ A4: dom f2= the carrier of BL &
 end;
 
 theorem Th20:
-  x in UFilter BL.a iff (ex F st F=x & F is_ultrafilter & a in F)
+  x in UFilter BL.a iff (ex F st F=x & F is being_ultrafilter & a in F)
 proof
-A1: x in UFilter BL.a implies (ex F st F=x & F is_ultrafilter & a in F)
+A1: x in UFilter BL.a implies (ex F st F=x & F is being_ultrafilter & a in F)
   proof
     assume x in UFilter BL.a;
-    then x in {UF: UF is_ultrafilter & a in UF} by Def6;
+    then x in {UF: UF is being_ultrafilter & a in UF} by Def6;
     then consider F such that
-A2: F=x & F is_ultrafilter & a in F;
+A2: F=x & F is being_ultrafilter & a in F;
     take F;
     thus thesis by A2;
   end;
-  (ex F st F=x & F is_ultrafilter & a in F) implies x in UFilter BL.a
+  (ex F st F=x & F is being_ultrafilter & a in F) implies x in UFilter BL.a
   proof
-    assume ex F st F=x & F is_ultrafilter & a in F;
-    then x in {UF: UF is_ultrafilter & a in UF};
+    assume ex F st F=x & F is being_ultrafilter & a in F;
+    then x in {UF: UF is being_ultrafilter & a in UF};
     hence thesis by Def6;
   end;
   hence thesis by A1;
 end;
 
 theorem Th21:
-  F in UFilter BL.a iff F is_ultrafilter & a in F
+  F in UFilter BL.a iff F is being_ultrafilter & a in F
 proof
   hereby
     assume F in UFilter BL.a;
     then consider F0 such that
-A1: F0=F & F0 is_ultrafilter & a in F0 by Th20;
-    thus F is_ultrafilter & a in F by A1;
+A1: F0=F & F0 is being_ultrafilter & a in F0 by Th20;
+    thus F is being_ultrafilter & a in F by A1;
   end;
-  thus F is_ultrafilter & a in F implies F in UFilter BL.a by Th20;
+  thus F is being_ultrafilter & a in F implies F in UFilter BL.a by Th20;
 end;
 
 theorem Th22:
-  for F st F is_ultrafilter holds a "\/" b in F iff a in F or b in F
+  for F st F is being_ultrafilter holds a "\/" b in F iff a in F or b in F
 proof
   let F;
-  assume F is_ultrafilter;
+  assume F is being_ultrafilter;
   then F is prime & F <> <.BL.) by FILTER_0:58;
   hence thesis by FILTER_0:def 6;
 end;
@@ -491,7 +491,7 @@ A1: UFilter BL.(a "/\" b) c= UFilter BL.a /\ UFilter BL.b
     set c = a "/\" b;
     assume x in UFilter BL.c;
     then consider F0 such that
-A2: x=F0 & F0 is_ultrafilter & c in F0 by Th20;
+A2: x=F0 & F0 is being_ultrafilter & c in F0 by Th20;
     a in F0 & b in F0 by A2,FILTER_0:def 1;
     then F0 in UFilter BL.(a) & F0 in UFilter BL.(b) by A2,Th20;
     hence thesis by A2,XBOOLE_0:def 4;
@@ -501,11 +501,11 @@ A2: x=F0 & F0 is_ultrafilter & c in F0 by Th20;
     let x;
     assume x in UFilter BL.a /\ UFilter BL.b;
     then x in UFilter BL.a & x in UFilter BL.b by XBOOLE_0:def 4;
-    then ( ex F0 st x=F0 & F0 is_ultrafilter & a in F0 ) &
-    ( ex F0 st x=F0 & F0 is_ultrafilter & b in F0 ) by Th20;
+    then ( ex F0 st x=F0 & F0 is being_ultrafilter & a in F0 ) &
+    ( ex F0 st x=F0 & F0 is being_ultrafilter & b in F0 ) by Th20;
     then consider F0 such that
-A3: x=F0 & F0 is_ultrafilter & (a in F0 & b in F0);
-    F0 is_ultrafilter & a "/\" b in F0 by A3,FILTER_0:def 1;
+A3: x=F0 & F0 is being_ultrafilter & (a in F0 & b in F0);
+    F0 is being_ultrafilter & a "/\" b in F0 by A3,FILTER_0:def 1;
     hence thesis by A3,Th20;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
@@ -520,7 +520,7 @@ A1: UFilter BL.(a "\/" b) c= UFilter BL.a \/ UFilter BL.b
     set c = a "\/" b;
     assume x in UFilter BL.c;
     then consider F0 such that
-A2: x=F0 & F0 is_ultrafilter & c in F0 by Th20;
+A2: x=F0 & F0 is being_ultrafilter & c in F0 by Th20;
     a in F0 or b in F0 by A2,Th22;
     then F0 in UFilter BL.(a) or F0 in UFilter BL.(b) by A2,Th20;
     hence thesis by A2,XBOOLE_0:def 3;
@@ -530,11 +530,11 @@ A2: x=F0 & F0 is_ultrafilter & c in F0 by Th20;
     let x;
     assume x in UFilter BL.a \/ UFilter BL.b;
     then x in UFilter BL.a or x in UFilter BL.b by XBOOLE_0:def 3;
-    then ( ex F0 st x=F0 & F0 is_ultrafilter & a in F0 ) or
-    ( ex F0 st x=F0 & F0 is_ultrafilter & b in F0 ) by Th20;
+    then ( ex F0 st x=F0 & F0 is being_ultrafilter & a in F0 ) or
+    ( ex F0 st x=F0 & F0 is being_ultrafilter & b in F0 ) by Th20;
     then consider F0 such that
-A3: x=F0 & F0 is_ultrafilter & (a in F0 or b in F0);
-    F0 is_ultrafilter & a "\/" b in F0 by A3,Th22;
+A3: x=F0 & F0 is being_ultrafilter & (a in F0 or b in F0);
+    F0 is being_ultrafilter & a "\/" b in F0 by A3,Th22;
     hence thesis by A3,Th20;
   end;
   hence thesis by A1,XBOOLE_0:def 10;
@@ -553,13 +553,13 @@ A1: dom f = the carrier of BL by Def6;
       assume y in rng f;
       then consider x such that
 A2:   x in dom f & y = f.x by FUNCT_1:def 5;
-      y ={F: F is_ultrafilter & x in F} by A1,A2,Def6;
+      y ={F: F is being_ultrafilter & x in F} by A1,A2,Def6;
       then y c= ultraset BL by A1,A2,Th19;
       hence thesis;
     end;
     then reconsider f as Function of the carrier of BL, bool ultraset BL
     by A1,FUNCT_2:def 1,RELSET_1:11;
-    for a holds f.a = { F :F is_ultrafilter & a in F} by Def6;
+    for a holds f.a = { F :F is being_ultrafilter & a in F} by Def6;
     hence thesis;
   end;
 end;
@@ -634,12 +634,12 @@ A1:     x=union B & B c= StoneR BL;
       set TS= TopStruct(# US,STP#);
 A2:   the carrier of TS in the topology of TS
       proof
-        set B = { F : F is_ultrafilter & Top BL in F };
+        set B = { F : F is being_ultrafilter & Top BL in F };
         B c= ultraset BL
         proof
           let x;
           assume x in B;
-          then ex F st F= x & F is_ultrafilter & Top BL in F;
+          then ex F st F= x & F is being_ultrafilter & Top BL in F;
           hence thesis;
         end;
         then
@@ -656,13 +656,14 @@ A5:       union SB = B by ZFMISC_1:31;
             let x;
             assume x in ultraset BL;
             then consider F such that
-A6:         F = x & F is_ultrafilter;
+A6:         F = x & F is being_ultrafilter;
             Top BL in F by FILTER_0:12;
             hence thesis by A6;
           end;
           hence thesis by A5,XBOOLE_0:def 10;
         end;
-        (UFilter BL).Top BL = { F : F is_ultrafilter & Top BL in F } by Def6;
+        (UFilter BL).Top BL = { F : F is being_ultrafilter & Top BL in F }
+         by Def6;
         then B in StoneR BL by Th26;
         then SB c= StoneR BL by ZFMISC_1:37;
         hence thesis by A4;
@@ -749,47 +750,48 @@ A22:      X in P & Y in Q & x = X /\ Y by SETFAM_1:def 5;
 A23:      X =(UFilter BL).a by A17,A22,Th26;
           consider b such that
 A24:      Y =(UFilter BL).b by A18,A22,Th26;
-A25:      X={ F: F is_ultrafilter & a in F} by A23,Def6;
-A26:      Y={ F: F is_ultrafilter & b in F} by A24,Def6;
-A27:      X /\ Y = { F: F is_ultrafilter & a "/\" b in F}
+A25:      X={ F: F is being_ultrafilter & a in F} by A23,Def6;
+A26:      Y={ F: F is being_ultrafilter & b in F} by A24,Def6;
+A27:      X /\ Y = { F: F is being_ultrafilter & a "/\" b in F}
           proof
-A28:        X /\ Y c= { F: F is_ultrafilter & a "/\" b in F}
+A28:        X /\ Y c= { F: F is being_ultrafilter & a "/\" b in F}
             proof
               let x;
               assume x in X /\ Y;
               then
 A29:          x in X & x in Y by XBOOLE_0:def 4;
               then consider F1 such that
-A30:          x= F1 & F1 is_ultrafilter & a in F1 by A25;
+A30:          x= F1 & F1 is being_ultrafilter & a in F1 by A25;
               consider F2 such that
-A31:          x= F2 & F2 is_ultrafilter& b in F2 by A26,A29;
+A31:          x= F2 & F2 is being_ultrafilter& b in F2 by A26,A29;
               a "/\" b in F1 by A30,A31,FILTER_0:def 1;
               then consider F such that
-A32:          x= F & F is_ultrafilter & a "/\" b in F by A30;
+A32:          x= F & F is being_ultrafilter & a "/\" b in F by A30;
               thus thesis by A32;
             end;
-            { F: F is_ultrafilter & a "/\" b in F} c= X /\ Y
+            { F: F is being_ultrafilter & a "/\" b in F} c= X /\ Y
             proof
               let x;
-              assume x in { F: F is_ultrafilter & a "/\" b in F};
+              assume x in { F: F is being_ultrafilter & a "/\" b in F};
               then consider F0 such that
-A33:          x= F0 & F0 is_ultrafilter & a "/\" b in F0;
+A33:          x= F0 & F0 is being_ultrafilter & a "/\" b in F0;
               a in F0 by A33,FILTER_0:def 1;
               then consider F such that
-A34:          F=F0 & F is_ultrafilter & a in F by A33;
+A34:          F=F0 & F is being_ultrafilter & a in F by A33;
 A35:          F in X by A25,A34;
               b in F0 by A33,FILTER_0:def 1;
               then consider F1 such that
-A36:          F1=F0 & F1 is_ultrafilter & b in F1 by A33;
+A36:          F1=F0 & F1 is being_ultrafilter & b in F1 by A33;
               F1 in Y by A26,A36;
               hence thesis by A33,A34,A35,A36,XBOOLE_0:def 4;
             end;
             hence thesis by A28,XBOOLE_0:def 10;
           end;
-          (UFilter BL).(a "/\" b)={ F :F is_ultrafilter & (a "/\" b) in
+          (UFilter BL).(a "/\" b)={ F :F is being_ultrafilter & (a "/\" b) in
           F} by Def6;
           then consider c being Element of BL such that
-A37:      c = a "/\" b & (UFilter BL).(c)={ F :F is_ultrafilter & c in F};
+A37:      c = a "/\" b &
+ (UFilter BL).(c)={ F :F is being_ultrafilter & c in F};
           thus thesis by A22,A27,A37,Th26;
         end;
         hence thesis by A17,A18,A19;
@@ -814,7 +816,7 @@ registration
 end;
 
 theorem
-  (F is_ultrafilter & not F in UFilter BL.a) implies not a in F by Th21;
+  (F is being_ultrafilter & not F in UFilter BL.a) implies not a in F by Th21;
 
 theorem Th28:
   ultraset BL \ UFilter BL.a = UFilter BL.a`
@@ -825,7 +827,7 @@ proof
     then
 A1: x in ultraset BL & not x in UFilter BL.a by XBOOLE_0:def 5;
     then consider F such that
-A2: F=x & F is_ultrafilter;
+A2: F=x & F is being_ultrafilter;
     not a in F by A1,A2,Th21;
     then a` in F by A2,FILTER_0:59;
     hence x in UFilter BL.a` by A2,Th21;
@@ -834,7 +836,7 @@ A2: F=x & F is_ultrafilter;
     let x;
     assume x in UFilter BL.a`;
     then consider F such that
-A3: F=x & F is_ultrafilter & a` in F by Th20;
+A3: F=x & F is being_ultrafilter & a` in F by Th20;
 A4: not a in F by A3,FILTER_0:59;
 A5: F in ultraset BL by A3;
     not F in UFilter BL.a by A4,Th21;
@@ -878,7 +880,7 @@ proof
 A1: UFilter BL.a = UFilter BL.b;
     assume not a=b;
     then consider UF such that
-A2: UF is_ultrafilter &
+A2: UF is being_ultrafilter &
     (a in UF & not b in UF or not a in UF & b in UF) by FILTER_0:60;
     now per cases by A2;
       case
@@ -1052,11 +1054,11 @@ end;
 
 theorem Th35:
   for L being 0_Lattice holds
-  not ex F being Filter of L st F is_ultrafilter & Bottom L in F
+  not ex F being Filter of L st F is being_ultrafilter & Bottom L in F
 proof
   let L be 0_Lattice;
   given F being Filter of L such that
-A1: F is_ultrafilter & Bottom L in F;
+A1: F is being_ultrafilter & Bottom L in F;
   F = <.L.) & F = the carrier of L by A1,FILTER_0:32;
   hence contradiction by A1,FILTER_0:def 4;
 end;
@@ -1067,7 +1069,7 @@ proof
   assume
 A1: UFilter BL.Bottom BL <> {};
   consider x being Element of UFilter BL.Bottom BL;
-  ex F st F=x & F is_ultrafilter & Bottom BL in F by A1,Th20;
+  ex F st F=x & F is being_ultrafilter & Bottom BL in F by A1,Th20;
   hence contradiction by Th35;
 end;
 
@@ -1127,7 +1129,7 @@ as non empty Subset-Family of ultraset BL by A13,A14,RELAT_1:152,XBOOLE_1:1;
 A15: now
       consider x being Element of UFilter BL.Bottom BL;
       assume {}ultraset BL <> UFilter BL.Bottom BL;
-      then ex F st F=x & F is_ultrafilter & Bottom BL in F by Th20;
+      then ex F st F=x & F is being_ultrafilter & Bottom BL in F by Th20;
       hence contradiction by Th35;
     end;
 A16: the L_meet of BL is commutative associative idempotent
@@ -1279,9 +1281,9 @@ A38:      x'` in D by A37,SETFAM_1:def 8;
   end;
   then H <> the carrier of BL by Th34;
   then consider F such that
-A39: H c= F & F is_ultrafilter by FILTER_0:22;
+A39: H c= F & F is being_ultrafilter by FILTER_0:22;
   consider F1 such that
-A40: F=F1 & F1 is_ultrafilter by A39;
+A40: F=F1 & F1 is being_ultrafilter by A39;
 A41: CY c= H by FILTER_0:def 5;
   not F in union X
   proof
@@ -1397,10 +1399,11 @@ A22:  D c= rng UFilter BL by A13,A19,XBOOLE_1:1;
 A23:  rng UFilter BL = dom id StoneR BL by FUNCT_2:def 1;
       dom UFilter BL = dom UFilter BL & UFilter BL is one-to-one &
       UFilter BL = id StoneR BL*UFilter BL by Th29,RELAT_1:80;
-      then UFilter BL, id StoneR BL are_fiberwise_equipotent by A23,RFINSEQ:3;
-      then Card(UFilter BL"D) = Card((id StoneR BL)"D) by RFINSEQ:4
-        .= Card D by A22,FUNCT_2:171;
-      then Card(UFilter BL"D) is finite;
+      then UFilter BL, id StoneR BL are_fiberwise_equipotent by A23,CLASSES1:85
+;
+      then card(UFilter BL"D) = card((id StoneR BL)"D) by CLASSES1:86
+        .= card D by A22,FUNCT_2:171;
+      then card(UFilter BL"D) is finite;
       then UFilter BL"D is finite;
       then reconsider B = UFilter BL"D as
       Finite_Subset of the carrier of BL by FINSUB_1:def 5;

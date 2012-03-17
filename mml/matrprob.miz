@@ -9,12 +9,13 @@ environ
 
  vocabularies ARYTM, FINSEQ_1, SQUARE_1, BOOLE, FUNCT_1, RELAT_1, MEASURE6,
       MATRIXC1, RVSUM_1, EUCLID_2, MATRIX_2, FINSEQ_2, INCSP_1, QC_LANG1,
-      MATRIXR1, CAT_3, SEQ_1, RLVECT_1, MATRIX_1, MATRPROB, TREES_1, VECTSP_1;
+      MATRIXR1, CAT_3, SEQ_1, RLVECT_1, MATRIX_1, MATRPROB, TREES_1, VECTSP_1,
+      FUNCOP_1;
  notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1, GROUP_1, BINOP_1,
-      EUCLID_2, RLVECT_1, BINOP_2, VECTSP_1, FUNCT_2, RVSUM_1, FVSUM_1,
-      FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, STRUCT_0, MATRLIN, MATRIXR1,
-      MATRIX_3, MATRIX_1;
+      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, SEQ_1, ZFMISC_1, GROUP_1, FUNCOP_1,
+      BINOP_1, EUCLID_2, RLVECT_1, BINOP_2, VECTSP_1, FUNCT_2, RVSUM_1,
+      FVSUM_1, FINSEQ_1, FINSEQ_2, FINSEQOP, NEWTON, STRUCT_0, MATRLIN,
+      MATRIXR1, MATRIX_3, MATRIX_1;
  constructors XXREAL_0, REAL_1, NAT_1, BINOP_2, NEWTON, FVSUM_1, MATRIX_3,
       MATRLIN, EUCLID_2, MATRIXR1, SEQ_1, BINOP_1, RVSUM_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, NAT_1,
@@ -22,12 +23,12 @@ environ
       VALUED_0, CARD_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, EUCLID_2, FINSEQ_2;
- theorems FUNCT_1, SEQ_1, NAT_1, TARSKI, ZFMISC_1, REAL_2, MATRIX_3, MATRIX_2,
-      XREAL_1, GOBOARD1, BINOP_2, FVSUM_1, VECTSP_1, RLVECT_1, MATRLIN,
-      XBOOLE_0, FINSEQ_1, PROB_3, MATRIX_1, GOBRD13, FINSEQ_2, FUNCOP_1,
-      RFINSEQ, FINSEQ_3, RVSUM_1, EUCLID_2, MATRIXR1, ORDINAL1, XREAL_0,
-      MATRIXC1, XXREAL_0, STRUCT_0, CARD_1, CARD_2, RELAT_1;
- schemes FUNCT_1, FINSEQ_2, PARTFUN1, SEQ_1, NAT_1, MATRIX_1;
+ theorems FUNCT_1, SEQ_1, NAT_1, TARSKI, ZFMISC_1, MATRIX_3, MATRIX_2, XREAL_1,
+      GOBOARD1, BINOP_2, FVSUM_1, VECTSP_1, RLVECT_1, MATRLIN, XBOOLE_0,
+      FINSEQ_1, PROB_3, MATRIX_1, GOBRD13, FINSEQ_2, FUNCOP_1, RFINSEQ,
+      FINSEQ_3, RVSUM_1, EUCLID_2, MATRIXR1, ORDINAL1, XREAL_0, MATRIXC1,
+      XXREAL_0, STRUCT_0, RELAT_1;
+ schemes CLASSES1, FINSEQ_2, PARTFUN1, NAT_1, MATRIX_1;
 
 begin
 
@@ -286,10 +287,9 @@ A1: for x being set st x in NAT ex y being set st P[x,y]
       end;
       hence thesis;
     end;
-A2: for x,y,z being set st x in NAT & P[x,y] & P[x,z] holds y=z;
     consider f1 being Function such that
 A3: dom f1=NAT & for x being set st x in NAT holds P[x,f1.x]
-    from FUNCT_1:sch 2(A2,A1);
+    from CLASSES1:sch 1(A1);
     now
       let x be set;
       assume x in NAT;
@@ -322,15 +322,12 @@ proof
   per cases;
   suppose
 A1: len F = 0;
-    deffunc F(Real)= 0;
-    ex f being Real_Sequence st for i holds f.i = F(i) from SEQ_1:sch 1;
-    then consider f being Real_Sequence such that
-A2: for i be Element of NAT holds f.i = 0;
+    set f = NAT --> (0 qua Real);
 A3: for i be Nat holds f.i = 0
     proof
       let i be Nat;
       i in NAT by ORDINAL1:def 13;
-      hence thesis by A2;
+      hence thesis by FUNCOP_1:13;
     end;
 A4: for i be Nat st i < len F holds f.(i+1) = f.i+(F.(i+1)) by A1;
 A5: Sum(F) = 0 by A1,PROB_3:67
@@ -1269,7 +1266,7 @@ A4: for i st i in dom z holds z.i >=0;
 A5: k in dom mlt(x,y);
 A6: x.k >=0 & y.k >=0 by A1,A2,A3;
     (mlt(x,y)).k = x.k * y.k by A5,RVSUM_1:86;
-    hence (mlt(x,y)).k >= 0 by A6,REAL_2:121;
+    hence (mlt(x,y)).k >= 0 by A6,XREAL_1:129;
   end;
 end;
 

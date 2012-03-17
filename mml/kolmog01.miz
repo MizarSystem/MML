@@ -1,0 +1,1999 @@
+:: Kolmogorov's Zero-one Law
+::  by Agnes Doll
+:: 
+:: Received November 4, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, PROB_1, PROB_2, PROB_3, FINSUB_1, FUNCT_1, DYNKIN, TARSKI,
+      KOLMOG01, SUBSET_1, FINSET_1, FINSEQ_1, ARYTM_1, SERIES_1, SEQ_1,
+      RELAT_1, SETWISEO, ORDINAL2, ARYTM, SETFAM_1, CARD_3, FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, REAL_1, ORDINAL1,
+      XCMPLX_0, XXREAL_0, NAT_1, XREAL_0, NUMBERS, FINSET_1, DYNKIN, SETWOP_2,
+      FINSUB_1, RELAT_1, CARD_3, SEQ_2, SETFAM_1, FUNCT_1, RELSET_1, BINOP_2,
+      VALUED_1, SEQ_1, FINSEQ_1, RVSUM_1, SUPINF_1, PARTFUN1, FUNCT_2, PROB_3,
+      MEASURE1, SERIES_1, RINFSUP1, WELLORD2, BINOP_1, FUNCOP_1, SETWISEO,
+      FINSEQOP, CANTOR_1, PROB_1, PROB_2;
+ constructors TARSKI, ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FINSET_1,
+      VALUAT_1, BVFUNC_1, XXREAL_0, SEQ_2, XBOOLE_0, SUBSET_1, DYNKIN, PBOOLE,
+      ZFMISC_1, PROB_1, VALUED_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, SEQ_1,
+      NAT_1, PROB_2, PROB_3, PROB_4, SERIES_1, KURATO_2, RINFSUP1, SETFAM_1,
+      BINOP_2, SEQM_3, SEQ_4, FINSOP_1, RVSUM_1, SETLIM_1, SETLIM_2, NAT_D,
+      MEMBERED, FUNCT_2, RELAT_1, WELLORD2, FUNCT_6, CARD_3, FINSUB_1,
+      FINSEQOP, SETWISEO, CANTOR_1, TOPS_2;
+ registrations VALUAT_1, BVFUNC_1, XBOOLE_0, PBOOLE, SUBSET_1, ORDINAL1,
+      VALUED_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED, PROB_1,
+      ZFMISC_1, SEQ_2, FUNCT_4, RELAT_1, NAT_1, ORDINAL2, RVSUM_1, FINSET_1,
+      FINSEQ_1, PARTFUN1, FINSUB_1, FUNCT_1, FUNCT_2, CARD_1, BINOP_1,
+      SETWISEO, VALUED_0;
+ requirements SUBSET, NUMERALS, BOOLE, ARITHM, REAL;
+ definitions PROB_1, SUBSET_1, PROB_2, TARSKI, XBOOLE_0, PROB_3, SERIES_1,
+      FUNCT_2, RVSUM_1, FINSET_1, FUNCT_1, FINSOP_1, FUNCT_6, CARD_3, CARD_1,
+      BINOP_1, RELAT_1, SETWISEO, FINSEQOP;
+ theorems XCMPLX_1, PROB_1, TARSKI, SUBSET_1, XBOOLE_0, DYNKIN, ZFMISC_1,
+      PROB_2, XBOOLE_1, SERIES_1, PROB_3, PROB_4, FUNCT_1, FUNCT_2, SEQ_1,
+      SEQ_2, RELAT_1, SETFAM_1, CARD_5, FINSUB_1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
+      RVSUM_1, ORDINAL1, WELLORD2, FINSEQOP, NAT_1, VALUED_0, FUNCOP_1;
+ schemes NAT_1, XBOOLE_0, SETWISEO, PARTFUN1, FUNCT_2;
+
+begin
+
+ reserve Omega, I for non empty set;
+ reserve Sigma for SigmaField of Omega;
+ reserve P for Probability of Sigma;
+ reserve D, E, F for Subset-Family of Omega;
+ reserve A, B, sB for non empty Subset of Sigma;
+ reserve b for Element of B;
+ reserve a for Element of Sigma;
+ reserve p, q, u, v for Event of Sigma;
+ reserve n, m for Element of NAT;
+ reserve S, S', X, x, y, z, i, j for set;
+
+theorem Th12:
+  for f being Function, X being set st X c= dom f holds
+    X <> {} implies rng (f|X) <> {}
+  proof
+  let f be Function, X be set;
+  assume A0: X c= dom f;
+  assume A1: X <> {};
+  consider x being Element of X;
+  x in X by A1;
+  hence thesis by A0, FUNCT_1:73;
+  end;
+
+theorem Th15:
+  for r being Real st r*r=r holds r=0 or r=1
+  proof
+  let r be Real;
+  assume r*r=r;
+  then r*(r-1)=0;
+  then r=0 or r-1=0 by XCMPLX_1:6;
+  hence thesis;
+  end;
+
+theorem Th1:
+  for X being Subset-Family of Omega st X={} holds sigma(X) = {{},Omega}
+  proof
+  let X be Subset-Family of Omega;
+  assume A0: X={};
+A1: {{},Omega} is SigmaField of Omega
+    proof
+Y:  x in {{},Omega} implies x in bool Omega
+      proof
+      assume x in {{},Omega};
+      then x={} or x=Omega by TARSKI:def 2;
+      then x c= Omega by XBOOLE_1:2;
+      hence thesis;
+      end;
+B1: for A1 being SetSequence of Omega st rng A1 c= {{},Omega}
+      holds Union A1 in {{},Omega}
+      proof
+      let A1 be SetSequence of Omega;
+      assume C0: rng A1 c= {{},Omega};
+      C1: for n holds ((Partial_Union A1).n = {} or
+      (Partial_Union A1).n = Omega)
+        proof
+        let n;
+        defpred P[Nat] means
+        (Partial_Union A1).$1 = {} or (Partial_Union A1).$1 = Omega;
+X:      (Partial_Union A1).0 = A1.0 by PROB_3:def 2;
+        A1.0 in rng A1 by NAT_1:52;
+        then D0: P[0] by TARSKI:def 2,C0,X;
+        D1: for k be Nat st P[k] holds P[k+1]
+          proof
+          let k be Nat;
+          assume
+Z:        (Partial_Union A1).k = {} or (Partial_Union A1).k = Omega;
+          reconsider k as Element of NAT by ORDINAL1:def 13;
+X:        A1.(k+1) in rng A1 by NAT_1:52;
+          per cases by Z, PROB_3:def 2;
+           suppose (Partial_Union A1).(k+1) = {} \/ A1.(k+1);
+            hence thesis by TARSKI:def 2,C0,X;
+            end;
+           suppose F1: (Partial_Union A1).(k+1) = Omega \/ A1.(k+1);
+            A1.(k+1) = {} or A1.(k+1) = Omega by TARSKI:def 2,C0,X;
+            hence thesis by F1;
+            end;
+          end;
+        for k being Nat holds P[k] from NAT_1:sch 2(D0,D1);
+        hence thesis;
+        end;
+      Union Partial_Union A1 = {} or Union Partial_Union A1 = Omega
+        proof
+        per cases;
+         suppose E0: for n holds (Partial_Union A1).n = {};
+          not x in Union Partial_Union A1
+            proof
+            assume not thesis;
+            then consider n such that
+            G0: x in (Partial_Union A1).n by PROB_1:25;
+            thus contradiction by G0, E0;
+            end;
+          hence thesis by XBOOLE_0:def 1;
+          end;
+         suppose not for n holds (Partial_Union A1).n = {};
+          then consider n such that
+          F0: (Partial_Union A1).n <> {};
+          (Partial_Union A1).n = Omega by F0, C1;
+          then x in Omega implies x in Union Partial_Union A1 by PROB_1:25;
+          then Union Partial_Union A1 c= Omega &
+          Omega c= Union Partial_Union A1 by TARSKI:def 3;
+          hence thesis by XBOOLE_0:def 10;
+          end;
+        end;
+      then Union A1 = {} or Union A1 = Omega by PROB_3:17;
+      hence thesis by TARSKI:def 2;
+      end;
+    for A being Subset of Omega st A in {{},Omega} holds A` in {{},Omega}
+      proof
+      let A be Subset of Omega;
+      assume A in {{},Omega};
+      then A={} or A=Omega by TARSKI:def 2;
+      then A`=Omega or A`={} by XBOOLE_1:37;
+      hence thesis by TARSKI:def 2;
+      end;
+    hence thesis by Y,B1,PROB_4:5,TARSKI:def 3;
+    end;
+  X c= {{},Omega} by A0, XBOOLE_1:2;
+  then A2: sigma(X) c= {{},Omega} by A1, PROB_1:def 14;
+  {} in sigma(X) & Omega in sigma(X) by PROB_1:42, PROB_1:43;
+  then x in {{},Omega} implies x in sigma(X) by TARSKI:def 2;
+  then {{},Omega} c= sigma(X) by TARSKI:def 3;
+  hence thesis by A2, XBOOLE_0:def 10;
+  end;
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     B be Subset of Sigma, P be Probability of Sigma;
+ func Indep(B,P) -> Subset of Sigma means :Def1:
+ for a being Element of Sigma holds
+ a in it iff for b being Element of B holds P.(a /\ b) = P.a * P.b;
+  existence
+   proof
+   defpred P[set] means
+   for b being Element of B holds P.($1 /\ b) = P.$1 * P.b;
+   consider X such that
+   A0: for x holds (x in X) iff x in Sigma & P[x] from XBOOLE_0:sch 1;
+   for x holds x in X implies x in Sigma by A0;
+   then reconsider X as Subset of Sigma by TARSKI:def 3;
+   take X;
+   let a be Element of Sigma;
+   thus thesis by A0;
+   end;
+  uniqueness
+   proof
+   let X1, X2 be Subset of Sigma;
+   assume A1: for a being Element of Sigma holds
+   a in X1 iff for b being Element of B holds P.(a /\ b) = P.a * P.b;
+   assume A2: for a being Element of Sigma holds
+   a in X2 iff for b being Element of B holds P.(a /\ b) = P.a * P.b;
+   now let a be Element of Sigma;
+     (a in X1 iff for b being Element of B holds P.(a /\ b) = P.a * P.b) &
+     (a in X2 iff for b being Element of B holds P.(a /\ b) = P.a * P.b)
+     by A1, A2;
+     hence a in X1 iff a in X2;
+   end;
+   hence thesis by SUBSET_1:8;
+  end;
+end;
+
+theorem Th2:
+ for f being SetSequence of Sigma holds
+ (for n,b holds P.(f.n /\ b) = P.(f.n) * P.b) & f is disjoint_valued implies
+ P.(b /\ Union f) = P.b * P.Union f
+  proof
+  let f be SetSequence of Sigma;
+  assume A0: for n,b holds P.(f.n /\ b) = P.(f.n) * P.b;
+  reconsider b as Element of Sigma;
+  assume A1: f is disjoint_valued;
+  then A2: seqIntersection(b,f) is disjoint_valued by DYNKIN:12;
+  A3: for n,m st n <= m holds
+  x in (@Partial_Union f).n implies x in (@Partial_Union f).m
+    proof
+    let n,m;
+    assume B0: n <= m;
+    assume B1: x in (@Partial_Union f).n;
+    reconsider Pf = @Partial_Union f as SetSequence of Sigma;
+    Pf is non-descending by PROB_3:13;
+    then Pf.n c= Pf.m by B0, PROB_1:def 7;
+    hence thesis by B1;
+    end;
+  for n,m st n <= m holds
+  seqIntersection(b,@Partial_Union f).n c=
+  seqIntersection(b,@Partial_Union f).m
+    proof
+    let n,m;
+    assume B1: n <= m;
+    let x;
+    assume x in seqIntersection(b,@Partial_Union f).n;
+    then x in b /\ (@Partial_Union f).n by DYNKIN:def 2;
+    then x in b & x in (@Partial_Union f).n by XBOOLE_0:def 4;
+    then x in b & x in (@Partial_Union f).m by B1, A3;
+    then x in b /\ (@Partial_Union f).m by XBOOLE_0:def 4;
+    hence thesis by DYNKIN:def 2;
+    end;
+  then A4: seqIntersection(b,@Partial_Union f) is non-descending
+  by PROB_1:def 7;
+  for n holds seqIntersection(b,f).n is Event of Sigma
+    proof
+    let n;
+    b /\ f.n is Event of Sigma;
+    hence thesis by DYNKIN:def 2;
+    end;
+  then reconsider seqIntf=seqIntersection(b,f) as SetSequence of Sigma
+  by PROB_1:57;
+  reconsider r=P.b as real number;
+  A5: P*seqIntf = r(#)(P*f)
+    proof
+      now let n be Element of NAT;
+      thus (P*seqIntf).n = P.(seqIntf.n) by FUNCT_2:21
+      .= P.(f.n /\ b) by DYNKIN:def 2
+      .= P.(f.n) * P.b by A0
+      .= (P*f).n * r by FUNCT_2:21
+      .= (r(#)(P*f)).n by SEQ_1:13;
+      end;
+    hence thesis by FUNCT_2:113;
+    end;
+  for n holds (@Partial_Union seqIntf).n =
+  seqIntersection(b,@Partial_Union f).n
+    proof
+    let n;
+    defpred P[Nat] means
+    (@Partial_Union seqIntf).$1 = seqIntersection(b,@Partial_Union f).$1;
+    (@Partial_Union seqIntf).0 = seqIntf.0 by PROB_3:def 2
+    .= b /\ f.0 by DYNKIN:def 2
+    .= b /\ (@Partial_Union f).0 by PROB_3:def 2
+    .= seqIntersection(b,@Partial_Union f).0 by DYNKIN:def 2;
+    then B0: P[0];
+    B1: for k being Nat st P[k] holds P[k+1]
+      proof let k be Nat such that
+      C0: (@Partial_Union seqIntf).k = seqIntersection(b,@Partial_Union f).k;
+      reconsider k as Element of NAT by ORDINAL1:def 13;
+      (@Partial_Union seqIntf).(k+1)
+      = (@Partial_Union seqIntf).k \/ seqIntf.(k+1) by PROB_3:def 2
+      .= (b /\ (@Partial_Union f).k) \/ seqIntf.(k+1) by DYNKIN:def 2,C0
+      .= (b /\ (@Partial_Union f).k) \/ (b /\ f.(k+1)) by DYNKIN:def 2
+      .= b /\ ((@Partial_Union f).k \/ f.(k+1)) by XBOOLE_1:23
+      .= b /\ (@Partial_Union f).(k+1) by PROB_3:def 2
+      .= seqIntersection(b,@Partial_Union f).(k+1) by DYNKIN:def 2;
+      hence thesis;
+    end;
+    for k being Nat holds P[k] from NAT_1:sch 2(B0,B1);
+    hence thesis;
+    end; then
+A6: P * seqIntersection(b,@Partial_Union f) =
+  P * @Partial_Union seqIntf by FUNCT_2:113
+  .= Partial_Sums (P*seqIntf) by A2, PROB_3:49
+  .= r(#)Partial_Sums(P*f) by A5,SERIES_1:12
+  .= r(#)(P * @Partial_Union f) by A1, PROB_3:49;
+   for n holds seqIntersection(b,@Partial_Union f).n is Event of Sigma
+    proof
+    let n;
+    b /\ (@Partial_Union f).n is Event of Sigma;
+    hence thesis by DYNKIN:def 2;
+    end;
+  then reconsider seqIntPf = seqIntersection(b,@Partial_Union f) as
+  SetSequence of Sigma by PROB_1:57;
+  A7: b /\ Union f = b /\ Union @Partial_Union f by PROB_3:17
+  .= Union seqIntPf by DYNKIN:13;
+  r * lim (P*@Partial_Union f) = lim (P*seqIntPf) by A6,SEQ_2:22,PROB_3:46
+  .=P.(b /\ Union f) by A7,A4,PROB_2:20;
+  hence thesis by PROB_3:46;
+  end;
+
+theorem Th3:
+  Indep(B,P) is Dynkin_System of Omega
+  proof
+A0: {} in Indep(B,P)
+    proof
+    B0: {} is Element of Sigma by PROB_1:52;
+    for b holds P.({} /\ b) = P.{} * P.b
+      proof
+      let b;
+      reconsider b as Event of Sigma;
+      P.({} /\ b) = 0 by VALUED_0:def 19;
+      hence thesis;
+      end;
+    hence thesis by B0, Def1;
+    end;
+A1: for g being SetSequence of Omega st
+    rng g c= Indep(B,P) & g is disjoint_valued holds Union g in Indep(B,P)
+    proof
+    let g be SetSequence of Omega;
+    assume B0: rng g c= Indep(B,P) & g is disjoint_valued;
+      now let n;
+      g.n is Element of Sigma
+        proof
+        per cases;
+         suppose n in dom g;
+          then g.n in rng g by FUNCT_1:12;
+          hence thesis by B0, TARSKI:def 3;
+          end;
+         suppose not n in dom g;
+          then g.n = {} by FUNCT_1:def 4;
+          hence thesis by PROB_1:10;
+          end;
+        end;
+      hence g.n is Event of Sigma;
+      end;
+    then reconsider g as SetSequence of Sigma by PROB_1:57;
+    B1: for n,b holds P.(g.n /\ b) = P.(g.n) * P.b
+      proof
+      let n,b;
+      g.n in Indep(B,P)
+        proof per cases;
+          suppose n in dom g;
+          then g.n in rng g by FUNCT_1:12;
+          hence thesis by B0;
+          end;
+          suppose not n in dom g;
+          hence thesis by A0, FUNCT_1:def 4;
+          end;
+        end;
+      hence thesis by Def1;
+      end;
+    reconsider Ug = Union g as Element of Sigma by PROB_1:58;
+    for b holds P.(Ug /\ b) = P.Ug * P.b by B0, B1, Th2;
+    hence thesis by Def1;
+    end;
+A2: for Z being Subset of Omega st Z in Indep(B,P) holds Z` in Indep(B,P)
+    proof
+    let Z be Subset of Omega;
+    assume B0: Z in Indep(B,P);
+    then reconsider Z as Event of Sigma;
+    B1: for b being Element of B holds P.(Z` /\ b) = P.Z` * P.b
+      proof
+      let b be Element of B;
+      P.(b /\ Z) = P.b * P.Z by B0, Def1;
+      then b,Z are_independent_respect_to P by PROB_2:def 5;
+      then b, ([#]Sigma\Z) are_independent_respect_to P by PROB_2:37;
+      hence thesis by PROB_2:def 5;
+      end;
+    reconsider Z'=Z` as Element of Sigma by PROB_1:50;
+    Z' in Indep(B,P) by B1, Def1;
+    hence thesis;
+    end;
+  reconsider Indp=Indep(B,P) as Subset-Family of Omega by XBOOLE_1:1;
+  Indp is Dynkin_System of Omega by A0, A1, A2, DYNKIN:def 7;
+  hence thesis;
+  end;
+
+theorem Th4:
+ for A being Subset-Family of Omega st A is intersection_stable &
+ A c= Indep(B,P) holds sigma(A) c= Indep(B,P)
+  proof
+  let A be Subset-Family of Omega;
+  assume A0: A is intersection_stable & A c= Indep(B,P);
+  reconsider Indp = Indep(B,P) as Dynkin_System of Omega by Th3;
+  sigma(A) c= Indp by A0, DYNKIN:27;
+  hence thesis;
+  end;
+
+theorem Th5:
+ for A, B being non empty Subset of Sigma
+ holds A c= Indep(B,P) iff
+ for p,q st p in A & q in B holds p,q are_independent_respect_to P
+  proof
+  let A, B be non empty Subset of Sigma;
+    A0: now assume B0: A c= Indep(B,P);
+    thus for p,q st p in A & q in B holds p,q are_independent_respect_to P
+      proof
+      let p,q;
+      assume C0: p in A & q in B;
+      reconsider p as Element of Sigma;
+      reconsider q as Element of B by C0;
+      P.(p /\ q) = P.p * P.q by C0, B0, Def1;
+      hence thesis by PROB_2:def 5;
+      end;
+    end;
+    now assume B1: for p,q st p in A & q in B holds
+      p,q are_independent_respect_to P;
+     thus A c= Indep(B,P)
+      proof
+      let x; assume C0: x in A;
+      then reconsider x as Event of Sigma;
+       for b being Element of B holds P.(x /\ b) = P.x * P.b
+      proof
+        let b be Element of B;
+        reconsider b as Event of Sigma;
+        x,b are_independent_respect_to P by C0, B1;
+        hence thesis by PROB_2:def 5;
+      end;
+      hence thesis by Def1;
+    end;
+  end;
+  hence thesis by A0;
+  end;
+
+theorem Th6:
+  for A,B being non empty Subset of Sigma st
+    A c= Indep(B,P) holds B c= Indep(A,P)
+  proof
+   let A, B be non empty Subset of Sigma;
+   assume A0: A c= Indep(B,P);
+   for q,p st q in B & p in A holds q,p are_independent_respect_to P
+    proof let q,p;
+    assume B0: q in B;
+    assume p in A;
+    then p,q are_independent_respect_to P by A0, B0, Th5;
+    hence thesis by PROB_2:31;
+    end;
+   hence thesis by Th5;
+  end;
+
+theorem Th7:
+  for A being Subset-Family of Omega st A is non empty Subset of Sigma
+    & A is intersection_stable
+  for B being non empty Subset of Sigma st B is intersection_stable
+    holds A c= Indep(B,P) implies
+ (for D,sB st D=B & sigma(D)=sB holds sigma(A) c= Indep(sB,P))
+  proof
+  let A be Subset-Family of Omega;
+  assume A0: A is non empty Subset of Sigma;
+  assume A1: A is intersection_stable;
+  let B be non empty Subset of Sigma;
+  assume A2: B is intersection_stable;
+  assume A3: A c= Indep(B,P);
+  let D, sB;
+  assume A4: D=B & sigma(D)=sB;
+  reconsider sA=sigma(A) as non empty Subset of Sigma by A0, PROB_1:def 14;
+  A5: sigma(A) c= Indep(B,P) by A1, A3, Th4;
+  reconsider B as Subset-Family of Omega by XBOOLE_1:1;
+  B c= Indep(sA,P) by A5, Th6;
+  then sigma(B) c= Indep(sA,P) by A2, Th4;
+  hence thesis by A4, Th6;
+  end;
+
+theorem Th8:
+ for E,F st E is non empty Subset of Sigma & E is intersection_stable
+ & F is non empty Subset of Sigma & F is intersection_stable holds
+ (for p,q st p in E & q in F holds p,q are_independent_respect_to P)
+ implies
+ (for u,v st u in sigma(E) & v in sigma(F) holds
+ u,v are_independent_respect_to P)
+  proof
+  let E,F;
+  assume A0: E is non empty Subset of Sigma;
+  assume A1: E is intersection_stable;
+  assume A2: F is non empty Subset of Sigma;
+  assume A3: F is intersection_stable;
+  assume A4: for p,q st p in E & q in F holds
+  p,q are_independent_respect_to P;
+  reconsider E as non empty Subset of Sigma by A0;
+  reconsider F as non empty Subset of Sigma by A2;
+  A5: E c= Indep(F,P) by A4, Th5;
+  reconsider E, F as Subset-Family of Omega;
+  reconsider sF=sigma(F), sE=sigma(E) as non empty Subset of Sigma
+    by PROB_1:def 14;
+  sigma(E) c= Indep(sF,P) by A1, A3, A5, Th7;
+  hence thesis by Th5;
+  end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega;
+  mode ManySortedSigmaField of I,Sigma -> Function of I, bool Sigma means
+ :Def2:
+  for i st i in I holds it.i is SigmaField of Omega;
+  existence
+   proof
+   set F = I --> Sigma;
+   A0: dom F = I by FUNCOP_1:19;
+   rng F c= bool Sigma
+   proof
+     let y;
+     assume y in rng F;
+     then ex x st x in dom F & y = F.x by FUNCT_1:def 5;
+     then y = Sigma by FUNCOP_1:13;
+     hence thesis by ZFMISC_1:def 1;
+   end;
+   then A2: F is Function of I, bool Sigma by A0, FUNCT_2:4;
+   for i st i in I holds F.i is SigmaField of Omega by FUNCOP_1:13;
+   hence thesis by A2;
+   end;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      P be Probability of Sigma, I be set, A be Function of I, Sigma;
+  pred A is_independent_wrt P means :Def3:
+  for e being one-to-one FinSequence of I st e <> {} holds
+  Product (P*A*e) = P.(meet rng (A*e));
+end;
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     I be set, J be Subset of I, F be ManySortedSigmaField of I,Sigma;
+ mode SigmaSection of J,F -> Function of J, Sigma means :Def4:
+ for i st i in J holds it.i in F.i;
+  existence
+    proof
+    set f = J --> {};
+    A0: dom f = J by FUNCOP_1:19;
+    A2: for i st i in J holds f.i in F.i
+      proof let i;
+      assume B0: i in J;
+      then F.i is SigmaField of Omega by Def2;
+      then {} in F.i by PROB_1:42;
+      hence thesis by B0, FUNCOP_1:13;
+      end;
+    rng f c= Sigma
+    proof
+      let y;
+      assume y in rng f;
+      then consider i such that
+      B0: i in J & y=f.i by A0, FUNCT_1:def 5;
+      B1: y in F.i by B0, A2;
+      F.i in bool Sigma by B0, FUNCT_2:7;
+      hence thesis by B1;
+    end;
+    then f is Function of J, Sigma by A0, FUNCT_2:4;
+    hence thesis by A2;
+    end;
+end;
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     P be Probability of Sigma, I be set,
+     F be ManySortedSigmaField of I,Sigma;
+ pred F is_independent_wrt P means :Def5:
+ for E being finite Subset of I, A being SigmaSection of E,F holds
+ A is_independent_wrt P;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I,Sigma, J be Subset of I;
+  redefine func F|J -> Function of J, bool Sigma;
+  coherence by FUNCT_2:38;
+end;
+
+definition
+  let I be set, J be Subset of I, Omega be non empty set,
+      Sigma be SigmaField of Omega, F be Function of J, bool Sigma;
+  redefine func Union F -> Subset-Family of Omega;
+  coherence
+  proof
+    y in Union F implies y in bool Omega
+    proof
+      assume y in Union F;
+      then consider i such that
+      A0: i in dom F & y in F.i by CARD_5:10;
+      thus thesis by A0;
+    end;
+    hence thesis by TARSKI:def 3;
+  end;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I,Sigma, J be Subset of I;
+  func sigUn(F,J) -> SigmaField of Omega equals
+  sigma Union (F|J);
+  coherence;
+end;
+
+definition
+ let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+     F be ManySortedSigmaField of I, Sigma;
+ func futSigmaFields(F,I) -> Subset-Family of bool Omega means  :Def7:
+ for S being Subset-Family of Omega holds
+ S in it iff ex E being finite Subset of I st S=sigUn(F,I\E);
+  existence
+   proof
+   defpred P[set] means
+   ex E being finite Subset of I st $1=sigUn(F,I\E);
+   consider X such that
+   A0: for x holds x in X iff x in bool bool Omega & P[x]
+   from XBOOLE_0:sch 1;
+   A1: for x holds x in X implies x in bool bool Omega by A0;
+   X is non empty
+   proof
+     set Ie=I\{}I;
+     sigUn(F,Ie) in X by A0;
+     hence thesis;
+   end;
+   then reconsider X as non empty Subset-Family of bool Omega
+   by A1, TARSKI:def 3;
+   take X;
+   let S be Subset-Family of Omega;
+   thus thesis by A0;
+   end;
+  uniqueness
+   proof
+   let X1,X2 be Subset-Family of bool Omega;
+   assume A1: for S being Subset-Family of Omega holds S in X1 iff
+   ex E being finite Subset of I st S=sigUn(F,I\E);
+   assume A2: for S being Subset-Family of Omega holds S in X2 iff
+   ex E being finite Subset of I st S=sigUn(F,I\E);
+     now let S be Subset-Family of Omega;
+     (S in X1 iff ex E being finite Subset of I st S=sigUn(F,I\E)) &
+     (S in X2 iff ex E being finite Subset of I st S=sigUn(F,I\E)) by A1, A2;
+     hence S in X1 iff S in X2;
+     end;
+   hence thesis by SUBSET_1:8;
+   end;
+end;
+
+registration
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I, Sigma;
+  cluster futSigmaFields(F,I) -> non empty;
+  coherence
+  proof
+    set Ie=I\{}I;
+    sigUn(F,Ie) in futSigmaFields(F,I) by Def7;
+    hence thesis;
+  end;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I, Sigma;
+  func tailSigmaField(F,I) -> Subset-Family of Omega equals
+  meet futSigmaFields(F,I);
+  coherence;
+end;
+
+registration let I be set, Omega be non empty set,
+                 Sigma be SigmaField of Omega,
+                 F be ManySortedSigmaField of I, Sigma;
+  cluster tailSigmaField(F,I) -> non empty;
+  coherence
+  proof
+    for X holds X in futSigmaFields(F,I) implies {} in X
+    proof let X;
+      assume X in futSigmaFields(F,I);
+      then consider E being finite Subset of I such that
+  A0: X=sigUn(F,I\E) by Def7;
+      thus thesis by A0, PROB_1:10;
+    end;
+    hence thesis by SETFAM_1:def 1;
+  end;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      I be non empty set, J be non empty Subset of I,
+      F be ManySortedSigmaField of I,Sigma;
+  func MeetSections(J,F) -> Subset-Family of Omega means :Def9:
+  for x being Subset of Omega holds
+  x in it iff ex E being non empty finite Subset of I,
+  f being SigmaSection of E,F st E c= J & x = meet rng f;
+  existence
+   proof
+   defpred P[set] means
+   ex E being non empty finite Subset of I, f being SigmaSection of E,F st
+   E c= J & $1 = meet rng f;
+   consider X such that
+   A0: for x holds x in X iff x in bool Omega & P[x] from XBOOLE_0:sch 1;
+   for x holds x in X implies x in bool Omega by A0;
+   then reconsider X as Subset-Family of Omega by TARSKI:def 3;
+   take X;
+   let x be Subset of Omega;
+   thus thesis by A0;
+   end;
+  uniqueness
+   proof
+   let X1,X2 be Subset-Family of Omega;
+   assume A1: for x being Subset of Omega holds
+   x in X1 iff ex E being non empty finite Subset of I,
+   f being SigmaSection of E,F st E c= J & x = meet rng f;
+   assume A2: for x being Subset of Omega holds
+   x in X2 iff ex E being non empty finite Subset of I,
+    f being SigmaSection of E,F st E c= J & x = meet rng f;
+     now let x be Subset of Omega;
+     (x in X1 iff ex E being non empty finite Subset of I,
+     f being SigmaSection of E,F st E c= J & x = meet rng f) &
+     (x in X2 iff ex E being non empty finite Subset of I,
+     f being SigmaSection of E,F st E c= J & x = meet rng f) by A1, A2;
+     hence x in X1 iff x in X2;
+     end;
+   hence thesis by SUBSET_1:8;
+   end;
+end;
+
+theorem Th9:
+  for F being ManySortedSigmaField of I, Sigma, J being non empty Subset of I
+  holds sigma MeetSections(J,F) = sigUn(F,J)
+  proof
+  let F be ManySortedSigmaField of I,Sigma, J be non empty Subset of I;
+  thus sigma MeetSections(J,F) c= sigUn(F,J)
+    proof
+    MeetSections(J,F) c= sigma Union (F|J)
+      proof
+        let x; assume x in MeetSections(J,F);
+        then consider E being non empty finite Subset of I,
+        f being SigmaSection of E,F such that
+        D0: E c= J & x = meet rng f by Def9;
+        D1: for B being Element of Fin E holds meet rng (f|B) in
+        sigma (Union (F|J))
+          proof
+          let B be Element of Fin E;
+          defpred P[set] means meet rng (f|$1) in sigma Union (F|J);
+          meet rng (f|{}) = {} by SETFAM_1:def 1;
+          then E0: P[{}.E] by PROB_1:42;
+          E1: for B' being Element of Fin E, b being Element of E
+          holds P[B'] & not b in B' implies P[B' \/ {b}]
+            proof
+            let B' be Element of Fin E, b be Element of E;
+            assume
+Z:           meet rng (f|B') in sigma (Union (F|J)) & not b in B';
+            F1: meet rng (f|{b}) is Event of sigma Union (F|J)
+              proof
+              b is Element of dom f by FUNCT_2:def 1;
+              then G0: {b} = dom f /\ {b} by ZFMISC_1:52
+              .= dom (f|{b}) by RELAT_1:90;
+              then G1: b in dom (f|{b}) by TARSKI:def 1;
+              rng (f|{b}) = {(f|{b}).b} by G0, FUNCT_1:14
+              .= {f.b} by G1, FUNCT_1:70;
+              then meet rng (f|{b}) = f.b by SETFAM_1:11;
+              then G2: meet rng (f|{b}) in F.b by Def4;
+              dom (F|J) = J by FUNCT_2:def 1;
+              then G3: b in dom (F|J) by D0, TARSKI:def 3;
+              then (F|J).b in rng (F|J) by FUNCT_1:def 5;
+              then F.b in rng (F|J) by G3, FUNCT_1:70;
+              then F.b c= Union (F|J) & Union (F|J) c= sigma Union (F|J)
+              by ZFMISC_1:92, PROB_1:def 14;
+              then F.b c= sigma (Union (F|J)) by XBOOLE_1:1;
+              hence thesis by G2;
+              end;
+            rng (f|(B' \/ {b})) = rng ((f|B') \/ (f|{b})) by RELAT_1:107;
+            then F2: rng (f|(B' \/ {b})) = (rng (f|B')) \/ rng (f|{b})
+            by RELAT_1:26;
+            reconsider rfB'b = rng (f|(B' \/ {b})) as set;
+            reconsider rfB' = rng (f|B') as set;
+            reconsider rfb = rng (f|{b}) as set;
+            per cases;
+             suppose rng (f|B') = {};
+              hence thesis by F1,F2;
+              end;
+             suppose G1: not rng (f|B') = {};
+              dom f = E by FUNCT_2:def 1;
+              then b in dom f & b in {b} by TARSKI:def 1;
+              then rfB' <> {} & rfb <> {} by G1, FUNCT_1:73;
+              then meet rfB'b = (meet rfB') /\ meet rfb by F2, SETFAM_1:10;
+              then meet rng (f|(B' \/ {b})) is Event of sigma Union (F|J)
+              by Z, F1, PROB_1:49;
+              hence thesis;
+              end;
+            end;
+          for B1 being Element of Fin E holds P[B1] from SETWISEO:sch 2(E0,E1);
+          hence thesis;
+          end;
+        reconsider Ee=E as Element of Fin E by FINSUB_1:def 5;
+        meet rng (f|Ee) in sigma (Union (F|J)) by D1;
+        hence thesis by D0, FUNCT_2:40;
+      end;
+    hence thesis by PROB_1:def 14;
+    end;
+    B0: Union (F|J) c= MeetSections(J,F)
+      proof
+        let x;
+        assume x in Union (F|J);
+        then consider y such that
+        D0: x in y & y in rng (F|J) by TARSKI:def 4;
+        consider i such that
+        D1: i in dom (F|J) & y = (F|J).i by D0, FUNCT_1:def 5;
+        reconsider x as Subset of Omega by D0, D1;
+        D2: {i} c= J by D1,ZFMISC_1:37;
+        then reconsider E={i} as finite Subset of I by XBOOLE_1:1;
+        defpred P[set,set] means $2=x & $2 in F.$1;
+D4:     for j st j in E ex y st y in Sigma & P[j,y]
+        proof
+          let j;
+          assume E0: j in E;
+          take y=x;
+          Sigma <> {} & i in I by D1,TARSKI:def 3; then
+X:        F.i in bool Sigma by FUNCT_2:7;
+          y in F.i by D0,D1,FUNCT_1:72;
+          hence thesis by E0,TARSKI:def 1,X;
+        end;
+        consider g being Function of E, Sigma such that
+D5:     for j st j in E holds P[j,g.j] from FUNCT_2:sch 1(D4);
+        for i st i in E holds g.i in F.i by D5; then
+        reconsider g as SigmaSection of E,F by Def4;
+        dom g = E by FUNCT_2:def 1; then
+D7:     rng g = {g.i} by FUNCT_1:14;
+        i in E by TARSKI:def 1;
+        then x=g.i by D5
+        .= meet rng g by D7, SETFAM_1:11;
+        hence thesis by D2, Def9;
+      end;
+    MeetSections(J,F) c= sigma MeetSections(J,F) by PROB_1:def 14;
+    then Union (F|J) c= sigma MeetSections(J,F) by B0, XBOOLE_1:1;
+    hence thesis by PROB_1:def 14;
+  end;
+
+theorem Th10:
+ for F being ManySortedSigmaField of I, Sigma, J,K being non empty Subset of I
+ st F is_independent_wrt P & J misses K holds
+ for a,c being Subset of Omega st
+ a in MeetSections(J,F) & c in MeetSections(K,F) holds P.(a /\ c) = P.a * P.c
+  proof
+  let F be ManySortedSigmaField of I, Sigma, J,K be non empty Subset of I;
+  assume A0: F is_independent_wrt P;
+  assume A1: J misses K;
+  let a,c be Subset of Omega;
+  assume A2: a in MeetSections(J,F) & c in MeetSections(K,F);
+  consider E1 being non empty finite Subset of I,
+  f1 being SigmaSection of E1,F such that
+  A3: E1 c= J & a = meet rng f1 by A2, Def9;
+  consider E2 being non empty finite Subset of I,
+  f2 being SigmaSection of E2,F such that
+  A4: E2 c= K & c = meet rng f2 by A2, Def9;
+  consider n being Nat such that A5: E1,Seg n are_equipotent by FINSEQ_1:77;
+  consider m being Nat such that A6: E2,Seg m are_equipotent by FINSEQ_1:77;
+  consider e1 be Function such that
+A7: e1 is one-to-one & dom e1 = Seg n & rng e1 = E1
+  by A5, WELLORD2:def 4;
+  A8: e1 <> {} by A7;
+  consider e2 be Function such that
+  A9: e2 is one-to-one & dom e2 = Seg m & rng e2 = E2 by A6, WELLORD2:def 4;
+  A10: e2 <> {} by A9;
+  A11: f1 is_independent_wrt P & f2 is_independent_wrt P
+  by A0, Def5;
+  reconsider rngf1 = rng f1, rngf2 = rng f2 as set;
+  reconsider f1 as Function of E1, rngf1 by FUNCT_2:8;
+  reconsider f2 as Function of E2, rngf2 by FUNCT_2:8;
+
+  reconsider e1 as Function of Seg n, E1 by A7, FUNCT_2:3;
+  reconsider e2 as Function of Seg m, E2 by A9, FUNCT_2:3;
+
+  A12: rng(f1*e1)= rng f1 & rng(f2*e2)= rng f2 by A7, A9, FUNCT_2:20;
+  A13: e1 is FinSequence & e2 is FinSequence by A7, A9, FINSEQ_1:def 2;
+
+  then reconsider e1 as one-to-one FinSequence of E1 by A7, FINSEQ_1:def 4;
+  reconsider e2 as one-to-one FinSequence of E2 by A9, A13, FINSEQ_1:def 4;
+  reconsider Si=Sigma as set;
+  reconsider f1 as Function of E1, Si;
+  reconsider fe1=f1*e1 as FinSequence of Si;
+  reconsider f2 as Function of E2, Si;
+  reconsider fe2=f2*e2 as FinSequence of Si;
+  reconsider Pfe1=P*f1*e1, Pfe2=P*f2*e2 as FinSequence of REAL
+  by FINSEQ_2:36;
+
+  deffunc D(set) = f1.$1;
+  deffunc B(set) = f2.$1;
+  defpred C[set] means $1 in E1;
+  consider h being Function such that
+  A14: dom h = E1 \/ E2 & for i st i in E1 \/ E2 holds
+  (C[i] implies h.i = D(i)) & (not C[i] implies h.i = B(i))
+  from PARTFUN1:sch 1;
+
+  A15: fe1^fe2 = h*(e1^e2)
+    proof
+    rng e1 = dom f1 & rng e2 = dom f2 by A7, A9, FUNCT_2:def 1;
+    then B0: len fe1 = len e1 & len fe2 = len e2 by FINSEQ_2:33;
+
+    x in dom (h*(e1^e2)) implies x in dom (e1^e2) by FUNCT_1:21;
+    then B1: dom (h*(e1^e2)) c= dom (e1^e2) by TARSKI:def 3;
+
+    x in dom (e1^e2) implies x in dom (h*(e1^e2))
+      proof
+      assume C0: x in dom (e1^e2);
+      rng (e1^e2) = dom h by A14,A7,A9,FINSEQ_1:44;
+      then (e1^e2).x in dom h by C0, FUNCT_1:12;
+      hence thesis by C0, FUNCT_1:21;
+      end;
+    then B2: dom (e1^e2) c= dom (h*(e1^e2)) by TARSKI:def 3;
+    B3: dom (fe1^fe2) = Seg (len fe1 + len fe2) by FINSEQ_1:def 7
+    .= dom (e1^e2) by FINSEQ_1:def 7,B0
+    .= dom (h*(e1^e2)) by B1, B2, XBOOLE_0:def 10;
+    for x st x in dom (fe1^fe2) holds (fe1^fe2).x = (h*(e1^e2)).x
+      proof
+      let x;
+      assume C0: x in dom (fe1^fe2);
+      then reconsider x as Element of NAT;
+      per cases;
+       suppose D0: x in dom fe1;
+        then F0: (fe1^fe2).x = fe1.x by FINSEQ_1:def 7;
+        F1: x in dom e1 by D0, FUNCT_1:21;
+        then F2: (e1^e2).x = e1.x by FINSEQ_1:def 7;
+        F3: e1.x in E1 by A7, F1, FUNCT_1:12;
+        E1 c= E1 \/ E2 by XBOOLE_1:7;
+        then h.(e1.x) = f1.(e1.x) by F3, A14;
+        then (fe1^fe2).x = h.(e1.x) by D0, F0, FUNCT_1:22;
+        hence thesis by B3, C0, F2, FUNCT_1:22;
+        end;
+       suppose not x in dom fe1;
+        then consider n be Nat such that
+        F0: n in dom fe2 & x = len fe1 + n by C0, FINSEQ_1:38;
+        F1: n in dom e2 by F0, FUNCT_1:21;
+        then F2: e2.n in E2 by A9, FUNCT_1:12;
+        E1 /\ E2 c= J /\ K by A3, A4, XBOOLE_1:27;
+        then E1 /\ E2 c= {} by A1, XBOOLE_0:def 7;
+        then E1 /\ E2 = {};
+        then E2 = E2\E1 \/ {} by XBOOLE_1:51;
+        then F3: not e2.n in E1 by F2, XBOOLE_0:def 5;
+        F4: E2 c= E1 \/ E2 by XBOOLE_1:7;
+        (fe1^fe2).x = fe2.n by F0, FINSEQ_1:def 7
+        .= f2.(e2.n) by F0, FUNCT_1:22
+        .= h.(e2.n) by F2, F3, F4, A14
+        .= h.((e1^e2).x) by F0, F1, B0, FINSEQ_1:def 7;
+        hence thesis by C0, B3, FUNCT_1:22;
+        end;
+      end;
+    hence thesis by B3, FUNCT_1:9;
+    end;
+
+  for i st i in E1 \/ E2 holds h.i in Sigma
+    proof
+    let i;
+    assume B0: i in E1 \/ E2;
+    per cases;
+     suppose C0: i in E1;
+      then h.i = f1.i by B0, A14;
+      hence thesis by C0, FUNCT_2:7;
+      end;
+     suppose C1: not i in E1;
+      then D0: h.i = f2.i by B0, A14;
+      i in E2 by C1, B0, XBOOLE_0:def 3;
+      hence thesis by D0, FUNCT_2:7;
+      end;
+    end;
+
+  then reconsider h as Function of E1 \/ E2, Sigma by A14, FUNCT_2:5;
+
+  for i st i in E1 \/ E2 holds h.i in F.i
+    proof
+    let i;
+    assume B0: i in E1 \/ E2;
+    per cases;
+     suppose C0: i in E1;
+      then f1.i in F.i by Def4;
+      hence thesis by C0, B0, A14;
+      end;
+     suppose C1: not i in E1;
+      then i in E2 by B0, XBOOLE_0:def 3;
+      then f2.i in F.i by Def4;
+      hence thesis by C1, B0, A14;
+      end;
+    end;
+  then reconsider h as SigmaSection of E1 \/ E2, F by Def4;
+A16: h is_independent_wrt P by Def5, A0;
+  E1 c= E1 \/ E2 by XBOOLE_1:7;
+  then rng e1 c= E1 \/ E2 by XBOOLE_1:1;
+  then reconsider e1 as FinSequence of E1 \/ E2 by FINSEQ_1:def 4;
+  E2 c= E1 \/ E2 by XBOOLE_1:7;
+  then rng e2 c= E1 \/ E2 by XBOOLE_1:1;
+  then reconsider e2 as FinSequence of E1 \/ E2 by FINSEQ_1:def 4;
+  E1 /\ E2 c= J /\ K by A3, A4, XBOOLE_1:27;
+  then E1 /\ E2 c= {} by A1, XBOOLE_0:def 7;
+  then E1 /\ E2 = {};
+  then rng e1 misses rng e2 by A7, A9, XBOOLE_0:def 7;
+  then reconsider e12 = e1^e2 as one-to-one FinSequence of E1 \/ E2
+  by FINSEQ_3:98;
+  reconsider e1 as one-to-one FinSequence of E1;
+  reconsider fe1 as FinSequence of Si;
+  reconsider e2 as FinSequence of E2;
+  reconsider fe2 as FinSequence of Si;
+  reconsider P as Function of Si, REAL;
+  A18: P*h*e12 = P*(h*(e1^e2)) by RELAT_1:55
+  .=(P*fe1)^(P*fe2) by FINSEQOP:10,A15;
+  A19: P*fe1 = Pfe1 & P*fe2 = Pfe2 by RELAT_1:55;
+  reconsider P as Function of Sigma, REAL;
+  reconsider f1 as Function of E1, Sigma;
+  A21: Product(P*f1*e1) = P.meet rng (f1*e1) by A8, A11, Def3;
+
+  reconsider e2 as one-to-one FinSequence of E2;
+  reconsider f2 as Function of E2, Sigma;
+  P.(a /\ c) = P.meet(rng f1 \/ rng f2) by SETFAM_1:10,A3, A4
+  .=P.meet rng(fe1 ^ fe2) by FINSEQ_1:44,A12
+  .=Product(Pfe1 ^ Pfe2) by A18,A19,A16, A8, Def3,A15
+  .=Product(Pfe1) * Product(Pfe2) by RVSUM_1:127
+  .=P.a * P.c by A3, A4,A12,A21,A10, A11, Def3;
+  hence thesis;
+  end;
+
+theorem Th11:
+ for F being ManySortedSigmaField of I,Sigma, J being non empty Subset of I
+ holds MeetSections(J,F) is non empty Subset of Sigma
+  proof
+  let F be ManySortedSigmaField of I,Sigma, J be non empty Subset of I;
+  A0: MeetSections(J,F) is non empty set
+    proof
+    consider E being non empty finite Subset of J;
+    consider f being Function such that
+    B0: dom f = E & rng f = {{}} by FUNCT_1:15;
+    B1: meet rng f = {} by B0, SETFAM_1:11;
+    B2: rng f c= Sigma
+      proof
+      let y be set; assume y in rng f;
+      then y={} by B0, TARSKI:def 1;
+      hence thesis by PROB_1:10;
+      end;
+    reconsider E as non empty finite Subset of I by XBOOLE_1:1;
+    reconsider f as Function of E, Sigma by B0, B2, FUNCT_2:4;
+    for i st i in E holds f.i in F.i
+      proof
+      let i;
+      assume C0: i in E;
+      then f.i in rng f by B0, FUNCT_1:def 5;
+      then C1: f.i = {} by B0, TARSKI:def 1;
+      reconsider Fi=F.i as SigmaField of Omega by C0, Def2;
+      f.i in Fi by C1, PROB_1:10;
+      hence thesis;
+      end;
+    then reconsider f as SigmaSection of E,F by Def4;
+    reconsider mrf=meet rng f as Subset of Omega by B1, XBOOLE_1:2;
+    mrf in MeetSections(J,F) by Def9;
+    hence thesis;
+    end;
+    MeetSections(J,F) c= Sigma
+    proof
+      let X;
+      assume X in MeetSections(J,F);
+      then consider E being non empty finite Subset of I,
+      f being SigmaSection of E,F such that
+      C0: E c= J & X = meet rng f by Def9;
+      C1: for B being Element of Fin E holds meet rng (f|B) in Sigma
+        proof
+        let B be Element of Fin E;
+        defpred P[set] means meet rng (f|$1) in Sigma;
+        D0: P[{}.E]
+          proof
+          meet rng (f|{}) = {} by SETFAM_1:def 1;
+          hence thesis by PROB_1:42;
+          end;
+        D1: for B' being (Element of Fin E), b being Element of E holds
+        P[B'] & not b in B' implies P[B' \/ {b}]
+          proof
+          let B' be (Element of Fin E), b be Element of E;
+          assume
+Z:         meet rng (f|B') in Sigma & not b in B';
+          E1: meet rng (f|{b}) is Event of Sigma
+            proof
+            F0: b is Element of dom f by FUNCT_2:def 1;
+            then dom f /\ {b} = {b} by ZFMISC_1:52;
+            then dom (f|{b}) = {b} by RELAT_1:90;
+            then F1: rng (f|{b}) = {(f|{b}).b} by FUNCT_1:14;
+            b in {b} & b in dom f by F0, TARSKI:def 1;
+            then b in dom (f|{b}) by RELAT_1:86;
+            then rng (f|{b}) = {f.b} by F1, FUNCT_1:70;
+            hence thesis by SETFAM_1:11;
+            end;
+
+          E2: rng (f|(B' \/ {b})) = rng ((f|B') \/ f|{b}) by RELAT_1:107
+          .= (rng (f|B')) \/ rng (f|{b}) by RELAT_1:26;
+
+          E3: dom f = E by FUNCT_2:def 1;
+          reconsider domf=dom f as non empty set;
+          b in domf & b in {b} by E3, TARSKI:def 1;
+          then E4: f.b in rng(f|{b}) by FUNCT_1:73;
+          per cases;
+           suppose rng (f|B') = {};
+            hence thesis by E1, E2;
+            end;
+           suppose not rng (f|B') = {};
+            then meet rng (f|(B' \/ {b}))=
+            meet rng (f|B') /\ meet rng (f|{b}) by E2, E4, SETFAM_1:10;
+            then meet rng (f|(B' \/ {b})) is Event of Sigma
+            by Z, E1, PROB_1:49;
+            hence thesis;
+            end;
+          end;
+        for B1 being Element of Fin E holds P[B1] from SETWISEO:sch 2 (D0,D1);
+        hence thesis;
+        end;
+
+      reconsider Ee=E as Element of Fin E by FINSUB_1:def 5;
+      meet rng (f|Ee) in Sigma by C1;
+      hence thesis by C0,FUNCT_2:40;
+    end;
+  hence thesis by A0;
+  end;
+
+registration let I,Omega,Sigma;
+ let F be ManySortedSigmaField of I,Sigma, J be non empty Subset of I;
+ cluster MeetSections(J,F) -> intersection_stable;
+ coherence
+  proof
+  for x,X st x in MeetSections(J,F) & X in MeetSections(J,F)
+  holds x /\ X in MeetSections(J,F)
+    proof
+    let x,X;
+    assume B0: x in MeetSections(J,F) & X in MeetSections(J,F);
+    then consider E being non empty finite Subset of I,
+    f being SigmaSection of E,F such that
+    B1: E c= J & x = meet rng f by Def9;
+    consider E' being non empty finite Subset of I,
+    f' being SigmaSection of E',F such that
+    B2: E' c= J & X = meet rng f' by B0, Def9;
+
+    deffunc D(set)= f.$1;
+    deffunc B(set)= f'.$1;
+    defpred C[set] means $1 in E;
+    consider h being Function such that
+    B3: dom h = E \/ E' & for i st i in E \/ E' holds
+    (C[i] implies h.i = D(i)) &
+    (not C[i] implies h.i = B(i)) from PARTFUN1:sch 1;
+
+    deffunc F(set) = h.$1;
+    deffunc G(set) = (f.$1) /\ (f'.$1);
+    defpred P[set] means $1 in (E\E') \/ (E'\E);
+    consider g being Function such that
+    B4: dom g = E \/ E' & for i st i in E \/ E' holds
+    (P[i] implies g.i = F(i)) &
+    (not P[i] implies g.i = G(i)) from PARTFUN1:sch 1;
+
+    B5: for i st i in E \/ E' holds g.i in F.i
+      proof
+      let i;
+      assume C0: i in E \/ E';
+      per cases;
+       suppose
+S:      i in (E\E') \/ (E'\E);
+        h.i in F.i
+        proof
+          per cases;
+           suppose F0: i in E;
+            then h.i = f.i by C0, B3;
+            hence thesis by F0, Def4;
+            end;
+           suppose F1: not i in E;
+            then G0: i in E' by C0, XBOOLE_0:def 3;
+            h.i = f'.i by F1, C0, B3;
+            hence thesis by G0, Def4;
+            end;
+          end;
+        hence thesis by S, C0, B4;
+        end;
+       suppose D1: not i in (E\E') \/ (E'\E);
+        then not i in E \+\ E';
+        then E0: i in E iff i in E' by XBOOLE_0:1;
+        E2: f.i in F.i by E0, Def4,C0, XBOOLE_0:def 3;
+        E3: f'.i in F.i by E0, C0, XBOOLE_0:def 3, Def4;
+        reconsider Fi=F.i as SigmaField of Omega by C0, Def2;
+        E4: (f.i) /\ f'.i is Event of Fi by PROB_1:49,E2, E3;
+        g.i = (f.i) /\ f'.i by D1, C0, B4;
+        hence thesis by E4;
+        end;
+      end;
+
+    g is Function of E \/ E', Sigma
+      proof
+      rng g c= Sigma
+      proof
+        let y;
+        assume y in rng g;
+        then consider i such that
+        E0: i in dom g & y=g.i by FUNCT_1:def 5;
+        E1: y in F.i by E0, B4, B5;
+        F.i in bool Sigma by E0, B4, FUNCT_2:7;
+        hence thesis by E1;
+      end;
+      hence thesis by B4, FUNCT_2:4;
+      end;
+    then reconsider g as SigmaSection of E \/ E',F by B5, Def4;
+
+    B6: E \/ E' c= J by B1, B2, XBOOLE_1:8;
+    B7: x /\ X = meet rng g
+      proof
+      C0: meet rng (g|(E /\ E')) =
+      (meet rng (f|(E /\ E'))) /\ meet rng (f'|(E/\E'))
+        proof
+        per cases;
+         suppose E0: E /\ E' = {};
+          then F0: meet rng (g|(E /\ E')) = meet rng {}
+          .= {} by SETFAM_1:def 1;
+          meet rng (f|(E /\ E')) = meet rng {} &
+          meet rng (f'|(E /\ E')) = meet rng {} by E0;
+          hence thesis by F0, SETFAM_1:def 1;
+          end;
+         suppose not E /\ E' = {};
+          then reconsider EnE' = E /\ E' as non empty set;
+          F0: for B being Element of Fin EnE' holds
+          meet rng (g|B) = (meet rng (f|B)) /\ (meet rng (f'|B))
+            proof
+            let B be Element of Fin EnE';
+            defpred P[set] means
+            meet rng (g|$1) = (meet rng (f|$1)) /\ meet rng (f'|$1);
+            G0: P[{}.(EnE')];
+            G1: for B' being (Element of Fin EnE'),
+            b being Element of EnE' holds P[B'] & not b in B'
+            implies P[B' \/ {b}]
+              proof
+              let B' be Element of Fin EnE', b be Element of EnE';
+              assume H0: (meet rng (g|B') =
+              (meet rng (f|B')) /\ meet rng (f'|B')) & not b in B';
+
+              H1: for g being Function, B',b being set holds
+              meet rng (g|(B' \/ {b})) = meet ((rng (g|B')) \/ rng (g|{b}))
+                proof
+                let g be Function, B',b be set;
+                rng (g|(B' \/ {b})) = rng ((g|B') \/ (g|{b})) by RELAT_1:107;
+                hence thesis by RELAT_1:26;
+                end;
+
+              dom f = E by FUNCT_2:def 1;
+              then h2: E /\ E' c= dom f by XBOOLE_1:17;
+              then H2: b in dom f by TARSKI:def 3;
+
+              dom f' = E' by FUNCT_2:def 1; then
+h3:            E /\ E' c= dom f' by XBOOLE_1:17;
+              then H3: b in dom f' by TARSKI:def 3;
+
+              dom (f|{b}) = (dom f) /\ {b} &
+              dom (f'|{b}) = (dom f') /\ {b} by RELAT_1:90;
+              then H4: rng (f|{b}) = {(f|{b}).b} &
+              rng (f'|{b}) = {(f'|{b}).b} by FUNCT_1:14,H2, H3, ZFMISC_1:52;
+              b in {b} & b in dom f & b in dom f'
+                by h2, h3, TARSKI:def 1,TARSKI:def 3; then
+              b in dom (f|{b}) & b in dom (f'|{b}) by RELAT_1:86;
+              then H5: rng (f|{b}) = {f.b} & rng (f'|{b}) = {f'.b}
+              by H4, FUNCT_1:70;
+
+              then H6: meet rng (f|{b}) = f.b & meet rng (f'|{b}) = f'.b
+              by SETFAM_1:11;
+
+              H7: E /\ E' c= E by XBOOLE_1:17;
+              E c= E \/ E' by XBOOLE_1:7;
+              then H8: E /\ E' c= E \/ E' by H7, XBOOLE_1:1;
+
+              then H9: b in E\/E' by TARSKI:def 3;
+              b in E\(E \/ E') \/ (E /\ E /\ E') by XBOOLE_0:def 3;
+              then b in E\(E \+\ E') by XBOOLE_1:102;
+              then not b in E \+\ E' by XBOOLE_0:def 5;
+              then H10: g.b = (f.b) /\ f'.b by H9, B4;
+
+              E c= dom g by B4, XBOOLE_1:7;
+              then h11: E /\ E' c= dom g by H7, XBOOLE_1:1;
+              then b is Element of dom g by TARSKI:def 3;
+              then dom g /\ {b} = {b} by ZFMISC_1:52;
+              then dom (g|{b}) = {b} by RELAT_1:90;
+              then H12: rng (g|{b}) = {(g|{b}).b} by FUNCT_1:14;
+              b in {b} & b in dom g by h11, TARSKI:def 1,TARSKI:def 3; then
+               b in dom (g|{b}) by RELAT_1:86;
+              then H13: rng (g|{b}) = {g.b} by FUNCT_1:70, H12;
+              then H14: meet rng (g|{b}) = g.b by SETFAM_1:11;
+
+              per cases;
+               suppose B' = {};
+                hence thesis by H13, H10, H6, SETFAM_1:11;
+                end;
+               suppose J1: not B' = {};
+                consider z being Element of B';
+                K0: z in B' by J1;
+
+                B' c= E /\ E' by FINSUB_1:def 5;
+                then B' c= E \/ E' by H8, XBOOLE_1:1;
+                then z in dom (g|B') by B4, K0, RELAT_1:86;
+                then consider y such that
+                K1: y in rng (g|B') by RELAT_1:18;
+                meet ((rng (g|B')) \/ rng (g|{b})) =
+                (meet rng (g|B')) /\ meet rng (g|{b})
+                  by K1, SETFAM_1:10, H12;
+                then K2: meet rng (g|(B' \/ {b})) =
+                 (meet rng (f|B')) /\ (meet rng (f'|B')) /\ g.b
+                  by H0, H14,H1
+                .= (meet rng (f|B')) /\ ((meet rng (f'|B')) /\ ((f.b) /\ f'.b))
+                by XBOOLE_1:16,H10
+                .= (meet rng (f|B')) /\ ((f.b) /\ ((meet rng (f'|B')) /\ f'.b))
+                by XBOOLE_1:16
+                .= ((meet rng (f|B')) /\ f.b) /\ (((meet rng (f'|B')) /\ f'.b))
+                by XBOOLE_1:16;
+
+                K3: (meet rng (f|B')) /\ f.b = meet rng (f|(B' \/ {b}))
+                  proof
+                  L1: B' c= E /\ E' by FINSUB_1:def 5;
+                  E /\ E' c= E by XBOOLE_1:17;
+                  then B' c= E by L1, XBOOLE_1:1;
+                  then
+l2:                B' c= dom f by FUNCT_2:def 1;
+                  meet rng (f|(B' \/ {b})) =
+                  meet ((rng (f|B')) \/ rng (f|{b})) by H1
+                  .= (meet rng (f|B')) /\ meet rng (f|{b})
+                  by H4, l2, SETFAM_1:10, J1;
+                  hence thesis by H5,SETFAM_1:11;
+                  end;
+                (meet rng (f'|B')) /\ f'.b = meet rng (f'|(B' \/ {b}))
+                  proof
+                  L1: B' c= E /\ E' by FINSUB_1:def 5;
+                  E /\ E' c= E' by XBOOLE_1:17;
+                  then B' c= E' by L1, XBOOLE_1:1; then
+l2:                B' c= dom f' by FUNCT_2:def 1;
+                  meet rng (f'|(B' \/ {b})) =
+                  meet ((rng (f'|B')) \/ rng (f'|{b})) by H1
+                  .= (meet rng (f'|B')) /\ meet rng (f'|{b})
+                  by H4, l2, SETFAM_1:10, J1;
+                  hence thesis by H5,SETFAM_1:11;
+                  end;
+                hence thesis by K2, K3;
+                end;
+              end;
+            for B1 being Element of Fin EnE' holds P[B1] from
+            SETWISEO:sch 2(G0,G1);
+            hence thesis;
+            end;
+          reconsider EE'=EnE' as Element of Fin EnE' by FINSUB_1:def 5;
+          meet rng (g|EE') = (meet rng (f|EE')) /\ meet rng (f'|EE') by F0;
+          hence thesis;
+          end;
+        end;
+      C1: meet rng (g|(E\E')) = meet rng (f|(E\E'))
+        proof
+        D0: dom (g|(E\E')) = dom g /\ (E\E') by RELAT_1:90
+        .= (E \/ E') /\ (E\E') by FUNCT_2:def 1
+        .= ((E \/ E') /\ E) \ E' by XBOOLE_1:49
+        .= E\E' by XBOOLE_1:21;
+        then D1: dom (g|(E\E')) = (E /\ E) \ E'
+        .= E /\ (E\E') by XBOOLE_1:49
+        .= dom f /\ (E\E') by FUNCT_2:def 1;
+        for i st i in dom(g|(E\E')) holds (g|(E\E')).i = f.i
+          proof
+          let i;
+          assume E0: i in dom(g|(E\E')); then
+          E2: i in (E\E') \/ (E'\E) by D0,XBOOLE_0:def 3;
+e3:       E\E' c= E by XBOOLE_1:36;
+          g.i = h.i by E2, B4, E0
+          .= f.i by e3, B3,E0,D0;
+          hence thesis by E0, FUNCT_1:70;
+          end;
+        hence thesis by D1, FUNCT_1:68;
+        end;
+      C2: meet rng (g|(E'\E)) = meet rng (f'|(E'\E))
+        proof
+        D0: dom (g|(E'\E)) = dom g /\ (E'\E) by RELAT_1:90
+        .= (E \/ E') /\ (E'\E) by FUNCT_2:def 1
+        .= ((E \/ E') /\ E') \ E by XBOOLE_1:49
+        .= E'\E by XBOOLE_1:21;
+        then D1: dom (g|(E'\E)) = (E' /\ E')\E
+        .= E' /\ (E'\E) by XBOOLE_1:49
+        .= dom f' /\ (E'\E) by FUNCT_2:def 1;
+        for i st i in dom (g|(E'\E)) holds (g|(E'\E)).i = f'.i
+          proof
+          let i;
+          assume E0: i in dom (g|(E'\E));
+          then E2: i in (E\E') \/ (E'\E) by XBOOLE_0:def 3,D0;
+          not i in E by E0,D0, XBOOLE_0:def 5;
+          then f'.i = h.i by E0, B3
+          .= g.i by E0, E2, B4;
+          hence thesis by E0, FUNCT_1:70;
+          end;
+        hence thesis by D1, FUNCT_1:68;
+        end;
+      C3: for E,E' being set, g being Function st dom g = E \/ E' holds
+      rng g = (rng (g|(E /\ E'))) \/ (rng (g|(E\E'))) \/ rng (g|(E'\E))
+        proof
+        let E,E' be set, g be Function;
+        assume D0: dom g = E \/ E';
+        thus rng g c=
+        (rng (g|(E /\ E'))) \/ (rng (g|(E\E'))) \/ rng (g|(E'\E))
+          proof
+            let y;
+            assume y in rng g;
+            then consider i such that
+            F0: i in dom g & y=g.i by FUNCT_1:def 5;
+
+            per cases;
+             suppose G0: i in (E\E') \/ (E'\E);
+              y in (rng (g|(E/\E'))) \/ (rng (g|(E\E'))) \/ rng (g|(E'\E))
+                proof
+                per cases;
+                 suppose J0: i in E;
+                  K0: E /\ E' c= E by XBOOLE_1:17;
+                  E /\ ((E\E') \/ (E'\E)) = E /\ (E\E') \/ E /\ (E'\E)
+                  by XBOOLE_1:23
+                  .= (E\E') \/ E /\ (E'\E) by XBOOLE_1:28
+                  .= (E\E') \/ ((E /\ E') \ E) by XBOOLE_1:49
+                  .= (E\E') \/ {} by K0, XBOOLE_1:37;
+                  then i in E\E' by J0, G0, XBOOLE_0:def 4;
+                  then i in dom g /\ (E\E') by F0, XBOOLE_0:def 4;
+                  then K1: i in dom (g|(E\E')) by RELAT_1:90;
+                  then (g|(E\E')).i = y by F0, FUNCT_1:70;
+                  then y in rng (g|(E\E')) by K1, FUNCT_1:def 5;
+                  then y in (rng (g|(E/\E'))) \/ rng (g|(E\E'))
+                  by XBOOLE_0:def 3;
+                  hence thesis by XBOOLE_0:def 3;
+                  end;
+                 suppose J1: not i in E;
+                  ((E\E') \/ (E'\E)) \ E = ((E\E') \ E) \/ ((E'\E) \ E)
+                  by XBOOLE_1:42
+                  .= {} \/ ((E'\E) \ E) by XBOOLE_1:37
+                  .= E' \ (E \/ E) by XBOOLE_1:41;
+                  then i in E' \ (E \/ E) by J1, G0, XBOOLE_0:def 5;
+                  then i in dom g /\ (E'\E) by F0, XBOOLE_0:def 4;
+                  then K0: i in dom (g|(E'\E)) by RELAT_1:90;
+                  then (g|(E'\E)).i = y by F0, FUNCT_1:70;
+                  then y in rng (g|(E'\E)) by K0, FUNCT_1:def 5;
+                  then y in (rng (g|(E\E'))) \/ rng (g|(E'\E))
+                  by XBOOLE_0:def 3;
+                  then y in (rng (g|(E/\E'))) \/
+                  ((rng (g|(E\E'))) \/ rng (g|(E'\E))) by XBOOLE_0:def 3;
+                  hence thesis by XBOOLE_1:4;
+                  end;
+                end;
+              hence thesis;
+              end;
+             suppose not i in (E\E') \/ (E'\E);
+              then H0: i in (E \/ E') \ (E \+\ E') by F0, D0, XBOOLE_0:def 5;
+              (E \/ E') \ (E \+\ E') = (E \/ E') \ (E \/ E') \/
+              (E \/ E') /\ E /\ E' by XBOOLE_1:102
+              .= {} \/ (E \/ E') /\ E /\ E' by XBOOLE_1:37
+              .= (E \/ E') /\ (E /\ E') by XBOOLE_1:16;
+              then H1: i in dom (g|(E /\ E')) by D0, H0, RELAT_1:90;
+              then (g|(E /\ E')).i = y by F0, FUNCT_1:70;
+              then y in rng (g|(E /\ E')) by H1, FUNCT_1:def 5;
+              then y in (rng (g|(E /\ E'))) \/ rng (g|(E\E'))
+              by XBOOLE_0:def 3;
+              hence thesis by XBOOLE_0:def 3;
+              end;
+          end;
+          rng (g|(E /\ E')) c= rng g & rng (g|(E\E')) c= rng g by RELAT_1:99;
+          then E0: (rng (g|(E /\ E'))) \/ (rng (g|(E\E'))) c= rng g
+          by XBOOLE_1:8;
+          rng (g|(E'\E)) c= rng g by RELAT_1:99;
+          hence thesis by E0, XBOOLE_1:8;
+        end;
+
+      C4: rng g = (rng (g|(E /\ E'))) \/ (rng (g|(E\E'))) \/ rng (g|(E'\E))
+      by C3, B4;
+      per cases;
+       suppose D0: E /\ E' = {}; then
+e0:      rng (g|(E /\ E')) = {};
+X:      E c= E & E' c= E' & E misses E' by D0, XBOOLE_0:def 7;
+        then E1: E' c= E'\E & E c= E\E' by XBOOLE_1:86;
+        E2: f|(E\E') = f & f'|(E'\E) = f' by FUNCT_2:40, X, XBOOLE_1:86;
+        E'\E c= E' & E\E' c= E by XBOOLE_1:36;
+        then E3: E' = E'\E & E = E\E' by E1, XBOOLE_0:def 10;
+        E' c= dom g & E c= dom g by B4, XBOOLE_1:7;
+        hence thesis by B1, B2, E2,C1, C2,e0, SETFAM_1:10, E3,C4;
+        end;
+
+       suppose D1: not E /\ E' = {};
+        meet rng g = (meet rng f) /\ meet rng f'
+        proof
+          per cases;
+           suppose F0: E\E' = {};
+            then G0: rng (g|(E\E')) = {};
+            G1: rng (g|(E/\E')) <> {}
+              proof
+              E /\ E' c= dom g by B4, XBOOLE_1:29;
+              hence thesis by D1;
+              end;
+            G2: E c= E' by F0, XBOOLE_1:37;
+            meet rng g = (meet rng f) /\ meet rng f'
+              proof
+              per cases;
+
+               suppose H0: E'\E = {};
+                E' c= E by XBOOLE_1:37, H0;
+                then
+j1:              E=E' by G2, XBOOLE_0:def 10;
+                f|E = f & f'|E' = f' by FUNCT_2:40;
+                hence thesis by j1,C0,C4,G0;
+                end;
+
+               suppose H1: E'\E <> {};
+                J0: E'\E c= E' by XBOOLE_1:36;
+                E' c= E' \/ E by XBOOLE_1:7;
+                then E'\E c= dom g by J0, B4, XBOOLE_1:1;
+                then meet rng g = (meet rng (g|(E /\ E'))) /\
+                meet rng (g|(E'\E)) by G0, C4, G1, SETFAM_1:10, H1;
+                then J2: meet rng g =
+                (meet rng f) /\ (meet rng (f'|(E/\E')))
+                /\ meet rng (f'|(E'\E))
+                  by C0, C2,FUNCT_2:40,G2, XBOOLE_1:19;
+
+                J3: E' \/ E = E' by G2, XBOOLE_1:12;
+                J4: rng (f'|(E\E')) = {} by F0;
+
+                dom f' = E' by FUNCT_2:def 1;
+                then J5: rng f'=
+                (rng (f'|(E /\ E'))) \/ (rng (f'|(E\E'))) \/ rng (f'|(E'\E))
+                by C3, J3
+                .= (rng (f'|(E /\ E'))) \/ rng (f'|(E'\E)) by J4;
+
+                E /\ E' c= E' by XBOOLE_1:17;
+                then
+j6:              E /\ E' c= dom f' by FUNCT_2:def 1;
+                E'\E c= E' by XBOOLE_1:36;
+                then E'\E c= dom f' by FUNCT_2:def 1;
+                then meet rng f' =
+                (meet rng (f'|(E /\ E'))) /\ meet rng (f'|(E'\E))
+                by J5, j6, SETFAM_1:10, H1, D1;
+                hence thesis by J2, XBOOLE_1:16;
+                end;
+              end;
+            hence thesis;
+            end;
+
+           suppose F1: not E\E' = {};
+           meet rng g = (meet rng f) /\ meet rng f'
+             proof
+g0:          E /\ E' c= E \/ E' by XBOOLE_1:29;
+             G1: E\E' c= E by XBOOLE_1:36;
+             E c= dom g by B4, XBOOLE_1:7;
+             then G2: rng (g|(E\E')) <> {} by F1, Th12,G1, XBOOLE_1:1;
+             per cases;
+
+              suppose H0: E'\E = {};
+               then rng (g|(E'\E)) = {};
+               then J0: meet rng g = (meet rng (g|(E /\ E'))) /\
+               meet rng (g|(E\E')) by C4, g0, G2, SETFAM_1:10,D1, B4
+               .= ((meet rng (f|(E /\ E'))) /\ (meet rng (f|(E\E')))) /\
+               meet rng (f'|(E /\ E')) by XBOOLE_1:16,C0,C1;
+
+               E' c= E & E' c= E' by H0, XBOOLE_1:37;
+               then J1: f'|(E /\ E') = f' by FUNCT_2:40,XBOOLE_1:19;
+
+               J2: rng (f|(E'\E)) = {} by H0;
+
+               E' c= E by H0, XBOOLE_1:37;
+               then E = E \/ E' by XBOOLE_1:12;
+               then dom f = E \/ E' by FUNCT_2:def 1;
+               then J3: rng f =
+               rng (f|(E /\ E')) \/ rng (f|(E\E')) \/ rng (f|(E'\E)) by C3
+               .= rng (f|(E /\ E')) \/ rng (f|(E\E')) by J2;
+
+               dom f = E by FUNCT_2:def 1;
+               then J4: rng (f|(E /\ E')) <> {} by D1, Th12,XBOOLE_1:17;
+
+               E\E' c= E by XBOOLE_1:36;
+               then E\E' c= dom f by FUNCT_2:def 1;
+               hence thesis by J0, J1,J3, J4, SETFAM_1:10, F1;
+               end;
+
+              suppose H1: not E'\E = {};
+               J1: E'\E c= E' by XBOOLE_1:36;
+               E' c= E \/ E' by XBOOLE_1:7;
+               then E'\E c= dom g by B4, J1, XBOOLE_1:1;
+               then J2: meet rng g =
+               (meet (rng (g|(E /\ E')) \/ rng (g|(E\E')))) /\
+               meet rng (g|(E'\E)) by C4, g0, SETFAM_1:10, H1,D1, B4
+               .= meet rng (g|(E /\ E')) /\ meet rng (g|(E\E'))
+               /\ meet rng (g|(E'\E)) by g0, G2, SETFAM_1:10,D1, B4;
+
+               E \/ (E /\ E') = E by XBOOLE_1:12,17;
+               then dom f = E \/ (E /\ E') by FUNCT_2:def 1;
+               then J3: rng f = (rng (f|(E /\ (E /\ E'))) \/
+               rng (f|(E \ (E /\ E')))) \/ rng (f|((E /\ E') \ E)) by C3;
+
+               J4: E /\ (E /\ E') = (E /\ E) /\ E' by XBOOLE_1:16
+               .= E /\ E';
+
+               E /\ E' c= E by XBOOLE_1:17;
+               then (E /\ E') \ E = {} by XBOOLE_1:37;
+               then rng (f|((E /\ E') \ E)) = {};
+               then J5: rng f = rng (f|(E /\ E')) \/ rng (f|(E\E'))
+               by J3, J4, XBOOLE_1:47;
+
+               E /\ E' c= E by XBOOLE_1:17;
+               then
+j6:             E /\ E' c= dom f by FUNCT_2:def 1;
+               E\E' c= E by XBOOLE_1:36;
+               then E\E' c= dom f by FUNCT_2:def 1;
+               then J7: meet rng f =
+               meet rng (f|(E /\ E')) /\ meet rng (f|(E\E'))
+               by J5, j6, SETFAM_1:10, F1, D1;
+               E' \/ (E /\ E') = E' by XBOOLE_1:12,XBOOLE_1:17;
+               then J8: dom f' = E' \/ (E /\ E') by FUNCT_2:def 1;
+
+               J9: E' /\ (E /\ E') = (E' /\ E') /\ E by XBOOLE_1:16
+               .= E /\ E';
+
+               J10: E'\E = E' \ (E /\ E') by XBOOLE_1:47;
+
+               E /\ E' c= E' by XBOOLE_1:17;
+               then (E /\ E') \ E' = {} by XBOOLE_1:37;
+               then J11: rng f' = (rng (f'|(E /\ E')) \/ rng (f'|(E'\E))) \/
+               rng (f'|{}) by J8, J9, J10, C3;
+               E /\ E' c= E' by XBOOLE_1:17;
+               then
+j13:            E /\ E' c= dom f' by FUNCT_2:def 1;
+               E'\E c= E' by XBOOLE_1:36;
+               then E'\E c= dom f' by FUNCT_2:def 1;
+               then J14: meet rng f' = meet rng (f'|(E /\ E')) /\
+               meet rng (f'|(E'\E)) by J11, j13, SETFAM_1:10, H1, D1;
+
+               meet rng g = meet rng (f|(E /\ E')) /\ meet rng (f|(E\E'))
+               /\ meet rng (f'|(E /\ E')) /\ meet rng (f'|(E'\E))
+               by C0, C1, C2, J2, XBOOLE_1:16;
+               hence thesis by J7, J14, XBOOLE_1:16;
+               end;
+             end;
+           hence thesis;
+           end;
+         end;
+         hence thesis by B1, B2;
+         end;
+       end;
+
+     y in (meet rng f /\ meet rng f') implies y in Omega
+       proof
+       assume y in meet rng f /\ meet rng f';
+       then D0: y in meet rng f & y in meet rng f' by XBOOLE_0:def 4;
+       consider S such that
+       D1: S in rng f by XBOOLE_0:def 1;
+       consider S' such that
+       D2: S' in rng f' by XBOOLE_0:def 1;
+       D3: y in S & y in S' by SETFAM_1:def 1, D0, D1, D2;
+       D4: S /\ S' is Event of Sigma by PROB_1:49, D1, D2;
+       y in S /\ S' by D3, XBOOLE_0:def 4;
+       hence thesis by D4;
+       end;
+     then reconsider xX = x /\ X as Subset of Omega
+     by B1, B2, TARSKI:def 3;
+     xX in MeetSections(J,F) by B6, B7, Def9;
+     hence thesis;
+     end;
+   hence thesis by FINSUB_1:def 2;
+   end;
+end;
+
+theorem Th14:
+ for F being ManySortedSigmaField of I,Sigma, J,K being non empty Subset of I
+ st F is_independent_wrt P & J misses K holds
+ for u,v st u in sigUn(F,J) & v in sigUn(F,K) holds P.(u /\ v) = P.u * P.v
+  proof
+  let F be ManySortedSigmaField of I,Sigma, J,K be non empty Subset of I;
+  assume A0: F is_independent_wrt P & J misses K;
+  let u,v;
+  assume A1: u in sigUn(F,J) & v in sigUn(F,K);
+  A2: MeetSections(J,F) is non empty Subset of Sigma by Th11;
+  A4: MeetSections(K,F) is non empty Subset of Sigma by Th11;
+  A6: for p,q st p in MeetSections(J,F) & q in MeetSections(K,F) holds
+  p,q are_independent_respect_to P
+    proof
+    let p,q;
+    assume B0: p in MeetSections(J,F) & q in MeetSections(K,F);
+    reconsider p,q as Subset of Omega;
+    P.(p /\ q) = P.p * P.q by A0, B0, Th10;
+    hence thesis by PROB_2:def 5;
+    end;
+  u in sigma(MeetSections(J,F)) & v in sigma(MeetSections (K,F)) by
+  A1, Th9;
+  then u,v are_independent_respect_to P by A2, A4, A6, Th8;
+  hence thesis by PROB_2:def 5;
+  end;
+
+definition
+ let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+     F be ManySortedSigmaField of I, Sigma;
+ func finSigmaFields(F,I) -> Subset-Family of Omega means :Def10:
+ for S being Subset of Omega holds
+ S in it iff ex E being finite Subset of I st S in sigUn(F,E);
+  existence
+   proof
+   defpred P[set] means
+   ex E being finite Subset of I st $1 in sigUn(F,E);
+   consider X such that
+   A0: for x holds (x in X) iff x in bool Omega & P[x]
+   from XBOOLE_0:sch 1;
+   for x holds x in X implies x in bool Omega by A0;
+   then reconsider X as Subset-Family of Omega by TARSKI:def 3;
+   take X;
+   let S be Subset of Omega;
+   thus thesis by A0;
+   end;
+  uniqueness
+   proof
+   let X1,X2 be Subset-Family of Omega;
+   assume A1: for S being Subset of Omega holds S in X1 iff
+   ex E being finite Subset of I st S in sigUn(F,E);
+   assume A2: for S being Subset of Omega holds S in X2 iff
+   ex E being finite Subset of I st S in sigUn(F,E);
+     now let S be Subset of Omega;
+     (S in X1 iff ex E being finite Subset of I st S in sigUn(F,E)) &
+     (S in X2 iff ex E being finite Subset of I st S in sigUn(F,E)) by
+     A1, A2;
+     hence S in X1 iff S in X2;
+     end;
+   hence thesis by SUBSET_1:8;
+   end;
+end;
+
+theorem Th16:
+  for F being ManySortedSigmaField of I, Sigma holds
+    tailSigmaField(F,I) is SigmaField of Omega
+  proof
+  let F be ManySortedSigmaField of I, Sigma;
+  set T=tailSigmaField(F,I);
+A0: for A being Subset of Omega st A in tailSigmaField(F,I) holds
+      A` in tailSigmaField(F,I)
+    proof
+     let A be Subset of Omega;
+     assume
+Z:   A in tailSigmaField(F,I);
+     for S holds S in futSigmaFields(F,I) implies A` in S
+      proof
+      let S;
+      assume C0: S in futSigmaFields(F,I);
+      then C1: A in S by Z, SETFAM_1:def 1;
+      consider E being finite Subset of I such that
+      C2: S=sigUn(F,I\E) by C0, Def7;
+      A` is Event of sigma (Union (F|(I\E))) by PROB_1:50, C1, C2;
+      hence thesis by C2;
+      end;
+    hence thesis by SETFAM_1:def 1;
+    end;
+  for A1 being SetSequence of Omega st rng A1 c= tailSigmaField(F,I)
+   holds Intersection A1 in tailSigmaField(F,I)
+    proof
+    let A1 be SetSequence of Omega;
+    assume B0: rng A1 c= tailSigmaField(F,I);
+B1: for n holds (for S holds S in futSigmaFields(F,I) implies A1.n in S)
+      proof
+      let n, S;
+      assume C0: S in futSigmaFields(F,I);
+      A1.n in rng A1 by NAT_1:52;
+      hence thesis by C0, SETFAM_1:def 1, B0;
+      end;
+    for S st S in futSigmaFields(F,I) holds (Union Complement A1)` in S
+      proof
+      let S;
+      assume C0: S in futSigmaFields(F,I);
+      then consider E being finite Subset of I such that
+      C1: S = sigUn(F,I\E) by Def7;
+      reconsider S as SigmaField of Omega by C1;
+      for n being Nat holds (Complement A1).n in S
+        proof
+        let n be Nat;
+         reconsider n as Element of NAT by ORDINAL1:def 13;
+        A1.n in S by C0, B1;
+        then (A1.n)` is Event of S by PROB_1:50;
+        then (A1.n)` in S;
+        hence thesis by PROB_1:def 4;
+        end;
+      then rng Complement A1 c= S by NAT_1:53;
+      then reconsider CA1= Complement A1 as SetSequence of S by PROB_1:def 9;
+      Union CA1 in S by PROB_1:46;
+      then (Union Complement A1)` is Event of S by PROB_1:50;
+      hence thesis;
+      end;
+    hence thesis by SETFAM_1:def 1;
+    end;
+  hence thesis by A0, PROB_1:32;
+  end;
+
+theorem
+  for F being ManySortedSigmaField of I,Sigma st F is_independent_wrt P
+    & a in tailSigmaField(F,I) holds P.a=0 or P.a=1
+  proof
+  let F be ManySortedSigmaField of I,Sigma;
+  assume A0: F is_independent_wrt P;
+  assume A1: a in tailSigmaField(F,I);
+  set Ie=I\{}I;
+  A2: a in tailSigmaField(F,I) implies a in sigUn(F,Ie)
+    proof
+    assume
+Z:   a in tailSigmaField(F,I);
+    sigUn(F,Ie) in futSigmaFields(F,I) by Def7;
+    hence thesis by Z, SETFAM_1:def 1;
+    end;
+A3: for E being finite Subset of I for p,q st p in sigUn(F,E) &
+    q in tailSigmaField(F,I) holds p,q are_independent_respect_to P
+    proof
+    let E be finite Subset of I;
+    let p,q;
+    assume B0: p in sigUn(F,E) & q in tailSigmaField(F,I);
+    for E being finite Subset of I holds q in sigUn(F,I\E)
+      proof
+      let E be finite Subset of I;
+      sigUn(F,I\E) in futSigmaFields(F,I) by Def7;
+      hence thesis by B0, SETFAM_1:def 1;
+      end;
+    then B1: q in sigUn(F,I\E);
+    per cases;
+     suppose C0: E <> {} & I\E <> {};
+      then reconsider E as non empty Subset of I;
+      reconsider IE=I\E as non empty Subset of I by C0;
+      E misses IE by XBOOLE_1:79;
+      then P.(p /\ q) = P.p * P.q by A0, B0, B1, Th14;
+      hence thesis by PROB_2:def 5;
+      end;
+     suppose C1: not (E <> {} & I\E <> {});
+      reconsider e={} as Subset of I by XBOOLE_1:2;
+      Union (F|{}) = {} by ZFMISC_1:2; then
+      D2: sigUn(F,e) = {{},Omega} by Th1;
+      D3: for u,v st u in {{},Omega} holds u,v are_independent_respect_to P
+        proof
+        let u,v;
+        assume E0: u in {{},Omega};
+        per cases;
+         suppose u={};
+          hence thesis by PROB_2:31,PROB_2:35;
+          end;
+         suppose u<>{};
+          then u=[#]Sigma by E0, TARSKI:def 2;
+          hence thesis by PROB_2:31,PROB_2:36;
+          end;
+        end;
+        p,q are_independent_respect_to P
+        proof
+        per cases;
+         suppose E={};
+          hence thesis by D2, D3,B0;
+          end;
+         suppose E<>{};
+          hence thesis by PROB_2:31,D2,D3,B1,C1;
+          end;
+        end;
+        hence thesis;
+      end;
+    end;
+A4: for p,q st p in finSigmaFields(F,I) & q in tailSigmaField(F,I)
+      holds p,q are_independent_respect_to P
+    proof
+    let p,q;
+    assume B0: p in finSigmaFields(F,I) & q in tailSigmaField(F,I);
+    then consider E being finite Subset of I such that
+B1: p in sigUn(F,E) by Def10;
+    thus thesis by B0, B1, A3;
+    end;
+    reconsider T=tailSigmaField(F,I) as SigmaField of Omega by Th16;
+a5: T c= sigma(T) by PROB_1:def 14;
+A6: sigma finSigmaFields(F,I) = sigUn(F,Ie)
+    proof
+      thus sigma finSigmaFields(F,I) c= sigUn(F,Ie)
+      proof
+      finSigmaFields(F,I) c= sigma Union (F|Ie)
+        proof
+          let X;
+          assume X in finSigmaFields(F,I);
+          then consider E being finite Subset of I such that
+          E0: X in sigUn(F,E) by Def10;
+          F|E c= F|Ie by RELAT_1:104;
+          then E2: union rng (F|E) c= union rng (F|Ie)
+            by ZFMISC_1:95,RELAT_1:25;
+          Union (F|Ie) c= sigma (Union (F|Ie)) by PROB_1:def 14;
+          then Union (F|E) c= sigma (Union (F|Ie)) by E2, XBOOLE_1:1;
+          then sigma (Union (F|E)) c= sigma (Union (F|Ie)) by PROB_1:def 14;
+          hence thesis by E0;
+        end;
+        hence thesis by PROB_1:def 14;
+      end;
+      Union (F|Ie) c= sigma finSigmaFields(F,I)
+      proof
+        let x;
+        assume E0: x in Union (F|Ie);
+        dom F c= Ie;
+        then x in union rng F by E0, RELAT_1:97;
+        then consider y such that
+        E1: x in y & y in rng F by TARSKI:def 4;
+        consider i such that
+        E2: i in dom F & y=F.i by E1,FUNCT_1:def 5;
+        defpred P[set] means ex i st i in I & $1 in F.i;
+        consider X such that
+    E3: for z holds z in X iff z in finSigmaFields(F,I) & P[z]
+        from XBOOLE_0:sch 1;
+        E4: x in X
+          proof
+          x in finSigmaFields(F,I)
+            proof
+            D0: dom (F|{i}) = dom F /\ {i} by RELAT_1:90
+            .= {i} by E2, ZFMISC_1:52;
+            then rng (F|{i}) = {(F|{i}).i} by FUNCT_1:14;
+            then D1: union rng (F|{i}) = (F|{i}).i by ZFMISC_1:31;
+            i in dom (F|{i}) by D0, TARSKI:def 1;
+            then D2: Union F|{i} = F.i by D1, FUNCT_1:70;
+            i in I by E2;
+            then z in {i} implies z in I by TARSKI:def 1;
+            then reconsider E={i} as finite Subset of I by TARSKI:def 3;
+            reconsider Fi=F.i as SigmaField of Omega by E2, Def2;
+        D3: sigma(Fi) c= Fi by PROB_1:def 14;
+            Fi c= sigma(Fi) by PROB_1:def 14;
+            then D4: sigUn(F,E) = F.i by D2,D3, XBOOLE_0:def 10;
+            reconsider x as Subset of Omega by E1, E2;
+            thus thesis by D4, E2, E1, Def10;
+            end;
+          hence thesis by E3, E2, E1;
+        end;
+        z in X implies z in finSigmaFields(F,I) by E3; then
+    E5: X c= finSigmaFields(F,I) by TARSKI:def 3;
+        finSigmaFields(F,I) c= sigma finSigmaFields(F,I) by PROB_1:def 14;
+        hence thesis by E4, E5, TARSKI:def 3;
+      end;
+      hence thesis by PROB_1:def 14;
+    end;
+A7: for u,v st u in sigUn(F,Ie) & v in tailSigmaField(F,I) holds
+      u,v are_independent_respect_to P
+    proof let u,v;
+      assume
+Z:    u in sigUn(F,Ie) & v in tailSigmaField(F,I);
+  C0: finSigmaFields(F,I) is non empty
+      proof
+        consider E being finite Subset of I;
+        {} in sigUn(F,E) by PROB_1:42;
+        hence thesis by Def10;
+      end;
+c0:   finSigmaFields(F,I) c= Sigma
+      proof
+        let x; assume x in finSigmaFields(F,I);
+        then consider E being finite Subset of I such that
+    D0: x in sigUn(F,E) by Def10;
+        Union (F|E) c= Sigma
+        proof
+          let y;
+          assume y in Union (F|E);
+          then consider S such that
+      F0: y in S & S in rng (F|E) by TARSKI:def 4;
+          thus thesis by F0;
+        end;
+        then sigma Union (F|E) c= Sigma by PROB_1:def 14;
+        hence thesis by D0;
+      end;
+B2:   finSigmaFields(F,I) is intersection_stable
+      proof
+        for x,y st x in finSigmaFields(F,I) & y in finSigmaFields(F,I)
+          holds x /\ y in finSigmaFields(F,I)
+        proof
+        let x,y;
+        assume D0: x in finSigmaFields(F,I) & y in finSigmaFields(F,I);
+        then consider E1 being finite Subset of I such that
+        D1: x in sigUn(F,E1) by Def10;
+        consider E2 being finite Subset of I such that
+        D2: y in sigUn(F,E2) by D0, Def10;
+        for E1,E2 being finite Subset of I holds
+        z in sigUn(F,E1) implies z in sigUn(F,E1 \/ E2)
+          proof
+          let E1,E2 be finite Subset of I;
+          assume
+Z:        z in sigUn(F,E1);
+          reconsider E3 = E1 \/ E2 as finite Subset of I;
+      F1: Union (F|E1) c= Union (F|E3)
+          proof
+            let X;
+            assume X in Union (F|E1);
+            then consider S such that
+            G0: X in S & S in rng (F|E1) by TARSKI:def 4;
+            F|(E3) = (F|E1) \/ (F|E2) by RELAT_1:107;
+            then rng (F|E3) = rng (F|E1) \/ rng(F|E2) by RELAT_1:26;
+            then S in rng (F|E3) by G0, XBOOLE_0:def 3;
+            hence thesis by G0, TARSKI:def 4;
+          end;
+          Union (F|E3) c= sigma Union(F|E3) by PROB_1:def 14;
+          then Union (F|E1) c= sigma Union(F|E3) by F1, XBOOLE_1:1;
+          then sigma Union(F|E1) c= sigma Union(F|E3) by PROB_1:def 14;
+          hence thesis by Z;
+        end;
+        then x in sigUn(F,E1 \/ E2) & y in sigUn(F,E2 \/ E1) by D1, D2;
+        then x /\ y in sigUn(F,E1 \/ E2) by FINSUB_1:def 2;
+        hence thesis by Def10;
+        end;
+        hence thesis by FINSUB_1:def 2;
+      end;
+      tailSigmaField(F,I) c= Sigma
+      proof
+        let x; assume d0: x in tailSigmaField(F,I);
+        set Ie=I\{}I;
+        sigUn(F,Ie) in futSigmaFields(F,I) by Def7;
+        then D1: x in sigma Union (F|Ie) by d0, SETFAM_1:def 1;
+        Union (F|Ie) c= Sigma
+        proof
+          let y;
+          assume y in Union (F|Ie);
+          then consider S such that
+          F0: y in S & S in rng (F|Ie) by TARSKI:def 4;
+          thus thesis by F0;
+        end;
+        then sigma Union (F|Ie) c= Sigma by PROB_1:def 14;
+        hence thesis by D1;
+      end;
+      hence thesis by Th8,c0,C0,A4,B2,Z,A6,a5;
+    end;
+    a,a are_independent_respect_to P by A1,A2,A7;
+    then P.(a /\ a) = P.a * P.a by PROB_2:def 5;
+    hence thesis by Th15;
+  end;

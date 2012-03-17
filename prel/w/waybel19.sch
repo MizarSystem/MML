@@ -12,15 +12,15 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="RELAT_2"/>
 <ArticleID name="PARTFUN1"/>
 <ArticleID name="EQREL_1"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="ORDERS_2"/>
@@ -44,7 +44,7 @@
 <ArgTypes>
 <Typ kind="G" nr="12">
 <Cluster>
-<Adjective nr="30"/>
+<Adjective nr="42"/>
 <Adjective nr="70"/>
 <Adjective nr="71"/>
 <Adjective nr="72"/>
@@ -64,7 +64,7 @@
 </Typ>
 <Not>
 <And>
-<Pred kind="V" nr="31">
+<Pred kind="V" nr="43">
 <Func kind="F" nr="1"/>
 <Var nr="1"/>
 </Pred>
@@ -200,7 +200,7 @@
 </For>
 </For>
 <Pred kind="P" nr="1">
-<Func kind="K" nr="86">
+<Func kind="K" nr="98">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

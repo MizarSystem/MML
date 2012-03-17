@@ -53,7 +53,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="34"/>
+<Adjective nr="36"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster>
@@ -103,7 +103,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="33"/>
+<Adjective nr="35"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster>

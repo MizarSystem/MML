@@ -8,14 +8,14 @@ environ
 
  vocabularies TARSKI, BOOLE, SUPINF_1, RLVECT_1, ARYTM_1, SETFAM_1, PROB_1,
       SUBSET_1, FINSUB_1, FUNCT_1, SUPINF_2, RELAT_1, FUNCOP_1, CARD_4, PROB_2,
-      MEASURE1, ARYTM;
+      MEASURE1, ARYTM, GRCAT_1, REALSET1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
       REAL_1, RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1,
-      SETFAM_1, FUNCOP_1, PROB_1, PROB_2, CARD_4, SUPINF_1, SUPINF_2;
+      SETFAM_1, FUNCOP_1, PROB_1, PROB_2, VALUED_0, SUPINF_1, SUPINF_2;
  constructors ENUMSET1, PARTFUN1, FUNCOP_1, FINSUB_1, REAL_1, NAT_1, PROB_2,
       SUPINF_2, SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      MEMBERED, PROB_1;
+      MEMBERED, PROB_1, FUNCT_1, VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
 
 
@@ -42,7 +42,7 @@ theorem :: MEASURE1:7
   for A,B being Subset of X holds {A,B} is Subset-Family of X;
 
 theorem :: MEASURE1:8
-  for A,B,C being Subset of X holds {A,B,C} is non empty Subset-Family of X;
+  for A,B,C being Subset of X holds {A,B,C} is Subset-Family of X;
 
 scheme :: MEASURE1:sch 1
  DomsetFamEx {A() -> set,P[set]}:
@@ -122,20 +122,25 @@ definition
   for A being Element of X holds 0. <= F.A;
 end;
 
-canceled;
-
-theorem :: MEASURE1:23
-  for S being Field_Subset of X holds ex M being Function of S,ExtREAL st
-  M is nonnegative & M.{} = 0.&
-  for A,B being Element of S st A misses B holds M.(A \/ B) = M.A + M.B;
+canceled 2;
 
 definition
   let X be set, S be Field_Subset of X;
-  mode Measure of S -> Function of S,ExtREAL means
+  let F be Function of S,ExtREAL;
+  attr F is additive means
 :: MEASURE1:def 5
+ for A,B being Element of S st A misses B holds F.(A \/ B) = F.A + F.B;
+end;
 
-    it is nonnegative & it.{} = 0. &
-    for A,B being Element of S st A misses B holds it.(A \/ B) = it.A + it.B;
+registration
+  let X be set, S be Field_Subset of X;
+ cluster nonnegative additive zeroed Function of S,ExtREAL;
+end;
+
+definition
+  let X be set, S be Field_Subset of X;
+  mode Measure of S
+   is nonnegative additive zeroed Function of S,ExtREAL;
 end;
 
 canceled;
@@ -329,20 +334,27 @@ theorem :: MEASURE1:57
   for S being SigmaField of X ex M being Function of S,ExtREAL st
   for A being Element of S holds M.A = 0.;
 
-theorem :: MEASURE1:58
-  for S being SigmaField of X ex M being Function of S,ExtREAL st
-  M is nonnegative & M.{} = 0. & for F being Sep_Sequence of S holds
-  SUM(M*F) = M.(union rng F);
+definition
+  let X be set;
+  let S be SigmaField of X;
+  let F be Function of S,ExtREAL;
+  canceled;
+ attr F is sigma-additive means
+:: MEASURE1:def 11
+ for s being Sep_Sequence of S holds SUM(F*s) = F.(union rng s);
+end;
+
+registration
+  let X be set;
+  let S be SigmaField of X;
+  cluster nonnegative sigma-additive zeroed Function of S,ExtREAL;
+end;
 
 definition
   let X be set;
   let S be SigmaField of X;
-  canceled;
-  mode sigma_Measure of S -> Function of S,ExtREAL means
-:: MEASURE1:def 11
-
-    it is nonnegative & it.{} = 0.& for F being Sep_Sequence of S holds
-    SUM(it*F) = it.(union rng F);
+  mode sigma_Measure of S is
+   nonnegative sigma-additive zeroed Function of S,ExtREAL;
 end;
 
 registration
@@ -351,7 +363,7 @@ registration
     (non empty Subset-Family of X);
 end;
 
-canceled;
+canceled 2;
 
 theorem :: MEASURE1:60
   for S being SigmaField of X,

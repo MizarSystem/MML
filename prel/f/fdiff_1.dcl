@@ -42,7 +42,7 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="2">
@@ -58,7 +58,7 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="3">
@@ -74,7 +74,7 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FDIFF_1" nr="4">
@@ -99,7 +99,7 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="37"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FDIFF_1" nr="1">
@@ -111,7 +111,7 @@
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="61"/>
 </Adjective>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="61"/>
@@ -132,7 +132,7 @@
 <Func kind="K" nr="65"/>
 <Func kind="K" nr="61"/>
 </Adjective>
-<Adjective nr="34"/>
+<Adjective nr="35"/>
 </Cluster>
 </FCluster>
 </Registrations>

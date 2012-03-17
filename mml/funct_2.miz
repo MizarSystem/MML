@@ -19,11 +19,9 @@ environ
       SUBSET_1, WELLORD2, XBOOLE_0, XBOOLE_1, RELAT_2, MCART_1, SETFAM_1;
  schemes FUNCT_1, PARTFUN1, XBOOLE_0, RELSET_1, WELLORD2, SUBSET_1;
 
-begin
+begin :: Function from a set into a set
 
 reserve P,Q,X,Y,Z,p,x,x',x1,x2,y,z for set;
-
-:: function from a set into a set ::
 
 definition
   let X,Y;
@@ -51,7 +49,7 @@ A1:   Y = {} & X <> {};
 A2:   Y <> {} or X = {};
       then consider f being Function such that
 A3:   X = dom f & rng f c= Y by FUNCT_1:18;
-      reconsider R = f as PartFunc of X,Y by A3,RELSET_1:10;
+      reconsider R = f as PartFunc of X,Y by A3,RELSET_1:11;
       take R;
       thus thesis by A2,A3,Def1;
     end;
@@ -87,7 +85,7 @@ theorem
   for f being Function holds f is Function of dom f, rng f
 proof
   let f be Function;
-  reconsider R = f as Relation of dom f, rng f by RELSET_1:9;
+  reconsider R = f as Relation of dom f, rng f by RELSET_1:11;
   R is quasi_total
   proof per cases;
     case rng f = {} implies dom f = {};
@@ -105,7 +103,7 @@ theorem Th4:
 proof
   let f be Function;
   assume rng f c= Y;
-  then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
+  then reconsider R = f as Relation of dom f,Y by RELSET_1:11;
   R is quasi_total
   proof
     per cases;
@@ -133,7 +131,7 @@ A2: for x st x in X holds f.x in Y;
     then ex x st x in X & y = f.x by A1,FUNCT_1:def 5;
     hence thesis by A2;
   end;
-  then reconsider R = f as Relation of dom f,Y by RELSET_1:10;
+  then reconsider R = f as Relation of dom f,Y by RELSET_1:11;
   R is quasi_total
   proof
     per cases;
@@ -143,7 +141,7 @@ A2: for x st x in X holds f.x in Y;
     end;
     case that
 A3:   Y = {} and
-A4:   dom f <> {};
+      dom f <> {};
      thus thesis by A3;
     end;
   end;
@@ -194,7 +192,7 @@ proof
   assume that
 A1: Y <> {} or X = {} and
 A2: Y c= Z;
-  reconsider R = f as Relation of X,Z by A2,RELSET_1:16;
+  reconsider R = f as Relation of X,Z by A2,RELSET_1:17;
   R is quasi_total
   proof
     per cases;
@@ -296,7 +294,7 @@ A2: for x st x in X() ex y st y in Y() & P[x,y] by A1;
   from FuncEx1(A2);
 end;
 
-:: set of functions from a set into a set ::
+:: Set of functions from a set into a set
 
 definition
   let X,Y;
@@ -371,23 +369,21 @@ registration
   coherence by Th11;
 end;
 
-canceled;
-
-theorem Th14:
-  X <> {} implies Funcs(X,{}) = {}
+registration let X be non empty set, Y be empty set;
+ cluster Funcs(X,Y) -> empty;
+ coherence
 proof
-  assume
-A1: X <> {};
-  consider x being Element of Funcs(X,{});
-  assume Funcs(X,{}) <> {};
+  consider x being Element of Funcs(X,Y);
+  assume Funcs(X,Y) is non empty;
   then consider f being Function such that x = f and
 A2: dom f = X and
 A3: rng f c= {} by Def2;
   rng f = {} by A3;
-  hence contradiction by A1,A2,RELAT_1:65;
+  hence contradiction by A2,RELAT_1:65;
+end;
 end;
 
-canceled;
+canceled 3;
 
 theorem
   for f being Function of X,Y
@@ -452,8 +448,7 @@ A4:   Z = {};
       thus X = dom(f*g) by A2,A4;
     end;
   end;
-  case
-A5: Z = {} & X <> {};
+  case Z = {} & X <> {};
     hence thesis;
   end;
 end;
@@ -796,7 +791,7 @@ end;
 theorem
   for f being Function of X,Y holds f.:P c= Y;
 
-theorem Th45:
+theorem
   for f being Function of X,Y st Y = {} implies X = {} holds f.:X = rng f
 proof
   let f be Function of X,Y;
@@ -852,7 +847,7 @@ proof
   hence thesis by FUNCT_1:146;
 end;
 
-theorem Th51:
+theorem
   for f being Function of X,Y st Y = {} implies X = {} holds f"(f.:X) = X
 proof
   let f be Function of X,Y;
@@ -876,33 +871,9 @@ proof
   hence thesis by FUNCT_1:160;
 end;
 
-:: Empty Function ::
+:: Empty Function
 
-canceled;
-
-theorem Th55:
-  for f being Function st dom f = {} holds f is Function of {},Y
-proof
-  let f be Function;
-  assume
-A1: dom f = {};
-  then rng f = {} by RELAT_1:65;
-  then rng f c= Y by XBOOLE_1:2;
-  then reconsider f as Relation of {},Y by A1,RELSET_1:11;
-  f is quasi_total
-  proof
-    per cases;
-    case Y = {} implies {} = {};
-      thus dom f = {};
-    end;
-    case Y = {} & {} <> {};
-      thus thesis;
-    end;
-  end;
-  hence thesis;
-end;
-
-canceled 3;
+canceled 5;
 
 theorem
   for f being Function of {},Y holds f.:P = {}
@@ -917,7 +888,7 @@ end;
 theorem
   for f being Function of {},Y holds f"Q = {};
 
-:: Function from a singelton into set::
+:: Function from a singleton into a set
 
 theorem
   for f being Function of {x},Y st Y <> {} holds f.x in Y
@@ -948,7 +919,7 @@ proof
   hence thesis by Th62;
 end;
 
-:: Function from a set into a singelton ::
+:: Function from a set into a singleton
 
 theorem Th65:
   for f being Function of X,{y} st x in X holds f.x = y
@@ -971,7 +942,7 @@ proof
   hence f1 = f2 by Th18;
 end;
 
-:: Function from X into X ::
+:: Function from X into X
 
 theorem Th67:
   for f being Function of X,X holds dom f = X
@@ -1063,7 +1034,7 @@ end;
 
 canceled 5;
 
-:: Permutation of a set ::
+:: Permutation of a set
 
 definition
   let X, Y be set;
@@ -1075,7 +1046,7 @@ end;
 
 definition
   let X, Y;
-  let f be Function of X,Y;
+  let f be PartFunc of X,Y;
   attr f is bijective means
   :Def4:
   f is one-to-one onto;
@@ -1083,9 +1054,9 @@ end;
 
 registration
   let X, Y be set;
-  cluster bijective -> one-to-one onto Function of X,Y;
+  cluster bijective -> one-to-one onto PartFunc of X,Y;
   coherence by Def4;
-  cluster one-to-one onto -> bijective Function of X,Y;
+  cluster one-to-one onto -> bijective PartFunc of X,Y;
   coherence by Def4;
 end;
 
@@ -1352,7 +1323,7 @@ proof
   assume
 A1: f in Funcs(X,Y);
   then
-A2: not(Y = {} & X <> {}) by Th14;
+A2: not(Y = {} & X <> {});
   ex f' being Function st f' = f & dom f' = X & rng f' c= Y by A1,Def2;
   hence thesis by A2,Def1,RELSET_1:11;
 end;
@@ -1404,25 +1375,13 @@ end;
 theorem
   for f being PartFunc of X,Y st f is total holds f is Function of X,Y;
 
-theorem Th132:
+theorem
   for f being PartFunc of X,Y st (Y = {} implies X = {}) &
-  f is Function of X,Y holds f is total
-proof
-  let f be PartFunc of X,Y;
-  assume (Y = {} implies X = {}) & f is Function of X,Y;
-  hence dom f = X by Def1;
-end;
+  f is Function of X,Y holds f is total;
 
 theorem Th133:
   for f being Function of X,Y
-  st (Y = {} implies X = {}) holds <:f,X,Y:> is total
-proof
-  let f be Function of X,Y;
-  assume
-A1: Y = {} implies X = {};
-  f = <:f,X,Y:> by PARTFUN1:87;
-  hence thesis by A1,Th132;
-end;
+  st (Y = {} implies X = {}) holds <:f,X,Y:> is total by PARTFUN1:87;
 
 theorem
   for f being Function of X,X holds <:f,X,X:> is total by Th133;
@@ -1435,16 +1394,13 @@ theorem Th136:
 proof
   let f be PartFunc of X,Y such that
 A1: Y = {} implies X = {};
-A2: now
-    assume
-A3: Y = {};
-    then dom f = {};
-    then reconsider g = f as Function of X,Y by A1,A3,Th55;
+  per cases;
+    suppose Y = {};
+    then reconsider g = f as Function of X,Y by A1;
     take g;
     thus for x st x in dom f holds g.x = f.x;
   end;
-  now
-    assume
+    suppose
 A4: Y <> {};
     consider y being Element of Y;
     defpred P[set] means $1 in dom f;
@@ -1458,11 +1414,8 @@ A6: for x st x in X holds
     (P[ x] implies g.x = F(x)) & (not P[ x] implies g.x = G(x))
     from Lambda1C(A5);
     take g;
-    let x;
-    assume x in dom f;
-    hence g.x = f.x by A6;
+    thus thesis by A6;
   end;
-  hence thesis by A2;
 end;
 
 canceled 4;
@@ -1550,13 +1503,7 @@ end;
 theorem Th155:
   for f being PartFunc of X,Y for g being Function of X,Y
   st (Y = {} implies X = {}) & f tolerates g holds g in TotFuncs f
-proof
-  let f be PartFunc of X,Y;
-  let g be Function of X,Y;
-  assume Y = {} implies X = {};
-  then g is total by Th132;
-  hence thesis by PARTFUN1:def 7;
-end;
+  by PARTFUN1:def 7;
 
 theorem
   for f being PartFunc of X,X for g being Function of X,X
@@ -1582,8 +1529,7 @@ proof
   let f be PartFunc of X,Y;
   per cases;
   suppose Y = {} & X <> {};
-    then TotFuncs f = {} by PARTFUN1:172;
-    hence thesis by XBOOLE_1:2;
+    hence thesis;
   end;
   suppose
 A1: Y <> {} or X = {};
@@ -1602,7 +1548,7 @@ theorem
 proof
   per cases;
   suppose Y = {} & X <> {};
-    then TotFuncs <:{},X,Y:> = {} & Funcs(X,Y) = {} by Th14,PARTFUN1:172;
+    then TotFuncs <:{},X,Y:> = {} & Funcs(X,Y) = {};
     hence thesis;
   end;
   suppose
@@ -1621,7 +1567,7 @@ A2:   g in Funcs(X,Y);
       then
 A3:   g is Function of X,Y by Th121;
       reconsider g' = g as PartFunc of X,Y by A2,Th121;
-      <:{},X,Y:> tolerates g' & g' is total by A1,A3,Th132,PARTFUN1:142;
+      <:{},X,Y:> tolerates g' & g' is total by A1,A3,PARTFUN1:142;
       hence thesis by PARTFUN1:def 7;
     end;
     hence thesis by TARSKI:2;
@@ -1634,7 +1580,7 @@ theorem Th161:
 proof
   let f be Function of X,Y;
   assume Y = {} implies X = {};
-  then <:f,X,Y:> is total & <:f,X,Y:> = f by Th133,PARTFUN1:87;
+  then <:f,X,Y:> is total & <:f,X,Y:> = f by PARTFUN1:87;
   hence thesis by PARTFUN1:174;
 end;
 
@@ -1659,7 +1605,7 @@ proof
       hence thesis by Th66;
     end;
     f tolerates g by PARTFUN1:143;
-    hence thesis by Th155;
+    hence thesis by PARTFUN1:def 7;
   end;
   hence thesis by TARSKI:def 1;
 end;
@@ -1701,7 +1647,7 @@ A3:     TotFuncs f c= TotFuncs g;
 A4:       x in dom g;
           consider h being Function of X,Y such that
 A5:       f tolerates h by A2,Th148;
-          h in TotFuncs f by A2,A5,Th155;
+          h in TotFuncs f by A2,A5,PARTFUN1:def 7;
           then g tolerates h & x in dom f by A1,A3,A4,PARTFUN1:171;
           then f tolerates g & x in dom f /\ dom g
            by A2,A4,A5,PARTFUN1:158,XBOOLE_0:def 4;
@@ -1753,7 +1699,7 @@ A10:    x in X by A4;
           then x' in dom f & x' in dom h by XBOOLE_0:def 4;
           hence thesis by A9;
         end;
-        then h in TotFuncs f by A3,Th155;
+        then h in TotFuncs f by A3,PARTFUN1:def 7;
         then h in TotFuncs g & x in dom h by A1,A3,A10,Def1;
         then g tolerates h & x in dom g /\ dom h & h.x = y
         by A4,A5,A9,PARTFUN1:171,XBOOLE_0:def 4;
@@ -2438,7 +2384,7 @@ A3: A c= A2 by FUNCT_1:146;
   hence thesis by A1,A3,TARSKI:def 4;
 end;
 
-:: Generelized RFUNCT_2:def 1,CFCONT_1:def 1,NFCONT_1:def 7,def 8
+:: Generalized RFUNCT_2:def 1,CFCONT_1:def 1,NFCONT_1:def 7,def 8
 ::  NCFCONT1:def 9,def 10,def 11,def 12,def 13,def 14
 :: 2008.08.15, A.T.
 

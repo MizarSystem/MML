@@ -11,11 +11,11 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
-<ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDINAL1"/>
-<ArticleID name="NUMBERS"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="NUMBERS"/>
 <ArticleID name="ALGSTR_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="INT_1"/>
@@ -31,7 +31,7 @@
 <ArgTypes>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="50"/>
 <Adjective nr="78"/>
 <Adjective nr="85"/>
@@ -43,7 +43,7 @@
 </Typ>
 <Typ kind="G" nr="14">
 <Cluster>
-<Adjective nr="14" value="false"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="50"/>
 <Adjective nr="94"/>
 <Adjective nr="95"/>

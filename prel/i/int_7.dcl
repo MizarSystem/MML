@@ -64,11 +64,11 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="500">
+<Func kind="K" nr="504">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="161"/>
+<Adjective nr="164"/>
 </Cluster>
 </FCluster>
 <FCluster aid="INT_7" nr="2">
@@ -80,15 +80,15 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="503">
+<Func kind="K" nr="507">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="73" value="false"/>
-<Adjective nr="79"/>
-<Adjective nr="126"/>
-<Adjective nr="127"/>
+<Adjective nr="74" value="false"/>
+<Adjective nr="80"/>
 <Adjective nr="129"/>
+<Adjective nr="130"/>
+<Adjective nr="132"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -33,7 +33,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="COMPUT_1"/>
 <ArticleID name="FRAENKEL"/>
 <ArticleID name="FUNCT_6"/>
@@ -451,7 +450,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="464">
+<Func kind="K" nr="454">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -459,7 +458,7 @@
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
-<Typ kind="M" nr="41">
+<Typ kind="M" nr="39">
 <Cluster/>
 <LocusVar nr="1"/>
 </Typ>
@@ -490,8 +489,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="442">
-<Func kind="K" nr="473"/>
+<Func kind="K" nr="432">
+<Func kind="K" nr="463"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -515,8 +514,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="442">
-<Func kind="K" nr="473"/>
+<Func kind="K" nr="432">
+<Func kind="K" nr="463"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -537,8 +536,8 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="442">
-<Func kind="K" nr="473"/>
+<Func kind="K" nr="432">
+<Func kind="K" nr="463"/>
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -566,7 +565,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="472">
+<Func kind="K" nr="462">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -588,7 +587,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="466">
+<Func kind="K" nr="456">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -632,7 +631,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="467">
+<Func kind="K" nr="457">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -688,7 +687,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="468">
+<Func kind="K" nr="458">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -735,7 +734,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="469">
+<Func kind="K" nr="459">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 <LocusVar nr="3"/>
@@ -765,7 +764,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="442">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -795,7 +794,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="442">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -824,7 +823,7 @@
 <Typ kind="M" nr="7">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="442">
+<Func kind="K" nr="432">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
@@ -890,7 +889,7 @@
 </Typ>
 </ArgTypes>
 <Cluster/>
-<Typ kind="M" nr="42">
+<Typ kind="M" nr="40">
 <Cluster/>
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>

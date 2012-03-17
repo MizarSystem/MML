@@ -7,10 +7,10 @@
 environ
 
  vocabularies FINSEQ_2, PARTFUN1, FINSEQ_4, MATRIX_1, RELAT_1, FUNCT_1,
-      INCSP_1, FINSEQ_1, MATRIX_2, BOOLE, TREES_1, ARYTM_1, FUNCT_2, CARD_1,
-      SUBSET_1, FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1,
-      FINSET_1, RLSUB_1, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1, RLSUB_2, CAT_3,
-      MATRLIN, ARYTM, ALGSTR_0;
+      INCSP_1, FINSEQ_1, MATRIX_2, BOOLE, TREES_1, ARYTM_1, FUNCT_2, SUBSET_1,
+      FUNCOP_1, MEASURE6, VECTSP_1, RLVECT_2, RLVECT_3, RLVECT_1, FINSET_1,
+      RLSUB_1, QC_LANG1, SEQ_1, SQUARE_1, RVSUM_1, RLSUB_2, CAT_3, MATRLIN,
+      ARYTM, ALGSTR_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, NAT_1,
       MOD_2, FINSEQ_1, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, FUNCT_3, STRUCT_0,
       ALGSTR_0, MATRIX_1, MATRIX_3, FVSUM_1, RLVECT_1, VECTSP_1, VECTSP_4,
@@ -19,14 +19,15 @@ environ
  constructors PARTFUN1, BINOP_1, FUNCT_3, SQUARE_1, NAT_1, VECTSP_6, VECTSP_7,
       MOD_2, FVSUM_1, MATRIX_3;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, FINSET_1,
-      XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1, MATRIX_1, CARD_1;
+      XXREAL_0, XREAL_0, NAT_1, FINSEQ_1, STRUCT_0, VECTSP_1, MATRIX_1, CARD_1,
+      VECTSP_7;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, FVSUM_1, FUNCOP_1, ALGSTR_0;
  theorems TARSKI, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, VECTSP_1, VECTSP_3,
       VECTSP_4, VECTSP_6, VECTSP_7, RLVECT_1, FUNCT_1, FUNCT_2, FUNCT_3,
       MATRIX_1, MATRIX_2, MATRIX_3, MOD_2, ZFMISC_1, NAT_1, FVSUM_1, SUBSET_1,
-      CARD_2, FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0,
-      XBOOLE_1, RLVECT_2, XREAL_1, NEWTON, ORDINAL1, PARTFUN1, CARD_1;
+      FINSEQOP, FUNCOP_1, RELAT_1, RELSET_1, PARTFUN2, XBOOLE_0, XBOOLE_1,
+      RLVECT_2, NEWTON, ORDINAL1, PARTFUN1;
  schemes FINSEQ_1, FINSEQ_2, FUNCT_2, MATRIX_1, NAT_1, CLASSES1, FINSEQ_4;
 
 begin :: Preliminaries
@@ -184,59 +185,7 @@ end;
 
 begin :: More on Finite Sequences
 
-theorem
-  for A being set, F being FinSequence
-  holds Sgm(F"A)^Sgm(F"(rng F \ A)) is Permutation of dom F
-proof
-  let A be set, F be FinSequence;
-A1: dom F = Seg len F by FINSEQ_1:def 3;
-  set p = Sgm(F"A)^Sgm(F"(rng F \ A));
-A2: F"A c= dom F by RELAT_1:167;
-  then
-A3: F"A c= Seg len F by FINSEQ_1:def 3;
-A4: F"(rng F \ A) c= dom F by RELAT_1:167;
-  then
-A5: F"(rng F \ A) c= Seg len F by FINSEQ_1:def 3;
-A6: Sgm(F"A) is one-to-one by A3,FINSEQ_3:99;
-A7: Sgm(F"(rng F \ A)) is one-to-one by A5,FINSEQ_3:99;
-  A misses (rng F \ A) by XBOOLE_1:79;
-  then
-A8: A /\ (rng F \ A) = {} by XBOOLE_0:def 7;
-A9: F"A /\ F"(rng F \ A) = F"(A /\ (rng F \ A)) by FUNCT_1:137
-    .= {} by A8,RELAT_1:171;
-  then
-A10: F"A misses F"(rng F \ A) by XBOOLE_0:def 7;
-  rng Sgm(F"A) /\ rng Sgm(F"(rng F \ A)) = F"A /\ rng Sgm(F"(rng F \ A))
-  by A3,FINSEQ_1:def 13
-    .= {} by A5,A9,FINSEQ_1:def 13;
-  then rng Sgm(F"A) misses rng Sgm(F"(rng F \ A)) by XBOOLE_0:def 7;
-  then
-A11: p is one-to-one by A6,A7,FINSEQ_3:98;
-A12: rng p = rng Sgm(F"A) \/ rng Sgm(F"(rng F \ A)) by FINSEQ_1:44
-    .= F"A \/ rng Sgm(F"(rng F \ A)) by A3,FINSEQ_1:def 13
-    .= F"A \/ F"(rng F \ A) by A5,FINSEQ_1:def 13
-    .= F"(A \/ (rng F \ A)) by RELAT_1:175
-    .= F"((rng F) \/ A) by XBOOLE_1:39
-    .= F"(rng F) \/ F"A by RELAT_1:175
-    .= (dom F) \/ F"A by RELAT_1:169
-    .= dom F by RELAT_1:167,XBOOLE_1:12;
-  len p = len Sgm(F"A) + len Sgm(F"(rng F \ A)) by FINSEQ_1:35
-    .= card (F"A) + len Sgm(F"(rng F \ A)) by A3,FINSEQ_3:44
-    .= card (F"A) + card (F"(rng F \ A)) by A5,FINSEQ_3:44
-    .= card (F"A \/ F"(rng F \ A)) by A10,CARD_2:53
-    .= len Sgm (F"A \/ F"(rng F \ A)) by A1,A2,A4,FINSEQ_3:44,XBOOLE_1:8
-    .= len Sgm (F"(A \/ (rng F \ A))) by RELAT_1:175
-    .= len Sgm (F"((rng F) \/ A)) by XBOOLE_1:39
-    .= len Sgm (F"(rng F) \/ F"A) by RELAT_1:175
-    .= len Sgm (dom F \/ F"A) by RELAT_1:169
-    .= len Sgm dom F by RELAT_1:167,XBOOLE_1:12
-    .= card Seg len F by A1,FINSEQ_3:44
-    .= len F by FINSEQ_1:78;
-  then dom p = dom F by FINSEQ_3:31;
-  hence thesis by A11,A12,FUNCT_2:3,83;
-end;
-
-canceled;
+canceled 2;
 
 definition
   let IT be Function;
@@ -421,10 +370,9 @@ registration
     take (0).V;
     thus (0).V is strict;
     take A = {}(the carrier of (0).V);
-A1: A is linearly-independent by VECTSP_7:4;
     Lin A = (0).(0).V by VECTSP_7:14;
     then Lin A = the VectSpStr of (0).V by VECTSP_4:47;
-    hence thesis by A1,VECTSP_7:def 3;
+    hence thesis by VECTSP_7:def 3;
   end;
 end;
 

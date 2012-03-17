@@ -12,11 +12,11 @@ environ
       CLVECT_1, CFUNCT_1, CLOPBAN1, CLOPBAN2, COMPLEX1, FUNCOP_1, FRECHET2,
       ALGSTR_0, GROUP_1, VECTSP_2;
  notations TARSKI, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, PRE_TOPC, DOMAIN_1,
-      FUNCOP_1, XXREAL_0, XREAL_0, REAL_1, NAT_1,
-      STRUCT_0, ALGSTR_0, ORDINAL1, NUMBERS,
-      RLVECT_1, VECTSP_1, COMPLEX1, NORMSP_1, VALUED_1, SEQ_1, VALUED_0,
-      SEQ_2, SEQM_3, SERIES_1, PREPOWER, POWER, CFUNCT_1, CLVECT_1, CSSPACE3,
-      BHSP_3, BHSP_4, CLOPBAN1, CLOPBAN2, LOPBAN_3, RECDEF_1;
+      FUNCOP_1, XXREAL_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, STRUCT_0,
+      ALGSTR_0, ORDINAL1,
+      NUMBERS, RLVECT_1, VECTSP_1, NORMSP_1, VALUED_1, SEQ_1,
+      VALUED_0, SEQ_2, SEQM_3, SERIES_1, PREPOWER, POWER, CFUNCT_1, CLVECT_1,
+      CSSPACE3, BHSP_3, BHSP_4, CLOPBAN1, CLOPBAN2, LOPBAN_3, RECDEF_1;
  constructors DOMAIN_1, XXREAL_0, REAL_1, NAT_1, COMPLEX1, SEQ_2, PREPOWER,
       SERIES_1, BHSP_3, BHSP_4, LOPBAN_3, CSSPACE3, CLOPBAN2, SEQ_1, VALUED_1,
       PARTFUN1, RECDEF_1;
@@ -28,9 +28,9 @@ environ
       VECTSP_1;
  theorems ABSVALUE, RLVECT_1, VECTSP_1, SEQ_1, SEQ_2, SEQM_3, SERIES_1, NAT_1,
       INT_1, FUNCT_2, SEQ_4, PREPOWER, CLVECT_1, CSSPACE3, LOPBAN_3, CLOPBAN1,
-      CFUNCDOM, CLOPBAN2, GROUP_1, FUNCOP_1, BHSP_3, XREAL_1, COMPLEX1,
-      FUNCT_1, XXREAL_0, ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0, VALUED_0;
- schemes SEQ_1, NAT_1, FUNCT_2;
+      CFUNCDOM, CLOPBAN2, GROUP_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0,
+      ORDINAL1, BHSP_4, NORMSP_1, ALGSTR_0, VALUED_0;
+ schemes NAT_1, FUNCT_2;
 
 begin :: Basic Properties of Sequences of Complex Normed Space
 
@@ -143,7 +143,7 @@ A1: for s be Real st 0<s
   holds ||.seq.m -g1.||<s by CLVECT_1:def 16;
   let s be Real;
   assume 0 < s;
-  then 0 < s/2 by SEQ_2:3;
+  then 0 < s/2 by XREAL_1:217;
   then consider n be Element of NAT such that
 A2: for m be Element of NAT st n<=m holds ||.seq.m -g1.||<s/2 by A1;
   now
@@ -195,7 +195,7 @@ A5: for p be Real st p > 0 holds
     now
       let s be Real;
       assume 0<s;
-      then 0<s/2 by SEQ_2:3;
+      then 0<s/2 by XREAL_1:217;
       then consider k be Element of NAT such that
 A6:   for m be Element of NAT st k<=m holds ||.seq.m -seq.k.||<s/2 by A5;
       now
@@ -262,7 +262,7 @@ A2: seq is convergent;
 A3: for p be Real st 0<p ex n be Element of NAT st
   for m be Element of NAT st n<=m holds
   ||.(seq.m)-g1.||< p by A2,CLVECT_1:def 16;
-  consider Nseq be increasing Seq_of_Nat such that
+  consider Nseq be increasing sequence of NAT such that
 A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   take g=g1;
   let p be Real;
@@ -289,7 +289,7 @@ proof
 A1: seq1 is subsequence of seq and
 A2: seq is convergent;
 A3: seq1 is convergent by A1,A2,Th10;
-  consider Nseq be increasing Seq_of_Nat such that
+  consider Nseq be increasing sequence of NAT such that
 A4: seq1=seq*Nseq by A1,VALUED_0:def 17;
   now
     let p be Real;
@@ -309,91 +309,7 @@ A7: n<=Nseq.m by A6,XXREAL_0:2;
   hence thesis by A3,CLVECT_1:def 18;
 end;
 
-Lm1: for
-n,m be Element of NAT holds n<m implies ex k be Element of NAT st m=n+1+k
-proof
-  let n,m be Element of NAT;
-  assume
-A1: n<m;
-  then consider k1 be Nat such that
-A2: m=n+k1 by NAT_1:10;
-  k1 <> 0 by A1,A2;
-  then consider n1 be Nat such that
-A3: k1=n1+1 by NAT_1:6;
-  reconsider n1 as Element of NAT by ORDINAL1:def 13;
-  take k=n1;
-  thus m=n+1+k by A2,A3;
-end;
-
-Lm2: for seq be Real_Sequence holds
-((for n be Element of NAT holds seq.n<seq.(n+1)) implies
-for n,k be Element of NAT holds seq.n<seq.(n+1+k)) &
-((for n,k be Element of NAT holds seq.n<seq.(n+1+k)) implies
-for n,m be Element of NAT st n<m holds seq.n<seq.m) &
-((for n,m be Element of NAT st n<m holds seq.n<seq.m) implies
-for n be Element of NAT holds seq.n<seq.(n+1))
-proof
-  let seq be Real_Sequence;
-  thus (for n be Element of NAT holds seq.n<seq.(n+1)) implies
-  for n,k be Element of NAT holds seq.n<seq.(n+1+k)
-  proof
-    assume
-A1: for n be Element of NAT holds seq.n<seq.(n+1);
-    let n be Element of NAT;
-    defpred X[Element of NAT] means seq.n<seq.(n+1+$1);
-A2: X[0] by A1;
-A3: now
-      let k be Element of NAT such that
-A4:   X[k];
-      seq.(n+1+k)<seq.(n+1+k+1) by A1;
-      hence X[k+1] by A4,XXREAL_0:2;
-    end;
-    thus for k be Element of NAT holds X[k] from NAT_1:sch 1(A2,A3);
-  end;
-  thus (for n,k be Element of NAT holds seq.n<seq.(n+1+k)) implies
-  for n,m be Element of NAT st n<m holds seq.n<seq.m
-  proof
-    assume
-A5: for n,k be Element of NAT holds seq.n<seq.(n+1+k);
-    let n,m be Element of NAT;
-    assume n<m;
-    then ex k be Element of NAT st m=n+1+k by Lm1;
-    hence seq.n<seq.m by A5;
-  end;
-  assume
-A6: for n,m be Element of NAT st n<m holds seq.n<seq.m;
-  let n be Element of NAT;
-  n<n+1 by NAT_1:13;
-  hence seq.n<seq.(n+1) by A6;
-end;
-
-Lm3: for f be Real_Sequence holds
-(f is increasing iff (for n being Element of NAT holds f.n < f.(n+1)))
-proof
-  let f be Real_Sequence;
-  thus f is increasing implies for n being Element of NAT holds f.n < f.(n+1)
-  proof
-    assume
-A1: f is increasing;
-    let n be Element of NAT;
-A2: dom f = NAT by FUNCT_2:def 1;
-    n < n+1 by NAT_1:13;
-    hence thesis by A1,A2,SEQM_3:def 1;
-  end;
-  assume
-A3: for n being Element of NAT holds f.n < f.(n+1);
-  for m,n be Element of NAT st m in dom f & n in dom f & m < n holds f.m < f.n
-  proof
-    let m,nn be Element of NAT such that
-A4: m in dom f & nn in dom f & m < nn;
-    consider k be Element of NAT such that
-A5: nn = m+1+k by A4,Lm1;
-    thus thesis by A3,A5,Lm2;
-  end;
-  hence thesis by SEQM_3:def 1;
-end;
-
-:::::::::: Norm Space versions of SEQ_4_33 - SEQ_4_39
+:: Norm Space versions of SEQ_4_33 - SEQ_4_39
 
 canceled;
 
@@ -534,7 +450,7 @@ A1: for n be Element of NAT holds C.n = 0.X by FUNCOP_1:13;
   end;
 end;
 
-:::::::::: Norm Space versions of SERIES_1_7 - SERIES_1_16
+:: Norm Space versions of SERIES_1_7 - SERIES_1_16
 
 theorem Th18:
   for X be ComplexNormSpace, s be sequence of X holds

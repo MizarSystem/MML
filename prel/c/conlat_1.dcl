@@ -12,6 +12,9 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="LATTICES"/>
@@ -22,10 +25,7 @@
 <ArticleID name="FILTER_0"/>
 <ArticleID name="FILTER_1"/>
 <ArticleID name="LATTICE3"/>
-<ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FUNCOP_1"/>
 <ArticleID name="FINSEQ_2"/>
@@ -44,9 +44,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="25"/>
-<Adjective nr="26" value="false"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="37"/>
+<Adjective nr="38" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="CONLAT_1" nr="2">
@@ -55,7 +55,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="25"/>
+<Adjective nr="37"/>
 <Adjective nr="133" value="false"/>
 </Cluster>
 </RCluster>
@@ -65,9 +65,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="25"/>
-<Adjective nr="26"/>
+<Adjective nr="29"/>
+<Adjective nr="37"/>
+<Adjective nr="38"/>
 <Adjective nr="133"/>
 </Cluster>
 </RCluster>
@@ -86,7 +86,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="29" value="false"/>
 <Adjective nr="134"/>
 </Cluster>
 </RCluster>
@@ -335,7 +335,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="272">
+<Func kind="K" nr="273">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -350,13 +350,13 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="276">
+<Func kind="K" nr="277">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="44"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="49"/>
+<Adjective nr="56"/>
 </Cluster>
 </FCluster>
 <FCluster aid="CONLAT_1" nr="5">
@@ -367,21 +367,21 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="276">
+<Func kind="K" nr="277">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="37"/>
-<Adjective nr="68"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="49"/>
+<Adjective nr="80"/>
 </Cluster>
 </FCluster>
 <CCluster aid="CONLAT_1" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="5">
 <Cluster>
-<Adjective nr="17"/>
-<Adjective nr="26"/>
+<Adjective nr="29"/>
+<Adjective nr="38"/>
 </Cluster>
 </Typ>
 </ArgTypes>

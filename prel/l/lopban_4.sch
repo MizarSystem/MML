@@ -10,11 +10,13 @@
 <ArticleID name="SUBSET_1"/>
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
+<ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="XXREAL_0"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="NAT_1"/>
 <ArticleID name="INT_1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
@@ -36,18 +38,18 @@
 <ArgTypes>
 <Typ kind="G" nr="16">
 <Cluster>
-<Adjective nr="33" value="false"/>
-<Adjective nr="57"/>
-<Adjective nr="82"/>
+<Adjective nr="34" value="false"/>
+<Adjective nr="58"/>
 <Adjective nr="83"/>
 <Adjective nr="84"/>
 <Adjective nr="85"/>
-<Adjective nr="88"/>
-<Adjective nr="96"/>
-<Adjective nr="103"/>
-<Adjective nr="107"/>
-<Adjective nr="109"/>
-<Adjective nr="120"/>
+<Adjective nr="86"/>
+<Adjective nr="89"/>
+<Adjective nr="97"/>
+<Adjective nr="104"/>
+<Adjective nr="108"/>
+<Adjective nr="110"/>
+<Adjective nr="121"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,7 +70,7 @@
 <Typ kind="M" nr="6">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="21">
+<Adjective nr="22">
 <Func kind="K" nr="47"/>
 <Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
@@ -96,8 +98,10 @@
 </Pred>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="152">
+<Func kind="K" nr="107">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
@@ -119,12 +123,14 @@
 </Not>
 <Not>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="152">
+<Func kind="K" nr="107">
+<Func kind="U" nr="1">
 <Func kind="F" nr="1"/>
+</Func>
 <Var nr="2"/>
 <Var nr="3"/>
 </Func>
-<Func kind="K" nr="129">
+<Func kind="K" nr="143">
 <Func kind="F" nr="1"/>
 </Func>
 </Pred>

@@ -9,6 +9,25 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="RELSET_1"/>
 </Signature>
+<RCluster aid="RELSET_1" nr="1">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+</ArgTypes>
+<Typ kind="M" nr="4">
+<Cluster/>
+<LocusVar nr="1"/>
+<LocusVar nr="2"/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+</Cluster>
+</RCluster>
 <FCluster aid="RELSET_1" nr="1">
 <ArgTypes>
 <Typ kind="M" nr="1">
@@ -160,12 +179,12 @@
 <CCluster aid="RELSET_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 </Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
 </Typ>
 </ArgTypes>
 <Cluster/>
@@ -181,12 +200,12 @@
 <CCluster aid="RELSET_1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
 </Cluster>
+</Typ>
+<Typ kind="M" nr="1">
+<Cluster/>
 </Typ>
 </ArgTypes>
 <Cluster/>

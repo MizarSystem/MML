@@ -30,7 +30,6 @@
 <ArticleID name="VALUED_0"/>
 <ArticleID name="MESFUNC1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="CARD_4"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="SETWISEO"/>
@@ -52,8 +51,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="47"/>
-<Adjective nr="76"/>
+<Adjective nr="49"/>
+<Adjective nr="77"/>
 </Cluster>
 </RCluster>
 <RCluster aid="MESFUNC7" nr="2">
@@ -66,7 +65,7 @@
 <Adjective nr="4"/>
 <Adjective nr="25"/>
 <Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MESFUNC7" nr="1">
@@ -90,7 +89,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="76"/>
+<Adjective nr="77"/>
 </Cluster>
 <Typ kind="M" nr="6">
 <Cluster>
@@ -132,7 +131,7 @@
 </Func>
 <Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="78">
+<Adjective nr="79">
 <Func kind="K" nr="49"/>
 </Adjective>
 </Cluster>
@@ -157,7 +156,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="5">
@@ -166,7 +165,7 @@
 <Func kind="K" nr="49"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="6">
@@ -180,7 +179,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MESFUNC7" nr="7">
@@ -190,7 +189,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -198,7 +197,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -210,7 +209,7 @@
 <Adjective nr="1"/>
 <Adjective nr="4"/>
 <Adjective nr="30"/>
-<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 </Registrations>

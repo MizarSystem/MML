@@ -26,10 +26,10 @@ environ
       STRUCT_0, PSCOMP_1, SUBSET_1, ARYTM_2, XCMPLX_0, ARYTM_3, WAYBEL11,
       PENCIL_1, TDLAT_3, FSM_1, MSAFREE1, PUA2MSS1, SETFAM_1, EQREL_1, MATRLIN,
       XREAL_0, ORDINAL1, MEMBERED, VALUED_1, ALGSTR_0, ALGSTR_1, BINOM,
-      RLVECT_1, VECTSP_1;
+      RLVECT_1, VECTSP_1, VECTSP_7;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, FUNCT_1, CLASSES1, TAXONOM2, XBOOLE_0, STRUCT_0, LEXBFS,
-      GROUP_1, PRE_TOPC, PENCIL_1;
+      GROUP_1, PRE_TOPC, PENCIL_1, SUBSET_1;
  theorems TARSKI, XBOOLE_1, ZFMISC_1, CARD_1, COH_SP, PRE_TOPC, NAT_1,
       CLASSES1, TDLAT_3, XXREAL_0, XREAL_1, XBOOLE_0, TAXONOM2, ORDERS_1,
       FUNCT_2, FUNCT_1, EQREL_1, WELLORD2, VECTSP_7, VECTSP_9, MATRLIN,
@@ -174,10 +174,11 @@ theorem M0:
 
 registration
   let M be non void subset-closed SubsetFamilyStr;
-  cluster {} the carrier of M -> independent;
+  cluster empty -> independent Subset of M;
   coherence
-  proof
-    thus {} the carrier of M in the_family_of M by M0;
+  proof let S be Subset of M;
+    assume S is empty;
+    hence S in the_family_of M by M0;
   end;
 end;
 
@@ -568,7 +569,7 @@ theorem Th13:
       x /\ D c/= {d1} by 09; then
       consider d2 being set such that
 010:  d2 in x /\ D & d2 nin {d1} by TARSKI:def 3;
-011:  d2 in x & d2 in D & d1 <> d2 by 010,TARSKI:def 1,XBOOLE_0:def 4;
+011:  d2 in x & d2 in D & d1 <> d2 by 010,XBOOLE_0:def 4,TARSKI:def 1;
       the carrier of ProdMatroid P = union P by Def4; then
       ex y being set st d2 in y & y in P by 011,TARSKI:def 4; then
 012:  dom f = x & D in P by FUNCT_2:def 1; then
@@ -749,7 +750,7 @@ registration
     hence the carrier of M is non empty;
 A2: the_family_of M = {A where A is Subset of V: A is linearly-independent}
     by Def5;
-    {} the carrier of V is linearly-independent by VECTSP_7:4; then
+    {} V is linearly-independent; then
     {} in the_family_of M by A2;
     hence the topology of M is non empty;
     let x,y be set;
@@ -761,17 +762,6 @@ A4: y c= x; then
     reconsider B = y as Subset of V by A3,XBOOLE_1:1;
     B is linearly-independent by A3,A4,VECTSP_7:2;
     hence y in the_family_of M by A2;
-  end;
-end;
-
-registration
-  let F be Field;
-  let V be VectSp of F;
-  cluster linearly-independent empty Subset of V;
-  existence
-  proof
-    take {} the carrier of V;
-    thus thesis by VECTSP_7:4;
   end;
 end;
 
@@ -902,7 +892,7 @@ A3: C c= A'' \/ B'' by A0,VECTSP_7:28;
 A8: c is Basis of V' & A' is Basis of Lin A' by RANKNULL:20; then
 BB: V' is finite-dimensional & Lin A' is finite-dimensional
     by MATRLIN:def 3; then
-    card c = Card D by VECTSP_9:26; then
+    card c = card D by VECTSP_9:26; then
     card B c= card c by A4,CARD_1:27; then
     card B <= card c by NAT_1:40; then
 A9: card A < card c by A5,NAT_1:13;
@@ -915,7 +905,7 @@ A9: card A < card c by A5,NAT_1:13;
       C'' is linearly-independent by VECTSP_9:15; then
       consider E being Basis of Lin A' such that
 B2:   C' c= E by VECTSP_7:27,VECTSP_9:16;
-B3:   card A = Card E by A8,BB,VECTSP_9:26; then
+B3:   card A = card E by A8,BB,VECTSP_9:26; then
       A,E are_equipotent by CARD_1:21; then
       E is finite by CARD_1:68;
       hence contradiction by A9,B2,B3,NAT_1:44;
@@ -939,7 +929,6 @@ B8: e in B' by A7,XBOOLE_0:def 3;
     reconsider a = e as Element of V by B8;
     A'\/{a} is linearly-independent by A6,ThI1;
     hence A \/ {e} in the_family_of M by A2;
-
   end;
 end;
 
@@ -1013,7 +1002,7 @@ A4: A0 c= A & A c= C & card A >= n0;
     let B be Subset of M; assume
 A5: B is independent & B c= C & A c= B; then
     reconsider B' = B as independent Subset of M;
-    A0 c= B & card A <= card B' by A4,A5,NAT_1:44,XBOOLE_1:1; then
+    A0 c= B & card A <= card B' by A4,A5,XBOOLE_1:1,NAT_1:44; then
     n0 <= card B' & card B' <= n0 & card A <= n0 by A3,A4,A5,XXREAL_0:2; then
     card B' = n0 & card A = n0 by A4,XXREAL_0:1;
     hence A = B by A5,CARD_FIN:1;
@@ -1026,10 +1015,10 @@ theorem
   proof
     let M be non void finite-degree subset-closed SubsetFamilyStr;
     let C be Subset of M;
-    {} the carrier of M c= C & {} the carrier of M is independent
+    {} M c= C & {} M is independent
     by XBOOLE_1:2; then
     ex A being independent Subset of M st
-    {} the carrier of M c= A & A is_maximal_independent_in C by Th;
+    {} M c= A & A is_maximal_independent_in C by Th;
     hence thesis;
   end;
 
@@ -1052,7 +1041,7 @@ A2:     card A < card B;
         (card A)+1 <= card B by A2,NAT_1:13; then
         (card A)+1 c= card B by NAT_1:40; then
         consider D being set such that
-A3:     D c= B & Card D = (card A)+1 by CARD_FIL:36;
+A3:     D c= B & card D = (card A)+1 by CARD_FIL:36;
         reconsider D as finite Subset of M by A3,XBOOLE_1:1;
         D is independent by A3,M1; then
         consider e being Element of M such that
@@ -1142,7 +1131,7 @@ A4:     a = card A & A c= C;
       end;
       hence union X c= n0 by ZFMISC_1:94;
 B1:   for k being Nat st Q[k] holds k <= n0 by A3;
-      card {} = card {} & {} the carrier of M c= C by XBOOLE_1:2; then
+      card {} = card {} & {} M c= C by XBOOLE_1:2; then
 B2:   ex n being Nat st Q[n];
       consider n being Nat such that
 B3:   Q[n] & for m being Nat st Q[m] holds m <= n from NAT_1:sch 6(B1,B2);
@@ -1202,7 +1191,7 @@ A4:   a = card A & A c= C;
     end; then
 A5: Rnk C c= n0 by ZFMISC_1:94;
 B1: for k being Nat st Q[k] holds k <= n0 by A3;
-    card {} = card {} & {} the carrier of M c= C by XBOOLE_1:2; then
+    card {} = card {} & {} M c= C by XBOOLE_1:2; then
 B2: ex n being Nat st Q[n];
     consider n being Nat such that
 B3: Q[n] & for m being Nat st Q[m] holds m <= n from NAT_1:sch 6(B1,B2);
@@ -1443,7 +1432,7 @@ A4:   not (x in C' iff x in C) by TARSKI:2;
       reconsider Cx = C\/{x} as independent Subset of M by M1,XBOOLE_1:1;
       now assume x in A; then
         {x} c= A by ZFMISC_1:37; then
-        Cx c= A & C c= Cx by A0,XBOOLE_1:7,8; then
+        Cx c= A & C c= Cx by A0,XBOOLE_1:8,7; then
         C = Cx by A2,MAXIMAL; then
         {x} c= C by XBOOLE_1:7;
         hence contradiction by A1,A4,ZFMISC_1:37;
@@ -1452,7 +1441,7 @@ A4:   not (x in C' iff x in C) by TARSKI:2;
       x = e or x = f by TARSKI:def 2; then
       {x} c= A\/{e} & C c= A\/{e} or {x} c= A\/{f} & C c= A\/{f}
       by A0,XBOOLE_1:10; then
-      C c= Cx & (Cx c= A\/{e} or Cx c= A\/{f}) by XBOOLE_1:7,8; then
+      C c= Cx & (Cx c= A\/{e} or Cx c= A\/{f}) by XBOOLE_1:8,7; then
       C = Cx by A3,MAXIMAL; then
       {x} c= C by XBOOLE_1:7;
       hence contradiction by A1,A4,ZFMISC_1:37;
@@ -1500,9 +1489,9 @@ C2:   card (E/\B)+1 <= Rnk B + 1 by XREAL_1:8;
       E = E/\(B\/{e}) by XBOOLE_1:28 .= E/\B\/E/\{e} by XBOOLE_1:23; then
       Rnk B + 1 <= card (E/\B) + card (E/\{e}) by C1,CARD_2:62; then
       card (E/\B)+1 <= card (E/\B) + card (E/\{e}) & E/\{e} c= {e}
-      by C2,XBOOLE_1:17,XXREAL_0:2; then
+      by C2,XXREAL_0:2,XBOOLE_1:17; then
       1 <= card (E/\{e}) & (E/\{e} = {} & card {} = 0 or
-      E/\{e} = {e} & card {e} = 1) by CARD_1:50,XREAL_1:8,ZFMISC_1:39; then
+      E/\{e} = {e} & card {e} = 1) by XREAL_1:8,ZFMISC_1:39,CARD_1:50; then
       e in E/\{e} by TARSKI:def 1; then
       e in E by XBOOLE_0:def 4; then
       {e} c= E by ZFMISC_1:37; then
@@ -1591,9 +1580,9 @@ A4:   x = e & e is_dependent_on A;
       consider D being independent Subset of M such that
 A6:   Ce c= D & D is_maximal_independent_in A\/{e} by Th;
       card Ca = Rnk (A\/{e}) by B2,A4,DF .= card D by A6,ThR2; then
-      card Ce <= card Ca & card Ca <= card Ce by A6,NAT_1:44,XBOOLE_1:7; then
+      card Ce <= card Ca & card Ca <= card Ce by A6,XBOOLE_1:7,NAT_1:44; then
       card Ca = card Ce by XXREAL_0:1; then
-      Ca = Ce by CARD_FIN:1,XBOOLE_1:7; then
+      Ca = Ce by XBOOLE_1:7,CARD_FIN:1; then
       e nin {e} by A3,A4,XBOOLE_0:def 3;
       hence contradiction by TARSKI:def 1;
     end; then
@@ -1663,8 +1652,7 @@ theorem LemC:
   proof assume that
 A0: A is dependent and
 A1: for e being Element of M st e in A holds A \ {e} is independent;
-    {} the carrier of M is independent;
-    hence A is non empty by A0;
+    thus A is non empty by A0;
     consider e being Element of A;
     now assume A is non empty set; then
 A2:   e in A; then
@@ -1691,8 +1679,7 @@ theorem C5:
     proof assume that
 Z0:   A is dependent and
 Z2:   for e being Element of M st e in A holds A \ {e} is independent;
-      {} the carrier of M is independent;
-      hence A is non empty by Z0;
+      thus A is non empty by Z0;
       let e; assume
 Z1:   e in A;
       set Ae = A\{e};
@@ -1722,7 +1709,7 @@ A3: Ae c= A by XBOOLE_1:36;
   end;
 
 theorem C4:
-  A is cycle implies Rnk A + 1 = Card A
+  A is cycle implies Rnk A + 1 = card A
   proof assume
 A0: A is cycle; then
     reconsider A as non empty finite Subset of M;
@@ -1808,7 +1795,7 @@ B1:       e in B; then
 B3:       n = card Be+1 by Z5,CARD_2:54;
           assume
 B2:       (B\/{x}) \ {e} is dependent;
-          (B\/{x}) \ {e} = Be\/{x} by B1,Z6,XBOOLE_1:87,ZFMISC_1:17; then
+          (B\/{x}) \ {e} = Be\/{x} by B1,Z6,ZFMISC_1:17,XBOOLE_1:87; then
           n <= card Be by Z4,A5,B2,Z5,XBOOLE_1:1;
           hence contradiction by B3,NAT_1:13;
         end;

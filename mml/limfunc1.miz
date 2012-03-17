@@ -9,13 +9,12 @@ environ
 
  vocabularies ARYTM, SEQ_1, PARTFUN1, ARYTM_1, RELAT_1, BOOLE, SQUARE_1,
       ARYTM_3, PROB_1, RCOMP_1, SEQ_2, FUNCT_1, ORDINAL2, ABSVALUE, SEQM_3,
-      LATTICES, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1,
-      FRECHET2, SUPINF_1, ANPROJ_1, OPPCAT_1;
+      LATTICES, FINSEQ_1, LIMFUNC1, FUNCT_3, FUNCOP_1, FRECHET2, SUPINF_1,
+      ANPROJ_1, OPPCAT_1, NORMSP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, REAL_1, NAT_1, FUNCT_2, FUNCOP_1,
-      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQM_3,
-      PROB_1, RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1, RFUNCT_2,
-      XXREAL_0, XXREAL_1, RECDEF_1;
+      COMPLEX1, REAL_1, NAT_1, FUNCT_2, FUNCOP_1, VALUED_0, VALUED_1, SEQ_1,
+      SEQ_2, SEQM_3, PROB_1, RELSET_1, SQUARE_1, PARTFUN1, FUNCT_3, RFUNCT_1,
+      RFUNCT_2, XXREAL_0, XXREAL_1, RECDEF_1;
  constructors PARTFUN1, FUNCOP_1, REAL_1, SQUARE_1, NAT_1, COMPLEX1, VALUED_1,
       SEQ_2, SEQM_3, PROB_1, RCOMP_1, RFUNCT_1, RFUNCT_2, SEQ_1, RECDEF_1;
  registrations ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED,
@@ -23,10 +22,10 @@ environ
       RFUNCT_2, SEQ_2, SEQ_4;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions SQUARE_1, TARSKI, SEQ_2, XBOOLE_0, PROB_1, MEMBERED, VALUED_1;
- theorems TARSKI, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
-      SQUARE_1, RFUNCT_1, RFUNCT_2, FUNCT_1, FUNCT_2, XREAL_0, XBOOLE_0,
-      XBOOLE_1, REAL_2, FINSEQ_2, XCMPLX_0, XCMPLX_1, XREAL_1, FUNCOP_1,
-      COMPLEX1, XXREAL_0, ORDINAL1, XXREAL_1, MEMBERED, VALUED_1, VALUED_0;
+ theorems TARSKI, NAT_1, ABSVALUE, SEQ_1, SEQ_2, SEQM_3, SEQ_4, SQUARE_1,
+      RFUNCT_1, RFUNCT_2, FUNCT_1, FUNCT_2, XREAL_0, XBOOLE_0, XBOOLE_1,
+      FINSEQ_2, XCMPLX_0, XCMPLX_1, XREAL_1, FUNCOP_1, COMPLEX1, XXREAL_0,
+      ORDINAL1, XXREAL_1, VALUED_1, VALUED_0;
  schemes SEQ_1, FUNCT_2;
 
 begin
@@ -41,7 +40,7 @@ Lm1: 0<g & r<=r1 implies r-g<r1 & r<r1+g
 proof
   assume
 A1: 0<g & r<=r1;
-  then r-g<r1-0 by XREAL_1:15,16,17;
+  then r-g<r1-0 by XREAL_1:17;
   hence r-g<r1;
   r+0<r1+g by A1,XREAL_1:10;
   hence thesis;
@@ -118,7 +117,7 @@ proof
 A1: seq is non-decreasing;
     take seq.0-1;
     let n;
-A2: seq.0-1<seq.0-0 by XREAL_1:15,16,17;
+A2: seq.0-1<seq.0-0 by XREAL_1:17;
     seq.0<=seq.n by A1,SEQM_3:21;
     hence thesis by A2,XXREAL_0:2;
   end;
@@ -226,8 +225,7 @@ A1: seq is convergent & 0<lim seq;
   then
 B2: lim(seq-s1)=(lim seq)/2+(lim seq)/2-(lim seq)/2 by A1,SEQ_4:59
     .=(lim seq)/2;
-  s1 is convergent;
-  then seq-s1 is convergent by A1,SEQ_2:25;
+  seq-s1 is convergent by A1,SEQ_2:25;
   then consider n such that
 A3: for m st n<=m holds 0<(seq-s1).m by B2,Th29,A1,XREAL_1:217;
   take n;
@@ -757,7 +755,7 @@ theorem Th53:
 proof
   assume
 A1: seq is divergent_to+infty & seq1 is subsequence of seq;
-  then consider Ns be increasing Seq_of_Nat such that
+  then consider Ns be increasing sequence of NAT such that
 A2: seq1=seq*Ns by VALUED_0:def 17;
   let r;
   consider n such that
@@ -777,7 +775,7 @@ theorem Th54:
 proof
   assume
 A1: seq is divergent_to-infty & seq1 is subsequence of seq;
-  then consider Ns be increasing Seq_of_Nat such that
+  then consider Ns be increasing sequence of NAT such that
 A2: seq1=seq*Ns by VALUED_0:def 17;
   let r;
   consider n such that
@@ -799,13 +797,12 @@ proof
 A1: seq1 is divergent_to+infty & seq2 is convergent & 0<lim seq2;
   then consider n1 be Element of NAT such that
 A2: for m st n1<=m holds (lim seq2)/2<seq2.m by Th30;
-B3: seq1^\n1 is subsequence of seq1;
   now thus 0<(lim seq2)/2 by A1,XREAL_1:217;
     let n;
     (lim seq2)/2<seq2.(n+n1) by A2,NAT_1:12;
     hence (lim seq2)/2<=(seq2^\n1).n by NAT_1:def 3;
   end;
-  then (seq1^\n1)(#)(seq2^\n1) is divergent_to+infty by B3,Th49,A1,Th53;
+  then (seq1^\n1)(#)(seq2^\n1) is divergent_to+infty by Th49,A1,Th53;
   then (seq1(#)seq2)^\n1 is divergent_to+infty by SEQM_3:42;
   hence thesis by Th34;
 end;
@@ -868,7 +865,7 @@ A3:   seq is bounded_below by Th26;
           then
 A4:       seq is bounded by A3;
           seq is monotone by A2,SEQM_3:def 7;
-          hence thesis by A4,SEQ_4:53;
+          hence thesis by A4;
         end;
         suppose not seq is bounded_above;
           hence thesis by A2,Th56;
@@ -885,7 +882,7 @@ A6:   seq is bounded_above by Th26;
           then
 A7:       seq is bounded by A6;
           seq is monotone by A5,SEQM_3:def 7;
-          hence thesis by A7,SEQ_4:53;
+          hence thesis by A7;
         end;
         suppose not seq is bounded_below;
           hence thesis by A5,Th57;
@@ -914,7 +911,7 @@ A4:     0<r;
 A5:     for m st n<=m holds r"<seq.m by A2,Def4;
         take n;
         let m;
-A6:     0<r" by A4,XREAL_1:124;
+A6:     0<r" by A4;
         assume n<=m;
         then
 A7:     r"<seq.m by A5;
@@ -938,7 +935,7 @@ A13:    0<r;
 A14:    for m st n<=m holds seq.m<-(r") by A11,Def5;
         take n;
         let m;
-        0<r" by A13,XREAL_1:124;
+        0<r" by A13;
         then
 A16:    -(r")<-0 by XREAL_1:26;
         assume
@@ -946,11 +943,11 @@ Z:        n<=m;
         then
 A17:    seq.m<-(r") by A14;
 A18:    seq.m<-0 by A13,Z,A14;
-        1/(-(r"))<1/seq.m by A16,A17,REAL_2:200;
+        1/(-(r"))<1/seq.m by A16,A17,XREAL_1:101;
         then ((-1)*(r"))"<1/seq.m by XCMPLX_1:217;
         then
 A19:    (-1)"*(r"")<1/seq.m by XCMPLX_1:205;
-        1/seq.m<0/seq.m by A18,XREAL_1:75,77;
+        1/seq.m<0/seq.m by A18,XREAL_1:77;
         then abs(1/seq.m)=-(1/seq.m) by ABSVALUE:def 1;
         then -(1*r)<-abs(1/seq.m) by A19;
         then abs(1/seq.m)<r by XREAL_1:26;
@@ -975,7 +972,7 @@ A2: for n st k<=n holds 0<seq.n;
   let r;
   set l=abs(r)+1;
   0<=abs(r) by COMPLEX1:132;
-  then 0<l" by XREAL_1:124;
+  then 0<l";
   then consider o be Element of NAT such that
 A3: for n st o<=n holds abs(seq.n-0)<l" by A1,SEQ_2:def 7;
   r<=abs(r) by ABSVALUE:11;
@@ -1012,7 +1009,7 @@ A2: for n st k<=n holds seq.n<0;
   let r;
   set l=abs(r)+1;
   0<=abs(r) by COMPLEX1:132;
-  then 0<l" by XREAL_1:124;
+  then 0<l";
   then consider o be Element of NAT such that
 A3: for n st o<=n holds abs(seq.n-0)<l" by A1,SEQ_2:def 7;
   -abs(r)<=r by ABSVALUE:11;
@@ -1781,8 +1778,6 @@ A3: seq is divergent_to+infty & rng seq c=dom(f1+f2);
 A4: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     consider k such that
 A5: for n st k<=n holds r1<seq.n by A3,Def4;
-    seq^\k is subsequence of seq;
-    then
 A6: seq^\k is divergent_to+infty by A3,Th53;
 A7: rng(seq^\k)c=rng seq by VALUED_0:21;
     then
@@ -1805,7 +1800,7 @@ then (seq^\k).n in right_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 4;
       then
 A13:  r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by XREAL_1:15,16,17;
+      then -abs(r2)-1<r2-0 by XREAL_1:17;
       hence -abs(r2)-1<(f2/*(seq^\k)).n by A13,XXREAL_0:2;
     end;
     then f2/*(seq^\k) is bounded_below by SEQ_2:def 4;
@@ -1837,8 +1832,6 @@ A3: seq is divergent_to+infty & rng seq c=dom(f1(#) f2);
 A4: dom(f1(#)f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     consider k such that
 A5: for n st k<=n holds r1<seq.n by A3,Def4;
-    seq^\k is subsequence of seq;
-    then
 A6: seq^\k is divergent_to+infty by A3,Th53;
 A7: rng(seq^\k)c=rng seq by VALUED_0:21;
     then
@@ -1884,8 +1877,6 @@ A3: seq is divergent_to-infty & rng seq c=dom(f1+f2);
 A4: dom(f1+f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm2;
     consider k such that
 A5: for n st k<=n holds seq.n<r1 by A3,Def5;
-    seq^\k is subsequence of seq;
-    then
 A6: seq^\k is divergent_to-infty by A3,Th54;
 A7: rng(seq^\k)c=rng seq by VALUED_0:21;
     then
@@ -1908,7 +1899,7 @@ then (seq^\k).n in left_open_halfline(r1)/\dom f2 by A8,A11,XBOOLE_0:def 4;
       then
 A12:  r2<=(f2/*(seq^\k)).n by A4,A7,FUNCT_2:185,XBOOLE_1:1;
       -abs(r2)<=r2 by ABSVALUE:11;
-      then -abs(r2)-1<r2-0 by XREAL_1:15,16,17;
+      then -abs(r2)-1<r2-0 by XREAL_1:17;
       hence -abs(r2)-1<(f2/*(seq^\k)).n by A12,XXREAL_0:2;
     end;
     then f2/*(seq^\k) is bounded_below by SEQ_2:def 4;
@@ -1941,8 +1932,6 @@ A3: seq is divergent_to-infty & rng seq c=dom(f1(#) f2);
 A4: dom(f1(#)f2)=dom f1/\dom f2 & rng seq c=dom f1 & rng seq c=dom f2 by Lm3;
     consider k such that
 A5: for n st k<=n holds seq.n<r1 by A3,Def5;
-    seq^\k is subsequence of seq;
-    then
 A6: seq^\k is divergent_to-infty by A3,Th54;
 A7: rng(seq^\k)c=rng seq by VALUED_0:21;
     then
@@ -2403,7 +2392,7 @@ A6:   seq.m in rng seq by VALUED_0:28;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15,17;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2411,7 +2400,7 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 4;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15,17;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
       then seq.m<g1 by A7,XXREAL_0:2;
       then f.g1<= f.(seq.m) by A1,A4,A9,RFUNCT_2:46;
       then r<f.(seq.m) by A4,XXREAL_0:2;
@@ -2456,7 +2445,7 @@ A6:   seq.m in rng seq by VALUED_0:28;
 A7:   seq.m<-abs(r1)-abs(g1) by A5;
 A8:   -abs(r1)<=r1 by ABSVALUE:11;
       0<=abs(g1) by COMPLEX1:132;
-      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15,16,17;
+      then -abs(r1)-abs(g1)<=r1-0 by A8,XREAL_1:15;
       then seq.m<r1 by A7,XXREAL_0:2;
       then seq.m in {g2: g2<r1};
       then seq.m in left_open_halfline(r1) by XXREAL_1:229;
@@ -2464,7 +2453,7 @@ A8:   -abs(r1)<=r1 by ABSVALUE:11;
 A9:   seq.m in left_open_halfline(r1)/\dom f by A3,A6,XBOOLE_0:def 4;
 A10:  -abs(g1)<=g1 by ABSVALUE:11;
       0<=abs(r1) by COMPLEX1:132;
-      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15,16,17;
+      then -abs(g1)-abs(r1)<=g1-0 by A10,XREAL_1:15;
       then seq.m<g1 by A7,XXREAL_0:2;
       then f.(seq.m)<= f.g1 by A1,A4,A9,RFUNCT_2:45;
       then f.(seq.m)<r by A4,XXREAL_0:2;
@@ -2520,8 +2509,7 @@ A9: rng(seq^\k)c=dom f1/\right_open_halfline(r1) by A2,XBOOLE_1:1;
 A10: dom f1/\right_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
     then
 A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
-    seq^\k is subsequence of seq;
-    then seq^\k is divergent_to+infty by A3,Th53;
+    seq^\k is divergent_to+infty by A3,Th53;
     then
 A12: f1/*(seq^\k) is divergent_to+infty by A1,A11,Def7;
     now
@@ -2577,8 +2565,7 @@ A9: rng(seq^\k)c=dom f1/\right_open_halfline(r1) by A2,XBOOLE_1:1;
 A10: dom f1/\right_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
     then
 A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
-    seq^\k is subsequence of seq;
-    then seq^\k is divergent_to+infty by A3,Th53;
+    seq^\k is divergent_to+infty by A3,Th53;
     then
 A12: f1/*(seq^\k) is divergent_to-infty by A1,A11,Def8;
     now
@@ -2634,8 +2621,7 @@ A9: rng(seq^\k)c=dom f1/\left_open_halfline(r1) by A2,XBOOLE_1:1;
 A10: dom f1/\left_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
     then
 A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
-    seq^\k is subsequence of seq;
-    then seq^\k is divergent_to-infty by A3,Th54;
+    seq^\k is divergent_to-infty by A3,Th54;
     then
 A12: f1/*(seq^\k) is divergent_to+infty by A1,A11,Def10;
     now
@@ -2691,8 +2677,7 @@ A9: rng(seq^\k)c=dom f1/\left_open_halfline(r1) by A2,XBOOLE_1:1;
 A10: dom f1/\left_open_halfline(r1)c=dom f1 by XBOOLE_1:17;
     then
 A11: rng(seq^\k)c=dom f1 by A9,XBOOLE_1:1;
-    seq^\k is subsequence of seq;
-    then seq^\k is divergent_to-infty by A3,Th54;
+    seq^\k is divergent_to-infty by A3,Th54;
     then
 A12: f1/*(seq^\k) is divergent_to-infty by A1,A11,Def11;
     now
@@ -2816,11 +2801,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15,16,17;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15,16,17;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -2858,11 +2843,11 @@ A4: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A5: 0<=abs(r1) by COMPLEX1:132;
     -abs(r)<=r by ABSVALUE:11;
-    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15,16,17;
+    then -abs(r)-abs(r1)<=r-0 by A5,XREAL_1:15;
     hence g<r by A4,XXREAL_0:2;
 A6: 0<=abs(r) by COMPLEX1:132;
     -abs(r1)<=r1 by ABSVALUE:11;
-    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15,16,17;
+    then -abs(r1)-abs(r)<=r1-0 by A6,XREAL_1:15;
     then g<r1 by A4,XXREAL_0:2;
     then g in {g2: g2<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -3617,8 +3602,6 @@ A5: s is divergent_to+infty & rng s c=dom(f1(#)f2);
 A6: dom(f1(#)f2)=dom f1/\dom f2 & rng s c=dom f1 & rng s c=dom f2 by Lm3;
     consider k such that
 A7: for n st k<=n holds r<s.n by A5,Def4;
-    s^\k is subsequence of s;
-    then
 A8: s^\k is divergent_to+infty by A5,Th53;
 A9: rng(s^\k)c=rng s by VALUED_0:21;
     then
@@ -3681,8 +3664,6 @@ A5: s is divergent_to-infty & rng s c=dom(f1(#)f2);
 A6: dom(f1(#)f2)=dom f1/\dom f2 & rng s c=dom f1 & rng s c=dom f2 by Lm3;
     consider k such that
 A7: for n st k<=n holds s.n<r by A5,Def5;
-    s^\k is subsequence of s;
-    then
 A8: s^\k is divergent_to-infty by A5,Th54;
 A9: rng(s^\k)c=rng s by VALUED_0:21;
     then
@@ -3752,8 +3733,6 @@ A5:   now
 A6:     seq is divergent_to+infty & rng seq c=dom f;
         then consider k such that
 A7:     for n st k<=n holds r1<seq.n by Def4;
-        seq^\k is subsequence of seq;
-        then
 A8:     seq^\k is divergent_to+infty by A6,Th53;
         now
           let x be set;
@@ -3816,8 +3795,6 @@ A23:  now
 A24:    seq is divergent_to+infty & rng seq c=dom f;
         then consider k such that
 A25:    for n st k<=n holds r1<seq.n by Def4;
-        seq^\k is subsequence of seq;
-        then
 A26:    seq^\k is divergent_to+infty by A24,Th53;
         now
           let x be set;
@@ -3958,8 +3935,6 @@ A5:   now
 A6:     seq is divergent_to-infty & rng seq c=dom f;
         then consider k such that
 A7:     for n st k<=n holds seq.n<r1 by Def5;
-        seq^\k is subsequence of seq;
-        then
 A8:     seq^\k is divergent_to-infty by A6,Th54;
         now
           let x be set;
@@ -4022,8 +3997,6 @@ A23:  now
 A24:    seq is divergent_to-infty & rng seq c=dom f;
         then consider k such that
 A25:    for n st k<=n holds seq.n<r1 by Def5;
-        seq^\k is subsequence of seq;
-        then
 A26:    seq^\k is divergent_to-infty by A24,Th54;
         now
           let x be set;
@@ -4106,11 +4079,11 @@ A6: g<-abs(r)-abs(r1) by XREAL_1:4;
     take g;
 A7: -abs(r)<=r by ABSVALUE:11;
     0<=abs(r1) by COMPLEX1:132;
-    then -abs(r)-abs(r1)<=r-0 by A7,XREAL_1:15,16,17;
+    then -abs(r)-abs(r1)<=r-0 by A7,XREAL_1:15;
     hence g<r by A6,XXREAL_0:2;
 A8: -abs(r1)<=r1 by ABSVALUE:11;
     0<=abs(r) by COMPLEX1:132;
-    then -abs(r1)-abs(r)<=r1-0 by A8,XREAL_1:15,16,17;
+    then -abs(r1)-abs(r)<=r1-0 by A8,XREAL_1:15;
     then g<r1 by A6,XXREAL_0:2;
     then g in {g1: g1<r1};
     then g in left_open_halfline(r1) by XXREAL_1:229;
@@ -4304,10 +4277,10 @@ A5:     g<-n-abs(r) & g in dom f1 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A6:     -n-abs(r)<=-n-0 by XREAL_1:15,16,17;
+A6:     -n-abs(r)<=-n-0 by XREAL_1:15;
 A7:     0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A7,XREAL_1:15,16,17;
+        then -abs(r)-n<=r-0 by A7,XREAL_1:15;
         then g<r by A5,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4366,10 +4339,10 @@ A19:    g<-n-abs(r) & g in dom f2 by A1,Def9;
         take g;
         0<=abs(r) by COMPLEX1:132;
         then
-A20:    -n-abs(r)<=-n-0 by XREAL_1:15,16,17;
+A20:    -n-abs(r)<=-n-0 by XREAL_1:15;
 A21:    0<=n by NAT_1:2;
         -abs(r)<=r by ABSVALUE:11;
-        then -abs(r)-n<=r-0 by A21,XREAL_1:15,16,17;
+        then -abs(r)-n<=r-0 by A21,XREAL_1:15;
         then g<r by A19,XXREAL_0:2;
         then g in {g2: g2<r};
         then g in left_open_halfline(r) by XXREAL_1:229;
@@ -4549,8 +4522,6 @@ A3: r1<g1 & g1 in dom f & f.g1<>0 by A1;
 A4: s is divergent_to+infty & rng s c=dom(f^);
   then consider k such that
 A5: for n st k<=n holds r<s.n by Def4;
-  s^\k is subsequence of s;
-  then
 A6: s^\k is divergent_to+infty by A4,Th53;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -4615,8 +4586,6 @@ A3: r1<g1 & g1 in dom f & f.g1<>0 by A1;
 A4: s is divergent_to+infty & rng s c=dom(f^);
   then consider k such that
 A5: for n st k<=n holds r<s.n by Def4;
-  s^\k is subsequence of s;
-  then
 A6: s^\k is divergent_to+infty by A4,Th53;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -4681,8 +4650,6 @@ A3: g1<r1 & g1 in dom f & f.g1<>0 by A1;
 A4: s is divergent_to-infty & rng s c=dom (f^);
   then consider k such that
 A5: for n st k<=n holds s.n<r by Def5;
-  s^\k is subsequence of s;
-  then
 A6: s^\k is divergent_to-infty by A4,Th54;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -4747,8 +4714,6 @@ A3: g1<r1 & g1 in dom f & f.g1<>0 by A1;
 A4: s is divergent_to-infty & rng s c=dom (f^);
   then consider k such that
 A5: for n st k<=n holds s.n<r by Def5;
-  s^\k is subsequence of s;
-  then
 A6: s^\k is divergent_to-infty by A4,Th54;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -4841,8 +4806,6 @@ A7:     g1<g2 & g2 in dom f by A1,Def6;
 A8: s is divergent_to+infty & rng s c=dom (f^);
   then consider k such that
 A9: for n st k<=n holds r<s.n by Def4;
-  s^\k is subsequence of s;
-  then
 A10: s^\k is divergent_to+infty by A8,Th53;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -4932,8 +4895,6 @@ A7:     g1<g2 & g2 in dom f by A1,Def6;
 A8: s is divergent_to+infty & rng s c=dom (f^);
   then consider k such that
 A9: for n st k<=n holds r<s.n by Def4;
-  s^\k is subsequence of s;
-  then
 A10: s^\k is divergent_to+infty by A8,Th53;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -5023,8 +4984,6 @@ A7:     g2<r & g2 in dom f by A1,Def9;
 A8: s is divergent_to-infty & rng s c=dom (f^);
   then consider k such that
 A9: for n st k<=n holds s.n<r by Def5;
-  s^\k is subsequence of s;
-  then
 A10: s^\k is divergent_to-infty by A8,Th54;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then
@@ -5114,8 +5073,6 @@ A7:     g2<r & g2 in dom f by A1,Def9;
 A8: s is divergent_to-infty & rng s c=dom (f^);
   then consider k such that
 A9: for n st k<=n holds s.n<r by Def5;
-  s^\k is subsequence of s;
-  then
 A10: s^\k is divergent_to-infty by A8,Th54;
   dom(f^)=dom f\f"{0} by RFUNCT_1:def 8;
   then

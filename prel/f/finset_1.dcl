@@ -29,7 +29,9 @@
 <RCluster aid="FINSET_1" nr="2">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster/>
+<Cluster>
+<Adjective nr="1" value="false"/>
+</Cluster>
 </Typ>
 </ArgTypes>
 <Typ kind="M" nr="2">
@@ -39,42 +41,11 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="1" value="false"/>
 <Adjective nr="14"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINSET_1" nr="3">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="1" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="18">
-<LocusVar nr="1"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="14"/>
-</Cluster>
-</RCluster>
-<RCluster aid="FINSET_1" nr="4">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="7"/>
-<Adjective nr="14"/>
-</Cluster>
-</RCluster>
-<RCluster aid="FINSET_1" nr="5">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>

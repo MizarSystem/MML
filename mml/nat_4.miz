@@ -9,12 +9,12 @@ environ
  vocabularies NAT_1, SQUARE_1, ARYTM_3, INT_1, FINSET_1, ARYTM_1, ABSVALUE,
       FILTER_0, MATRIX_2, CARD_1, POWER, FINSEQ_1, PEPIN, RELAT_1, GROUP_1,
       ARYTM, NAT_LAT, NAT_3, ALGSEQ_1, FUNCT_1, CARD_3, BOOLE, FINSEQ_2,
-      VECTSP_1, MEMBERED, NEWTON, QC_LANG1, RLVECT_1, PREPOWER;
+      VECTSP_1, MEMBERED, NEWTON, QC_LANG1, RLVECT_1, PREPOWER, INT_2;
  notations SUBSET_1, XXREAL_0, PREPOWER, TARSKI, XBOOLE_0, ORDINAL1, CARD_1,
       NUMBERS, XCMPLX_0, XREAL_0, INT_1, NAT_1, NAT_D, BINARITH, ABIAN,
       SQUARE_1, NEWTON, FINSET_1, PEPIN, NAT_3, RELAT_1, REAL_1, FUNCT_1,
-      FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, XXREAL_2,
-      POWER, MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1, RECDEF_1;
+      FINSEQ_1, POLYNOM1, RVSUM_1, WSIERP_1, TREES_4, BINOP_2, XXREAL_2, POWER,
+      MEMBERED, INT_2, FINSEQ_2, FINSEQOP, ZFMISC_1, RECDEF_1;
  constructors REAL_1, NAT_1, NAT_D, FINSEQOP, PREPOWER, POWER, BINARITH,
       PRE_CIRC, WSIERP_1, ABIAN, PEPIN, POLYNOM2, NAT_3, SEQ_1, RECDEF_1,
       BINOP_2, XXREAL_2;
@@ -23,13 +23,12 @@ environ
       RVSUM_1, NEWTON, PRE_CIRC, POLYNOM1, SEQM_3, NAT_3, VALUED_0, VALUED_1,
       XXREAL_2, CARD_1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON;
- theorems TARSKI, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1,
-      CARD_2, FINSET_1, SQUARE_1, EULER_1, EULER_2, BINARITH, PREPOWER, POWER,
-      ABSVALUE, NEWTON, XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1,
-      CARD_4, XBOOLE_0, MEMBERED, INT_2, ABIAN, FINSEQ_3, RVSUM_1,
-      FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1, PROB_3, INTEGRA5,
-      COMPTRIG, XXREAL_0, NAT_D, VALUED_1, XXREAL_2;
+ definitions TARSKI, MEMBERED, RVSUM_1, FINSEQ_2, NEWTON, SQUARE_1;
+ theorems TARSKI, NAT_1, NAT_2, INT_1, FINSEQ_1, CARD_1, XBOOLE_1, CARD_2,
+      FINSET_1, SQUARE_1, EULER_1, EULER_2, PREPOWER, POWER, ABSVALUE, NEWTON,
+      XCMPLX_1, ORDINAL1, XREAL_1, PEPIN, NAT_3, POLYNOM1, XBOOLE_0, INT_2,
+      ABIAN, FINSEQ_3, RVSUM_1, FUNCT_1, FINSEQ_2, ZFMISC_1, FUNCT_2, FUNCOP_1,
+      PROB_3, INTEGRA5, COMPTRIG, XXREAL_0, NAT_D, VALUED_1, XXREAL_2;
  schemes NAT_1, FINSEQ_1;
 
 begin :: Some theorems on real and natural numbers.
@@ -107,10 +106,9 @@ A2: P[0]
     assume
 A3: k <= m;
     assume
-A4: m = [\ 0/2 /];
+    m = [\ 0/2 /];
     then m = 0 by INT_1:47;
-    then k = 0 by A3;
-    hence 0 choose m >= 0 choose k by A4,INT_1:47;
+    hence 0 choose m >= 0 choose k by A3;
   end;
 A5: for n being Nat st P[n] holds P[n+1]
   proof
@@ -153,7 +151,6 @@ A18:  n >= k
           hence thesis by A1,A8,A9,INT_1:def 4;
         end;
         suppose n<>0;
-          then n>0;
           then n+1>0+1 by XREAL_1:8;
           then n>=1 by NAT_1:13;
           then n+n>=1+n by XREAL_1:8;
@@ -565,11 +562,11 @@ A2: l<j & 0<l;
 end;
 
 theorem Th10:
-  for n,q,b being Nat holds q hcf b = 1 & q<>0 & b<>0 implies q|^n hcf b = 1
+  for n,q,b being Nat holds q gcd b = 1 & q<>0 & b<>0 implies q|^n gcd b = 1
 proof
   let n,q,b be Nat;
   assume
-A1: q hcf b = 1 & q<>0 & b<>0;
+A1: q gcd b = 1 & q<>0 & b<>0;
   then q,b are_relative_prime by INT_2:def 4;
   then (q|^n),b are_relative_prime by A1,EULER_2:32;
   hence thesis by INT_2:def 4;
@@ -690,7 +687,7 @@ A2: p is prime;
   assume
 A3: not a,p are_relative_prime;
   reconsider a,p,k as Element of NAT by ORDINAL1:def 13;
-  a hcf p = p by A2,A3,PEPIN:2;
+  a gcd p = p by A2,A3,PEPIN:2;
   then p divides a by NAT_D:def 5;
   then consider i being Nat such that
 A4: a=p*i by NAT_D:def 3;
@@ -715,10 +712,9 @@ A2: x=p |^ (p |-count a);
   thus b=x;
   p >= 1 by INT_2:def 5;
   hence 1 <= b by A2,PREPOWER:19;
-A3: a > 0 by A1;
   p <> 1 by INT_2:def 5;
   then b divides a by A1,A2,NAT_3:def 7;
-  hence b <= a by A3,NAT_D:7;
+  hence b <= a by A1,NAT_D:7;
 end;
 
 theorem Th17:
@@ -737,7 +733,6 @@ A2: q is prime & d divides k*q|^(0+1) & not d divides k*q|^0;
     assume not q|^(0+1) divides d;
     then
 A3: not q divides d by NEWTON:10;
-A4: q>1 by A2,INT_2:def 5;
 A5: not d divides k*1 by A2,NEWTON:9;
     d divides k*q by A2,NEWTON:10;
     then consider i be Nat such that
@@ -747,7 +742,7 @@ A6: k*q=d*i by NAT_D:def 3;
     then consider j be Nat such that
 A7: i=q*j by NAT_D:def 3;
     d*j*q=k*q by A6,A7;
-    then d*j=k by A4,XCMPLX_1:5;
+    then d*j=k by A2,XCMPLX_1:5;
     hence contradiction by A5,NAT_D:def 3;
   end;
 A8: for n being Element of NAT holds P[n] implies P[n+1]
@@ -788,15 +783,12 @@ A18:  not (q divides i)
         assume q divides i;
         then consider i1 be Nat such that
 A19:    i=q*i1 by NAT_D:def 3;
-A20:    q>1 by A10,INT_2:def 5;
         k*(q|^(n+1)*q)=d*(q*i1) by A15,A19,NEWTON:11;
         then k*q|^(n+1)*q=d*i1*q;
-        then k*q|^(n+1)=d*i1 by A20,XCMPLX_1:5;
+        then k*q|^(n+1)=d*i1 by A10,XCMPLX_1:5;
         hence contradiction by A12,NAT_D:def 3;
       end;
-      n+1>0 & q>1 by A10,INT_2:def 5;
-      then q|^(n+1)>1 by PEPIN:26;
-      then k*q=j*i by A17,XCMPLX_1:5;
+      k*q=j*i by A17,XCMPLX_1:5,A10;
       then q divides j*i by NAT_D:def 3;
       then q divides j by A10,A18,NEWTON:98;
       then consider j1 be Nat such that
@@ -821,7 +813,7 @@ A1: q1 divides q|^n1 & q is prime;
   assume
 A2: q1 is prime & n1>0;
   then
-A3: q1>1 by INT_2:def 5;
+    q1>1 by INT_2:def 5;
   then consider k be Element of NAT such that
 A4: q1=q*k by A1,PEPIN:33;
   k divides q1 by A4,NAT_D:def 3;
@@ -830,7 +822,7 @@ A5: k=1 or k=q1 by A2,INT_2:def 5;
   k<>q1
   proof
     assume k=q1;
-    then q=1 by A3,A4,XCMPLX_1:7;
+    then q=1 by A2,A4,XCMPLX_1:7;
     hence contradiction by A1,INT_2:def 5;
   end;
   hence thesis by A4,A5;
@@ -913,7 +905,6 @@ A6:     x in support pfexp a by XBOOLE_0:def 1;
         reconsider x as prime Element of NAT by ORDINAL1:def 13;
         (pfexp a).x<>0 by A6,POLYNOM1:def 7;
         then x|-count a<>0 by NAT_3:def 8;
-        then x|-count a>0;
         then x|-count b>0 by A4;
         then (pfexp b).x<>0 by NAT_3:def 8;
         hence contradiction by A5,POLYNOM1:def 7;
@@ -980,7 +971,7 @@ A20: xcb<>0 by NAT_3:def 8;
 A21: b1,x are_relative_prime
     proof
       assume not b1,x are_relative_prime;
-      then b1 hcf x = x by PEPIN:2;
+      then b1 gcd x = x by PEPIN:2;
       then x divides b1 by NAT_D:def 5;
       then consider c be Nat such that
 A22:  b1=x*c by NAT_D:def 3;
@@ -1162,8 +1153,6 @@ A3: p is prime & p divides n;
   assume
 A4: not (p divides (a|^((n-'1) div q)-'1));
 A5: p > 1 & q > 1 by A1,A3,INT_2:def 5;
-  then
-A6: q|^n1 > 0;
 A8: n-1+1 > 0+1 by A1,XREAL_1:8;
   then
 A9: n-'1=n-1 by XREAL_1:235;
@@ -1188,9 +1177,8 @@ A15: order(a,p) divides k*q|^(n1-'1+1) by A1,A5,A9,A10,A12,PEPIN:52;
   a|^((n-'1) div q)>=1
   proof
     assume a|^((n-'1) div q)<1;
-    then a|^((n-'1) div q)=0 by NAT_1:14;
     then
-A16: a=0;
+A16: a=0 by NAT_1:14;
     n-'1 + 1 > 1 by A8,XREAL_1:235;
     then n-'1 >= 1 by NAT_1:13;
     then a|^(n-'1) mod n = 0*n mod n by A16,NEWTON:16
@@ -1199,7 +1187,7 @@ A16: a=0;
   end;
   then a|^((n-'1) div q)-'1=a|^((n-'1) div q)-1 by XREAL_1:235;
   then
-A17: not (a|^((n-'1) div q) mod p = 1) by A4,A5,PEPIN:8;
+A17: not (a|^((n-'1) div q) mod p = 1) by A4,A3,PEPIN:8;
   n1+1 > 0+1 by A1,XREAL_1:8;
   then n1>=1 by NAT_1:13;
   then
@@ -1207,32 +1195,31 @@ A18: n1-'1=n1-1 by XREAL_1:235;
   then (n-'1) div q = (q|^(n1-'1+1))*k div q by A1,A8,XREAL_1:235
     .=q*q|^(n1-'1)*k div q by NEWTON:11
     .=q*(q|^(n1-'1)*k) div q
-    .=k*q|^(n1-'1) by A5,NAT_D:18;
+    .=k*q|^(n1-'1) by A1,NAT_D:18;
   then
 A19: q|^n1 divides order(a,p) by A1,A5,A14,A15,A17,A18,Th17,PEPIN:53;
   p-'1=p-1 by A5,XREAL_1:235;
   then
 A20: p-'1+1=p;
-A21: 1<q|^n1 by A1,A5,PEPIN:26;
   order(a,p) divides p-'1 by A3,A12,A13,Th15,PEPIN:54;
   then q|^n1 divides p-'1 by A19,NAT_D:4;
-  then p-'1 mod q|^n1 = 0 by A6,PEPIN:6;
-  hence thesis by A20,A21,NAT_D:16;
+  then p-'1 mod q|^n1 = 0 by A1,PEPIN:6;
+  hence thesis by A20,A1,A5,PEPIN:26,NAT_D:16;
 end;
 
 theorem Th24:
-  for n,f,c being Element of NAT st n-1=f*c & f>c & c>0 & f hcf c = 1 &
+  for n,f,c being Element of NAT st n-1=f*c & f>c & c>0 & f gcd c = 1 &
   (for q being Element of NAT st q divides f & q is prime holds
   ex a being Element of NAT st a|^(n-'1) mod n = 1
-  & (a|^((n-'1) div q)-'1) hcf n = 1) holds n is prime
+  & (a|^((n-'1) div q)-'1) gcd n = 1) holds n is prime
 proof
   let n,f,c be Element of NAT;
   assume
-A1: n-1=f*c & f>c & c>0 & f hcf c = 1;
+A1: n-1=f*c & f>c & c>0 & f gcd c = 1;
   assume
 A2: for q being Element of NAT st q divides f & q is prime holds
   ex a being Element of NAT st a|^(n-'1) mod n = 1 &
-  (a|^((n-'1) div q)-'1) hcf n = 1;
+  (a|^((n-'1) div q)-'1) gcd n = 1;
   assume
 A3: not (n is prime);
   n-1+1>0+1 by A1,XREAL_1:8;
@@ -1248,7 +1235,7 @@ A6: q1 in support (pfexp f);
 A7: q1 |-count f > 0;
 A8: q1 is prime & q1 divides f by A6,NAT_3:34,36;
     then consider a be Element of NAT such that
-A9: a|^(n-'1) mod n = 1 & (a|^((n-'1) div q1)-'1) hcf n = 1 by A2;
+A9: a|^(n-'1) mod n = 1 & (a|^((n-'1) div q1)-'1) gcd n = 1 by A2;
     q1<>1 by A8,INT_2:def 5;
     then
 A10: q1|^(q1 |-count f) divides f by A1,NAT_3:def 7;
@@ -1261,7 +1248,6 @@ A12: n-1=k*q1|^n1 by A1,A11;
 A13: k>0
     proof
       assume k<=0;
-      then 0=d*c;
       then d=0 by A1;
       hence contradiction by A1,A11;
     end;
@@ -1269,7 +1255,7 @@ A14: q1 is prime by A6,NAT_3:34;
     not (p divides (a|^((n-'1) div q1)-'1))
     proof
       assume p divides (a|^((n-'1) div q1)-'1);
-      then p divides (n hcf (a|^((n-'1) div q1)-'1)) by A4,NEWTON:63;
+      then p divides (n gcd (a|^((n-'1) div q1)-'1)) by A4,NEWTON:63;
       hence contradiction by A4,A9,NAT_D:7;
     end;
     hence p mod q1|^n1 = 1 by A4,A7,A9,A12,A13,A14,Th23;
@@ -1288,9 +1274,7 @@ A18: q1 is prime;
     suppose
 A19:  q1 in support (pfexp f);
       then (pfexp f).q1<>0 by POLYNOM1:def 7;
-      then q1 |-count f<>0 by A18,NAT_3:def 8;
-      then
-  q1 |-count f>0;
+      then q1 |-count f>0 by A18,NAT_3:def 8;
       then
 A21:  p mod q1|^(q1 |-count f) = 1 by A5,A19;
 A22:  q1>1 by A18,INT_2:def 5;
@@ -1308,13 +1292,12 @@ A22:  q1>1 by A18,INT_2:def 5;
   then f<=(p-'1) by A16,NAT_D:7;
   then p-1+1>=f+1 by A17,XREAL_1:8;
   then p>f by NAT_1:13;
-  then p^2>f^2 by SQUARE_1:78;
   then
-A23: p^2>f*f by SQUARE_1:def 3;
+B23: p^2>f^2 by SQUARE_1:78;
   f>=c+1 by A1,NAT_1:13;
   then f*f>=f*(c+1) by XREAL_1:66;
   then
-A24: p^2>f+(n-1) by A1,A23,XXREAL_0:2;
+A24: p^2>f+(n-1) by A1,B23,XXREAL_0:2;
 A25: f>=c+1 by A1,NAT_1:13;
   c>=0+1 by A1,NAT_1:13;
   then c+1>=1+1 by XREAL_1:8;
@@ -1322,28 +1305,27 @@ A25: f>=c+1 by A1,NAT_1:13;
   then f-1>=2-1 by XREAL_1:11;
   then n+(f-1)>=n+1 by XREAL_1:8;
   then p^2>=n+1 by A24,XXREAL_0:2;
-  then p^2>n by NAT_1:13;
-  hence contradiction by A4,SQUARE_1:def 3;
+  hence contradiction by A4,NAT_1:13;
 end;
 
 theorem Th25:
   for n,f,d,n1,a,q being Element of NAT
-  st n-1=q|^n1*d & q|^n1>d & d>0 & q hcf d = 1
-  & q is prime & a|^(n-'1) mod n = 1 & (a|^((n-'1) div q)-'1) hcf n = 1
+  st n-1=q|^n1*d & q|^n1>d & d>0 & q gcd d = 1
+  & q is prime & a|^(n-'1) mod n = 1 & (a|^((n-'1) div q)-'1) gcd n = 1
   holds n is prime
 proof
   let n,f,d,n1,a,q be Element of NAT;
   assume
-A1: n-1=q|^n1*d & q|^n1>d & d>0 & q hcf d = 1 & q is prime;
+A1: n-1=q|^n1*d & q|^n1>d & d>0 & q gcd d = 1 & q is prime;
   assume
 A2: a|^(n-'1) mod n = 1;
   assume
-A3: (a|^((n-'1) div q)-'1) hcf n = 1;
+A3: (a|^((n-'1) div q)-'1) gcd n = 1;
   set f=q|^n1;
-A4: 1 = f hcf d by A1,Th10;
+A4: 1 = f gcd d by A1,Th10;
   for q1 being Element of NAT st q1 divides f & q1 is prime holds
   ex a being Element of NAT st a|^(n-'1) mod n = 1 &
-  (a|^((n-'1) div q1)-'1) hcf n = 1
+  (a|^((n-'1) div q1)-'1) gcd n = 1
   proof
     let q1 be Element of NAT;
     assume
@@ -1358,7 +1340,7 @@ A7: n1>0
       hence contradiction by A1,NAT_1:14;
     end;
     consider a be Element of NAT such that
-A8: a|^(n-'1) mod n = 1 & (a|^((n-'1) div q)-'1) hcf n = 1 by A2,A3;
+A8: a|^(n-'1) mod n = 1 & (a|^((n-'1) div q)-'1) gcd n = 1 by A2,A3;
     take a;
     thus thesis by A1,A5,A6,A7,A8,Th18;
   end;
@@ -1860,9 +1842,9 @@ theorem Th38:
 proof
 A1: 1259-1=37*34;
 A2: 37=37|^1 by NEWTON:10;
-A3: 37 hcf 34 = (34*1+3) hcf 34
-    .= 3 hcf (3*11+1) by EULER_1:9
-    .= 3 hcf 1 by EULER_1:9
+A3: 37 gcd 34 = (34*1+3) gcd 34
+    .= 3 gcd (3*11+1) by EULER_1:9
+    .= 3 gcd 1 by EULER_1:9
     .= 1 by NEWTON:64;
   2|^1=2 by NEWTON:10;
   then
@@ -1948,23 +1930,23 @@ A31: 2|^34 mod 1259 = 2|^(32+2) mod 1259
     .= (847*4) mod 1259 by A5,A11,EULER_2:11
     .= 870 by A30,NAT_D:def 2;
 A32: 2128=1259*1+869;
-  (2|^((1259-'1)div 37)-'1)hcf 1259
-  = (2|^34 -' 1) hcf 1259 by A26,A28,NAT_D:def 1
-    .= (2|^34-'1+1259*1) hcf 1259 by EULER_1:9
-    .= 1259 hcf ((2|^34+1258) mod 1259) by A29,NAT_D:28
-    .= 1259 hcf ((870+(1258 mod 1259)) mod 1259) by A31,EULER_2:8
-    .= 1259 hcf ((870+1258) mod 1259) by NAT_D:24
-    .= (869*1+390) hcf 869 by A32,NAT_D:def 2
-    .= 390 hcf (390*2+89) by EULER_1:9
-    .= (89*4+34) hcf 89 by EULER_1:9
-    .= 34 hcf (34*2+21) by EULER_1:9
-    .= (21*1+13) hcf 21 by EULER_1:9
-    .= 13 hcf (13*1+8) by EULER_1:9
-    .= (8*1+5) hcf 8 by EULER_1:9
-    .= 5 hcf (5*1+3) by EULER_1:9
-    .= (3*1+2) hcf 3 by EULER_1:9
-    .= 2 hcf (2*1+1) by EULER_1:9
-    .= 2 hcf 1 by EULER_1:9
+  (2|^((1259-'1)div 37)-'1)gcd 1259
+  = (2|^34 -' 1) gcd 1259 by A26,A28,NAT_D:def 1
+    .= (2|^34-'1+1259*1) gcd 1259 by EULER_1:9
+    .= 1259 gcd ((2|^34+1258) mod 1259) by A29,NAT_D:28
+    .= 1259 gcd ((870+(1258 mod 1259)) mod 1259) by A31,EULER_2:8
+    .= 1259 gcd ((870+1258) mod 1259) by NAT_D:24
+    .= (869*1+390) gcd 869 by A32,NAT_D:def 2
+    .= 390 gcd (390*2+89) by EULER_1:9
+    .= (89*4+34) gcd 89 by EULER_1:9
+    .= 34 gcd (34*2+21) by EULER_1:9
+    .= (21*1+13) gcd 21 by EULER_1:9
+    .= 13 gcd (13*1+8) by EULER_1:9
+    .= (8*1+5) gcd 8 by EULER_1:9
+    .= 5 gcd (5*1+3) by EULER_1:9
+    .= (3*1+2) gcd 3 by EULER_1:9
+    .= 2 gcd (2*1+1) by EULER_1:9
+    .= 2 gcd 1 by EULER_1:9
     .= 1 by NEWTON:64;
   hence thesis by A1,A2,A3,A27,Th25,Th31;
 end;
@@ -1974,12 +1956,12 @@ theorem Th39:
 proof
 A1: 2503-1=139*18;
 A2: 139=139|^1 by NEWTON:10;
-A3: 139 hcf 18 = (13+18*7) hcf 18
-    .= 13 hcf (13*1+5) by EULER_1:9
-    .= (3+2*5) hcf 5 by EULER_1:9
-    .= 3 hcf (2+3*1) by EULER_1:9
-    .= 1+2*1 hcf 2 by EULER_1:9
-    .= 1 hcf 2 by EULER_1:9
+A3: 139 gcd 18 = (13+18*7) gcd 18
+    .= 13 gcd (13*1+5) by EULER_1:9
+    .= (3+2*5) gcd 5 by EULER_1:9
+    .= 3 gcd (2+3*1) by EULER_1:9
+    .= 1+2*1 gcd 2 by EULER_1:9
+    .= 1 gcd 2 by EULER_1:9
     .= 1 by NEWTON:64;
   2|^1=2 by NEWTON:10;
   then
@@ -2070,25 +2052,25 @@ A32: 2|^18 mod 2503 = 2|^(16+2) mod 2503
     .= (458*4) mod 2503 by A5,A9,EULER_2:11
     .= 1832 by NAT_D:24;
 A33: 4334=2503*1+1831;
-  (2|^((2503-'1)div 139)-'1)hcf 2503 = (2|^18 -' 1) hcf 2503
+  (2|^((2503-'1)div 139)-'1)gcd 2503 = (2|^18 -' 1) gcd 2503
   by A28,A30,NAT_D:def 1
-    .= (2|^18-'1+2503*1) hcf 2503 by EULER_1:9
-    .= 2503 hcf ((2|^18+2502) mod 2503) by A31,NAT_D:28
-    .= 2503 hcf ((1832+(2502 mod 2503)) mod 2503) by A32,EULER_2:8
-    .= 2503 hcf ((1832+2502) mod 2503) by NAT_D:24
-    .= (1831*1+672) hcf 1831 by A33,NAT_D:def 2
-    .= 672 hcf (672*2+487) by EULER_1:9
-    .= (487*1+185) hcf 487 by EULER_1:9
-    .= 185 hcf (185*2+117) by EULER_1:9
-    .= (117*1+68) hcf 117 by EULER_1:9
-    .= 68 hcf (68*1+49) by EULER_1:9
-    .= (49*1+19) hcf 49 by EULER_1:9
-    .= 19 hcf (19*2+11) by EULER_1:9
-    .= (11*1+8) hcf 11 by EULER_1:9
-    .= 8 hcf (8*1+3) by EULER_1:9
-    .= (3*2+2) hcf 3 by EULER_1:9
-    .= 2 hcf (2*1+1) by EULER_1:9
-    .= 2 hcf 1 by EULER_1:9
+    .= (2|^18-'1+2503*1) gcd 2503 by EULER_1:9
+    .= 2503 gcd ((2|^18+2502) mod 2503) by A31,NAT_D:28
+    .= 2503 gcd ((1832+(2502 mod 2503)) mod 2503) by A32,EULER_2:8
+    .= 2503 gcd ((1832+2502) mod 2503) by NAT_D:24
+    .= (1831*1+672) gcd 1831 by A33,NAT_D:def 2
+    .= 672 gcd (672*2+487) by EULER_1:9
+    .= (487*1+185) gcd 487 by EULER_1:9
+    .= 185 gcd (185*2+117) by EULER_1:9
+    .= (117*1+68) gcd 117 by EULER_1:9
+    .= 68 gcd (68*1+49) by EULER_1:9
+    .= (49*1+19) gcd 49 by EULER_1:9
+    .= 19 gcd (19*2+11) by EULER_1:9
+    .= (11*1+8) gcd 11 by EULER_1:9
+    .= 8 gcd (8*1+3) by EULER_1:9
+    .= (3*2+2) gcd 3 by EULER_1:9
+    .= 2 gcd (2*1+1) by EULER_1:9
+    .= 2 gcd 1 by EULER_1:9
     .= 1 by NEWTON:64;
   hence thesis by A1,A2,A3,A29,Th25,Th34;
 end;
@@ -2101,9 +2083,9 @@ A2: 5*5*5=5|^1*5*5 by NEWTON:10
     .=5|^(1+1)*5 by NEWTON:11
     .=5|^(1+1+1) by NEWTON:11
     .=5|^3;
-A3: 5 hcf 32 = (2 + 5*6) hcf 5
-    .= (1+ 2*2) hcf 2 by EULER_1:9
-    .= 1 hcf 2 by EULER_1:9
+A3: 5 gcd 32 = (2 + 5*6) gcd 5
+    .= (1+ 2*2) gcd 2 by EULER_1:9
+    .= 1 gcd 2 by EULER_1:9
     .= 1 by NEWTON:64;
   2|^1=2 by NEWTON:10;
   then
@@ -2200,24 +2182,24 @@ A35: 2|^800 mod 4001 = 2|^(512+288) mod 4001
     .= 3906*1913 mod 4001 by A33,NAT_D:def 2
     .= 2311 by A34,NAT_D:def 2;
 A36: 6311=4001*1+2310;
-  (2|^((4001-'1) div 5)-'1) hcf 4001 = (2|^800 -' 1) hcf 4001
+  (2|^((4001-'1) div 5)-'1) gcd 4001 = (2|^800 -' 1) gcd 4001
   by A29,A31,NAT_D:def 1
-    .= (2|^800-'1+4001*1) hcf 4001 by EULER_1:9
-    .= 4001 hcf ((2|^800+4000) mod 4001) by A32,NAT_D:28
-    .= 4001 hcf ((2311+(4000 mod 4001)) mod 4001) by A35,EULER_2:8
-    .= 4001 hcf ((2311+4000) mod 4001) by NAT_D:24
-    .= 2310*1+1691 hcf 2310 by A36,NAT_D:def 2
-    .= 1691 hcf (1691*1+619) by EULER_1:9
-    .= (619*2+453) hcf 619 by EULER_1:9
-    .= (453*1+166) hcf 453 by EULER_1:9
-    .= 166 hcf (166*2+121) by EULER_1:9
-    .= (121*1+45) hcf 121 by EULER_1:9
-    .= 45 hcf (45*2+31) by EULER_1:9
-    .= (31*1+14) hcf 31 by EULER_1:9
-    .= 14 hcf (14*2+3) by EULER_1:9
-    .= (3*4+2) hcf 3 by EULER_1:9
-    .= 2 hcf (2*1+1) by EULER_1:9
-    .= 2 hcf 1 by EULER_1:9
+    .= (2|^800-'1+4001*1) gcd 4001 by EULER_1:9
+    .= 4001 gcd ((2|^800+4000) mod 4001) by A32,NAT_D:28
+    .= 4001 gcd ((2311+(4000 mod 4001)) mod 4001) by A35,EULER_2:8
+    .= 4001 gcd ((2311+4000) mod 4001) by NAT_D:24
+    .= 2310*1+1691 gcd 2310 by A36,NAT_D:def 2
+    .= 1691 gcd (1691*1+619) by EULER_1:9
+    .= (619*2+453) gcd 619 by EULER_1:9
+    .= (453*1+166) gcd 453 by EULER_1:9
+    .= 166 gcd (166*2+121) by EULER_1:9
+    .= (121*1+45) gcd 121 by EULER_1:9
+    .= 45 gcd (45*2+31) by EULER_1:9
+    .= (31*1+14) gcd 31 by EULER_1:9
+    .= 14 gcd (14*2+3) by EULER_1:9
+    .= (3*4+2) gcd 3 by EULER_1:9
+    .= 2 gcd (2*1+1) by EULER_1:9
+    .= 2 gcd 1 by EULER_1:9
     .= 1 by NEWTON:64;
   hence thesis by A1,A2,A3,A30,Th25,PEPIN:64;
 end;
@@ -2455,7 +2437,6 @@ A16:    x in A by A7;
         reconsider r as Element of NAT by A5,A16;
 A17:    r <= m by A7,A15,XXREAL_2:def 8;
         not r=0 by A5,A7,A15;
-        then 0 < r;
         then 0+1 < r+1 by XREAL_1:8;
         then 1 <= r by NAT_1:13;
         hence x in Seg m by A17,FINSEQ_1:3;
@@ -2463,7 +2444,6 @@ A17:    r <= m by A7,A15,XXREAL_2:def 8;
       then
 A18:  X12 c= Seg m by TARSKI:def 3;
 A19:  not m=0 by A5,XXREAL_2:def 8;
-      then 0 < m;
       then 0+1 < m+1 by XREAL_1:8;
       then
 A20:  1 <= m by NAT_1:13;
@@ -2504,7 +2484,6 @@ A29:      x in A by A5;
           reconsider r as Element of NAT by A5,A29;
 A30:      r <= m by A5,A28,XXREAL_2:def 8;
           not r=0 by A5,A28;
-          then 0 < r;
           then 0+1 < r+1 by XREAL_1:8;
           then 1 <= r by NAT_1:13;
           hence x in Seg m by A30,FINSEQ_1:3;
@@ -2910,12 +2889,11 @@ A36:        b = (2*k+1)!/((k!)*(r!)) by NEWTON:def 3;
 A37:        a is non empty Nat by A29,Th42;
 A38:        b>0
             proof
-              assume b<=0;
-              then
-A39:          b=0;
+              assume
+B39:            b<=0;
 A40:          (k!)*(r!)<>0 by NEWTON:25;
               (2*k+1)!<>0 by NEWTON:23;
-              hence contradiction by A36,A39,A40;
+              hence contradiction by A36,B39,A40;
             end;
             for p being Element of NAT st p is prime
             holds p |-count a <= p |-count b
@@ -2981,7 +2959,6 @@ A50:                p divides k!;
                   end;
                 end;
                 then p |-count b <> 0 by A47,NAT_3:27;
-                then 0 < p |-count b;
                 then 0+1 < p |-count b +1 by XREAL_1:8;
                 then 1 <= p |-count b by NAT_1:13;
                 hence thesis by A14,A41,A45,A46,Th44;
@@ -3303,9 +3280,7 @@ A10: n < p |-count n;
     p<>1 by INT_2:def 5;
     then
 A11: p|^(p |-count n) divides n by A1,NAT_3:def 7;
-    0<n by A1;
-    then
-A12: p |^ (p |-count n) <= n by A11,NAT_D:7;
+A12: p |^ (p |-count n) <= n by A11,NAT_D:7,A1;
 A13: p>1 by INT_2:def 5;
     then p to_power n < p to_power (p |-count n) by A10,POWER:44;
     then p |^ n < p to_power (p |-count n) by POWER:46;
@@ -3500,9 +3475,7 @@ A24:      n+1=(p|^k)*r by NAT_D:def 3;
 A25:      (n+1)/(p|^k) = r/((p|^k)/(p|^k)) by A24,XCMPLX_1:78
             .= r/(1/1) by XCMPLX_1:60
             .= r;
-          p|^k-1>=1-1 by A21,XREAL_1:11;
-          then
-A26:      0/(p|^k)<=(p|^k-1)/(p|^k);
+B26:      p|^k-1>=1-1 by A21,XREAL_1:11;
           ((p|^k)/(p|^k))+((-1)/(p|^k))-1<0 by A22;
           then
 A27:      (p|^k+(-1))/(p|^k)-1<0 by XCMPLX_1:63;
@@ -3512,7 +3485,7 @@ A27:      (p|^k+(-1))/(p|^k)-1<0 by XCMPLX_1:63;
             .=[\ ((n+1)+(p|^k -1))/(p|^k) /]
             .=[\ (n+1)/(p|^k) + (p|^k-1)/(p|^k) /] by XCMPLX_1:63
             .=(n+1)/(p|^k) + [\ (p|^k-1)/(p|^k) /] by A25,INT_1:51
-            .=(n+1)/(p|^k) + 0 by A26,A27,INT_1:def 4
+            .=(n+1)/(p|^k) + 0 by B26,A27,INT_1:def 4
             .=[\ (n+1)/(p|^k) /] by A25,INT_1:47;
           hence f.k=[\ (n+1)/(p|^k) /] by A5,A11,A12,A13,A23;
         end;
@@ -3524,12 +3497,10 @@ A29:      fn1.k=0 by A5,A12;
           set m=(n+1) mod (p|^k);
 A30:      n+1 = (p|^k) * d + m by NAT_D:2;
           then not m=0 by A28,NAT_D:def 3;
-          then m>0;
           then m+1>0+1 by XREAL_1:8;
           then m>=1 by NAT_1:13;
-          then m-1>=1-1 by XREAL_1:11;
           then
-A31:      0/(p|^k)<=(m-1)/(p|^k);
+B31:       m-1>=1-1 by XREAL_1:11;
 A32:      m<p|^k by NAT_D:1;
           0+p|^k<1+p|^k by XREAL_1:8;
           then m<p|^k+1 by A32,XXREAL_0:2;
@@ -3546,7 +3517,7 @@ A34:      m/(p|^k)-1<1-1 by A22,XREAL_1:11;
             .= [\ d*((p|^k)/(p|^k)) + (m-1)/(p|^k) /] by XCMPLX_1:75
             .= [\ d*1 + (m-1)/(p|^k) /] by XCMPLX_1:60
             .= d + [\ (m-1)/(p|^k) /] by INT_1:51
-            .= d + 0 by A31,A33,INT_1:def 4
+            .= d + 0 by B31,A33,INT_1:def 4
             .= d + [\ m/(p|^k) /] by A34,INT_1:def 4
             .= [\ d*1 + m/(p|^k) /] by INT_1:51
             .= [\ d*((p|^k)/(p|^k)) + m/(p|^k) /] by XCMPLX_1:60
@@ -3652,7 +3623,6 @@ A20:  (f1^f0).k = f0.e by A14,FINSEQ_1:def 7
         hence f.k=[\(2*n)/(p|^k)/]- 2*[\n/(p|^k)/] by A12,A20,INT_1:47;
       end;
       suppose n<>0;
-        then n>0;
         then
 A21:    n/(p|^n)>n/(p|^k) by A19,XREAL_1:78;
         (p|^n)/(p|^n)>n/(p|^n) by A18,Th3,XREAL_1:76;
@@ -3677,8 +3647,6 @@ A23:  p |-count (2*n choose n) = 0 by A22,NAT_3:21,NEWTON:27;
     suppose
 A24:  n<>0;
 A25:  n!<>0 by NEWTON:23;
-      then
-A26:  (n!)*(n!)<>0;
 A27:  n+n>n+0 & 2*n-n=n by A24,XREAL_1:8;
       then
 A28:  2*n choose n = ((2*n)!)/((n!)*(n!)) by NEWTON:def 3;
@@ -3694,9 +3662,9 @@ A30:  2*n choose n = ((n!) * (n!)) * (((2*n)!) div ((n!) * (n!)))
 A31:  (2*n)!<>0 by NEWTON:23;
       then
 A32:  p |-count (((2*n)!) div ((n!)*(n!))) =
-      p |-count ((2*n)!) -' p |-count ((n!)*(n!)) by A26,A29,NAT_3:31
+      p |-count ((2*n)!) -' p |-count ((n!)*(n!)) by A25,A29,NAT_3:31
         .= p |-count ((2*n)!) - p |-count ((n!)*(n!))
-         by A26,A29,A31,NAT_3:30,XREAL_1:235;
+         by A25,A29,A31,NAT_3:30,XREAL_1:235;
 A33:  len((-(f1^f0))+(-(f1^f0)))=len f2 by A4,A8,FINSEQ_1:def 3;
 A34:  f2 is Element of len(f2)-tuples_on REAL by FINSEQ_2:110;
 A35:  ((-(f1^f0))+(-(f1^f0))) is Element
@@ -3857,8 +3825,7 @@ A8: n>=2 by A1,XXREAL_0:2;
     then
 A9: p|^r <= 2*n by NEWTON:9;
     p|^(r+1)>2*n by A7,NEWTON:10;
-    then p |-count (2*n choose n) <= r by A2,A8,A9;
-    hence p |-count (2*n choose n) = 0;
+    hence p |-count (2*n choose n) = 0 by A2,A8,A9;
   end;
   thus (n<p & p<=2*n implies p |-count (2*n choose n) <= 1)
   proof
@@ -3997,13 +3964,11 @@ A42: (1/3)*(2*n) <= 1*(2*n) by XREAL_1:66;
     p|^r <= 2*n/3 by A40,NEWTON:10;
     then
 A43: p|^r <= 2*n by A42,XXREAL_0:2;
-    n*2>=2*2 by A41,XREAL_1:66;
-    then sqrt(2*n)>0 by SQUARE_1:93;
+    sqrt(2*n)>0 by SQUARE_1:93,A1;
     then
 A44: sqrt(2*n)*sqrt(2*n)<p*sqrt(2*n) by A39,XREAL_1:70;
     sqrt(2*n)*p<p*p by A39,XREAL_1:70;
-    then sqrt(2*n)*sqrt(2*n)<p*p by A44,XXREAL_0:2;
-    then (sqrt(2*n))^2<p*p by SQUARE_1:def 3;
+    then (sqrt(2*n))^2<p*p by A44,XXREAL_0:2;
     then 2*n<p*p by SQUARE_1:def 4;
     then 2*n<p|^1 * p by NEWTON:10;
     then 2*n<p|^(1+1) by NEWTON:11;
@@ -4018,8 +3983,7 @@ A47: p*p>1*p by XREAL_1:70;
 A48: r <= log(p,2*n) & log(p,2*n) - 1 < r by INT_1:def 4;
 A49: sqrt(2*n)*p >= p*p by A45,XREAL_1:66;
   sqrt(2*n)*sqrt(2*n) >= p*sqrt(2*n) by A45,XREAL_1:66;
-  then sqrt(2*n)*sqrt(2*n) >= p*p by A49,XXREAL_0:2;
-  then (sqrt(2*n))^2 >= p*p by SQUARE_1:def 3;
+  then (sqrt(2*n))^2 >= p*p by A49,XXREAL_0:2;
   then
 A50: 2*n>=p*p by SQUARE_1:def 4;
   then 2*n>p by A47,XXREAL_0:2;
@@ -4316,7 +4280,7 @@ A18:  r1>0 by A6,FINSEQ_1:59;
       r1 <= f2.k1 by A6,A17,FINSEQ_1:59;
       then
 A19:  r1 <= r2 by A7,A8,A9,FINSEQ_1:59;
-A20:  (Product g1) * r1 <= (Product g2) * r1 by A14,A18,XREAL_1:66;
+A20:  (Product g1) * r1 <= (Product g2) * r1 by A10,A3,A8,A9,A18,XREAL_1:66;
       for k being Element of NAT st k in dom g1 holds g1.k > 0 by A10;
       then Product g2 > 0 by A14,Th42;
       then r1 * (Product g2) <= r2 * (Product g2) by A19,XREAL_1:66;
@@ -4691,11 +4655,9 @@ proof
 A1: m = 2*n choose n;
   assume
 A2: n >= 3;
-  then
-A3: 2*n >= 3*2 by XREAL_1:66;
   m * (2*n) >= 4|^n / (2*n) * (2*n) by A1,Th6,XREAL_1:66;
   then
-A4: m<>0 by A3;
+A4: m<>0 by A2;
   defpred P1[Element of NAT,Element of NAT,Prime] means
   $3<=sqrt(2*$1) & $3 |-count $2>0;
   set X1 = {p|^(p |-count m) where p is prime Element of NAT: P1[n,m,p]};
@@ -4730,9 +4692,6 @@ A10: Product f3 > 0 by A4;
   set n1=Product f1;
   set n2=Product f2;
   set n3=Product f3;
-  Product f1 * Product f2 <> 0 by A6,A8;
-  then
-A11: k<>0 by A10;
 A12: for p being Prime, n being Element of NAT,
   m being non empty Element of NAT, X being set
   st X = {p'|^(p' |-count m) where p' is prime Element of NAT: P1[n,m,p']}
@@ -4773,8 +4732,7 @@ A21: sqrt 2 < sqrt n by A20,XXREAL_0:2;
     sqrt n > 0 by A2,SQUARE_1:93;
     then (sqrt 2)*(sqrt n) < (sqrt n)*(sqrt n) by A21,XREAL_1:70;
     then sqrt(2*n) < (sqrt n)*(sqrt n) by SQUARE_1:97;
-    then sqrt(2*n) < sqrt(n*n) by SQUARE_1:97;
-    then sqrt(2*n) < sqrt(n^2) by SQUARE_1:def 3;
+    then sqrt(2*n) < sqrt(n^2) by SQUARE_1:97;
     hence contradiction by A19,SQUARE_1:def 4;
   end;
 A22: now
@@ -5008,7 +4966,7 @@ A55:  p |-count n1 = p |-count m by A38,A42;
       hence thesis by A38,A42,A43,A54,A55;
     end;
   end;
-  hence thesis by A4,A11,Th21;
+  hence thesis by A4,A10,A6,A8,Th21;
 end;
 
 scheme scheme4 { A(set,set) -> set, P[set,set] } :
@@ -5155,11 +5113,9 @@ proof
 A1: m = 2*n choose n;
   assume
 A2: n>=3;
-  then
-A3: 2*n >= 3*2 by XREAL_1:66;
   m * (2*n) >= 4|^n / (2*n) * (2*n) by A1,Th6,XREAL_1:66;
   then
-A4: m<>0 by A3;
+A4: m<>0 by A2;
   set X = {p|^(p |-count m) where
   p is prime Element of NAT: p<=sqrt(2*n) & p |-count m>0};
   set f1 = Sgm X;
@@ -5195,7 +5151,7 @@ A11: rng f2 c= REAL;
   reconsider f2 as FinSequence of REAL by A11,FINSEQ_1:def 4;
   Product f1 <= Product f2 by A5,A7,Th54;
   then
-A12: Product f1 <= (2*n) to_power len(f1) by A3,Th55;
+A12: Product f1 <= (2*n) to_power len(f1) by A2,Th55;
   n*2 >= 3*2 by A2,XREAL_1:66;
   then
 A13: 2*n > 1 by XXREAL_0:2;
@@ -5235,8 +5191,6 @@ A2: n>=4000;
 A3: not ex p being Prime st n<p & p<=2*n;
     set m = 2*n choose n;
 A4: n>=3 by A2,XXREAL_0:2;
-    then
-A5: 2*n >= 3*2 by XREAL_1:66;
     set X1={p|^(p |-count m) where p is prime Element of NAT: p<=sqrt(2*n) &
     p |-count m>0};
     set X2={p|^(p |-count m) where p is prime Element of NAT:
@@ -5305,7 +5259,7 @@ A16: m <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1))
     then
 A17: 4|^n / (2*n) <= ((2*n) to_power sqrt(2*n))*(4 to_power ((2*n/3)-1 ))
     by A16,XXREAL_0:2;
-A18: (2*n) to_power sqrt(2*n)>0 by A5,POWER:39;
+A18: (2*n) to_power sqrt(2*n)>0 by A2,POWER:39;
 A19: 4|^n = 4 to_power (3*n/3) by POWER:46;
 A20: 4 to_power (2*n/3)>0 by POWER:39;
 A21: 4 to_power (n/3)>0 by POWER:39;
@@ -5318,7 +5272,7 @@ A21: 4 to_power (n/3)>0 by POWER:39;
     then 4|^n/(2*n)*(2*n)<=((2*n) to_power sqrt(2*n))*(4 to_power (2*n/3))*(2*
     n) by XREAL_1:66;
     then 4|^n<=((2*n) to_power sqrt(2*n))*(2*n)*(4 to_power (2*n/3))
-    by A5,XCMPLX_1:88;
+    by A2,XCMPLX_1:88;
     then (4 to_power (3*n/3))/(4 to_power (2*n/3)) <=
     (((2*n) to_power sqrt(2*n))*(2*n))*
     (4 to_power (2*n/3))/(4 to_power (2*n/3)) by A19,A20,XREAL_1:74;
@@ -5328,7 +5282,8 @@ A21: 4 to_power (n/3)>0 by POWER:39;
     by POWER:34;
     then 4 to_power (n/3) <= ((2*n) to_power sqrt(2*n))*((2*n) to_power 1)
     by POWER:30;
-    then 4 to_power (n/3) <= (2*n) to_power (sqrt(2*n)+1) by A5,POWER:32;
+    then 4 to_power (n/3) <= (2*n) to_power (sqrt(2*n)+1)
+     by A2,POWER:32;
     then 4 to_power (n/3) < (2*n) to_power (sqrt(2*n)+1) or
     4 to_power (n/3) = (2*n) to_power (sqrt(2*n)+1) by XXREAL_0:1;
     then (4 to_power (n/3)) to_power 3 <=
@@ -5336,12 +5291,12 @@ A21: 4 to_power (n/3)>0 by POWER:39;
     then 4 to_power ((n/3)*3) <= ((2*n) to_power (sqrt(2*n)+1)) to_power 3
     by POWER:38;
     then
-A22: 4 to_power n <= (2*n) to_power ((sqrt(2*n)+1)*3) by A5,POWER:38;
+A22: 4 to_power n <= (2*n) to_power ((sqrt(2*n)+1)*3) by A2,POWER:38;
     set n1=[\ 6-root(2*n) /];
     6-root(2*n) -1 < n1 by INT_1:def 4;
     then
 A23: 6-root(2*n) -1 +1 < n1 +1 by XREAL_1:8;
-    6-root(2*n) > 6-root 0 by A5,POWER:18;
+    6-root(2*n) > 6-root 0 by A2,POWER:18;
     then
 A24: 6-root(2*n) > 0 by POWER:6;
     then reconsider n1 as Element of NAT by INT_1:80;
@@ -5356,8 +5311,7 @@ A25: n1+1 <= 2 to_power n1 by POWER:46;
     by XXREAL_0:1;
     then
 A26: (n1+1) to_power 6 <= (2 to_power (6-root(2*n))) to_power 6 by POWER:42;
-    sqrt(2*n)>0 by A5,SQUARE_1:93;
-    then sqrt(2*n)+1>0+1 by XREAL_1:8;
+    sqrt(2*n)>0 by A2,SQUARE_1:93;
     then
 A27: (sqrt(2*n)+1)*3>0*3;
     reconsider 2n=2*n as real number;
@@ -5368,14 +5322,13 @@ A28: 6-root(2*n) to_power 6 = 6-root(2n) |^ 6 by POWER:46
     then 2*n < 2 to_power ((6-root(2*n))*6) by POWER:38;
     then (2*n) to_power ((sqrt(2*n)+1)*3) <
     (2 to_power ((6-root(2*n))*6)) to_power ((sqrt(2*n)+1)*3)
-    by A5,A27,POWER:42;
+     by A2,A27,POWER:42;
     then 4 to_power n < (2 to_power ((6-root(2*n))*6))
     to_power ((sqrt(2*n)+1)*3) by A22,XXREAL_0:2;
     then
 A29: 4 to_power n < 2 to_power (((6-root(2*n))*6)*((sqrt(2*n)+1)*3))
     by POWER:38;
-    81=9*9;
-    then 81=9^2 by SQUARE_1:def 3;
+    81=9^2;
     then
 A30: sqrt 81 = 9 by SQUARE_1:89;
     42 < n by A2,XXREAL_0:2;
@@ -5388,9 +5341,9 @@ A30: sqrt 81 = 9 by SQUARE_1:89;
 A31: (18 + 18*sqrt(2*n))*(6-root(2*n)) <
     20*sqrt(2*n)*(6-root(2*n)) by A24,XREAL_1:70;
 A32: 2 to_power (2*n)>0 by POWER:39;
-A33: (2*n) to_power (2/3)>0 by A5,POWER:39;
-A34: (2*n) to_power (2/3)<>0 by A5,POWER:39;
-A35: (2*n) to_power (1/3)>0 by A5,POWER:39;
+A33: (2*n) to_power (2/3)>0 by A2,POWER:39;
+A34: (2*n) to_power (2/3)<>0 by A2,POWER:39;
+A35: (2*n) to_power (1/3)>0 by A2,POWER:39;
     2 to_power 2 = 2|^2 by POWER:46
       .= Product <* 2, 2 *> by FINSEQ_2:75
       .= 2*2 by RVSUM_1:129;
@@ -5409,14 +5362,14 @@ A35: (2*n) to_power (1/3)>0 by A5,POWER:39;
     then 2*n < 20*((2-root(2*n))*(6-root(2*n))) by POWER:def 1;
     then 2*n < 20*(((2*n) to_power (1/2))*(6-root(2*n))) by POWER:52;
     then 2*n < 20*(((2*n) to_power (1/2))*((2*n) to_power (1/6))) by POWER:52;
-    then 2*n < 20*((2*n) to_power (1/2+1/6)) by A5,POWER:32;
+    then 2*n < 20*((2*n) to_power (1/2+1/6)) by A2,POWER:32;
     then (2*n)/((2*n) to_power (2/3)) <
     20*((2*n) to_power (2/3))/((2*n) to_power (2/3)) by A33,XREAL_1:76;
     then (2*n)/((2*n) to_power (2/3)) < 20 by A34,XCMPLX_1:90;
     then ((2*n) to_power 1)/((2*n) to_power (2/3)) < 20 by POWER:30;
-    then ((2*n) to_power (1-(2/3))) < 20 by A5,POWER:34;
+    then ((2*n) to_power (1-(2/3))) < 20 by A2,POWER:34;
     then ((2*n) to_power (1/3)) to_power 3 < 20 to_power 3 by A35,POWER:42;
-    then ((2*n) to_power ((1/3)*3)) < 20 to_power 3 by A5,POWER:38;
+    then ((2*n) to_power ((1/3)*3)) < 20 to_power 3 by A2,POWER:38;
     then 2*n < 20 to_power (2+1) by POWER:30;
     then 2*n < (20 to_power 2)*(20 to_power 1) by POWER:32;
     then 2*n < (20 to_power (1+1))*20 by POWER:30;

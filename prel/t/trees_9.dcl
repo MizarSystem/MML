@@ -77,25 +77,6 @@
 <RCluster aid="TREES_9" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-</ArgTypes>
-<Typ kind="M" nr="7">
-<Cluster/>
-<LocusVar nr="1"/>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="4"/>
-<Adjective nr="5"/>
-<Adjective nr="14"/>
-<Adjective nr="20"/>
-<Adjective nr="25"/>
-</Cluster>
-</RCluster>
-<RCluster aid="TREES_9" nr="6">
-<ArgTypes>
-<Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="14" value="false"/>
 <Adjective nr="28"/>

@@ -180,7 +180,7 @@ proof
     given x such that
 A1: x in union {};
     ex X being set st x in X & X in {} by A1,TARSKI:def 4;
-    hence contradiction by XBOOLE_0:def 1;
+    hence contradiction;
   end;
   hence thesis by XBOOLE_0:7;
 end;
@@ -274,7 +274,7 @@ A1: {x} /\ X = {} and
 A2: x in X;
   x in {x} by TARSKI:def 1;
   then x in {x} /\ X by A2,XBOOLE_0:def 4;
-  hence contradiction by A1,XBOOLE_0:def 1;
+  hence contradiction by A1;
 end;
 
 canceled;
@@ -801,7 +801,7 @@ A1: {x,y} /\ Z = {} and
 A2: x in Z;
   x in {x,y} & y in {x,y} by TARSKI:def 2;
   then x in {x,y} /\ Z or y in {x,y} /\ Z by A2,XBOOLE_0:def 4;
-  hence contradiction by A1,XBOOLE_0:def 1;
+  hence contradiction by A1;
 end;
 
 theorem
@@ -1097,7 +1097,7 @@ A2: Y in A /\ B by TARSKI:def 4;
   hence thesis by XBOOLE_0:def 4;
 end;
 
-theorem
+theorem Th98:
   (for X st X in A holds X misses B) implies union A misses B
 proof
   assume
@@ -1314,7 +1314,7 @@ A2: x in X by XBOOLE_0:7;
     then consider y being set such that
 A3: y in Y by XBOOLE_0:7;
     [x,y] in [:X,Y:] by A2,A3,Def2;
-    hence contradiction by A1,XBOOLE_0:def 1;
+    hence contradiction by A1;
   end;
   assume
 A4: not thesis;
@@ -1324,13 +1324,13 @@ A6: now
     assume
 A7: X={};
     ex x,y st x in X & y in Y & [x,y]=z by A5,Def2;
-    hence contradiction by A7,XBOOLE_0:def 1;
+    hence contradiction by A7;
   end;
   now
     assume
 A8: Y={};
     ex x,y st x in X & y in Y & [x,y]=z by A5,Def2;
-    hence contradiction by A8,XBOOLE_0:def 1;
+    hence contradiction by A8;
   end;
   hence contradiction by A4,A6;
 end;
@@ -1703,7 +1703,7 @@ proof
   then consider y being set such that
 A1: y in X by XBOOLE_0:7;
   [x,y] in [:{x},X:] & [y,x] in [:X,{x}:] by A1,Th128,Th129;
-  hence thesis by XBOOLE_0:def 1;
+  hence thesis;
 end;
 
 theorem
@@ -1816,7 +1816,7 @@ A15: X c= [:Y,X:];
     defpred P[set] means ex Y st $1=Y & ex z st z in Y & z in X;
     consider Z such that
 A16: for y holds y in Z iff y in union X & P[y] from XBOOLE_0:sch 1;
-    X \/ Z <> {} by A2,XBOOLE_1:15;
+    X \/ Z <> {} by A2;
     then consider x being set such that
 A17: x in X \/ Z by XBOOLE_0:7;
     consider Y2 such that
@@ -2190,8 +2190,8 @@ registration
    assume
 Z:  X is empty;
    let x,y;
-    X = {} by Z,XBOOLE_0:def 2;
-   hence thesis by XBOOLE_0:def 1;
+    X = {} by Z;
+   hence thesis;
   end;
 end;
 
@@ -2205,3 +2205,73 @@ registration let x be set;
    hence thesis;
   end;
 end;
+
+:: from SPRECT_3, 2008.09.30, A.T.
+
+theorem
+  for A,B,C,p being set st A c= B & B /\ C = {p} & p in A holds A /\ C = {p}
+proof
+  let A,B,C,p be set such that
+A1: A c= B;
+  assume
+A2: B /\ C = {p};
+  then p in B /\ C by TARSKI:def 1;
+  then
+A3: p in C by XBOOLE_0:def 4;
+  assume p in A;
+  then
+A4: p in A /\ C by A3,XBOOLE_0:def 4;
+  A /\ C c= { p } by A1,A2,XBOOLE_1:26;
+  hence A /\ C = {p} by A4,Lm3;
+end;
+
+:: from SPRECT_2, 2008.09.30, A.T.
+
+theorem
+  for A,B,C,p being set st A /\ B c= {p} & p in C & C misses B
+  holds A \/ C misses B
+proof
+  let A,B,C,p be set such that
+A1: A /\ B c= {p} and
+A2: p in C and
+A3: C misses B;
+  {p} c= C by A2,Lm1;
+  then A /\ B c= C by A1,XBOOLE_1:1;
+  then A /\ B /\ B c= C /\ B by XBOOLE_1:27;
+  then
+A4: A /\ (B /\ B) c= C /\ B by XBOOLE_1:16;
+  (A \/ C) /\ B = A /\ B \/ C /\ B by XBOOLE_1:23
+    .= C /\ B by A4,XBOOLE_1:12
+    .= {} by A3,XBOOLE_0:def 7;
+  hence A \/ C misses B by XBOOLE_0:def 7;
+end;
+
+theorem
+  for A,B,C,p being set st A /\ C = {p} & p in B & B c= C holds A /\ B = {p}
+proof
+  let A,B,C,p be set such that
+A1: A /\ C = {p} and
+A2: p in B and
+A3: B c= C;
+A4: {p} c= B by A2,Lm1;
+  thus A /\ B = A /\ (C /\ B) by A3,XBOOLE_1:28
+    .= {p} /\ B by A1,XBOOLE_1:16
+    .= {p} by A4,XBOOLE_1:28;
+end;
+
+theorem
+  for A,B being set st for x,y being set st x in A & y in B holds x misses y
+  holds union A misses union B
+proof
+  let A,B be set such that
+A1: for x,y being set st x in A & y in B holds x misses y;
+  for y being set st y in B holds union A misses y
+  proof
+    let y be set;
+    assume y in B;
+    then for x being set st x in A holds x misses y by A1;
+    hence union A misses y by Th98;
+  end;
+  hence union A misses union B by Th98;
+end;
+

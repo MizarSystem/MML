@@ -9,25 +9,26 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, WELLORD2, NUMBERS,
-      XCMPLX_0, XXREAL_0, NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, RELAT_1, FUNCT_1,
-      RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_1,
-      FINSEQ_2, FUNCT_4, RFINSEQ, NAT_D, REWRITE1;
+      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1, ARYTM,
+      DYNKIN, NORMSP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, CARD_1, WELLORD2,
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, RELAT_1,
+      FUNCT_1, RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2,
+      FINSEQ_1, FINSEQ_2, FUNCT_4, CLASSES1, RFINSEQ, NAT_D, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, PBOOLE, RFINSEQ, NAT_D, REWRITE1, RELAT_2,
-      REAL_1;
+      REAL_1, CLASSES1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2,
-      RELSET_1;
+      RELSET_1, NUMBERS, XXREAL_0, REAL_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
- definitions TARSKI, FUNCT_1, XBOOLE_0, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2,
+ definitions TARSKI, XBOOLE_0, FUNCT_1, FUNCOP_1, BINOP_1, FINSEQ_2, FUNCT_2,
       FUNCT_4;
- theorems FINSEQ_1, RELAT_1, CARD_5, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
+ theorems FINSEQ_1, RELAT_1, TARSKI, AXIOMS, ZFMISC_1, INT_1, FUNCT_1,
       FINSEQ_2, FUNCT_4, SUBSET_1, FINSET_1, CARD_1, NAT_1, FUNCT_2, FUNCOP_1,
       PBOOLE, SETFAM_1, MCART_1, FINSEQ_3, ENUMSET1, REWRITE1, TREES_1,
       FINSEQ_4, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1, GRFUNC_1, XREAL_1,
-      XXREAL_0, ORDINAL1, RFINSEQ, CARD_2, FINSEQ_5, NAT_D;
+      XXREAL_0, ORDINAL1, RFINSEQ, FINSEQ_5, NAT_D;
  schemes NAT_1, DOMAIN_1, CLASSES1, FRAENKEL, FINSEQ_1, RECDEF_1, FUNCT_2;
 
 begin :: Preliminaries
@@ -417,7 +418,7 @@ proof
     assume 1 in INT*;
     then
 A1: 1 is Relation-like by FINSEQ_1:def 11;
-    {} in 1 by CARD_5:1,TARSKI:def 1;
+    {} in 1 by CARD_1:87,TARSKI:def 1;
     then consider x,y such that
 A2: {} = [x,y] by A1,RELAT_1:def 1;
     thus contradiction by A2;
@@ -591,12 +592,12 @@ A1: dom p = {1} & p.1 = <*0*> by FINSEQ_1:4,55,57;
 end;
 
 registration
-  cluster {} -> Function-yielding;
+  cluster empty -> Function-yielding Function;
   coherence
-  proof
+  proof let F be Function such that
+Z:  F is empty;
     let x be set;
-    assume x in dom {};
-    hence thesis;
+    thus thesis by Z;
   end;
   let f be Function;
   cluster <*f*> -> Function-yielding;
@@ -922,10 +923,9 @@ A5: p is Function-yielding implies P[p] and
 A6: p^<*x*> is Function-yielding;
 A7: <*x*>.1 = x & dom <*x*> = {1} by FINSEQ_1:4,55,57;
     then
-A8: p is Function-yielding & <*x*> is Function-yielding & 1 in dom <*x *>
+    p is Function-yielding & <*x*> is Function-yielding & 1 in dom <*x *>
     by A6,Th25,TARSKI:def 1;
-    then P[p] & x is Function by A5,A7;
-    hence P[p^<*x*>] by A2,A8;
+    hence P[p^<*x*>] by A2,A5,A7;
   end;
   for p being FinSequence holds R[p] from FINSEQ_1:sch 3(A3,A4);
   hence thesis;
@@ -1352,13 +1352,11 @@ A1: for i being Element of NAT st 1 <= i & i < len p+1
       let x be set;
       take f.x, f; thus thesis;
     end;
-A2: for n being Element of NAT st 1 <= n & n < len p+1
-    for x,y1,y2 being set st P[n,x,y1] & P[n,x,y2] holds y1 = y2;
     consider q being FinSequence such that
 A3: len q = len p+1 and
 A4: q.1 = x or len p+1 = 0 and
 A5: for i being Element of NAT st 1 <= i & i < len p+1 holds
-    P[i,q.i,q.(i+1)] from RECDEF_1:sch 3(A1,A2);
+    P[i,q.i,q.(i+1)] from RECDEF_1:sch 3(A1);
     take q; thus len q = len p+1 & q.1 = x by A3,A4;
     let i be Element of NAT, f be Function;
     assume i in dom p;
@@ -1387,7 +1385,7 @@ A14:  i+1 in dom q1;
       i+1 <= len q1 by A14,FINSEQ_3:27;
       then
 A15:  i <= len p by A6,XREAL_1:8;
-      per cases by NAT_1:3;
+      per cases;
       suppose i = 0;
         hence q1.(i+1) = q2.(i+1) by A6,A8;
       end;
@@ -1486,7 +1484,7 @@ A10: i+1 in dom apply(p,x);
     i <= i+1 & i+1 <= len apply(p,x) by A10,FINSEQ_3:27,NAT_1:13;
     then
 A11: i <= len apply(p,x) & i <= len p by A2,XREAL_1:8,XXREAL_0:2;
-    per cases by NAT_1:3;
+    per cases;
     suppose i = 0;
       hence apply(p^<*f*>,x).(i+1) = apply(p,x).(i+1) by A2,Def5;
     end;
@@ -1995,15 +1993,14 @@ A12:  (q^<*f*>).len q in Funcs(p.len q, p.(len q+1)) &
 A13:  (q^<*f*>).(len q+1) = f & q.len q = x by A7,FINSEQ_1:59;
       then consider g being Function such that
 A14:  x = g & dom g = p.len q & rng g c= p.(len q+1) by A12,FUNCT_2:def 2;
-A15:  ex g being Function st f = g & dom g = p.(len q+1) &
+      ex g being Function st f = g & dom g = p.(len q+1) &
       rng g c= p.(len q+1+1) by A12,A13,FUNCT_2:def 2;
       then
 A16:  dom f = p.(len q+1) & lastrng q = rng g by A7,A14,Th60;
       dom compose(q,X) = (firstdom q) /\ X & rng compose(q,X) c= lastrng q
       by A3,A4,A6,Th61,Th62;
-      then rng compose(q,X) c= p.(len q+1) by A14,A16,XBOOLE_1:1;
       hence dom compose(q^<*f*>,X) = (firstdom (q^<*f*>)) /\ X
-      by A3,A4,A5,A6,A9,A15,Th62,RELAT_1:46;
+      by A5,A9,RELAT_1:46,A14,A16,XBOOLE_1:1;
     end;
   end;
   for p being Function-yielding FinSequence holds P[p] from FuncSeqInd(A1,A2);
@@ -2042,8 +2039,6 @@ A5: len (<*f*>^p) = len p+1 & len r = 1+len q by FINSEQ_1:35;
 A6: now
     assume
 A7: p <> {};
-    then len p <> 0;
-    then len p > 0 by NAT_1:3;
     then len p >= 0+1 by NAT_1:13;
     then 1 in dom p by FINSEQ_3:27;
     then p.1 in Funcs(q.1, q.(1+1)) by A3;
@@ -2191,8 +2186,7 @@ A10:  p <> {};
       then
 A11:  firstdom p = proj1 (p.1) & firstdom (p^<*f*>) = proj1((p^<*f*>).1) &
       len p <> 0 by Def6;
-      then len p > 0 by NAT_1:3;
-      then len p >= 0+1 by NAT_1:13;
+      len p >= 0+1 by NAT_1:13,A10;
       then
 A12:  1 in dom p by FINSEQ_3:27;
       then p.1 = (p^<*f*>).1 by FINSEQ_1:def 7;
@@ -2302,10 +2296,7 @@ A1: x in dom p;
     then i in dom q & i+1 in dom q by A1,Th24;
     then reconsider X = q.i, Y = q.(i+1) as non empty set;
     p.i in Funcs(X,Y) by A1,Def10;
-    then consider f such that
-A2: p.x = f & dom f = X & rng f c= Y by FUNCT_2:def 2;
-    consider a being Element of X;
-    [a,f.a] in p.x by A2,FUNCT_1:def 4;
+    then ex f st p.x = f & dom f = X & rng f c= Y by FUNCT_2:def 2;
     hence thesis;
   end;
 end;
@@ -2702,9 +2693,8 @@ theorem
   for f being Function of X,X holds iter(f,0) = id X
 proof
   let f be Function of X,X;
-  rng f c= dom f by Lm1;
-  then iter(f,0) = id(dom f \/ rng f) & dom f \/ rng f = dom f & dom f= X
-  by Th70,FUNCT_2:67,XBOOLE_1:12;
+  iter(f,0) = id(dom f \/ rng f) & dom f \/ rng f = dom f & dom f= X
+  by Th70,FUNCT_2:67,XBOOLE_1:12,Lm1;
   hence thesis;
 end;
 
@@ -2770,7 +2760,7 @@ proof
   defpred P[Element of NAT] means iter(f,$1) = compose($1|->f,dom f \/ rng f);
   iter(f,0) = id (dom f \/ rng f) by Th70
     .= compose({},dom f \/ rng f) by Th41
-    .= compose(0|->f,dom f \/ rng f) by FINSEQ_2:72;
+    .= compose(0|->f,dom f \/ rng f);
   then
 A1: P[ 0];
 A2: now
@@ -2980,7 +2970,6 @@ proof
 A1: i in dom w;
   then
 A2: 1<=i & i<=len w by FINSEQ_3:27;
-A3: len(w+*(i,r))=i-1+1+(len w -i) by Th99;
 A4: len ((w|(i-'1))^<*r*>^(w/^i))
   =len ((w|(i-'1))^<*r*>)+len(w/^i) by FINSEQ_1:35
     .=len (w|(i-'1))+len<*r*>+len(w/^i) by FINSEQ_1:35
@@ -3047,7 +3036,7 @@ A19:    j<=i-'1 by A2,XREAL_1:235;
     end;
     hence (w+*(i,r)).j=((w|(i-'1))^<*r*>^(w/^i)).j;
   end;
-  hence thesis by A3,A4,FINSEQ_1:18;
+  hence thesis by Th99,A4,FINSEQ_1:18;
 end;
 
 :: comp. FINSEQ_7, 2007.03.18, A.T.
@@ -3525,13 +3514,13 @@ proof
   set p2 = p1+*(y, p.x);
 A1: dom p2 = dom p1 by Th32;
 A2: dom p1 = dom p by Th32;
-  X = {} implies X = {};
+B3: X = {} implies X = {};
   then
 A3: dom p = X by FUNCT_2:def 1;
   per cases;
   suppose X is empty;
-    hence p+*(x, p.y)+*(y, p.x) is Permutation of X
-    by A1,A2,A3,FUNCT_2:55;
+     then p2 = {} by A1,A2;
+    hence p+*(x, p.y)+*(y, p.x) is Permutation of X by A1,A2,B3;
   end;
   suppose
 A4: X is non empty;
@@ -3782,7 +3771,7 @@ end;
 
 :: comp TOPALG_3:1, 2008.01.18, A.T.
 
-theorem
+theorem Th117:
   for A, B, a, b being set, f being Function of A,B st b in B holds
   f +* (a,b) is Function of A,B
 proof
@@ -3848,3 +3837,288 @@ B: dom(id A+*(x,y)) = dom id A by Th32
      .= (id A+*(x,y))*f+*((id A+*(x,y))*g) by B,Th10,XBOOLE_1:7
      .= f+~(x,y)+*(g+~(x,y)) by Th118,C,XBOOLE_1:7;
 end;
+
+definition
+  let a,b be set;
+  func a followed_by b equals
+  (NAT --> b) +* (0,a);
+  coherence;
+end;
+
+registration
+  let a,b be set;
+  cluster a followed_by b -> Function-like Relation-like;
+  coherence;
+end;
+
+reserve a,b,c for set,
+        n for Nat;
+
+
+theorem Thy:
+ dom(a followed_by b) = NAT
+  proof
+   thus dom(a followed_by b) = dom((NAT --> b) +* (0,a))
+    .= dom(NAT --> b) by Th32
+    .= NAT by FUNCOP_1:19;
+  end;
+
+definition
+  let X be non empty set;
+  let a,b be Element of X;
+  redefine func a followed_by b -> sequence of X;
+  coherence
+   proof
+     a followed_by b = (NAT --> b) +* (0,a);
+    hence thesis by Th117;
+   end;
+end;
+
+theorem Th54:
+ (a followed_by b).0 = a
+ proof
+  dom(NAT --> b) = NAT by FUNCOP_1:19;
+  hence thesis by Th33;
+ end;
+
+theorem Th55:
+ for n st n > 0 holds (a followed_by b).n = b
+  proof let n;
+Y: n in NAT by ORDINAL1:def 13;
+   assume n > 0;
+   hence (a followed_by b).n
+       = (NAT --> b).n by Th34
+      .= b by Y,FUNCOP_1:13;
+  end;
+
+:: from DYNKIN, 2008.09.24, A.T.
+
+definition
+  let a,b,c be set;
+  func (a,b) followed_by c equals
+  (NAT --> c) +* ((0,1) --> (a,b));
+  coherence;
+end;
+
+registration
+  let a,b,c be set;
+  cluster (a,b) followed_by c -> Function-like Relation-like;
+  coherence;
+end;
+
+theorem Thx:
+ dom (a,b) followed_by c = NAT
+ proof
+  thus dom (a,b) followed_by c
+        = dom(NAT --> c) \/ dom (0,1) --> (a,b) by FUNCT_4:def 1
+       .= NAT \/ dom (0,1) --> (a,b) by FUNCOP_1:19
+       .= NAT \/ {0,1} by FUNCT_4:65
+       .= NAT by XBOOLE_1:12;
+ end;
+
+theorem Th57:
+  ((a,b) followed_by c).0 = a
+   proof
+    dom (0,1) --> (a,b) = {0,1} by FUNCT_4:65;
+    then
+A:  0 in dom (0,1) --> (a,b) by TARSKI:def 2;
+    thus ((a,b) followed_by c).0
+           = ((NAT --> c) +* ((0,1) --> (a,b))).0
+          .= ((0,1) --> (a,b)).0 by A,FUNCT_4:14
+          .= a by FUNCT_4:66;
+   end;
+
+theorem Th58:
+  ((a,b) followed_by c).1 = b
+  proof
+    dom (0,1) --> (a,b) = {0,1} by FUNCT_4:65;
+    then
+A:  1 in dom (0,1) --> (a,b) by TARSKI:def 2;
+   thus ((a,b) followed_by c).1
+         = ((NAT --> c) +* ((0,1) --> (a,b))).1
+        .= ((0,1) --> (a,b)).1 by A,FUNCT_4:14
+        .= b by FUNCT_4:66;
+  end;
+
+theorem Th59:
+  for n st n > 1 holds ((a,b) followed_by c).n = c
+ proof let n;
+A: dom (0,1) --> (a,b) = {0,1} by FUNCT_4:65;
+  assume n > 1;
+   then
+B:  not n in dom (0,1) --> (a,b) by A,TARSKI:def 2;
+C: n in NAT by ORDINAL1:def 13;
+  thus ((a,b) followed_by c).n
+         = ((NAT --> c) +* ((0,1) --> (a,b))).n
+        .= (NAT --> c).n by B,FUNCT_4:12
+        .= c by C,FUNCOP_1:13;
+ end;
+
+theorem Th60:
+  (a,b) followed_by c = (a followed_by c) +* (1,b)
+  proof
+    set f = (a,b) followed_by c, g = (a followed_by c) +* (1,b);
+F:  dom f = NAT by Thx;
+H:  dom(a followed_by c) = NAT by Thy;
+   hence dom f = dom g by F,Th32;
+   let x be set;
+   assume x in dom f;
+    then reconsider n=x as Nat by F;
+   per cases by NAT_1:26;
+   suppose
+S:  n = 0;
+   hence f.x = a by Th57
+    .= (a followed_by c).x by S,Th54
+    .= g.x by S,Th34;
+   end;
+   suppose
+S:  n = 1;
+   hence f.x = b by Th58
+    .= g.x by S,H,Th33;
+   end;
+   suppose
+S:  n > 1;
+   hence f.x = c by Th59
+    .= (a followed_by c).x by S,Th55
+    .= g.x by S,Th34;
+   end;
+  end;
+
+definition
+  let X be non empty set;
+  let a,b,c be Element of X;
+  redefine func (a,b) followed_by c -> sequence of X;
+  coherence
+   proof
+     (a,b) followed_by c = (a followed_by c) +* (1,b) by Th60;
+    hence thesis by Th117;
+   end;
+end;
+
+theorem Th62:
+ rng(a followed_by b) = {a,b}
+proof
+  rng(NAT --> b) = {b} by FUNCOP_1:14;
+  then rng((NAT --> b)+*(0,a)) c= {b} \/ {a} by Th102;
+ hence rng(a followed_by b) c= {a,b} by ENUMSET1:41;
+ let x be set;
+ assume
+Z: x in {a,b};
+X: dom(NAT --> b) = NAT by FUNCOP_1:19;
+  then
+A: a in rng(a followed_by b) by Th104;
+   1 in dom(NAT --> b) by X;
+   then
+B: 1 in dom(a followed_by b) by Th32;
+  (a followed_by b).1 = b by Th55;
+  then b in rng(a followed_by b) by B,FUNCT_1:12;
+ hence x in rng(a followed_by b) by A,Z,TARSKI:def 2;
+end;
+
+theorem
+ rng (a,b) followed_by c = {a,b,c}
+proof
+F: (a,b) followed_by c = (a followed_by c) +* (1,b) by Th60;
+   rng(a followed_by c) = {a,c} by Th62;
+  then rng((a followed_by c)+*(1,b)) c= {a,c} \/ {b} by Th102;
+  then rng((a followed_by c)+*(1,b)) c= {a,c,b} by ENUMSET1:43;
+ hence rng (a,b) followed_by c c= {a,b,c} by F,ENUMSET1:98;
+ let x be set;
+ assume
+Z: x in {a,b,c};
+X: dom (a,b) followed_by c = dom(a followed_by c) by F,Th32
+          .= dom(NAT --> c) by Th32
+          .= NAT by FUNCOP_1:19;
+  ((a,b) followed_by c).0 = a by Th57;
+  then
+A: a in rng (a,b) followed_by c by X,FUNCT_1:12;
+  ((a,b) followed_by c).1 = b by Th58;
+  then
+C: b in rng (a,b) followed_by c by X,FUNCT_1:12;
+  ((a,b) followed_by c).2 = c by Th59;
+  then
+  c in rng (a,b) followed_by c by X,FUNCT_1:12;
+ hence x in rng (a,b) followed_by c by A,C,Z,ENUMSET1:def 1;
+end;
+
+:: from POLYNOM1, 2008.12.15, A.T.
+
+definition
+  let A, B be set, f be Function of A, B, x be set, y be Element of B;
+  redefine func f+*(x,y) -> Function of A, B;
+  coherence
+  proof
+    set F = f+*(x,y);
+A1: rng F c= rng f \/ {y} by Th102;
+    per cases;
+    suppose B is empty;
+      then dom f is empty;
+      hence thesis by Def3;
+    end;
+    suppose
+A2:   B is non empty;
+      then dom f = A & rng f c= B by FUNCT_2:def 1;
+      then
+A3:   dom F = A by Th32;
+      {y} c= B by A2,ZFMISC_1:37;
+      then rng f \/ {y} c= B by XBOOLE_1:8;
+      then rng F c= B by A1,XBOOLE_1:1;
+      hence thesis by A2,A3,FUNCT_2:def 1,RELSET_1:11;
+    end;
+  end;
+end;
+
+:: missing, 2008.12.14, A.T.
+
+theorem
+ for A, B being non empty set, f being Function of A, B,
+     x being Element of A, y being set
+  holds f+*(x,y).x = y
+proof
+  let A, B be non empty set, f be Function of A, B,
+      x be Element of A, y be set;
+   x in A;
+   then x in dom f by FUNCT_2:def 1;
+  hence f+*(x,y).x = y by Th33;
+end;
+
+theorem
+ for A, B being non empty set, f,g being Function of A, B,
+     x being Element of A
+  st for y being Element of A st f.y <> g.y holds y = x
+  holds f = g+*(x,f.x)
+proof
+ let A, B be non empty set, f,g be Function of A, B,
+     x be Element of A such that
+Z: for y being Element of A st f.y <> g.y holds y = x;
+A1: x in A;
+   then
+A: x in dom g by FUNCT_2:def 1;
+B: dom f = A by FUNCT_2:def 1
+     .= A \/ {x} by XBOOLE_1:12
+     .= dom g \/ {x} by FUNCT_2:def 1
+     .= dom g \/ dom(x.-->f.x) by FUNCOP_1:19;
+  for e being set st e in dom g \/ dom (x.-->f.x)
+  holds (e in dom(x.-->f.x) implies f.e = (x.-->f.x).e) &
+   (not e in dom(x.-->f.x) implies f.e = g.e)
+   proof  let e be set;
+    assume e in dom g \/ dom (x.-->f.x);
+     then
+X:    e in A by B;
+    thus e in dom(x.-->f.x) implies f.e = (x.-->f.x).e
+     proof
+      assume e in dom(x.-->f.x);
+       then e in {x} by FUNCOP_1:19;
+       then e = x by TARSKI:def 1;
+      hence f.e = (x.-->f.x).e by FUNCOP_1:87;
+     end;
+    assume not e in dom(x.-->f.x);
+     then not e in {x} by FUNCOP_1:19;
+     then e <> x by TARSKI:def 1;
+    hence f.e = g.e by Z,X;
+   end;
+ hence f = g+*(x.-->f.x) by B,FUNCT_4:def 1
+   .= g+*(x,f.x) by A,Def3;
+end;
+
+

@@ -14,8 +14,8 @@ environ
       XBOOLE_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI;
- theorems TARSKI, FUNCT_1, NAT_1, FINSEQ_1, XBOOLE_0, XREAL_1,
-      XXREAL_0, ORDINAL1, CARD_2;
+ theorems TARSKI, FUNCT_1, NAT_1, FINSEQ_1, XBOOLE_0, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, XBOOLE_0;
 
 begin
@@ -413,17 +413,11 @@ definition
   ex x,H1 st H = All(x,H1);
 end;
 
-notation
-  let H;
-  synonym H is_equality for H is being_equality; synonym H is_membership for
-  H is being_membership;
-end;
-
 canceled;
 
 theorem
-  (H is_equality iff ex x,y st H = x '=' y) &
-  (H is_membership iff ex x,y st H = x 'in' y) &
+  (H is being_equality iff ex x,y st H = x '=' y) &
+  (H is being_membership iff ex x,y st H = x 'in' y) &
   (H is negative iff ex H1 st H = 'not' H1) &
   (H is conjunctive iff ex F,G st H = F '&' G) &
   (H is universal iff ex x,H1 st H = All(x,H1) )
@@ -433,7 +427,7 @@ definition
   let H;
   attr H is atomic means
   :Def15:
-  H is_equality or H is_membership;
+  H is being_equality or H is being_membership;
 end;
 
 definition
@@ -519,7 +513,8 @@ theorem
   All(x,y,z,H) = All(x,All(y,z,H)) & Ex(x,y,z,H) = Ex(x,Ex(y,z,H));
 
 theorem Th25:
-  H is_equality or H is_membership or H is negative or H is conjunctive or
+  H is being_equality or H is being_membership or H is negative or
+   H is conjunctive or
   H is universal
 proof
 A1: H is Element of WFF by Def9;
@@ -586,7 +581,7 @@ end;
 theorem Th26:
   H is atomic or H is negative or H is conjunctive or H is universal
 proof
-  assume not H is_equality & not H is_membership;
+  assume not H is being_equality & not H is being_membership;
   hence thesis by Th25;
 end;
 
@@ -596,14 +591,14 @@ proof
   assume
 A1: H is atomic;
 A2: now
-    assume H is_equality;
+    assume H is being_equality;
     then consider x,y such that
 A3: H = x '=' y by Def10;
     H = <* 0,x,y *> by A3,FINSEQ_1:def 10;
     hence len H = 3 by FINSEQ_1:62;
   end;
   now
-    assume H is_membership;
+    assume H is being_membership;
     then consider x,y such that
 A4: H = x 'in' y by Def11;
     H = <* 1,x,y *> by A4,FINSEQ_1:def 10;
@@ -737,9 +732,9 @@ proof
 end;
 
 theorem Th35:
-  H is_equality implies H.1 = 0
+  H is being_equality implies H.1 = 0
 proof
-  assume H is_equality;
+  assume H is being_equality;
   then consider x,y such that
 A1: H = x '=' y by Def10;
   H = <* 0,x,y *> by A1,FINSEQ_1:def 10;
@@ -747,9 +742,9 @@ A1: H = x '=' y by Def10;
 end;
 
 theorem Th36:
-  H is_membership implies H.1 = 1
+  H is being_membership implies H.1 = 1
 proof
-  assume H is_membership;
+  assume H is being_membership;
   then consider x,y such that
 A1: H = x 'in' y by Def11;
   H = <* 1,x,y *> by A1,FINSEQ_1:def 10;
@@ -786,15 +781,15 @@ A1: H = All(x,H1) by Def14;
 end;
 
 theorem Th40:
-  H is_equality & H.1 = 0 or H is_membership & H.1 = 1 or
+  H is being_equality & H.1 = 0 or H is being_membership & H.1 = 1 or
   H is negative & H.1 = 2 or H is conjunctive & H.1 = 3 or
   H is universal & H.1 = 4
 proof
   per cases by Th25;
-  case H is_equality;
+  case H is being_equality;
     hence H.1 = 0 by Th35;
   end;
-  case H is_membership;
+  case H is being_membership;
     hence H.1 = 1 by Th36;
   end;
   case H is negative;
@@ -809,10 +804,10 @@ proof
 end;
 
 theorem
-  H.1 = 0 implies H is_equality by Th40;
+  H.1 = 0 implies H is being_equality by Th40;
 
 theorem
-  H.1 = 1 implies H is_membership by Th40;
+  H.1 = 1 implies H is being_membership by Th40;
 
 theorem
   H.1 = 2 implies H is negative by Th40;
@@ -1023,7 +1018,7 @@ A1: H is atomic;
   H.2;
   coherence
   proof
-A2: H is_equality or H is_membership by A1,Def15;
+A2: H is being_equality or H is being_membership by A1,Def15;
 A3: (ex x,y st H = x '=' y) implies ex k,x, y st H = <*k*>^<*x*>^<*y*>;
     (ex x,y st H = x 'in' y) implies ex k, x, y st H = <*k*>^<*x*>^<*y*>;
     then consider k,x,y such that
@@ -1036,7 +1031,7 @@ A4: H = <*k*>^<*x*>^<*y*> by A2,A3,Def10,Def11;
   H.3;
   coherence
   proof
-A5: H is_equality or H is_membership by A1,Def15;
+A5: H is being_equality or H is being_membership by A1,Def15;
 A6: (ex x,y st H = x '=' y) implies ex k, x, y st H = <*k*>^<*x*>^<*y*>;
     (ex x,y st H = x 'in' y) implies ex k, x, y st H = <*k*>^<*x*>^<*y*>;
     then consider k,x,y such that
@@ -1050,10 +1045,10 @@ theorem
   H is atomic implies Var1 H = H.2 & Var2 H = H.3 by Def28,Def29;
 
 theorem Th53:
-  H is_equality implies H = (Var1 H) '=' Var2 H
+  H is being_equality implies H = (Var1 H) '=' Var2 H
 proof
   assume
-A1: H is_equality;
+A1: H is being_equality;
   then consider x,y such that
 A2: H = x '=' y by Def10;
 A3: H = <*0*>^<*x*>^<*y*> & <*0*>^<*x*>^<*y*> = <*0,x,y*> by A2,FINSEQ_1:def 10
@@ -1065,10 +1060,10 @@ A3: H = <*0*>^<*x*>^<*y*> & <*0*>^<*x*>^<*y*> = <*0,x,y*> by A2,FINSEQ_1:def 10
 end;
 
 theorem Th54:
-  H is_membership implies H = (Var1 H) 'in' Var2 H
+  H is being_membership implies H = (Var1 H) 'in' Var2 H
 proof
   assume
-A1: H is_membership;
+A1: H is being_membership;
   then consider x,y such that
 A2: H = x 'in' y by Def11;
 A3: H = <*1*>^<*x*>^<*y*> & <*1*>^<*x*>^<*y*> = <*1,x,y*>
@@ -1436,12 +1431,12 @@ proof
   assume
 A1: H is atomic;
 A2: now
-    assume H is_equality;
+    assume H is being_equality;
     then H = (Var1 H) '=' Var2 H by Th53;
     hence thesis by Th69;
   end;
   now
-    assume H is_membership;
+    assume H is being_membership;
     then H = (Var1 H) 'in' Var2 H by Th54;
     hence thesis by Th70;
   end;
@@ -1951,7 +1946,7 @@ theorem
   H is atomic implies not F is_proper_subformula_of H
 proof
   assume H is atomic;
-  then H is_equality or H is_membership by Def15;
+  then H is being_equality or H is being_membership by Def15;
   then H = (Var1 H) '=' Var2 H or H = (Var1 H) 'in' Var2 H by Th53,Th54;
   hence thesis by Th88,Th89;
 end;
@@ -2266,7 +2261,7 @@ proof
   thus H is atomic implies Subformulae H = { H }
   proof
     assume H is atomic;
-    then H is_equality or H is_membership by Def15;
+    then H is being_equality or H is being_membership by Def15;
     then H = (Var1 H) '=' Var2 H or H = (Var1 H) 'in' Var2 H by Th53,Th54;
     hence thesis by Th102,Th103;
   end;

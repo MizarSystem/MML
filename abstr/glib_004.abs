@@ -1,6 +1,7 @@
 :: Proof of Dijkstra's Shortest Path Algorithm & Prim's Minimum Spanning
 :: Tree Algorithm
 ::  by Gilbert Lee and Piotr Rudnicki
+:: Revised by Piotr Rudnicki, September 2008
 ::
 :: Received February 22, 2005
 :: Copyright (c) 2005 Association of Mizar Users
@@ -8,24 +9,25 @@
 environ
 
  vocabularies ALGSEQ_1, AMI_1, ARYTM, ARYTM_1, BOOLE, CARD_1, CAT_1, FINSEQ_1,
-      FINSEQ_2, FINSET_1, FUNCOP_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000,
-      GLIB_001, GLIB_002, GLIB_003, GLIB_004, GRAPH_1, MATRIX_2, MSAFREE2,
-      NEWTON, PARTFUN1, PBOOLE, POLYNOM1, PRE_TOPC, QUANTAL1, REALSET1,
-      RELAT_1, RELAT_2, RLVECT_1, SQUARE_1, TARSKI, TREES_1, UPROOTS;
+      FINSEQ_2, FINSET_1, FUNCT_1, FUNCT_2, FUNCT_4, GLIB_000, GLIB_001,
+      GLIB_002, GLIB_003, GLIB_004, GRAPH_1, MATRIX_2, MSAFREE2, NEWTON,
+      PARTFUN1, PBOOLE, POLYNOM1, PRE_TOPC, QUANTAL1, REALSET1, RELAT_1,
+      RELAT_2, RLVECT_1, SQUARE_1, TARSKI, TREES_1, UPROOTS, MCART_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, CARD_1, NUMBERS, SUBSET_1,
-      XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, PARTFUN1,
-      FUNCT_1, FINSEQ_1, FINSEQ_2, SEQ_1, PBOOLE, FUNCT_2, RVSUM_1, ABIAN,
-      ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1, FUNCT_4,
-      GLIB_000, GLIB_001, GLIB_002, GLIB_003;
- constructors DOMAIN_1, REAL_1, SQUARE_1, BINOP_2, FINSOP_1, RVSUM_1, GRAPH_2,
-      UPROOTS, GLIB_002, GLIB_003, SEQ_1, RECDEF_1, XXREAL_2;
- registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1, MEMBERED, GLIB_000,
-      ABIAN, POLYNOM1, GLIB_001, GLIB_002, GLIB_003, VALUED_0;
+      DOMAIN_1, MCART_1, XCMPLX_0, XXREAL_0, XREAL_0, REAL_1, RELAT_1,
+      RELSET_1, PARTFUN1, FUNCT_1, FINSEQ_1, FINSEQ_2, SEQ_1, PBOOLE, FUNCT_2,
+      RVSUM_1, ABIAN, ORDINAL1, POLYNOM1, UPROOTS, FINSET_1, NAT_1, FUNCOP_1,
+      FUNCT_4, GLIB_000, GLIB_001, GLIB_002, GLIB_003, RFUNCT_3;
+ constructors DOMAIN_1, BINOP_2, FINSOP_1, RVSUM_1, GRAPH_2, RFUNCT_3, UPROOTS,
+      GLIB_002, GLIB_003, SEQ_1, RECDEF_1, XXREAL_2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, PARTFUN1, FRAENKEL, FUNCT_1,
+      ORDINAL1, FUNCOP_1, FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, CARD_1,
+      UPROOTS, MEMBERED, GLIB_000, ABIAN, POLYNOM1, GLIB_001, GLIB_002,
+      GLIB_003, VALUED_0, FUNCT_2;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
 
 
-begin :: Preliminaries on Sum of RBag
+begin
 
 theorem :: GLIB_004:1  ::tSUPPORT01
   for f, g being Function holds support (f +* g) c= support f \/ support g;
@@ -62,13 +64,12 @@ theorem :: GLIB_004:9 ::tRBAGSUM07
   for X, x being set, b1, b2 being Rbag of X, y being real number
   st b2 = b1 +* (x.-->y) holds Sum b2 = Sum b1 + y - b1.x;
 
-begin :: Definitions for Dijkstra's Shortest Path Algorithm
+begin :: Graph preliminaries
 
 definition
   let G1 be real-weighted WGraph, G2 be WSubgraph of G1, v be set;
   pred G2 is_mincost_DTree_rooted_at v means
 :: GLIB_004:def 1
-
   G2 is Tree-like &
   for x being Vertex of G2 holds
   ex W2 being DPath of G2 st W2 is_Walk_from v,x &
@@ -79,8 +80,7 @@ end;
 definition
   let G be real-weighted WGraph, W be DPath of G, x,y be set;
   pred W is_mincost_DPath_from x,y means
-:: GLIB_004:def 2
-   ::dWMINCOSTD
+:: GLIB_004:def 2                  ::dWMINCOSTD
   W is_Walk_from x,y & for W2 being DPath of G st
   W2 is_Walk_from x,y holds W.cost() <= W2.cost();
 end;
@@ -88,205 +88,14 @@ end;
 definition
   let G be finite real-weighted WGraph, x,y be set;
   func G.min_DPath_cost(x,y) -> Real means
-:: GLIB_004:def 3
-   ::dWGMINDCOST
+:: GLIB_004:def 3               ::dWGMINDCOST
   ex W being DPath of G st W is_mincost_DPath_from x,y & it = W.cost() if
   ex W being DWalk of G st W is_Walk_from x,y otherwise it = 0;
 end;
 
 definition
-  let G be real-WEV WEVGraph;
-  func DIJK:NextBestEdges(G) -> Subset of the_Edges_of G means
-:: GLIB_004:def 4
-
-  for e1 being set holds e1 in it iff
-  e1 DSJoins G.labeledV(), the_Vertices_of G \ G.labeledV(), G &
-  for e2 being set st
-  e2 DSJoins G.labeledV(), the_Vertices_of G \ G.labeledV(), G holds
-  (the_VLabel_of G).((the_Source_of G).e1) + (the_Weight_of G).e1 <=
-  (the_VLabel_of G).((the_Source_of G).e2) + (the_Weight_of G).e2;
-end;
-
-definition
-  let G be real-WEV WEVGraph;
-  func DIJK:Step(G) -> real-WEV WEVGraph equals
-:: GLIB_004:def 5
-   ::dDIJKSTEP
-  G if DIJK:NextBestEdges(G) = {} otherwise
-  G.labelEdge(choose DIJK:NextBestEdges(G),1)
-  .labelVertex((the_Target_of G).(choose DIJK:NextBestEdges(G)),
-  (the_VLabel_of G).((the_Source_of G).(choose DIJK:NextBestEdges(G)))
-  + (the_Weight_of G).(choose DIJK:NextBestEdges(G)));
-end;
-
-registration
-  let G be finite real-WEV WEVGraph;
-  cluster DIJK:Step(G) -> finite;
-end;
-
-registration
-  let G be nonnegative-weighted real-WEV WEVGraph;
-  cluster DIJK:Step(G) -> nonnegative-weighted;
-end;
-
-definition
-  let G be real-weighted WGraph, src be Vertex of G;
-  func DIJK:Init(G, src) -> real-WEV WEVGraph equals
-:: GLIB_004:def 6  ::dDIJKINIT:
-  G.set(ELabelSelector,{}).set(VLabelSelector,src.-->0);
-end;
-
-definition
-  let s be WEVGraphSeq, n be Nat;
-  redefine func s.n -> WEVGraph;
-end;
-
-registration
-  let s be real-WEV WEVGraphSeq, n be Nat;
-  cluster s.n -> real-WEV WEVGraph;
-end;
-
-definition
-  let G be real-weighted WGraph, src be Vertex of G;
-  func DIJK:CompSeq(G,src) -> real-WEV WEVGraphSeq means
-:: GLIB_004:def 7
-   ::dDIJKCS
-  it.0 = DIJK:Init(G,src) &
-  for n being Element of NAT holds it.(n+1) = DIJK:Step(it.n);
-end;
-
-registration
-  let G be finite real-weighted WGraph, src be Vertex of G;
-  cluster DIJK:CompSeq(G,src) -> finite;
-end;
-
-registration
-  let G be nonnegative-weighted WGraph, src be Vertex of G;
-  cluster DIJK:CompSeq(G,src) -> nonnegative-weighted;
-end;
-
-definition
-  let G be real-weighted WGraph, src be Vertex of G;
-  func DIJK:SSSP(G,src) -> real-WEV WEVGraph equals
-:: GLIB_004:def 8  ::dDIJKSSSP
-  DIJK:CompSeq(G,src).Result();
-end;
-
-registration
-  let G be finite real-weighted WGraph, src be Vertex of G;
-  cluster DIJK:SSSP(G,src) -> finite;
-end;
-
-begin  :: Dijkstra's Algorithm Theorems
-
-theorem :: GLIB_004:10  ::tWGMINDCOST01
-  for G being finite nonnegative-weighted WGraph, W being DPath of G,
-  x,y being set, m,n being Element of NAT st W is_mincost_DPath_from x,y holds
-  W.cut(m,n) is_mincost_DPath_from W.cut(m,n).first(),W.cut(m,n).last();
-
-theorem :: GLIB_004:11  ::tWGMINDCOST02
-  for G being finite real-weighted WGraph, W1,W2 being DPath of G,
-  x,y being set st
-  W1 is_mincost_DPath_from x,y & W2 is_mincost_DPath_from x,y holds
-  W1.cost() = W2.cost();
-
-theorem :: GLIB_004:12  ::tWGMINDCOST03
-  for G being finite real-weighted WGraph, W being DPath of G, x,y being set st
-  W is_mincost_DPath_from x,y holds G.min_DPath_cost(x,y) = W.cost();
-
-theorem :: GLIB_004:13  ::tDSTEP01
-  for G being finite real-WEV WEVGraph holds
-  (card DIJK:Step(G).labeledV() = card G.labeledV()
-  iff DIJK:NextBestEdges(G) = {}) &
-  (card DIJK:Step(G).labeledV() = card G.labeledV() + 1
-  iff DIJK:NextBestEdges(G) <> {});
-
-theorem :: GLIB_004:14  ::tDSTEP02
-  for G being real-WEV WEVGraph holds G == DIJK:Step(G) &
-  the_Weight_of G = the_Weight_of DIJK:Step(G) &
-  G.labeledE() c= DIJK:Step(G).labeledE() &
-  G.labeledV() c= DIJK:Step(G).labeledV();
-
-theorem :: GLIB_004:15  ::tDIJKINIT01
-  for G being real-weighted WGraph, src be Vertex of G
-  holds DIJK:Init(G,src).labeledV() = {src};
-
-theorem :: GLIB_004:16  ::tDCS01
-  for G being real-weighted WGraph, src being Vertex of G,
-  i,j being Element of NAT st i <= j holds
-  (DIJK:CompSeq(G,src).i).labeledV() c= (DIJK:CompSeq(G,src).j).labeledV() &
-  (DIJK:CompSeq(G,src).i).labeledE() c= (DIJK:CompSeq(G,src).j).labeledE();
-
-theorem :: GLIB_004:17  ::tDCS02
-  for G being real-weighted WGraph, src being Vertex of G,
-  n being Element of NAT holds G == DIJK:CompSeq(G,src).n &
-  the_Weight_of G = the_Weight_of (DIJK:CompSeq(G,src).n);
-
-theorem :: GLIB_004:18  ::tDCS03
-  for G being finite real-weighted WGraph, src being Vertex of G,
-  n being Element of NAT holds
-  (DIJK:CompSeq(G,src).n).labeledV() c= G.reachableDFrom(src);
-
-registration
-  let s be finite WEVGraphSeq, n be Nat;
-  cluster s.n -> finite WEVGraph;
-end;
-
-theorem :: GLIB_004:19  ::tDCS05
-  for G being finite real-weighted WGraph, src being Vertex of G,
-  n being Element of NAT
-  holds DIJK:NextBestEdges(DIJK:CompSeq(G,src).n) = {} iff
-  (DIJK:CompSeq(G,src).n).labeledV() = G.reachableDFrom(src);
-
-theorem :: GLIB_004:20  ::tDCS06
-  for G being finite real-weighted WGraph, src being Vertex of G,
-  n being Element of NAT holds Card (DIJK:CompSeq(G,src).n).labeledV() =
-  min(n+1, card(G.reachableDFrom(src)));
-
-theorem :: GLIB_004:21  ::tDCS07
-  for G being finite real-weighted WGraph, src being Vertex of G,
-  n being Element of NAT
-  holds (DIJK:CompSeq(G,src).n).labeledE() c= (DIJK:CompSeq(G,src).n)
-  .edgesBetween((DIJK:CompSeq(G,src).n).labeledV());
-
-theorem :: GLIB_004:22  ::tDCS08
-  for G being finite nonnegative-weighted WGraph, src being Vertex of G,
-  n being Element of NAT, G2 being inducedWSubgraph of
-  G,(DIJK:CompSeq(G,src).n).labeledV(), (DIJK:CompSeq(G,src).n).labeledE()
-  holds G2 is_mincost_DTree_rooted_at src &
-  for v being Vertex of G st v in (DIJK:CompSeq(G,src).n).labeledV()
-  holds G.min_DPath_cost(src,v) = (the_VLabel_of (DIJK:CompSeq(G,src).n)).v;
-
-theorem :: GLIB_004:23  ::tDIJK01
-  for G being finite real-weighted WGraph, src being Vertex of G
-  holds DIJK:CompSeq(G,src) is halting;
-
-registration
-  let G be finite real-weighted WGraph, src be Vertex of G;
-  cluster DIJK:CompSeq(G,src) -> halting;
-end;
-
-theorem :: GLIB_004:24  ::tDIJK02
-  for G being finite real-weighted WGraph, src being Vertex of G holds
-  DIJK:CompSeq(G,src).Lifespan() + 1 = card G.reachableDFrom(src);
-
-theorem :: GLIB_004:25  ::tDIJK03
-  for G being finite real-weighted WGraph, src being Vertex of G
-  holds DIJK:SSSP(G,src).labeledV() = G.reachableDFrom(src);
-
-theorem :: GLIB_004:26 ::tDIJK04
-  for G being finite nonnegative-weighted WGraph, src being Vertex of G,
-  G2 being inducedWSubgraph of G, DIJK:SSSP(G,src).labeledV(),
-  DIJK:SSSP(G,src).labeledE() holds G2 is_mincost_DTree_rooted_at src &
-  for v being Vertex of G st v in G.reachableDFrom(src) holds
-  v in the_Vertices_of G2 &
-  G.min_DPath_cost(src,v) = (the_VLabel_of DIJK:SSSP(G,src)).v;
-
-begin :: Prim's Algorithm preliminaries
-
-definition
   func WGraphSelectors -> non empty finite Subset of NAT equals
-:: GLIB_004:def 9  ::dWGRAPHSEL
+:: GLIB_004:def 4  ::dWGRAPHSEL
   {VertexSelector, EdgeSelector, SourceSelector, TargetSelector,
   WeightSelector};
 end;
@@ -299,8 +108,7 @@ end;
 definition
   let G be WGraph;
   func G.allWSubgraphs() -> non empty set means
-:: GLIB_004:def 10
-   ::dGALLWSUBG
+:: GLIB_004:def 5   ::dGALLWSUBG
   for x being set holds x in it iff
   ex G2 being WSubgraph of G st x = G2 & dom G2 = WGraphSelectors;
 end;
@@ -318,38 +126,16 @@ end;
 definition
   let G be finite real-weighted WGraph;
   func G.cost() -> Real equals
-:: GLIB_004:def 11  ::dWGCOST
+:: GLIB_004:def 6  ::dWGCOST
   Sum the_Weight_of G;
 end;
 
-canceled;
-
-theorem :: GLIB_004:28 ::tWGRAPHSEL02
-  for G being WGraph holds WGraphSelectors c= dom G;
-
-theorem :: GLIB_004:29 ::tWSSEL01
-  for G being WGraph holds G == (G.strict(WGraphSelectors)) &
-  the_Weight_of G = the_Weight_of (G.strict(WGraphSelectors));
-
-theorem :: GLIB_004:30 ::tWSEL02
-  for G being WGraph holds
-  dom (G.strict(WGraphSelectors)) = WGraphSelectors;
-
-theorem :: GLIB_004:31 ::tGCOST01
-  for G being finite real-weighted WGraph st the_Edges_of G = {} holds
-  G.cost() = 0;
-
-theorem :: GLIB_004:32  ::tGCOST02
-  for G1,G2 being finite real-weighted WGraph
-  st the_Edges_of G1 = the_Edges_of G2 & the_Weight_of G1 = the_Weight_of G2
-  holds G1.cost() = G2.cost();
-
-theorem :: GLIB_004:33  ::tGCOST03
+theorem :: GLIB_004:10  ::tGCOST03
   for G1 being finite real-weighted WGraph, e being set,
   G2 being weight-inheriting ([Weighted] removeEdge of G1,e)
   st e in the_Edges_of G1 holds G1.cost() = G2.cost() + (the_Weight_of G1).e;
 
-theorem :: GLIB_004:34  ::tGCOST04
+theorem :: GLIB_004:11  ::tGCOST04
   for G being finite real-weighted WGraph,
   V1 being non empty Subset of the_Vertices_of G,
   E1 being Subset of G.edgesBetween(V1),
@@ -358,77 +144,320 @@ theorem :: GLIB_004:34  ::tGCOST04
   st not e in E1 & e in G.edgesBetween(V1)
   holds G1.cost() + (the_Weight_of G).e = G2.cost();
 
-begin :: PRIM's Algorithm definitions
+theorem :: GLIB_004:12  ::tWGMINDCOST01
+for G being finite nonnegative-weighted WGraph, W being DPath of G,
+    x,y being set, m,n being Element of NAT
+ st W is_mincost_DPath_from x,y
+  holds W.cut(m,n) is_mincost_DPath_from W.cut(m,n).first(),W.cut(m,n).last();
+
+theorem :: GLIB_004:13  ::tWGMINDCOST02
+for G being finite real-weighted WGraph, W1,W2 being DPath of G,
+    x,y being set
+ st W1 is_mincost_DPath_from x,y & W2 is_mincost_DPath_from x,y
+  holds W1.cost() = W2.cost();
+
+theorem :: GLIB_004:14  ::tWGMINDCOST03
+for G being finite real-weighted WGraph, W being DPath of G, x,y being set
+ st W is_mincost_DPath_from x,y holds G.min_DPath_cost(x,y) = W.cost();
+
+begin :: Definitions for Dijkstra's Shortest Path Algorithm
 
 definition
-  let G be real-weighted WVGraph;
-  func PRIM:NextBestEdges(G) -> Subset of the_Edges_of G means
-:: GLIB_004:def 12
-   ::dPRIMNEXT
-  for e1 being set holds e1 in it iff
-  e1 SJoins G.labeledV(), the_Vertices_of G \ G.labeledV(), G &
-  for e2 being set
-  st e2 SJoins G.labeledV(), the_Vertices_of G \ G.labeledV(), G
-  holds (the_Weight_of G).e1 <= (the_Weight_of G).e2;
+  let G be _Graph;
+  mode DIJK:Labeling of G is
+     Element of [: PFuncs(the_Vertices_of G, REAL),
+                   bool the_Edges_of G :];
 end;
 
 definition
-  let G be real-weighted WGraph;
-  func PRIM:Init(G) -> real-WEV WEVGraph equals
-:: GLIB_004:def 13  ::dPRIMINIT
-  G.set(VLabelSelector,(choose the_Vertices_of G).-->1)
-  .set(ELabelSelector,{});
-end;
-
-definition
-  let G be real-WEV WEVGraph;
-  func PRIM:Step(G) -> real-WEV WEVGraph equals
-:: GLIB_004:def 14
-   ::dPRIMSTEP
-  G if PRIM:NextBestEdges(G) = {}, G.labelEdge(choose PRIM:NextBestEdges(G),1)
-  .labelVertex((the_Target_of G).(choose PRIM:NextBestEdges(G)),1)
-  if PRIM:NextBestEdges(G) <> {} &
-  (the_Source_of G).(choose PRIM:NextBestEdges(G)) in G.labeledV() otherwise
-  G.labelEdge(choose PRIM:NextBestEdges(G),1)
-  .labelVertex((the_Source_of G).(choose PRIM:NextBestEdges(G)),1);
-end;
-
-definition
-  let G be real-weighted WGraph;
-  func PRIM:CompSeq(G) -> real-WEV WEVGraphSeq means
-:: GLIB_004:def 15
-   ::dPRIMCS
-  it.0 = PRIM:Init(G) &
-  for n being Element of NAT holds it.(n+1) = PRIM:Step(it.n);
+  let X1,X3 be set, X2 be non empty set;
+  let x be Element of [: PFuncs(X1,X3),X2 :];
+  redefine func x`1 -> Element of PFuncs(X1,X3);
 end;
 
 registration
-  let G be finite real-weighted WGraph;
-  cluster PRIM:CompSeq(G) -> finite;
+  let G be finite _Graph, L be DIJK:Labeling of G;
+  cluster L`1 -> finite;
+  cluster L`2 -> finite;
+end;
+
+
+definition
+  let G be real-weighted WGraph, L be DIJK:Labeling of G;
+  func DIJK:NextBestEdges(L) -> Subset of the_Edges_of G means
+:: GLIB_004:def 7
+  for e1 being set holds e1 in it iff
+     e1 DSJoins dom (L`1), the_Vertices_of G \ dom (L`1), G &
+     for e2 being set
+      st e2 DSJoins dom (L`1), the_Vertices_of G \ dom (L`1), G
+       holds (L`1).((the_Source_of G).e1) + (the_Weight_of G).e1 <=
+             (L`1).((the_Source_of G).e2) + (the_Weight_of G).e2;
+end;
+
+definition
+  let G be real-weighted WGraph, L be DIJK:Labeling of G;
+  func DIJK:Step(L) -> DIJK:Labeling of G equals
+:: GLIB_004:def 8   ::dDIJKSTEP
+  L if DIJK:NextBestEdges(L) = {}
+    otherwise
+  [ L`1+*((the_Target_of G).(choose DIJK:NextBestEdges(L))
+      .--> ((L`1).((the_Source_of G).(choose DIJK:NextBestEdges(L)))
+            + (the_Weight_of G).(choose DIJK:NextBestEdges(L)))),
+    L`2 \/ {choose DIJK:NextBestEdges(L)}
+  ];
+end;
+
+definition
+  let G be real-weighted WGraph, src be Vertex of G;
+  func DIJK:Init(src) -> DIJK:Labeling of G equals
+:: GLIB_004:def 9  ::dDIJKINIT:
+   [src .--> 0, {}];
 end;
 
 definition
   let G be real-weighted WGraph;
-  func PRIM:MST(G) -> real-WEV WEVGraph equals
-:: GLIB_004:def 16  ::dPRIMMST
+  mode DIJK:LabelingSeq of G -> ManySortedSet of NAT means
+:: GLIB_004:def 10
+  for n being Nat holds it.n is DIJK:Labeling of G;
+end;
+
+definition
+  let G be real-weighted WGraph, S be DIJK:LabelingSeq of G, n be Nat;
+  redefine func S.n -> DIJK:Labeling of G;
+end;
+
+definition
+  let G be real-weighted WGraph, src be Vertex of G;
+  func DIJK:CompSeq(src) -> DIJK:LabelingSeq of G means
+:: GLIB_004:def 11    ::dDIJKCS
+  it.0 = DIJK:Init(src) &
+  for n being Nat holds it.(n+1) = DIJK:Step(it.n);
+end;
+
+definition
+  let G be real-weighted WGraph, src be Vertex of G;
+  func DIJK:SSSP(G,src) -> DIJK:Labeling of G equals
+:: GLIB_004:def 12  ::dDIJKSSSP
+  DIJK:CompSeq(src).Result();
+end;
+
+begin :: Dijkstra's Algorithm Theorems
+
+theorem :: GLIB_004:15  ::tDSTEP01
+for G being finite real-weighted WGraph, L be DIJK:Labeling of G
+ holds
+  (card dom (DIJK:Step(L))`1 = card dom L`1 iff DIJK:NextBestEdges(L) = {}) &
+  (card dom (DIJK:Step(L))`1 = card dom L`1 + 1 iff DIJK:NextBestEdges(L)<>{});
+
+theorem :: GLIB_004:16  ::tDSTEP02
+  for G being real-weighted WGraph, L be DIJK:Labeling of G
+   holds dom L`1 c= dom (DIJK:Step(L))`1 & L`2 c= (DIJK:Step(L))`2;
+
+theorem :: GLIB_004:17  ::tDIJKINIT01
+  for G being real-weighted WGraph, src be Vertex of G
+   holds dom ((DIJK:Init(src))`1) = {src};
+
+theorem :: GLIB_004:18  ::tDCS01
+for G being real-weighted WGraph, src being Vertex of G, i,j being Nat
+ st i <= j
+  holds dom ((DIJK:CompSeq(src).i))`1 c= dom (DIJK:CompSeq(src).j)`1 &
+        (DIJK:CompSeq(src).i)`2 c= (DIJK:CompSeq(src).j)`2;
+
+theorem :: GLIB_004:19  ::tDCS03
+for G being finite real-weighted WGraph, src being Vertex of G, n being Nat
+ holds dom (DIJK:CompSeq(src).n)`1 c= G.reachableDFrom(src);
+
+theorem :: GLIB_004:20  ::tDCS05
+for G being finite real-weighted WGraph, src being Vertex of G, n being Nat
+ holds DIJK:NextBestEdges(DIJK:CompSeq(src).n) = {}
+   iff dom (DIJK:CompSeq(src).n)`1 = G.reachableDFrom(src);
+
+theorem :: GLIB_004:21  ::tDCS06
+for G being finite real-weighted WGraph, s being Vertex of G, n being Nat
+ holds card dom (DIJK:CompSeq(s).n)`1 = min(n+1, card(G.reachableDFrom(s)));
+
+theorem :: GLIB_004:22  ::tDCS07
+for G being finite real-weighted WGraph, src being Vertex of G, n being Nat
+ holds (DIJK:CompSeq(src).n)`2
+    c= G.edgesBetween(dom (DIJK:CompSeq(src).n)`1);
+
+theorem :: GLIB_004:23  ::tDCS08
+for G being finite nonnegative-weighted WGraph,
+    s being Vertex of G, n being Nat,
+    G2 being inducedWSubgraph of
+                       G, dom (DIJK:CompSeq(s).n)`1, (DIJK:CompSeq(s).n)`2
+ holds G2 is_mincost_DTree_rooted_at s &
+  for v being Vertex of G st v in dom (DIJK:CompSeq(s).n)`1
+   holds G.min_DPath_cost(s,v) = (DIJK:CompSeq(s).n)`1.v;
+
+theorem :: GLIB_004:24  ::tDIJK01
+for G being finite real-weighted WGraph, s being Vertex of G
+ holds DIJK:CompSeq(s) is halting;
+
+registration
+  let G be finite real-weighted WGraph, src be Vertex of G;
+  cluster DIJK:CompSeq(src) -> halting;
+end;
+
+theorem :: GLIB_004:25  ::tDIJK02
+for G being finite real-weighted WGraph, s being Vertex of G
+ holds DIJK:CompSeq(s).Lifespan() + 1 = card G.reachableDFrom(s);
+
+theorem :: GLIB_004:26  ::tDIJK03
+for G being finite real-weighted WGraph, s being Vertex of G
+  holds dom (DIJK:SSSP(G,s))`1 = G.reachableDFrom(s);
+
+theorem :: GLIB_004:27 ::tDIJK04
+for G being finite nonnegative-weighted WGraph, s being Vertex of G,
+    G2 being inducedWSubgraph of G, dom (DIJK:SSSP(G,s))`1, DIJK:SSSP(G,s)`2
+ holds G2 is_mincost_DTree_rooted_at s &
+  for v being Vertex of G st v in G.reachableDFrom(s)
+   holds v in the_Vertices_of G2 &
+         G.min_DPath_cost(s,v) = (DIJK:SSSP(G,s))`1.v;
+
+begin :: Prim's Algorithm definitions
+
+definition
+  let G be _Graph;
+  mode PRIM:Labeling of G is Element of
+                           [: bool the_Vertices_of G, bool the_Edges_of G :];
+end;
+
+registration
+  let G be finite _Graph, L be PRIM:Labeling of G;
+  cluster L`1 -> finite;
+  cluster L`2 -> finite;
+end;
+
+definition
+  let G be real-weighted WGraph, L being PRIM:Labeling of G;
+  func PRIM:NextBestEdges(L) -> Subset of the_Edges_of G means
+:: GLIB_004:def 13
+  for e1 being set
+   holds e1 in it iff
+      e1 SJoins L`1, the_Vertices_of G \ L`1, G &
+      for e2 being set
+       st e2 SJoins L`1, the_Vertices_of G \ L`1, G
+        holds (the_Weight_of G).e1 <= (the_Weight_of G).e2;
+end;
+
+definition
+  let G be real-weighted WGraph;
+  func PRIM:Init(G) -> PRIM:Labeling of G equals
+:: GLIB_004:def 14  ::dPRIMINIT
+  [ {choose the_Vertices_of G}, {} ];
+end;
+
+definition
+  let G be real-weighted WGraph, L being PRIM:Labeling of G;
+  func PRIM:Step(L) -> PRIM:Labeling of G equals
+:: GLIB_004:def 15   ::dPRIMSTEP
+  L if PRIM:NextBestEdges(L) = {},
+  [ L`1 \/ {(the_Target_of G).(choose PRIM:NextBestEdges(L))},
+    L`2 \/ {choose PRIM:NextBestEdges(L)} ]
+    if PRIM:NextBestEdges(L) <> {} &
+       (the_Source_of G).(choose PRIM:NextBestEdges(L)) in L`1
+    otherwise
+  [ L`1 \/ {(the_Source_of G).(choose PRIM:NextBestEdges(L))},
+    L`2 \/ {choose PRIM:NextBestEdges(L)} ];
+end;
+
+definition
+  let G be real-weighted WGraph;
+  mode PRIM:LabelingSeq of G -> ManySortedSet of NAT means
+:: GLIB_004:def 16
+  for n being Nat holds it.n is PRIM:Labeling of G;
+end;
+
+definition
+  let G be real-weighted WGraph, S be PRIM:LabelingSeq of G, n be Nat;
+  redefine func S.n -> PRIM:Labeling of G;
+end;
+
+definition
+  let G be real-weighted WGraph;
+  func PRIM:CompSeq(G) -> PRIM:LabelingSeq of G means
+:: GLIB_004:def 17   ::dPRIMCS
+  it.0 = PRIM:Init(G) &
+  for n being Nat holds it.(n+1) = PRIM:Step(it.n);
+end;
+
+definition
+  let G be real-weighted WGraph;
+  func PRIM:MST(G) -> PRIM:Labeling of G equals
+:: GLIB_004:def 18  ::dPRIMMST
   PRIM:CompSeq(G).Result();
 end;
 
+theorem :: GLIB_004:28
+for G being real-weighted WGraph, L be PRIM:Labeling of G
+ st PRIM:NextBestEdges(L) <> {} holds
+  ex v being Vertex of G st not v in L`1 &
+     PRIM:Step(L) = [ L`1 \/ {v}, L`2 \/ {choose PRIM:NextBestEdges(L)} ];
+
+theorem :: GLIB_004:29
+for G being real-weighted WGraph, L be PRIM:Labeling of G
+  holds L`1 c= (PRIM:Step(L))`1 & L`2 c= (PRIM:Step(L))`2;
+
+theorem :: GLIB_004:30
+for G being finite real-weighted WGraph, n being Nat
+ holds (PRIM:CompSeq(G).n)`1 is non empty Subset of the_Vertices_of G &
+       (PRIM:CompSeq(G).n)`2 c= G.edgesBetween((PRIM:CompSeq(G).n)`1);
+
+theorem :: GLIB_004:31
+for G1 being finite real-weighted WGraph, n being Nat,
+  G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).n)`1, (PRIM:CompSeq(G1).n)`2
+ holds G2 is connected;
+
+theorem :: GLIB_004:32
+for G1 being finite real-weighted WGraph, n being Nat,
+    G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n)`1
+ holds G2 is connected;
+
 registration
-  let G be finite real-weighted WGraph;
-  cluster PRIM:MST(G) -> finite;
+  let G1 be finite real-weighted WGraph, n being Nat;
+  cluster -> connected inducedSubgraph of G1,(PRIM:CompSeq(G1).n)`1;
 end;
 
 registration
-  let G1 be finite real-weighted WGraph, n being Element of NAT;
-  cluster -> connected inducedSubgraph of G1,(PRIM:CompSeq(G1).n).labeledV();
+  let G1 be finite real-weighted WGraph, n being Nat;
+  cluster -> connected inducedSubgraph of G1, (PRIM:CompSeq(G1).n)`1,
+                                              (PRIM:CompSeq(G1).n)`2;
 end;
 
-registration
-  let G1 be finite real-weighted WGraph, n being Element of NAT;
-  cluster -> connected inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV(),
-    (PRIM:CompSeq(G1).n).labeledE();
-end;
+theorem :: GLIB_004:33
+for G being finite real-weighted WGraph, n being Nat
+ holds (PRIM:CompSeq(G).n)`1 c= G.reachableFrom(choose the_Vertices_of G);
+
+theorem :: GLIB_004:34
+for G being finite real-weighted WGraph, i,j being Nat st i <= j
+ holds (PRIM:CompSeq(G).i)`1 c= (PRIM:CompSeq(G).j)`1 &
+       (PRIM:CompSeq(G).i)`2 c= (PRIM:CompSeq(G).j)`2;
+
+theorem :: GLIB_004:35
+for G being finite real-weighted WGraph, n being Nat
+ holds PRIM:NextBestEdges(PRIM:CompSeq(G).n) = {} iff
+       (PRIM:CompSeq(G).n)`1 = G.reachableFrom(choose the_Vertices_of G);
+
+theorem :: GLIB_004:36
+for G being finite real-weighted WGraph, n being Nat
+ holds card ((PRIM:CompSeq(G).n)`1) =
+                    min(n+1, card(G.reachableFrom(choose the_Vertices_of G)));
+
+theorem :: GLIB_004:37
+for G being finite real-weighted WGraph
+ holds PRIM:CompSeq(G) is halting &
+       PRIM:CompSeq(G).Lifespan() + 1 =
+                               card G.reachableFrom(choose the_Vertices_of G);
+
+theorem :: GLIB_004:38
+for G1 being finite real-weighted WGraph, n being Nat,
+ G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n)`1, (PRIM:CompSeq(G1).n)`2
+ holds G2 is Tree-like;
+
+theorem :: GLIB_004:39
+for G being finite connected real-weighted WGraph
+ holds (PRIM:MST(G))`1 = the_Vertices_of G;
 
 registration
   let G be finite connected real-weighted WGraph;
@@ -439,10 +468,8 @@ definition
   let G1 be finite connected real-weighted WGraph,
   G2 be spanning Tree-like WSubgraph of G1;
   attr G2 is min-cost means
-:: GLIB_004:def 17
-   ::dWGMINCOST
-  for G3 being spanning Tree-like WSubgraph of G1 holds
-  G2.cost() <= G3.cost();
+:: GLIB_004:def 19                               ::dWGMINCOST
+  for G3 being spanning Tree-like WSubgraph of G1 holds G2.cost() <= G3.cost();
 end;
 
 registration
@@ -453,109 +480,29 @@ end;
 definition
   let G be finite connected real-weighted WGraph;
   mode minimumSpanningTree of G is
-    min-cost (spanning Tree-like WSubgraph of G);
+       min-cost (spanning Tree-like WSubgraph of G);
 end;
 
 begin :: Prim's Algorithm Theorems
 
-theorem :: GLIB_004:35 ::tMST01
+theorem :: GLIB_004:40 ::tMST01
   for G1,G2 being finite connected real-weighted WGraph,
   G3 being WSubgraph of G1 st G3 is minimumSpanningTree of G1 &
   G1 == G2 & the_Weight_of G1 = the_Weight_of G2
   holds G3 is minimumSpanningTree of G2;
 
-theorem :: GLIB_004:36  ::tMST02
-  for G being finite connected real-weighted WGraph,
-  G1 being minimumSpanningTree of G, G2 being WGraph
-  st G1 == G2 & the_Weight_of G1 = the_Weight_of G2 holds
-  G2 is minimumSpanningTree of G;
+theorem :: GLIB_004:41  ::tMST02
+for G being finite connected real-weighted WGraph,
+    G1 being minimumSpanningTree of G, G2 being WGraph
+ st G1 == G2 & the_Weight_of G1 = the_Weight_of G2 holds
+    G2 is minimumSpanningTree of G;
 
-theorem :: GLIB_004:37 ::tPRIMINIT01
-  for G being real-weighted WGraph holds G == PRIM:Init(G) &
-  the_Weight_of G = the_Weight_of PRIM:Init(G) &
-  the_ELabel_of PRIM:Init(G) = {} &
-  the_VLabel_of PRIM:Init(G) = (choose the_Vertices_of G).-->1;
+theorem :: GLIB_004:42  ::tPRIMMST03
+for G being finite connected real-weighted WGraph, n being Nat
+ holds (PRIM:CompSeq(G).n)`2 c= (PRIM:MST(G))`2;
 
-theorem :: GLIB_004:38 ::tPRIMINIT02
-  for G being real-weighted WGraph holds
-  PRIM:Init(G).labeledV() = {choose the_Vertices_of G} &
-  PRIM:Init(G).labeledE() = {};
-
-theorem :: GLIB_004:39 ::lPRIMSTEP02
-  for G being real-WEV WEVGraph st PRIM:NextBestEdges(G) <> {} holds
-  ex v being Vertex of G st not v in G.labeledV() &
-  PRIM:Step(G) = G.labelEdge(choose PRIM:NextBestEdges(G),1)
-  .labelVertex(v,1);
-
-theorem :: GLIB_004:40 ::tPRIMSTEP01
-  for G being real-WEV WEVGraph holds
-  G == PRIM:Step(G) & the_Weight_of G = the_Weight_of PRIM:Step(G) &
-  G.labeledE() c= PRIM:Step(G).labeledE() &
-  G.labeledV() c= PRIM:Step(G).labeledV();
-
-theorem :: GLIB_004:41 ::tPRIMCS03
-  for G being finite real-weighted WGraph, n being Element of NAT holds
-  G == PRIM:CompSeq(G).n &
-  the_Weight_of (PRIM:CompSeq(G).n) = the_Weight_of G;
-
-theorem :: GLIB_004:42 ::tPRIMCS05
-  for G being finite real-weighted WGraph, n being Element of NAT holds
-  (PRIM:CompSeq(G).n).labeledV() is non empty Subset of the_Vertices_of G &
-  (PRIM:CompSeq(G).n).labeledE() c=
-  G.edgesBetween((PRIM:CompSeq(G).n).labeledV());
-
-theorem :: GLIB_004:43 ::tPRIMCS02
-  for G1 being finite real-weighted WGraph, n being Element of NAT,
-  G2 being inducedSubgraph of G1,(PRIM:CompSeq(G1).n).labeledV(),
-  (PRIM:CompSeq(G1).n).labeledE() holds G2 is connected;
-
-theorem :: GLIB_004:44 ::tPRIMCS04
-  for G1 being finite real-weighted WGraph, n being Element of NAT,
-  G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV()
-  holds G2 is connected;
-
-theorem :: GLIB_004:45 ::tPRIMCS08
-  for G being finite real-weighted WGraph, n being Element of NAT holds
-  (PRIM:CompSeq(G).n).labeledV() c=
-  G.reachableFrom(choose the_Vertices_of G);
-
-theorem :: GLIB_004:46 ::tPRIMCS13
-  for G being finite real-weighted WGraph, i,j being Element of NAT
-  st i <= j holds (PRIM:CompSeq(G).i).labeledV() c=
-  (PRIM:CompSeq(G).j).labeledV() & (PRIM:CompSeq(G).i).labeledE() c=
-  (PRIM:CompSeq(G).j).labeledE();
-
-theorem :: GLIB_004:47 ::tPRIMCS07
-  for G being finite real-weighted WGraph, n being Element of NAT holds
-  PRIM:NextBestEdges(PRIM:CompSeq(G).n) = {} iff
-  (PRIM:CompSeq(G).n).labeledV() =
-  G.reachableFrom(choose the_Vertices_of G);
-
-theorem :: GLIB_004:48 ::tPRIMCS06
-  for G being finite real-weighted WGraph, n being Element of NAT holds
-  card (PRIM:CompSeq(G).n).labeledV() =
-  min(n+1, card(G.reachableFrom(choose the_Vertices_of G)));
-
-theorem :: GLIB_004:49 ::tPRIMCS09
-  for G being finite real-weighted WGraph holds
-  PRIM:CompSeq(G) is halting & PRIM:CompSeq(G).Lifespan() + 1 =
-  card G.reachableFrom(choose the_Vertices_of G);
-
-theorem :: GLIB_004:50 ::tPRIMCS11
-  for G1 being finite real-weighted WGraph, n being Element of NAT,
-  G2 being inducedSubgraph of G1, (PRIM:CompSeq(G1).n).labeledV(),
-  (PRIM:CompSeq(G1).n).labeledE() holds G2 is Tree-like;
-
-theorem :: GLIB_004:51 ::tPRIMMST02
-  for G being finite connected real-weighted WGraph
-  holds PRIM:MST(G).labeledV() = the_Vertices_of G;
-
-theorem :: GLIB_004:52  ::tPRIMMST03
-  for G being finite connected real-weighted WGraph, n being Nat holds
-  (PRIM:CompSeq(G).n).labeledE() c= PRIM:MST(G).labeledE();
-
-theorem :: GLIB_004:53 ::tPRIMMST04
-  for G1 being finite connected real-weighted WGraph,
-  G2 being inducedWSubgraph of G1, PRIM:MST(G1).labeledV(),
-  PRIM:MST(G1).labeledE() holds G2 is minimumSpanningTree of G1;
+theorem :: GLIB_004:43 ::tPRIMMST04
+for G1 being finite connected real-weighted WGraph,
+    G2 being inducedWSubgraph of G1, (PRIM:MST(G1))`1, (PRIM:MST(G1))`2
+ holds G2 is minimumSpanningTree of G1;
 

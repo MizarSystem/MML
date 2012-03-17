@@ -99,12 +99,16 @@ theorem :: HELLY:15
   for G being _Graph for W1, W2 being Walk of G
   holds W1 is_a_prefix_of W1.append(W2);
 
-theorem :: HELLY:16
+theorem :: HELLY:16  :: PathLike20 :: LEXBFS:9 in 1033
+  for G being _Graph, W1,W2 being Walk of G
+  st W1 is trivial & W1.last() = W2.first() holds W1.append(W2) = W2;
+
+theorem :: HELLY:17
   for G being _Graph for W1, W2 being Trail of G
   st W1.last() = W2.first() & W1.edges() misses W2.edges()
   holds W1.append(W2) is Trail-like;
 
-theorem :: HELLY:17
+theorem :: HELLY:18
   for G being _Graph for P1, P2 being Path of G
   st P1.last() = P2.first() & P1 is open & P2 is open &
   P1.edges() misses P2.edges() &
@@ -112,35 +116,35 @@ theorem :: HELLY:17
   P1.vertices() /\ P2.vertices() c= {P1.first(), P1.last()}
   holds P1.append(P2) is Path-like;
 
-theorem :: HELLY:18
+theorem :: HELLY:19
   for G being _Graph for P1, P2 being Path of G
   st P1.last() = P2.first() & P1 is open & P2 is open &
   P1.vertices() /\ P2.vertices() = {P1.last()}
   holds P1.append(P2) is open Path-like;
 
-theorem :: HELLY:19
+theorem :: HELLY:20
   for G being _Graph for P1, P2 being Path of G
   st P1.last() = P2.first() & P2.last() = P1.first() &
   P1 is open & P2 is open & P1.edges() misses P2.edges() &
   P1.vertices() /\ P2.vertices() = {P1.last(), P1.first()}
   holds P1.append(P2) is Cycle-like;
 
-theorem :: HELLY:20 :: unused SimpleG1:
+theorem :: HELLY:21 :: unused SimpleG1:
   for G being simple _Graph for W1, W2 being Walk of G for k being odd Nat
 
 st k <= len W1 & k <= len W2 & for j being odd Nat st j <= k holds W1.j = W2.j
   holds for j being Nat st 1 <= j & j <= k holds W1.j = W2.j;
 
-theorem :: HELLY:21
+theorem :: HELLY:22
   for G being _Graph for W1, W2 being Walk of G
   st W1.first() = W2.first() holds len maxPrefix(W1,W2) is odd;
 
-theorem :: HELLY:22
+theorem :: HELLY:23
   for G being _Graph for W1, W2 being Walk of G
   st W1.first() = W2.first() & not W1 is_a_prefix_of W2
   holds len maxPrefix(W1,W2) +2 <= len W1;
 
-theorem :: HELLY:23
+theorem :: HELLY:24
   for G being non-multi _Graph for W1, W2 being Walk of G
   st W1.first() = W2.first() &
   not W1 is_a_prefix_of W2 & not W2 is_a_prefix_of W1
@@ -159,7 +163,7 @@ registration
   cluster Trail-like -> Path-like Walk of T;
 end;
 
-theorem :: HELLY:24
+theorem :: HELLY:25
   for T being _Tree for P being Path of T st P is non trivial holds P is open;
 
 registration
@@ -167,11 +171,11 @@ registration
   cluster non trivial -> open Path of T;
 end;
 
-theorem :: HELLY:25   :: Only for _Tree as it is not true for cyclic paths
+theorem :: HELLY:26   :: Only for _Tree as it is not true for cyclic paths
   for T being _Tree for P being Path of T for i, j being odd Nat
   st i < j & j <= len P holds P.i <> P.j;
 
-theorem :: HELLY:26
+theorem :: HELLY:27
   for T being _Tree for a, b being Vertex of T for P1, P2 being Path of T
   st P1 is_Walk_from a, b & P2 is_Walk_from a, b holds P1 = P2;
 
@@ -184,13 +188,13 @@ definition
   it is_Walk_from a, b;
 end;
 
-theorem :: HELLY:27
+theorem :: HELLY:28
   for T being _Tree, a, b being Vertex of T
   holds T.pathBetween(a,b).first() = a & T.pathBetween(a,b).last() = b;
 
 :: more theorems about pathBetween ?
 
-theorem :: HELLY:28
+theorem :: HELLY:29
   for T being _Tree, a, b being Vertex of T
   holds a in T.pathBetween(a,b).vertices() & b in T.pathBetween(a,b).vertices()
 ;
@@ -205,54 +209,54 @@ registration
   cluster T.pathBetween(a, a) -> trivial;
 end;
 
-theorem :: HELLY:29
+theorem :: HELLY:30
   for T being _Tree, a being Vertex of T
   holds T.pathBetween(a,a).vertices() = {a};
 
-theorem :: HELLY:30
+theorem :: HELLY:31
   for T being _Tree, a, b being Vertex of T
   holds T.pathBetween(a,b).reverse() = T.pathBetween(b,a);
 
-theorem :: HELLY:31
+theorem :: HELLY:32
   for T being _Tree, a, b being Vertex of T
   holds T.pathBetween(a,b).vertices() = T.pathBetween(b,a).vertices();
 
-theorem :: HELLY:32
+theorem :: HELLY:33
   for T being _Tree for a, b being Vertex of T for t being _Subtree of T
   for a', b' being Vertex of t st a = a' & b = b'
   holds T.pathBetween(a,b) = t.pathBetween(a',b');
 
-theorem :: HELLY:33
+theorem :: HELLY:34
   for T being _Tree for a, b being Vertex of T
   for t being _Subtree of T st a in the_Vertices_of t & b in the_Vertices_of t
   holds T.pathBetween(a,b).vertices() c= the_Vertices_of t;
 
-theorem :: HELLY:34
+theorem :: HELLY:35
   for T being _Tree for P being Path of T for a, b being Vertex of T
   for i, j being odd Nat st i <= j & j <= len P & P.i = a & P.j = b
   holds T.pathBetween(a,b) = P.cut(i, j);
 
-theorem :: HELLY:35
+theorem :: HELLY:36
   for T being _Tree for a, b, c being Vertex of T
   holds c in T.pathBetween(a,b).vertices()
   iff T.pathBetween(a,b) = T.pathBetween(a,c).append(T.pathBetween(c,b));
 
-theorem :: HELLY:36
+theorem :: HELLY:37
   for T being _Tree for a, b, c being Vertex of T
   holds c in T.pathBetween(a,b).vertices()
   iff T.pathBetween(a,c) is_a_prefix_of T.pathBetween(a,b);
 
-theorem :: HELLY:37
+theorem :: HELLY:38
   for T being _Tree for P1, P2 being Path of T
   st P1.last() = P2.first() & P1.vertices() /\ P2.vertices() = {P1.last()}
   holds P1.append(P2) is Path-like;
 
-theorem :: HELLY:38
+theorem :: HELLY:39
   for T being _Tree for a, b, c being Vertex of T
   holds c in T.pathBetween(a,b).vertices()
   iff T.pathBetween(a,c).vertices() /\ T.pathBetween(c,b).vertices() = {c};
 
-theorem :: HELLY:39
+theorem :: HELLY:40
   for T being _Tree for a, b, c, d being Vertex of T
   for P1, P2 being Path of T
   st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
@@ -270,49 +274,49 @@ definition
   /\ T.pathBetween(c,a).vertices() = { it };
 end;
 
-theorem :: HELLY:40  :: PMV(a,b,c) = PMV(a,c,b)
+theorem :: HELLY:41  :: PMV(a,b,c) = PMV(a,c,b)
   for T being _Tree for a, b, c being Vertex of T
   holds MiddleVertex(a,b,c) = MiddleVertex(a,c,b);
 
-theorem :: HELLY:41   :: PMV(a,b,c) = PMV(b,a,c)
+theorem :: HELLY:42   :: PMV(a,b,c) = PMV(b,a,c)
   for T being _Tree for a, b, c being Vertex of T
   holds MiddleVertex(a,b,c) = MiddleVertex(b,a,c);
 
-theorem :: HELLY:42 ::PMV102: :: PMV(a,b,c) = PMV(b,c,a)
+theorem :: HELLY:43 ::PMV102: :: PMV(a,b,c) = PMV(b,c,a)
   for T being _Tree for a, b, c being Vertex of T
   holds MiddleVertex(a,b,c) = MiddleVertex(b,c,a);
 
-theorem :: HELLY:43  :: PMV(a,b,c) = PMV(c,a,b)
+theorem :: HELLY:44  :: PMV(a,b,c) = PMV(c,a,b)
   for T being _Tree for a, b, c being Vertex of T
   holds MiddleVertex(a,b,c) = MiddleVertex(c,a,b);
 
-theorem :: HELLY:44 :: PMV104: :: PMV(a,b,c) = PMV(c,b,a)
+theorem :: HELLY:45 :: PMV104: :: PMV(a,b,c) = PMV(c,b,a)
   for T being _Tree for a, b, c being Vertex of T
   holds MiddleVertex(a,b,c) = MiddleVertex(c,b,a);
 
-theorem :: HELLY:45
+theorem :: HELLY:46
   for T being _Tree for a, b, c being Vertex of T
   st c in T.pathBetween(a,b).vertices() holds MiddleVertex(a,b,c) = c;
 
-theorem :: HELLY:46 :: PMV200: :: PMV(a,a,a) = a;
+theorem :: HELLY:47 :: PMV200: :: PMV(a,a,a) = a;
   for T being _Tree for a being Vertex of T holds MiddleVertex(a,a,a) = a;
 
-theorem :: HELLY:47  :: PMV(a,a,b) = a;
+theorem :: HELLY:48  :: PMV(a,a,b) = a;
   for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,a,b) = a;
 
-theorem :: HELLY:48  :: PMV(a,b,a) = a;
+theorem :: HELLY:49  :: PMV(a,b,a) = a;
   for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,b,a) = a;
 
-theorem :: HELLY:49 :: PMV203: :: PMV(a,b,b) = b;
+theorem :: HELLY:50 :: PMV203: :: PMV(a,b,b) = b;
   for T being _Tree for a, b being Vertex of T holds MiddleVertex(a,b,b) = b;
 
-theorem :: HELLY:50
+theorem :: HELLY:51
   for T being _Tree for P1, P2 be Path of T for a, b, c being Vertex of T
   st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
   not b in P2.vertices() & not c in P1.vertices()
   holds MiddleVertex(a, b, c) = P1.len maxPrefix(P1,P2);
 
-theorem :: HELLY:51 :: PMV302:
+theorem :: HELLY:52 :: PMV302:
   for T being _Tree for P1, P2, P3, P4 be Path of T
   for a, b, c being Vertex of T
   st P1 = T.pathBetween(a,b) & P2 = T.pathBetween(a,c) &
@@ -320,7 +324,7 @@ theorem :: HELLY:51 :: PMV302:
   not b in P2.vertices() & not c in P1.vertices() & not a in P4.vertices()
   holds P1.len maxPrefix(P1,P2) = P3.len maxPrefix(P3,P4);
 
-theorem :: HELLY:52
+theorem :: HELLY:53
   for T being _Tree for a, b, c being Vertex of T for S being non empty set
   st for s being set st s in S
   holds (ex t being _Subtree of T st s = the_Vertices_of t)
@@ -343,7 +347,7 @@ end;
 :: infinite families of subtrees.  Example: half-line tree with
 :: subtrees T_i = {j >= i}.
 
-theorem :: HELLY:53 :: main Prop4p7:
+theorem :: HELLY:54 :: main Prop4p7:
   for T being _Tree, X being finite set
 
 st for x being set st x in X ex t being _Subtree of T st x = the_Vertices_of t

@@ -25,7 +25,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1"/>
+<Adjective nr="1" value="false"/>
 <Adjective nr="10"/>
 <Adjective nr="11"/>
 <Adjective nr="12"/>
@@ -37,33 +37,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="1" value="false"/>
-<Adjective nr="10"/>
-<Adjective nr="11"/>
-<Adjective nr="12"/>
-</Cluster>
-</RCluster>
-<RCluster aid="ORDINAL1" nr="4">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="7"/>
-<Adjective nr="14"/>
-</Cluster>
-</RCluster>
-<RCluster aid="ORDINAL1" nr="5">
-<ArgTypes/>
-<Typ kind="M" nr="1">
-<Cluster/>
-</Typ>
-<Cluster>
 <Adjective nr="16"/>
 </Cluster>
 </RCluster>
-<RCluster aid="ORDINAL1" nr="6">
+<RCluster aid="ORDINAL1" nr="4">
 <ArgTypes/>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -87,13 +64,6 @@
 </Cluster>
 </FCluster>
 <FCluster aid="ORDINAL1" nr="2">
-<ArgTypes/>
-<Func kind="K" nr="5"/>
-<Cluster>
-<Adjective nr="12"/>
-</Cluster>
-</FCluster>
-<FCluster aid="ORDINAL1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -109,7 +79,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster aid="ORDINAL1" nr="4">
+<FCluster aid="ORDINAL1" nr="3">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -124,7 +94,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster aid="ORDINAL1" nr="5">
+<FCluster aid="ORDINAL1" nr="4">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -141,7 +111,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster aid="ORDINAL1" nr="6">
+<FCluster aid="ORDINAL1" nr="5">
 <ArgTypes/>
 <Func kind="K" nr="42"/>
 <Cluster>
@@ -149,7 +119,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </FCluster>
-<FCluster aid="ORDINAL1" nr="7">
+<FCluster aid="ORDINAL1" nr="6">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -204,6 +174,22 @@
 </Cluster>
 </CCluster>
 <CCluster aid="ORDINAL1" nr="4">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="7"/>
+<Adjective nr="14"/>
+</Cluster>
+</CCluster>
+<CCluster aid="ORDINAL1" nr="5">
 <ArgTypes>
 <Typ kind="M" nr="1">
 <Cluster>
@@ -220,7 +206,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster aid="ORDINAL1" nr="5">
+<CCluster aid="ORDINAL1" nr="6">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="16"/>
@@ -232,7 +218,7 @@
 <Adjective nr="12"/>
 </Cluster>
 </CCluster>
-<CCluster aid="ORDINAL1" nr="6">
+<CCluster aid="ORDINAL1" nr="7">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
@@ -244,7 +230,7 @@
 <Adjective nr="16"/>
 </Cluster>
 </CCluster>
-<CCluster aid="ORDINAL1" nr="7">
+<CCluster aid="ORDINAL1" nr="8">
 <ArgTypes/>
 <Cluster/>
 <Typ kind="M" nr="2">

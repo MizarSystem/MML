@@ -26,7 +26,6 @@
 <ArticleID name="CARD_3"/>
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
-<ArticleID name="CARD_4"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="SUPINF_2"/>
 <ArticleID name="MEASURE1"/>
@@ -51,7 +50,7 @@
 <Adjective nr="22"/>
 <Adjective nr="23"/>
 <Adjective nr="24"/>
-<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </RCluster>
 <FCluster aid="MESFUN6C" nr="1">
@@ -59,7 +58,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="18"/>
-<Adjective nr="35" value="false"/>
+<Adjective nr="36" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -70,7 +69,7 @@
 <Typ kind="M" nr="5">
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 <LocusVar nr="2"/>
 <Func kind="K" nr="43"/>
@@ -83,7 +82,7 @@
 </Func>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="72"/>
+<Adjective nr="73"/>
 </Cluster>
 </FCluster>
 </Registrations>

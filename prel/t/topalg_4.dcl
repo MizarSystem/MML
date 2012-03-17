@@ -58,15 +58,15 @@
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="116"/>
-<Adjective nr="158"/>
+<Adjective nr="117"/>
+<Adjective nr="159"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="116"/>
-<Adjective nr="158"/>
+<Adjective nr="117"/>
+<Adjective nr="159"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -75,9 +75,9 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="115"/>
 <Adjective nr="116"/>
-<Adjective nr="158"/>
+<Adjective nr="117"/>
+<Adjective nr="159"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPALG_4" nr="2">
@@ -85,13 +85,13 @@
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="12">
 <Cluster>
 <Adjective nr="31" value="false"/>
-<Adjective nr="116"/>
+<Adjective nr="117"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">

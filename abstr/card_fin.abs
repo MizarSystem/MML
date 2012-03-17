@@ -20,7 +20,7 @@ environ
       FINSOP_1, NEWTON, NAT_D, STIRL2_1, YELLOW20, PRGCOR_2, RECDEF_1, BINOP_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCT_2,
       FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, NAT_1,
-      INT_1, BINOP_2, CARD_1, FINSEQ_1, WSIERP_1, AFINSQ_1, STIRL2_1, CARD_4;
+      INT_1, BINOP_2, CARD_1, FINSEQ_1, WSIERP_1, AFINSQ_1, STIRL2_1, CARD_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
 
 
@@ -36,11 +36,11 @@ theorem :: CARD_FIN:1  :: TREES_1:19
 
 theorem :: CARD_FIN:2
   for X,Y,x,y st (Y={} implies X={}) & not x in X holds card Funcs(X,Y) =
-  Card{F where F is Function of X\/{x},Y\/{y}:rng (F|X) c=Y & F.x=y};
+  card{F where F is Function of X\/{x},Y\/{y}:rng (F|X) c=Y & F.x=y};
 
 theorem :: CARD_FIN:3
   for X,Y,x,y st not x in X & y in Y holds
-  card Funcs(X,Y) = Card{F where F is Function of X\/{x},Y:F.x=y};
+  card Funcs(X,Y) = card{F where F is Function of X\/{x},Y:F.x=y};
 
 :: card Funcs(X,Y)
 
@@ -49,8 +49,8 @@ theorem :: CARD_FIN:4  :: WEDDWITT:4
 
 theorem :: CARD_FIN:5
   for X,Y,x,y st (Y is empty implies X is empty) & not x in X & not y in Y
-  holds Card{F where F is Function of X,Y:F is one-to-one}=
-  Card{F where F is Function of X\/{x},Y\/{y}:F is one-to-one & F.x=y};
+  holds card{F where F is Function of X,Y:F is one-to-one}=
+  card{F where F is Function of X\/{x},Y\/{y}:F is one-to-one & F.x=y};
 
 theorem :: CARD_FIN:6
   n!/((n-'k)!) is Element of NAT;
@@ -59,20 +59,20 @@ theorem :: CARD_FIN:6
 
 theorem :: CARD_FIN:7
   card X <= card Y implies
-  Card {F where F is Function of X,Y:F is one-to-one} =
+  card {F where F is Function of X,Y:F is one-to-one} =
   card Y!/((card Y-'card X)!);
 
 :: Permutation of X
 
 theorem :: CARD_FIN:8
-  Card{F where F is Function of X,X:F is Permutation of X}=card X!;
+  card{F where F is Function of X,X:F is Permutation of X}=card X!;
 
 definition
   let X,k,x1,x2;
   func Choose(X,k,x1,x2) -> Subset of Funcs(X,{x1,x2}) means
 :: CARD_FIN:def 1
 
-  x in it iff ex f be Function of X,{x1,x2} st f = x & Card (f"{x1})=k;
+  x in it iff ex f be Function of X,{x1,x2} st f = x & card (f"{x1})=k;
 end;
 
 theorem :: CARD_FIN:9
@@ -92,14 +92,14 @@ theorem :: CARD_FIN:13
 
 theorem :: CARD_FIN:14
   not z in X implies card Choose(X,k,x,y)=
-  Card{f where f is Function of X\/{z},{x,y}:Card (f"{x})=k+1 & f.z=x};
+  card{f where f is Function of X\/{z},{x,y}:card (f"{x})=k+1 & f.z=x};
 
 theorem :: CARD_FIN:15
   f.y<>x implies (f|(dom f\{y}))"{x}=f"{x};
 
 theorem :: CARD_FIN:16
   not z in X & x<>y implies card Choose(X,k,x,y)=
-  Card{f where f is Function of X\/{z},{x,y}:Card (f"{x})=k & f.z=y};
+  card{f where f is Function of X\/{z},{x,y}:card (f"{x})=k & f.z=y};
 
 theorem :: CARD_FIN:17
   x<>y & not z in X implies card Choose(X\/{z},k+1,x,y)=
@@ -202,7 +202,7 @@ end;
 
 registration
   cluster non empty finite-yielding Function;
-  cluster empty finite-yielding Function;
+  cluster empty -> finite-yielding Function;
 end;
 
 registration
@@ -244,7 +244,7 @@ reserve D for non empty set,
 
 theorem :: CARD_FIN:42
   for F be XFinSequence of D,b,n st
-  n in dom F & ( b has_a_unity or n <> 0 ) holds
+  n in dom F & ( b is having_a_unity or n <> 0 ) holds
   b.(b "**" F|n, F.n) = b "**" F|(n+1);
 
 theorem :: CARD_FIN:43
@@ -263,12 +263,12 @@ theorem :: CARD_FIN:46
   F = x & dom F = n & rng F c= {0,1} & Sum F=k;
 
 theorem :: CARD_FIN:47
-  for F be XFinSequence of D,b st b has_a_unity or len F >= 1
+  for F be XFinSequence of D,b st b is having_a_unity or len F >= 1
   holds b "**" F = b "**" (XFS2FS F);
 
 theorem :: CARD_FIN:48
   for F,G be XFinSequence of D,P be Permutation of dom F st
-  b is commutative associative & (b has_a_unity or len F >= 1) &
+  b is commutative associative & (b is having_a_unity or len F >= 1) &
   G = F * P holds b "**" F = b "**" G;
 
 definition
@@ -283,7 +283,7 @@ definition
   P be Function of card Choose(X,k,x,y),Choose(X,k,x,y)
   st dom F=X & P is one-to-one & x<>y ex XFS be XFinSequence of NAT st
   dom XFS=dom P & (for z,f st z in dom XFS & f=P.z holds
-  XFS.z=Card(Intersection(F,f,x))) & it=Sum XFS;
+  XFS.z=card(Intersection(F,f,x))) & it=Sum XFS;
 end;
 
 theorem :: CARD_FIN:49
@@ -291,10 +291,10 @@ theorem :: CARD_FIN:49
   P be Function of card Choose(X,k,x,y),Choose(X,k,x,y)
   st dom Fy=X & P is one-to-one & x<>y for XFS be XFinSequence of NAT st
   dom XFS=dom P & (for z,f st z in dom XFS & f=P.z holds
-  XFS.z=Card(Intersection(Fy,f,x))) holds Card_Intersection(Fy,k)=Sum XFS;
+  XFS.z=card(Intersection(Fy,f,x))) holds Card_Intersection(Fy,k)=Sum XFS;
 
 theorem :: CARD_FIN:50
-  dom Fy is finite & k=0 implies Card_Intersection(Fy,k)=Card (union rng Fy);
+  dom Fy is finite & k=0 implies Card_Intersection(Fy,k)=card (union rng Fy);
 
 theorem :: CARD_FIN:51
   dom Fy=X & k > card X implies Card_Intersection(Fy,k)=0;
@@ -306,7 +306,7 @@ theorem :: CARD_FIN:52
   Card_Intersection(Fy,1)=Sum XFS;
 
 theorem :: CARD_FIN:53
-  dom Fy=X implies Card_Intersection(Fy,card X)=Card Intersection(Fy,X-->x,x);
+  dom Fy=X implies Card_Intersection(Fy,card X)=card Intersection(Fy,X-->x,x);
 
 theorem :: CARD_FIN:54
   Fy=x.-->X implies Card_Intersection(Fy,1)=card X;
@@ -341,7 +341,7 @@ theorem :: CARD_FIN:61
 
 theorem :: CARD_FIN:62
   for F, G, bFG be XFinSequence of D st b is commutative associative &
-  (b has_a_unity or len F >= 1) & len F=len G & len F=len bFG &
+  (b is having_a_unity or len F >= 1) & len F=len G & len F=len bFG &
   (for n st n in dom bFG holds bFG.n=b.(F.n,G.n))
   holds b "**" F^G = b "**" bFG;
 
@@ -380,18 +380,18 @@ theorem :: CARD_FIN:67
   for Fy be finite-yielding Function,X st dom Fy=X
   for XFS be XFinSequence of INT st dom XFS= card X &
   for n st n in dom XFS holds XFS.n=((-1)|^n)*Card_Intersection(Fy,n+1) holds
-  Card union rng Fy=Sum XFS;
+  card union rng Fy=Sum XFS;
 
 theorem :: CARD_FIN:68
   for Fy,X,n,k st dom Fy=X holds (ex x,y st x<>y &
-  for f st f in Choose(X,k,x,y) holds Card(Intersection(Fy,f,x))=n) implies
+  for f st f in Choose(X,k,x,y) holds card(Intersection(Fy,f,x))=n) implies
   Card_Intersection(Fy,k)=n*(card X choose k);
 
 theorem :: CARD_FIN:69
   for Fy,X st dom Fy=X for XF be XFinSequence of NAT st dom XF=card X &
   for n st n in dom XF holds ex x,y st x<>y &
-  for f st f in Choose(X,n+1,x,y) holds Card(Intersection(Fy,f,x))=XF.n holds
-  ex F be XFinSequence of INT st dom F=card X & Card union rng Fy = Sum F &
+  for f st f in Choose(X,n+1,x,y) holds card(Intersection(Fy,f,x))=XF.n holds
+  ex F be XFinSequence of INT st dom F=card X & card union rng Fy = Sum F &
   for n st n in dom F holds F.n=((-1)|^n)*XF.n*(card X choose (n+1));
 
 :: onto
@@ -399,7 +399,7 @@ theorem :: CARD_FIN:69
 theorem :: CARD_FIN:70
   for X,Y be finite set st X is non empty & Y is non empty
   ex F be XFinSequence of INT st dom F = card Y+1 &
-  Sum F = Card {f where f is Function of X,Y:f is onto} &
+  Sum F = card {f where f is Function of X,Y:f is onto} &
   for n st n in dom F holds
   F.n=((-1)|^n)*(card Y choose n)*((card Y-n) |^ card X);
 
@@ -413,21 +413,21 @@ theorem :: CARD_FIN:71
 theorem :: CARD_FIN:72
   for X1,Y1,X be finite set st (Y1 is empty implies X1 is empty) & X c= X1
   for F be Function of X1,Y1 st F is one-to-one & card X1=card Y1 holds
-  (card X1-'card X)!= Card{f where f is Function of X1,Y1:
+  (card X1-'card X)!= card{f where f is Function of X1,Y1:
   f is one-to-one & rng(f|(X1\X)) c= F.:(X1\X) &
   for x st x in X holds f.x=F.x};
 
 theorem :: CARD_FIN:73
   for F be Function st dom F=X & F is one-to-one
   ex XF be XFinSequence of INT st
-  Sum XF=Card {h where h is Function of X,rng F:
+  Sum XF=card {h where h is Function of X,rng F:
   h is one-to-one & for x st x in X holds h.x<>F.x}& dom XF = card X +1 &
   for n st n in dom XF holds XF.n=((-1)|^n)*(card X!)/(n!);
 
 :: disorders
 
 theorem :: CARD_FIN:74
-  ex XF be XFinSequence of INT st Sum XF=Card {h where h is Function of X,X:
+  ex XF be XFinSequence of INT st Sum XF=card {h where h is Function of X,X:
   h is one-to-one & for x st x in X holds h.x<>x}& dom XF = card X+1 &
   for n st n in dom XF holds XF.n=((-1)|^n)*(card X!)/(n!);
 

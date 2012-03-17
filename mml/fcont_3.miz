@@ -10,21 +10,20 @@ environ
       BOOLE, LIMFUNC1, FUNCT_1, PROB_1, ARYTM, RCOMP_1, ARYTM_1, ABSVALUE,
       ARYTM_3, FCONT_1, SQUARE_1, FUNCOP_1, SEQM_3, OPPCAT_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
-      COMPLEX1, PROB_1, REAL_1, FUNCT_1,
-      FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1, RELSET_1,
-      SEQ_2, PARTFUN1, PARTFUN2, RCOMP_1, FCONT_1, LIMFUNC1,
+      COMPLEX1, PROB_1, REAL_1, FUNCT_1, FUNCT_2, FUNCOP_1, VALUED_1, SEQ_1,
+      RELSET_1, SEQ_2, PARTFUN1, PARTFUN2, RCOMP_1, FCONT_1, LIMFUNC1,
       XXREAL_0, RFUNCT_2;
  constructors PARTFUN1, REAL_1, COMPLEX1, NAT_1, SEQ_2, PROB_1, RCOMP_1,
       PARTFUN2, RFUNCT_2, FCONT_1, LIMFUNC1, VALUED_1, SEQ_1, XXREAL_2;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0,
       MEMBERED, SEQM_3, RCOMP_1, RFUNCT_2, VALUED_1, FUNCT_2, VALUED_0,
-      XXREAL_2, FUNCOP_1, FCONT_1, SEQ_4;
+      XXREAL_2, FUNCOP_1, FCONT_1, SEQ_4, RELAT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, RCOMP_1, XBOOLE_0, SUBSET_1, PROB_1, LIMFUNC1;
- theorems FUNCT_1, NAT_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1, PARTFUN2,
-      RCOMP_1, RFUNCT_2, FCONT_1, SUBSET_1, REAL_2, LIMFUNC1, FCONT_2, TARSKI,
-      FUNCT_2, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1,
-      COMPLEX1, XXREAL_0, VALUED_1, XXREAL_1, XXREAL_2, VALUED_0;
+ theorems FUNCT_1, NAT_1, SEQ_2, SEQ_4, ABSVALUE, PARTFUN1, PARTFUN2, RCOMP_1,
+      RFUNCT_2, FCONT_1, SUBSET_1, FCONT_2, TARSKI, FUNCT_2, RELAT_1, XREAL_0,
+      XBOOLE_0, XBOOLE_1, FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, VALUED_1,
+      XXREAL_1, XXREAL_2, VALUED_0;
  schemes SEQ_1, FUNCT_2;
 
 begin
@@ -36,50 +35,49 @@ reserve n,m for Element of NAT;
 reserve a,b,d for Real_Sequence;
 reserve f for PartFunc of REAL,REAL;
 
-theorem Th1:
-  [#] REAL is closed
+registration
+  cluster [#] REAL -> closed;
+  coherence
 proof
   let a;
   thus thesis;
 end;
-
-theorem Th2:
-  {} REAL is open
-proof ({} REAL)` = [#] REAL;
-  hence thesis by Th1,RCOMP_1:def 5;
-end;
-
-theorem Th3:
-  {} REAL is closed
-proof
+  cluster empty -> closed Subset of REAL;
+  coherence
+proof let S be Subset of REAL such that
+Z: S is empty;
   let a;
-  assume rng a c= {} REAL & a is convergent;
-  then rng a = {} by XBOOLE_1:3;
-  then dom a = {} by RELAT_1:65;
-  hence thesis by FUNCT_2:def 1;
+  assume rng a c= S & a is convergent;
+  then rng a = S by Z,XBOOLE_1:3;
+  then dom a = S by Z;
+  hence thesis by Z;
 end;
-
-theorem Th4:
-  [#] REAL is open
-proof ([#] REAL)` = {} REAL by XBOOLE_1:37;
-  hence thesis by Th3,RCOMP_1:def 5;
 end;
 
 registration
-  cluster [#] REAL -> open closed;
-  coherence by Th1,Th4;
-  cluster {} REAL -> open closed;
-  coherence by Th2,Th3;
+  cluster [#] REAL -> open;
+  coherence
+proof ([#] REAL)` = {} REAL by XBOOLE_1:37;
+  hence thesis by RCOMP_1:def 5;
+end;
+  cluster empty -> open Subset of REAL;
+  coherence
+proof let S be Subset of REAL;
+  assume S is empty;
+   then S` = [#] REAL;
+  hence thesis by RCOMP_1:def 5;
+end;
 end;
 
-theorem Th5:
-  right_closed_halfline(r) is closed
+registration
+  let r;
+  cluster right_closed_halfline(r) -> closed;
+  coherence
 proof
   let a such that
 A1: rng a c= right_closed_halfline(r) & a is convergent;
   r in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
-A2: b is convergent;
 A3: lim b = b.0 by SEQ_4:41
     .= r by FUNCOP_1:13;
   now
@@ -90,19 +88,17 @@ A3: lim b = b.0 by SEQ_4:41
     then ex r1 st a.n = r1 & r <= r1;
     hence b.n <= a.n by FUNCOP_1:13;
   end;
-  then r <= lim a by A1,A2,A3,SEQ_2:32;
+  then r <= lim a by A1,A3,SEQ_2:32;
   then (lim a) in {g1: r <= g1};
   hence thesis by XXREAL_1:232;
 end;
-
-theorem Th6:
-  left_closed_halfline(r) is closed
+  cluster left_closed_halfline(r) -> closed;
+  coherence
 proof
   let a such that
 A1: rng a c= left_closed_halfline(r) & a is convergent;
   r in REAL by XREAL_0:def 1;
   then reconsider b = NAT --> r as Real_Sequence by FUNCOP_1:57;
-A2: b is convergent;
 A3: lim b = b.0 by SEQ_4:41
     .= r by FUNCOP_1:13;
   now
@@ -113,38 +109,25 @@ A3: lim b = b.0 by SEQ_4:41
     then ex r1 st a.n = r1 & r1 <= r;
     hence a.n <= b.n by FUNCOP_1:13;
   end;
-  then lim a <= r by A1,A2,A3,SEQ_2:32;
+  then lim a <= r by A1,A3,SEQ_2:32;
   then lim a in {g1: g1 <= r};
   hence thesis by XXREAL_1:231;
 end;
-
-theorem Th7:
-  right_open_halfline(r) is open
+  cluster right_open_halfline(r) -> open;
+  coherence
 proof
 A1: (right_open_halfline(r))` = left_closed_halfline(r) by XXREAL_1:224,296;
-  left_closed_halfline(r) is closed by Th6;
-  hence thesis by A1,RCOMP_1:def 5;
+  thus thesis by A1,RCOMP_1:def 5;
 end;
-
-theorem Th8:
-  left_open_halfline(r) is open
+  cluster halfline(r) -> open;
+  coherence
 proof
 A1: (left_open_halfline(r))` = right_closed_halfline(r) by XXREAL_1:224,290;
-  right_closed_halfline(r) is closed by Th5;
-  hence thesis by A1,RCOMP_1:def 5;
+  thus thesis by A1,RCOMP_1:def 5;
+end;
 end;
 
-registration
-  let r;
-  cluster right_open_halfline(r) -> open;
-  coherence by Th7;
-  cluster halfline(r) -> open;
-  coherence by Th8;
-  cluster right_closed_halfline(r) -> closed;
-  coherence by Th5;
-  cluster left_closed_halfline(r) -> closed;
-  coherence by Th6;
-end;
+canceled 8;
 
 theorem Th9:
   g in ].x0 - r,x0 + r.[ implies ex r1 st g = x0 + r1 & abs(r1) < r
@@ -217,7 +200,6 @@ A1: for n holds a.n = x0 - p/(n+1);
   consider d such that
 A2: for n holds d.n = F(n) from SEQ_1:sch 1;
 A3: d is convergent & lim d = 0 by A2,SEQ_4:46;
-A4: b is convergent;
 A5: lim b = b.0 by SEQ_4:41
     .= x0 by FUNCOP_1:13;
   now
@@ -229,8 +211,8 @@ A5: lim b = b.0 by SEQ_4:41
   end;
   then
 A6: a = b - d by FUNCT_2:113;
-  hence a is convergent by A3,A4,SEQ_2:25;
-  thus lim a = x0 - 0 by A3,A4,A5,A6,SEQ_2:26
+  hence a is convergent by A3,SEQ_2:25;
+  thus lim a = x0 - 0 by A3,A5,A6,SEQ_2:26
     .= x0;
 end;
 
@@ -247,7 +229,6 @@ A1: for n holds a.n = x0 + p/(n+1);
   consider d such that
 A2: for n holds d.n = F(n) from SEQ_1:sch 1;
 A3: d is convergent & lim d = 0 by A2,SEQ_4:46;
-A4: b is convergent;
 A5: lim b = b.0 by SEQ_4:41
     .= x0 by FUNCOP_1:13;
   now
@@ -259,8 +240,8 @@ A5: lim b = b.0 by SEQ_4:41
   end;
   then
 A6: a = b + d by FUNCT_2:113;
-  hence a is convergent by A3,A4,SEQ_2:19;
-  thus lim a = x0 + 0 by A3,A4,A5,A6,SEQ_2:20
+  hence a is convergent by A3,SEQ_2:19;
+  thus lim a = x0 + 0 by A3,A5,A6,SEQ_2:20
     .= x0;
 end;
 
@@ -303,7 +284,7 @@ A10: Nn c= dom f
 A11:  g2 = x & x0 - p/(n+1) < g2 & g2 < x0 + p/(n+1);
       0 + 1 <= n + 1 by A9,XREAL_1:9;
       then
-A12:  p/(n+1) <= p/1 by A4,REAL_2:201;
+A12:  p/(n+1) <= p/1 by A4,XREAL_1:120;
       then x0 - p <= x0 - p/(n+1) by XREAL_1:15;
       then
 A13:  x0 - p < g2 by A11,XXREAL_0:2;
@@ -519,7 +500,7 @@ A11:      r>0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A12:      r/2 > 0 by A11,SEQ_2:3;
+A12:      r/2 > 0 by A11,XREAL_1:217;
           then
 A13:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A14:      (f|X).x0 < (f|X).x0 + r/2 by A12,XREAL_1:31;
@@ -631,7 +612,7 @@ A49:      r > 0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A50:      r/2 > 0 by A49,SEQ_2:3;
+A50:      r/2 > 0 by A49,XREAL_1:217;
           then
 A51:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A52:      (f|X).x0 < (f|X).x0 + r/2 by A50,XREAL_1:31;
@@ -757,7 +738,7 @@ A11:      r>0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A12:      r/2 > 0 by A11,SEQ_2:3;
+A12:      r/2 > 0 by A11,XREAL_1:217;
           then
 A13:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A14:      (f|X).x0 < (f|X).x0 + r/2 by A12,XREAL_1:31;
@@ -869,7 +850,7 @@ A49:      r > 0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A50:      r/2 > 0 by A49,SEQ_2:3;
+A50:      r/2 > 0 by A49,XREAL_1:217;
           then
 A51:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A52:      (f|X).x0 < (f|X).x0 + r/2 by A50,XREAL_1:31;
@@ -1001,7 +982,7 @@ A12:          r>0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set M1 = (f|X).x0 - r/2;
               set M2 = (f|X).x0 + r/2;
-A13:          r/2 > 0 by A12,SEQ_2:3;
+A13:          r/2 > 0 by A12,XREAL_1:217;
               then
 A14:          (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A15:          (f|X).x0 < (f|X).x0 + r/2 by A13,XREAL_1:31;
@@ -1093,7 +1074,7 @@ A42:          (f|X).x0 = p;
 A43:          r > 0 & N1 = ].p - r,p + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set R = r/2;
-A44:          0 < R by A43,SEQ_2:3;
+A44:          0 < R by A43,XREAL_1:217;
 A45:          R < r by A43,XREAL_1:218;
               then
 A46:          p + R < p + r by XREAL_1:8;
@@ -1162,7 +1143,7 @@ A65:          r > 0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set M1 = (f|X).x0 - r/2;
               set M2 = (f|X).x0 + r/2;
-A66:          r/2 > 0 by A65,SEQ_2:3;
+A66:          r/2 > 0 by A65,XREAL_1:217;
               then
 A67:          (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A68:          (f|X).x0 < (f|X).x0 + r/2 by A66,XREAL_1:31;
@@ -1254,7 +1235,7 @@ A95:          (f|X).x0 = p;
 A96:          r > 0 & N1 = ].p - r,p + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set R = r/2;
-A97:          0 < R by A96,SEQ_2:3;
+A97:          0 < R by A96,XREAL_1:217;
 A98:          R < r by A96,XREAL_1:218;
               then
 A99:          p + R < p + r by XREAL_1:8;
@@ -1362,7 +1343,7 @@ A12:          r>0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set M1 = (f|X).x0 - r/2;
               set M2 = (f|X).x0 + r/2;
-A13:          r/2 > 0 by A12,SEQ_2:3;
+A13:          r/2 > 0 by A12,XREAL_1:217;
               then
 A14:          (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A15:          (f|X).x0 < (f|X).x0 + r/2 by A13,XREAL_1:31;
@@ -1454,7 +1435,7 @@ A42:          (f|X).x0 = p;
 A43:          r > 0 & N1 = ].p - r,p + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set R = r/2;
-A44:          0 < R by A43,SEQ_2:3;
+A44:          0 < R by A43,XREAL_1:217;
 A45:          R < r by A43,XREAL_1:218;
               then
 A46:          p + R < p + r by XREAL_1:8;
@@ -1523,7 +1504,7 @@ A65:          r > 0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set M1 = (f|X).x0 - r/2;
               set M2 = (f|X).x0 + r/2;
-A66:          r/2 > 0 by A65,SEQ_2:3;
+A66:          r/2 > 0 by A65,XREAL_1:217;
               then
 A67:          (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A68:          (f|X).x0 < (f|X).x0 + r/2 by A66,XREAL_1:31;
@@ -1615,7 +1596,7 @@ A95:          (f|X).x0 = p;
 A96:          r > 0 & N1 = ].p - r,p + r.[ by RCOMP_1:def 7;
               reconsider r as Real by XREAL_0:def 1;
               set R = r/2;
-A97:          0 < R by A96,SEQ_2:3;
+A97:          0 < R by A96,XREAL_1:217;
 A98:          R < r by A96,XREAL_1:218;
               then
 A99:          p + R < p + r by XREAL_1:8;
@@ -1717,7 +1698,7 @@ A11:      r>0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A12:      r/2 > 0 by A11,SEQ_2:3;
+A12:      r/2 > 0 by A11,XREAL_1:217;
           then
 A13:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A14:      (f|X).x0 < (f|X).x0 + r/2 by A12,XREAL_1:31;
@@ -1829,7 +1810,7 @@ A49:      r > 0 & N3 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A50:      r/2 > 0 by A49,SEQ_2:3;
+A50:      r/2 > 0 by A49,XREAL_1:217;
           then
 A51:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A52:      (f|X).x0 < (f|X).x0 + r/2 by A50,XREAL_1:31;
@@ -1944,7 +1925,7 @@ A6:       r>0 & N1 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A7:       r/2 > 0 by A6,SEQ_2:3;
+A7:       r/2 > 0 by A6,XREAL_1:217;
           then
 A8:       (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A9:       (f|X).x0 < (f|X).x0 + r/2 by A7,XREAL_1:31;
@@ -2045,7 +2026,7 @@ A39:      r > 0 & N1 = ].(f|X).x0 - r,(f|X).x0 + r.[ by RCOMP_1:def 7;
           reconsider r as Real by XREAL_0:def 1;
           set M1 = (f|X).x0 - r/2;
           set M2 = (f|X).x0 + r/2;
-A40:      r/2 > 0 by A39,SEQ_2:3;
+A40:      r/2 > 0 by A39,XREAL_1:217;
           then
 A41:      (f|X).x0 - r < (f|X).x0 - r + r/2 by XREAL_1:31;
 A42:      (f|X).x0 < (f|X).x0 + r/2 by A40,XREAL_1:31;
@@ -2571,16 +2552,16 @@ A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
-A10: 0 < r/2 by A6,SEQ_2:3;
+A10: 0 < r/2 by A6,XREAL_1:217;
     then
 A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
-    x0 < x0 + r by A6,REAL_2:174;
+    x0 < x0 + r by A6,XREAL_1:31;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
 A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
 A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
-A14: x0 - r < x0 by A6,REAL_2:174;
-A15: x0 < x0 + r/2 by A10,REAL_2:174;
+A14: x0 - r < x0 by A6,XREAL_1:46;
+A15: x0 < x0 + r/2 by A10,XREAL_1:31;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
@@ -2588,7 +2569,7 @@ A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
 A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
 Y:    [.x0 - r/2, x0 + r/2.] c= ].p,g.[ by A5,A6,A12,A16,XXREAL_2:def 12;
     then
-A18: f|[.x0 - r/2, x0 + r/2.] is continuous  by A1,A0,FCONT_1:17;
+A18: f|[.x0 - r/2, x0 + r/2.] is continuous  by A1,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A19: x0 - r/2 < x0 + r/2 by A11,A15,XXREAL_0:2;
@@ -2715,20 +2696,20 @@ A5: N c= L by RCOMP_1:39;
     consider r be real number such that
 A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A7: f|N is continuous by A1,A5,A0,FCONT_1:17;
+A7: f|N is continuous by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
-A10: 0 < r/2 by A6,SEQ_2:3;
+A10: 0 < r/2 by A6,XREAL_1:217;
     then
 A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
-    x0 < x0 + r by A6,REAL_2:174;
+    x0 < x0 + r by A6,XREAL_1:31;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
 A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
 A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
-A14: x0 - r < x0 by A6,REAL_2:174;
-A15: x0 < x0 + r/2 by A10,REAL_2:174;
+A14: x0 - r < x0 by A6,XREAL_1:46;
+A15: x0 < x0 + r/2 by A10,XREAL_1:31;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
@@ -2737,8 +2718,6 @@ A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
     then [.x0 - r/2, x0 + r/2.] c= L by A5,A6,XBOOLE_1:1;
     then
 X:    [.x0 - r/2, x0 + r/2.] c= dom f by A0,XBOOLE_1:1;
-    N c= dom f by A0,A5,XBOOLE_1:1;
-    then
 A18: f|[.x0 - r/2, x0 + r/2.] is continuous  by A6,A7,A17,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
@@ -2864,20 +2843,20 @@ A5: N c= L by RCOMP_1:39;
     consider r be real number such that
 A6: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
     reconsider r as Real by XREAL_0:def 1;
-A7: f|N is continuous by A1,A5,A0,FCONT_1:17;
+A7: f|N is continuous by A1,A5,FCONT_1:17;
 A8: r/2 < r by A6,XREAL_1:218;
     then
 A9: x0 - r < x0 - r/2 by XREAL_1:17;
-A10: 0 < r/2 by A6,SEQ_2:3;
+A10: 0 < r/2 by A6,XREAL_1:217;
     then
 A11: x0 - r/2 < x0 - 0 by XREAL_1:17;
-    x0 < x0 + r by A6,REAL_2:174;
+    x0 < x0 + r by A6,XREAL_1:31;
     then x0 - r/2 < x0 + r by A11,XXREAL_0:2;
     then
 A12: x0 - r/2 in ].x0 - r, x0 + r.[ by A9;
 A13: x0 + r/2 < x0 + r by A8,XREAL_1:10;
-A14: x0 - r < x0 by A6,REAL_2:174;
-A15: x0 < x0 + r/2 by A10,REAL_2:174;
+A14: x0 - r < x0 by A6,XREAL_1:46;
+A15: x0 < x0 + r/2 by A10,XREAL_1:31;
     then x0 - r < x0 + r/2 by A14,XXREAL_0:2;
     then
 A16: x0 + r/2 in ].x0 - r, x0 + r.[ by A13;
@@ -2886,8 +2865,6 @@ A17: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A12,XXREAL_2:def 12;
     then [.x0 - r/2, x0 + r/2.] c= L by A5,A6,XBOOLE_1:1;
     then
 X:        [.x0 - r/2, x0 + r/2.] c= dom f by A0,XBOOLE_1:1;
-    N c= dom f by A0,A5,XBOOLE_1:1;
-    then
 A18: f|([.x0 - r/2, x0 + r/2.]) is continuous  by A6,A7,A17,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
@@ -3010,22 +2987,22 @@ A4: 0 < r & N = ].x0 - r, x0 + r.[ by RCOMP_1:def 7;
 A6: r/2 < r by A4,XREAL_1:218;
     then
 A7: x0 - r < x0 - r/2 by XREAL_1:17;
-A8: 0 < r/2 by A4,SEQ_2:3;
+A8: 0 < r/2 by A4,XREAL_1:217;
     then
 A9: x0 - r/2 < x0 - 0 by XREAL_1:17;
-    x0 < x0 + r by A4,REAL_2:174;
+    x0 < x0 + r by A4,XREAL_1:31;
     then x0 - r/2 < x0 + r by A9,XXREAL_0:2;
     then
 A10: x0 - r/2 in ].x0 - r, x0 + r.[ by A7;
 A11: x0 + r/2 < x0 + r by A6,XREAL_1:10;
-A12: x0 - r < x0 by A4,REAL_2:174;
-A13: x0 < x0 + r/2 by A8,REAL_2:174;
+A12: x0 - r < x0 by A4,XREAL_1:46;
+A13: x0 < x0 + r/2 by A8,XREAL_1:31;
     then x0 - r < x0 + r/2 by A12,XXREAL_0:2;
     then
 A14: x0 + r/2 in ].x0 - r, x0 + r.[ by A11;
     then
 A15: [.x0 - r/2, x0 + r/2.] c= ].x0 - r, x0 + r.[ by A10,XXREAL_2:def 12;
-A16: f|([.x0 - r/2, x0 + r/2.]) is continuous  by A1,A0,FCONT_1:17;
+A16: f|([.x0 - r/2, x0 + r/2.]) is continuous  by A1,FCONT_1:17;
     set fm = f.(x0 - r/2);
     set fp = f.(x0 + r/2);
 A17: x0 - r/2 < x0 + r/2 by A9,A13,XXREAL_0:2;

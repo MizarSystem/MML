@@ -77,7 +77,7 @@
 <Cluster/>
 <Func kind="K" nr="137">
 <Func kind="U" nr="1">
-<Func kind="K" nr="284">
+<Func kind="K" nr="285">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -90,10 +90,10 @@
 <Adjective nr="23"/>
 <Adjective nr="28"/>
 <Adjective nr="85"/>
-<Adjective nr="134"/>
 <Adjective nr="135"/>
 <Adjective nr="136"/>
 <Adjective nr="137"/>
+<Adjective nr="138"/>
 </Cluster>
 </RCluster>
 <CCluster aid="GOBOARD1" nr="1">

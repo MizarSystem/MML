@@ -21,8 +21,8 @@ environ
  definitions TARSKI, XBOOLE_0, TREES_1, TREES_2, BINOP_1;
  theorems TARSKI, ZFMISC_1, FINSEQ_1, MCART_1, NAT_1, FUNCT_1, FUNCT_2,
       FUNCT_3, FUNCOP_1, FUNCT_6, FINSEQ_2, FINSEQ_3, ENUMSET1, TREES_1,
-      TREES_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1,
-      XXREAL_0, ORDINAL1, CARD_1, CARD_2;
+      TREES_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      ORDINAL1;
  schemes NAT_1, CARD_3, XBOOLE_0, FINSEQ_1;
 
 begin :: Finite sets
@@ -367,13 +367,20 @@ A1: for x st x in X holds x is DecoratedTree;
   hence thesis by A1;
 end;
 
-theorem Th12:
-  {} is constituted-Trees constituted-FinTrees constituted-DTrees
-proof
-  thus for x st x in {} holds x is Tree;
-  thus for x st x in {} holds x is finite Tree;
-  thus for x st x in {} holds x is DecoratedTree;
+registration
+ cluster empty ->
+  constituted-Trees constituted-FinTrees constituted-DTrees set;
+ coherence
+proof let S be set;
+  assume
+Z: S is empty;
+  hence for x st x in S holds x is Tree;
+  thus for x st x in S holds x is finite Tree by Z;
+  thus for x st x in S holds x is DecoratedTree by Z;
 end;
+end;
+
+canceled;
 
 theorem Th13:
   {x} is constituted-Trees iff x is Tree
@@ -872,13 +879,19 @@ definition
   rng IT is constituted-DTrees;
 end;
 
-theorem Th23:
-  {} is Tree-yielding FinTree-yielding DTree-yielding
-proof
-  thus rng {} is constituted-Trees by Th12;
-  thus rng {} is constituted-FinTrees by Th12;
-  thus rng {} is constituted-DTrees by Th12;
+registration
+ cluster empty -> Tree-yielding FinTree-yielding DTree-yielding Function;
+ coherence
+proof let F be Function;
+  assume
+Z: F is empty;
+  hence rng F is constituted-Trees;
+  thus rng F is constituted-FinTrees by Z;
+  thus rng F is constituted-DTrees by Z;
 end;
+end;
+
+canceled;
 
 theorem Th24:
   f is Tree-yielding iff for x st x in dom f holds f.x is Tree
@@ -1040,7 +1053,7 @@ theorem Th36:
   i <> 0 implies (i |-> x is Tree-yielding iff x is Tree)
 proof
   assume i <> 0;
-  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_2:def 2;
   then rng (i |-> x) = {x} by FUNCOP_1:14;
   then (x is Tree iff rng (i |-> x) is constituted-Trees) &
   (i |-> x is Tree-yielding iff rng (i |-> x) is constituted-Trees)
@@ -1052,7 +1065,7 @@ theorem Th37:
   i <> 0 implies (i |-> x is FinTree-yielding iff x is finite Tree)
 proof
   assume i <> 0;
-  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_2:def 2;
   then rng (i |-> x) = {x} by FUNCOP_1:14;
   then (x is finite Tree iff rng (i |-> x) is constituted-FinTrees) &
   (i |-> x is FinTree-yielding iff rng (i |-> x) is constituted-FinTrees)
@@ -1064,7 +1077,7 @@ theorem Th38:
   i <> 0 implies (i |-> x is DTree-yielding iff x is DecoratedTree)
 proof
   assume i <> 0;
-  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_1:5,FINSEQ_2:def 2;
+  then i |-> x = (Seg i) --> x & Seg i <> {} by FINSEQ_2:def 2;
   then rng (i |-> x) = {x} by FUNCOP_1:14;
   then (x is DecoratedTree iff rng (i |-> x) is constituted-DTrees) &
   (i |-> x is DTree-yielding iff rng (i |-> x) is constituted-DTrees)
@@ -1188,7 +1201,7 @@ registration
   cluster n |-> T -> Tree-yielding;
   coherence
   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
-    hence thesis by Th23,Th36;
+    hence thesis by Th36;
   end;
 end;
 
@@ -1206,7 +1219,7 @@ registration
   cluster n |-> T -> FinTree-yielding;
   coherence
   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
-    hence thesis by Th23,Th37;
+    hence thesis by Th37;
   end;
 end;
 
@@ -1224,7 +1237,7 @@ registration
   cluster n |-> T -> DTree-yielding;
   coherence
   proof 0 |-> T = {} & (n = 0 or n <> 0) by FINSEQ_2:72;
-    hence thesis by Th23,Th38;
+    hence thesis by Th38;
   end;
 end;
 
@@ -1951,8 +1964,7 @@ proof
   proof
     assume p in tree({});
     then
-A1: p = {} or ex n,q st n < len {} & q in {} .(n+1) & p = <*n*>^q
-    by Def15,Th23;
+A1: p = {} or ex n,q st n < len {} & q in {} .(n+1) & p = <*n*>^q by Def15;
     assume not thesis;
     then consider n,q such that
 A2: n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56;
@@ -1960,7 +1972,7 @@ A2: n < len {} & q in {} .(n+1) & p = <*n*>^q by A1,TARSKI:def 1,TREES_1:56;
   end;
   assume p in elementary_tree 0;
   then p = {} by TARSKI:def 1,TREES_1:56;
-  hence thesis by Def15,Th23;
+  hence thesis by Def15;
 end;
 
 theorem Th56:
@@ -2504,7 +2516,7 @@ proof
   len {} = 0 & <*T1*> = {}^<*T1*> & <*T2*> = {}^<*T2*> &
   <*T1*> = <*T1*>^{} & <*T2*> = <*T2*>^{}
    by FINSEQ_1:47;
-  hence thesis by Th23,Th60;
+  hence thesis by Th60;
 end;
 
 theorem
@@ -2557,7 +2569,7 @@ proof
   tree(T1,T2) = tree(<*T1,T2*>) & <*T1,T2*> = <*T1*>^<*T2*> &
   <*T1*> = {}^<*T1*> & len {} = 0
    by FINSEQ_1:47,def 9;
-  hence thesis by Th23,Th54;
+  hence thesis by Th54;
 end;
 
 theorem Th73:
@@ -2567,7 +2579,7 @@ proof
   let T1,T2 be Tree;
   tree(T1,T2) = tree(<*T1,T2*>) & <*T1,T2*> = <*T1*>^<*T2*> & len <*T1*> = 1 &
   <*T1,T2*> = <*T1,T2*>^{} by FINSEQ_1:47,57,def 9;
-  hence thesis by Th23,Th54;
+  hence thesis by Th54;
 end;
 
 theorem
@@ -2634,7 +2646,7 @@ proof
   <*T1,T2*> = <*T1*>^<*T2*> & <*T1,T*> = <*T1*>^<*T*> &
   <*T,T2*> = <*T*>^<*T2*>
    by FINSEQ_1:47,57,def 9;
-  hence thesis by Th23,Th60;
+  hence thesis by Th60;
 end;
 
 theorem

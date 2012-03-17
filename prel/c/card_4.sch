@@ -8,9 +8,15 @@
 <ArticleID name="XBOOLE_0"/>
 <ArticleID name="ZFMISC_1"/>
 <ArticleID name="SUBSET_1"/>
+<ArticleID name="RELSET_1"/>
 <ArticleID name="ORDINAL1"/>
+<ArticleID name="MCART_1"/>
+<ArticleID name="FUNCT_2"/>
 <ArticleID name="NUMBERS"/>
-<ArticleID name="CARD_4"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
+<ArticleID name="FRAENKEL"/>
+<ArticleID name="CARD_3"/>
 </Signature>
 <Scheme>
 <ArgTypes>
@@ -18,11 +24,11 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="17">
+<Pred kind="V" nr="29">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>
@@ -39,15 +45,15 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="17">
+<Pred kind="V" nr="29">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>
@@ -66,19 +72,19 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Pred kind="V" nr="17">
+<Pred kind="V" nr="29">
 <Fraenkel>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="47"/>
+<Func kind="K" nr="86"/>
 </Typ>
 <Func kind="F" nr="1">
 <Var nr="1"/>

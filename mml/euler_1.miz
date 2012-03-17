@@ -17,10 +17,9 @@ environ
       XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, NEWTON;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, FUNCT_2, XBOOLE_0, BINOP_1;
- theorems TARSKI, INT_2, AXIOMS, FINSEQ_1, CARD_1, FINSET_1, NAT_1, ABSVALUE,
-      CARD_2, ZFMISC_1, INT_1, FUNCT_1, FUNCT_2, PRE_FF, DOMAIN_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, NEWTON, XREAL_1, COMPLEX1,
-      XXREAL_0, ORDINAL1, NAT_D;
+ theorems TARSKI, INT_2, AXIOMS, FINSEQ_1, CARD_1, NAT_1, ABSVALUE, CARD_2,
+      ZFMISC_1, INT_1, FUNCT_1, FUNCT_2, PRE_FF, DOMAIN_1, RELSET_1, XBOOLE_0,
+      XBOOLE_1, XCMPLX_1, NEWTON, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, NAT_D;
  schemes NAT_1, FUNCT_7;
 
 begin :: Preliminary
@@ -41,28 +40,14 @@ A1: k <> 0 & ([\ j/k /]) + 1 >= j/k;
   hence k >= j - (([\ j/k /])*k);
 end;
 
-theorem Th1:
-  k in n iff k < n
-proof
-A1: k in NAT & n in NAT by ORDINAL1:def 13;
-  thus k in n implies k < n
-  proof
-    assume k in n;
-    then k in {l where l is Element of NAT: l < n} by AXIOMS:30;
-    then ex j being Element of NAT st k = j & j < n;
-    hence k < n;
-  end;
-  assume k < n;
-  then k in {l where l is Element of NAT: l < n} by A1;
-  hence thesis by AXIOMS:30;
-end;
-
 Lm2: not 1 is prime by INT_2:def 5;
+
+canceled;
 
 theorem Th2:
   n,n are_relative_prime iff n = 1
 proof
-  n hcf n = n by NAT_D:32;
+  n gcd n = n by NAT_D:32;
   hence thesis by INT_2:def 4;
 end;
 
@@ -73,12 +58,12 @@ proof
   let k,n be Nat;
   assume
 A1: k <> 0 & k < n & n is prime;
-A2: (k hcf n) divides n by NAT_D:def 5;
+A2: (k gcd n) divides n by NAT_D:def 5;
   per cases by A1,A2,INT_2:def 5;
-  suppose k hcf n = 1;
+  suppose k gcd n = 1;
     hence k,n are_relative_prime by INT_2:def 4;
   end;
-  suppose k hcf n = n;
+  suppose k gcd n = n;
     then
 A3: n divides k by NAT_D:def 5;
     thus thesis by A1,A3,NAT_D:7;
@@ -101,12 +86,12 @@ A2: ex kk being Element of NAT st
     kk = k & n,kk are_relative_prime & kk >= 1 & kk <= n;
     then k <> n by A1,Lm2,Th2;
     then k < n by A2,XXREAL_0:1;
-    hence thesis by A1,A2,Th1,TARSKI:def 1;
+    hence thesis by A1,A2,NAT_1:45,TARSKI:def 1;
   end;
   assume
 A3: n is prime & k in n & not k in {0};
   then
-A4: k < n by Th1;
+A4: k < n by NAT_1:45;
 A5: k <> 0 by A3,TARSKI:def 1;
   then
 A6: k >= 1 by NAT_1:14;
@@ -126,22 +111,22 @@ proof
 end;
 
 theorem Th6:
-  a hcf b = 1 implies for c holds a*c hcf b*c = c
+  a gcd b = 1 implies for c holds a*c gcd b*c = c
 proof
   assume
-A1: a hcf b = 1;
+A1: a gcd b = 1;
   reconsider a' = a, b' = b as Integer;
 A2: a',b' are_relative_prime by A1,INT_2:def 4;
   let m;
-  thus a*m hcf b*m = abs(abs(m)) by A2,INT_2:39
+  thus a*m gcd b*m = abs(abs(m)) by A2,INT_2:39
     .= m by ABSVALUE:def 1;
 end;
 
 theorem Th7:
-  a <> 0 & b <> 0 & c <> 0 & a*c hcf b*c = c implies a,b are_relative_prime
+  a <> 0 & b <> 0 & c <> 0 & a*c gcd b*c = c implies a,b are_relative_prime
 proof
   assume
-A1: a <> 0 & b <> 0 & c <> 0 & a*c hcf b*c = c;
+A1: a <> 0 & b <> 0 & c <> 0 & a*c gcd b*c = c;
   then a*c <> 0*c & b*c <> 0*c by XCMPLX_1:5;
   then consider a1,b1 being Integer such that
 A2: a*c = (a*c gcd b*c)*a1 and
@@ -152,19 +137,19 @@ A4: a1,b1 are_relative_prime by INT_2:38;
 end;
 
 theorem Th8:
-  a hcf b = 1 implies (a + b) hcf b = 1
+  a gcd b = 1 implies (a + b) gcd b = 1
 proof
   assume
-A1: a hcf b = 1;
-  set n = (a + b) hcf b;
+A1: a gcd b = 1;
+  set n = (a + b) gcd b;
 A2: n divides (a + b) & n divides b by NAT_D:def 5;
   then n divides a by NAT_D:10;
-  then n divides a hcf b by A2,NEWTON:63;
+  then n divides a gcd b by A2,NEWTON:63;
   then
 A3: n <= 1 + 0 & n >= 0 by A1,NAT_D:7;
   per cases by A3,NAT_1:9;
   suppose n = 1;
-    hence (a + b) hcf b = 1;
+    hence (a + b) gcd b = 1;
   end;
   suppose n = 0;
     then (a + b) = 0 & b = 0 by INT_2:5;
@@ -173,57 +158,57 @@ A3: n <= 1 + 0 & n >= 0 by A1,NAT_D:7;
 end;
 
 theorem Th9:
-  for a, b, c be Nat holds (a + b*c) hcf b = a hcf b
+  for a, b, c be Nat holds (a + b*c) gcd b = a gcd b
 proof
   let a, b, c be Nat;
-  defpred P[Nat] means (a + b*$1) hcf b = a hcf b;
+  defpred P[Nat] means (a + b*$1) gcd b = a gcd b;
 A1: P[0];
 A2: for k being Nat st P[k] holds P[k + 1]
   proof
     let kk be Nat;
     assume
-A3: (a + b*kk) hcf b = a hcf b;
+A3: (a + b*kk) gcd b = a gcd b;
     now per cases;
       suppose b = 0;
-        hence (a + b*(kk + 1)) hcf b = a hcf b;
+        hence (a + b*(kk + 1)) gcd b = a gcd b;
       end;
       suppose
 A4:     b > 0;
-A5:     a hcf b divides (a + b*kk) by A3,NAT_D:def 5;
+A5:     a gcd b divides (a + b*kk) by A3,NAT_D:def 5;
         then
-A6:     (a + b*kk) = (a hcf b)*((a + b*kk) div (a hcf b)) by NAT_D:3;
-        set T = a hcf b;
-A7:     a hcf b > 0 by A4,NEWTON:71;
+A6:     (a + b*kk) = (a gcd b)*((a + b*kk) div (a gcd b)) by NAT_D:3;
+        set T = a gcd b;
+A7:     a gcd b > 0 by A4,NEWTON:71;
         now per cases;
           suppose
 A8:         a + b*kk = 0;
-            then a hcf b = 0 hcf b by NAT_1:7
+            then a gcd b = 0 gcd b by NAT_1:7
               .= b by NEWTON:65;
-            hence (a + b*(kk + 1)) hcf b = a hcf b by A8,NAT_D:32;
+            hence (a + b*(kk + 1)) gcd b = a gcd b by A8,NAT_D:32;
           end;
           suppose (a + b*kk) > 0;
             then
-A9:         ((a + b*kk) div (a hcf b)) <> 0 by A6;
-            set T1 = ((a + b*kk) div (a hcf b));
-            a hcf b divides b by NAT_D:def 5;
+A9:         ((a + b*kk) div (a gcd b)) <> 0 by A6;
+            set T1 = ((a + b*kk) div (a gcd b));
+            a gcd b divides b by NAT_D:def 5;
             then
-A10:        b = (a hcf b)*(b div (a hcf b)) by NAT_D:3;
+A10:        b = (a gcd b)*(b div (a gcd b)) by NAT_D:3;
             then
-A11:        (b div (a hcf b)) <> 0 by A4;
-            set T2 = (b div (a hcf b));
-            T1*T hcf T2*T = T by A3,A5,A10,NAT_D:3;
+A11:        (b div (a gcd b)) <> 0 by A4;
+            set T2 = (b div (a gcd b));
+            T1*T gcd T2*T = T by A3,A5,A10,NAT_D:3;
             then T1,T2 are_relative_prime by A7,A9,A11,Th7;
-            then T1 hcf T2 = 1 by INT_2:def 4;
+            then T1 gcd T2 = 1 by INT_2:def 4;
             then
-A12:        (T1 + T2) hcf T2 = 1 by Th8;
-            (a + b*(kk + 1)) hcf b = ((a + b*kk) + b) hcf b
-              .= (T*T1 + T*T2) hcf T*T2 by A5,A10,NAT_D:3
-              .= (T*(T1 + T2)) hcf T*T2
-              .= a hcf b by A12,Th6;
-            hence (a + b*(kk + 1)) hcf b = a hcf b;
+A12:        (T1 + T2) gcd T2 = 1 by Th8;
+            (a + b*(kk + 1)) gcd b = ((a + b*kk) + b) gcd b
+              .= (T*T1 + T*T2) gcd T*T2 by A5,A10,NAT_D:3
+              .= (T*(T1 + T2)) gcd T*T2
+              .= a gcd b by A12,Th6;
+            hence (a + b*(kk + 1)) gcd b = a gcd b;
           end;
         end;
-        hence (a + b*(kk + 1)) hcf b = a hcf b;
+        hence (a + b*(kk + 1)) gcd b = a gcd b;
       end;
     end;
     hence thesis;
@@ -244,7 +229,7 @@ A1: m,n are_relative_prime;
   proof
     assume not(m > 0 or n > 0);
     then m = 0 & n = 0;
-    then m hcf n <> 1 by NAT_D:32;
+    then m gcd n <> 1 by NAT_D:32;
     hence contradiction by A1,INT_2:def 4;
   end;
   then m + n <> 0;
@@ -315,7 +300,7 @@ A12: a divides m
       hence thesis by NAT_D:3;
     end;
   end;
-  then a divides (m hcf n) by A12,NAT_D:def 5;
+  then a divides (m gcd n) by A12,NAT_D:def 5;
   then a divides 1 by A1,INT_2:def 4;
   then ex b be Nat st 1 = a*b by NAT_D:def 3;
   then i0*m + j0*n = 1 by A4,NAT_1:15;
@@ -328,18 +313,18 @@ end;
 theorem Th12:
   for A,B being non empty finite set holds
   (ex f being Function of A, B st f is one-to-one onto)
-  implies Card A = Card B
+  implies card A = card B
 proof
   let A,B be non empty finite set;
   given f being Function of A, B such that
 A1: f is one-to-one and
 A2: f is onto;
 A3: A = dom f & rng f c= B by FUNCT_2:def 1,RELSET_1:12;
-  then Card A c= Card B by A1,CARD_1:26;
+  then card A c= card B by A1,CARD_1:26;
   then
 A4: card A <= card B by NAT_1:40;
   B c= rng f by A2,FUNCT_2:def 3;
-  then Card B c= Card A by A3,CARD_1:28;
+  then card B c= card A by A3,CARD_1:28;
   then card B <= card A by NAT_1:40;
   hence thesis by A4,XXREAL_0:1;
 end;
@@ -373,9 +358,9 @@ theorem Th14:
 proof
   assume
 A1: a <> 0 & b <> 0 & c <> 0 & c divides a*b & a,c are_relative_prime;
-  then a hcf c = 1 by INT_2:def 4;
+  then a gcd c = 1 by INT_2:def 4;
   then
-A2: (a*b hcf c*b) = b by Th6;
+A2: (a*b gcd c*b) = b by Th6;
   c divides c*b by NAT_D:9;
   hence thesis by A1,A2,NEWTON:63;
 end;
@@ -388,24 +373,24 @@ proof
 A1: a <> 0 & b <> 0 & c <> 0 &
   a,c are_relative_prime & b,c are_relative_prime;
   then
-A2: (a hcf c) = 1 & (b hcf c) = 1 by INT_2:def 4;
+A2: (a gcd c) = 1 & (b gcd c) = 1 by INT_2:def 4;
 A3: a > 0 & b > 0 & c > 0 by A1;
   then
-A4: (a*b) hcf c > 0 & a*b hcf c <> 0 by NEWTON:71;
-A5: (a*b hcf c) divides a*b & (a*b hcf c) divides c by NAT_D:def 5;
-A6: ((a*b hcf c) hcf a) divides (a*b hcf c) & ((a*b hcf c) hcf a) divides
+A4: (a*b) gcd c > 0 & a*b gcd c <> 0 by NEWTON:71;
+A5: (a*b gcd c) divides a*b & (a*b gcd c) divides c by NAT_D:def 5;
+A6: ((a*b gcd c) gcd a) divides (a*b gcd c) & ((a*b gcd c) gcd a) divides
   a by NAT_D:def 5;
-  then ((a*b hcf c) hcf a) divides c by A5,NAT_D:4;
+  then ((a*b gcd c) gcd a) divides c by A5,NAT_D:4;
   then
-A7: ((a*b hcf c) hcf a) divides 1 by A2,A6,NEWTON:63;
-A8: ((a*b hcf c) hcf a) <> 0 by A3,NEWTON:71;
-  ((a*b hcf c) hcf a) >= 0 & ((a*b hcf c) hcf a) <= 0 + 1 by A7,NAT_D:7;
-  then ((a*b hcf c) hcf a) = 1 by A8,NAT_1:9;
-  then a,(a*b hcf c) are_relative_prime by INT_2:def 4;
-  then (a*b hcf c) divides b by A1,A4,A5,Th14;
-  then (a*b hcf c) divides 1 by A2,A5,NEWTON:63;
-  then a*b hcf c >= 0 & a*b hcf c <= 0 + 1 by NAT_D:7;
-  then a*b hcf c = 1 by A4,NAT_1:9;
+A7: ((a*b gcd c) gcd a) divides 1 by A2,A6,NEWTON:63;
+A8: ((a*b gcd c) gcd a) <> 0 by A3,NEWTON:71;
+  ((a*b gcd c) gcd a) >= 0 & ((a*b gcd c) gcd a) <= 0 + 1 by A7,NAT_D:7;
+  then ((a*b gcd c) gcd a) = 1 by A8,NAT_1:9;
+  then a,(a*b gcd c) are_relative_prime by INT_2:def 4;
+  then (a*b gcd c) divides b by A1,A4,A5,Th14;
+  then (a*b gcd c) divides 1 by A2,A5,NEWTON:63;
+  then a*b gcd c >= 0 & a*b gcd c <= 0 + 1 by NAT_D:7;
+  then a*b gcd c = 1 by A4,NAT_1:9;
   hence thesis by INT_2:def 4;
 end;
 
@@ -434,7 +419,7 @@ proof
   assume a <> 0 & b <> 0;
   then
 A1: a > 0 & b > 0;
-  set i = a hcf b;
+  set i = a gcd b;
 A2: a = abs(a) & b = abs(b) by ABSVALUE:def 1;
 A3: i divides a & i divides b by NAT_D:def 5;
   then
@@ -490,7 +475,7 @@ A13:    a = -mm*t - mm*(xx*n) by A9,A12,XCMPLX_1:26
     end;
     hence thesis by A2,A8,NEWTON:63;
   end;
-  then abs((a + xx*b)) hcf abs(b) = i by A2,A3,A5,NAT_D:def 5;
+  then abs((a + xx*b)) gcd abs(b) = i by A2,A3,A5,NAT_D:def 5;
   hence thesis by INT_2:51;
 end;
 
@@ -500,7 +485,7 @@ definition
   let n be Nat;
   func Euler n -> Element of NAT equals
 
-  Card {k where k is Element of NAT :
+  card {k where k is Element of NAT :
   n,k are_relative_prime & k >= 1 & k <= n};
   coherence
   proof
@@ -531,13 +516,13 @@ proof
     1,k are_relative_prime & k >= 1 & k <= 1;
     hence x = 1 by XXREAL_0:1;
   end;
-  1 hcf 1 = 1 by NAT_D:32;
+  1 gcd 1 = 1 by NAT_D:32;
   then 1,1 are_relative_prime by INT_2:def 4;
   hence thesis;
 end;
 then
 
-Lm3: Card{1} = Euler 1 by TARSKI:def 1;
+Lm3: card{1} = Euler 1 by TARSKI:def 1;
 
 theorem
   Euler 1 = 1 by Lm3,CARD_1:50;
@@ -554,16 +539,16 @@ A1: k = x and
 A2: 2,k are_relative_prime and
 A3: k >= 1 & k <= 2;
 A4: k = 1 or k = 2 by A3,NAT_1:27;
-    2 hcf 2 = 2 by NAT_D:32;
+    2 gcd 2 = 2 by NAT_D:32;
     hence thesis by A1,A2,A4,INT_2:def 4;
   end;
-  2 hcf 1 = 1 by NEWTON:64;
+  2 gcd 1 = 1 by NEWTON:64;
   then 2,1 are_relative_prime by INT_2:def 4;
   hence thesis;
 end;
 then
 
-Lm4: Card{1} = Euler 2 by TARSKI:def 1;
+Lm4: card{1} = Euler 2 by TARSKI:def 1;
 
 theorem
   Euler 2 = 1 by Lm4,CARD_1:50;
@@ -601,7 +586,7 @@ A5: not k in {0} by A4,TARSKI:def 1;
   then 0 in n by AXIOMS:30;
   then
 A6: card(n \ {0}) = card n - card {0} by Th5;
-  Card n = n & Card {0} = 1 by CARD_1:50,def 5;
+  card n = n & card {0} = 1 by CARD_1:50,def 5;
   hence thesis by A3,A6,NAT_1:44;
 end;
 
@@ -647,7 +632,7 @@ A7: card (n \ {0}) <= card X by NAT_1:44;
     then 0 in {l where l is Element of NAT: l < n};
     then
 A8: 0 in n by AXIOMS:30;
-    Card n = n & Card {0} = 1 by CARD_1:50,def 5;
+    card n = n & card {0} = 1 by CARD_1:50,def 5;
     hence thesis by A7,A8,Th5;
   end;
   hence thesis by A5,XXREAL_0:1;
@@ -752,7 +737,7 @@ A24:    (m*y + n*x) mod m*n = i1 - (i1 div i2)*i2 by A3,INT_1:def 8
         hence z in X by A19,A21,A22,A23;
       end;
       suppose i = 0;
-        then m*n hcf 0 = 1 by A22,INT_2:def 4;
+        then m*n gcd 0 = 1 by A22,INT_2:def 4;
         hence z in X by A2,NEWTON:65;
       end;
     end;
@@ -765,7 +750,7 @@ A27: i >= 1 & i <= m*n;
     i <> m*n
     proof
       assume i = m*n;
-      then (m*n) hcf (m*n) = 1 by A26,INT_2:def 4;
+      then (m*n) gcd (m*n) = 1 by A26,INT_2:def 4;
       then m*n = 1 by NAT_D:32;
       hence contradiction by A1,NAT_1:15;
     end;
@@ -802,7 +787,7 @@ A39: a = 1 implies a in A
   proof
     assume
 A40: a = 1;
-    then n hcf a = 1 by NEWTON:64;
+    then n gcd a = 1 by NEWTON:64;
     then n,a are_relative_prime by INT_2:def 4;
     hence thesis by A1,A40;
   end;
@@ -810,7 +795,7 @@ A41: b = 1 implies b in B
   proof
     assume
 A42: b = 1;
-    then m hcf b = 1 by NEWTON:64;
+    then m gcd b = 1 by NEWTON:64;
     then m,b are_relative_prime by INT_2:def 4;
     hence thesis by A1,A42;
   end;
@@ -822,20 +807,20 @@ A44: y = 1 & x = 1;
     (m*y' + n*x') mod m*n = (m*y + n*x) mod m*n;
     then consider t being Element of NAT such that
 A45: t = (m*y + n*x) mod m*n;
-A46: m hcf n = 1 by A1,INT_2:def 4;
-    then (m + n) hcf n = 1 by Th8;
+A46: m gcd n = 1 by A1,INT_2:def 4;
+    then (m + n) gcd n = 1 by Th8;
     then
 A47: n,(m + n) are_relative_prime by INT_2:def 4;
-    (m + n) hcf m = 1 by A46,Th8;
+    (m + n) gcd m = 1 by A46,Th8;
     then
 A48: m,(m + n) are_relative_prime by INT_2:def 4;
     m*n,(m + n) are_relative_prime by A1,A47,A48,Th15;
     then
-A49: m*n hcf (m + n) = 1 by INT_2:def 4;
+A49: m*n gcd (m + n) = 1 by INT_2:def 4;
     consider d being Nat such that
 A50: (m + n) = (m*n)*d + ((m + n) mod m*n) and
     ((m + n) mod m*n) < (m*n) by A3,NAT_D:def 2;
-    (m + n) mod m*n hcf m*n = 1 by A49,A50,Th9;
+    (m + n) mod m*n gcd m*n = 1 by A49,A50,Th9;
     then m*n,t are_relative_prime by A44,A45,INT_2:def 4;
     hence thesis by A1,A44,A45;
   end;
@@ -865,26 +850,26 @@ A59: j <= m;
 A60: q = (m*ii + n*jj) mod m*n;
     i*m,n are_relative_prime by A1,A53,A54,Th15;
     then
-A61: i*m hcf n = 1 by INT_2:def 4;
+A61: i*m gcd n = 1 by INT_2:def 4;
     j*n,m are_relative_prime by A1,A57,A58,Th15;
     then
-A62: j*n hcf m = 1 by INT_2:def 4;
-    (m*i + n*j) hcf n = 1 by A61,Th9;
+A62: j*n gcd m = 1 by INT_2:def 4;
+    (m*i + n*j) gcd n = 1 by A61,Th9;
     then
 A63: n,(m*i + n*j) are_relative_prime by INT_2:def 4;
-    (m*i + n*j) hcf m = 1 by A62,Th9;
+    (m*i + n*j) gcd m = 1 by A62,Th9;
     then
 A64: m,(m*i + n*j) are_relative_prime by INT_2:def 4;
     i*m <> 0*m & j*n <> 0*n by A1,A54,A58,XCMPLX_1:5;
     then (m*i + n*j) <> 0;
     then n*m,(m*i + n*j) are_relative_prime by A1,A63,A64,Th15;
     then
-A65: n*m hcf (m*i + n*j) = 1 by INT_2:def 4;
+A65: n*m gcd (m*i + n*j) = 1 by INT_2:def 4;
     consider t being Nat such that
 A66: (m*i + n*j) = (n*m)*t + ((m*i + n*j) mod n*m) and
     ((m*i + n*j) mod n*m) < (n*m) by A3,NAT_D:def 2;
     set l = n*m;
-    ((m*i + n*j) mod l) hcf l = 1 by A65,A66,Th9;
+    ((m*i + n*j) mod l) gcd l = 1 by A65,A66,Th9;
     then l,q are_relative_prime by A60,INT_2:def 4;
     hence thesis by A52,A55,A56,A59,A60;
   end;
@@ -1109,7 +1094,7 @@ A136:     p <> 0 & jj <> 0 & j <> 0;
           hence p = 1 by NAT_1:15;
         end;
         suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj hcf 0 = 1 by A119,A120,A130,A133,A134,INT_2:def 4;
+          then p*jj gcd 0 = 1 by A119,A120,A130,A133,A134,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
           hence p = 1 by NAT_1:15;
         end;
@@ -1157,7 +1142,7 @@ A145:     p <> 0 & jj <> 0 & j <> 0;
           hence p = 1 by NAT_1:15;
         end;
         suppose p <> 0 & jj <> 0 & j = 0;
-          then p*jj hcf 0 = 1 by A119,A120,A139,A142,A143,INT_2:def 4;
+          then p*jj gcd 0 = 1 by A119,A120,A139,A142,A143,INT_2:def 4;
           then p*jj = 1 by NEWTON:65;
           hence p = 1 by NAT_1:15;
         end;
@@ -1191,7 +1176,7 @@ A152: m*n gcd m*jj = 1 by A119,A120,A149,INT_2:def 4;
         then m*(n gcd jj) = 1 by A1,A152,Th16;
         hence contradiction by A1,NAT_1:15;
       end;
-      then m*n hcf 0 = 1 by A119,A120,A149,INT_2:def 4;
+      then m*n gcd 0 = 1 by A119,A120,A149,INT_2:def 4;
       hence contradiction by A2,NEWTON:65;
     end;
     then
@@ -1222,7 +1207,7 @@ A159: m*n gcd n*jj = 1 by A119,A120,A156,INT_2:def 4;
         then n*(m gcd jj) = 1 by A1,A159,Th16;
         hence contradiction by A1,NAT_1:15;
       end;
-      then m*n hcf 0 = 1 by A119,A120,A156,INT_2:def 4;
+      then m*n gcd 0 = 1 by A119,A120,A156,INT_2:def 4;
       hence contradiction by A2,NEWTON:65;
     end;
     then
@@ -1232,7 +1217,7 @@ A161: m,x are_relative_prime
       x = x0 - (x0 div m)*m by A1,A121,INT_1:def 8;
       then x0 gcd m = x + (x0 div m)*m gcd m;
       then x0 gcd m = x gcd m by A1,A147,Th17;
-      then m hcf x = 1 by A129,INT_2:def 4;
+      then m gcd x = 1 by A129,INT_2:def 4;
       hence thesis by INT_2:def 4;
     end;
 A162: n,y are_relative_prime
@@ -1255,7 +1240,7 @@ A166: w in dom f by A164,A165,ZFMISC_1:106;
     i = f.(y,x) by A67,A119,A126;
     hence z in rng f by A117,A165,A166,FUNCT_1:def 5;
   end;
-  then Card[:A,B:] = Card C by A68,Th12;
+  then card[:A,B:] = card C by A68,Th12;
   hence thesis by A18,CARD_2:65;
 end;
 

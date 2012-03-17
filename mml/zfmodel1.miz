@@ -7,16 +7,18 @@
 environ
 
  vocabularies ZF_LANG, FUNCT_1, ORDINAL1, ZF_MODEL, TARSKI, BOOLE, FINSEQ_1,
-      MCART_1, RELAT_1, ZFMODEL1, ARYTM;
+      MCART_1, RELAT_1, ZFMODEL1, ARYTM, FUNCT_4;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, XXREAL_0, NUMBERS,
-      RELAT_1, FUNCT_1, FINSEQ_1, ZF_LANG, RELSET_1, FUNCT_2, ORDINAL1, NAT_1,
+      RELAT_1, FUNCT_1, FINSEQ_1, ZF_LANG, RELSET_1, FUNCT_2,
+      FUNCT_7, ORDINAL1, NAT_1,
       ZF_MODEL, MCART_1;
- constructors ENUMSET1, XXREAL_0, NAT_1, MEMBERED, ZF_MODEL;
+ constructors ENUMSET1, XXREAL_0, NAT_1, MEMBERED, ZF_MODEL, FUNCT_7;
  registrations XBOOLE_0, SUBSET_1, MEMBERED, ZF_LANG, RELAT_1, XXREAL_0;
  requirements NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, ORDINAL1, ZF_MODEL, ZF_LANG, RELAT_1, FUNCT_1, XBOOLE_0;
+ definitions TARSKI, ORDINAL1, ZF_MODEL, ZF_LANG, RELAT_1, FUNCT_1, XBOOLE_0,
+      FUNCT_2;
  theorems TARSKI, ZF_LANG, ZF_MODEL, ZFMISC_1, MCART_1, FUNCT_1, FUNCT_2,
-      ENUMSET1, ORDINAL1, RELAT_1, RELSET_1, XBOOLE_0;
+      ENUMSET1, ORDINAL1, RELAT_1, RELSET_1, XBOOLE_0, FUNCT_7;
  schemes NAT_1, ZF_LANG, XBOOLE_0;
 
 begin
@@ -49,8 +51,8 @@ A2:   E,f |= All(x2,x2 'in' x0 <=> x2 'in' x1);
 A3:       a in f.x0;
           f.x0 c= E by A1;
           then reconsider a' = a as Element of E by A3;
-          consider g such that
-A4:       g.x2 = a' & for x st x <> x2 holds g.x = f.x by ZF_MODEL:21;
+          set g = f+*(x2,a');
+A4:       g.x2 = a' & for x st x <> x2 holds g.x = f.x by FUNCT_7:34,130;
           for x st g.x <> f.x holds x2 = x by A4;
           then E,g |= x2 'in' x0 <=> x2 'in' x1 by A2,ZF_MODEL:16;
           then
@@ -62,8 +64,8 @@ A5:       E,g |= x2 'in' x0 iff E,g |= x2 'in' x1 by ZF_MODEL:19;
 A6:     a in f.x1;
         f.x1 c= E by A1;
         then reconsider a' = a as Element of E by A6;
-        consider g such that
-A7:     g.x2 = a' & for x st x <> x2 holds g.x = f.x by ZF_MODEL:21;
+          set g = f+*(x2,a');
+A7:       g.x2 = a' & for x st x <> x2 holds g.x = f.x by FUNCT_7:34,130;
         for x st g.x <> f.x holds x2 = x by A7;
         then E,g |= x2 'in' x0 <=> x2 'in' x1 by A2,ZF_MODEL:16;
         then
@@ -106,10 +108,10 @@ A4: (E |= All(x0,All(x1,Ex(x2,
 A5: E |= the_axiom_of_pairs;
     let u,v;
     consider fv being Function of VAR,E;
-    consider g such that
-A6: g.x0 = u & for x st x <> x0 holds g.x = fv.x by ZF_MODEL:21;
-    consider f such that
-A7: f.x1 = v & for x st x <> x1 holds f.x = g.x by ZF_MODEL:21;
+          set g = fv+*(x0,u);
+A6:       g.x0 = u & for x st x <> x0 holds g.x = fv.x by FUNCT_7:34,130;
+          set f = g+*(x1,v);
+A7:       f.x1 = v & for x st x <> x1 holds f.x = g.x by FUNCT_7:34,130;
 A8: f.x0 = u by A6,A7;
     E,f |= Ex(x2,All(x3,x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1) )
     by A4,A5,ZF_MODEL:def 5;
@@ -124,8 +126,8 @@ A9: (for x st h.x <> f.x holds x2 = x) &
         assume
 A10:    a in h.x2;
         then reconsider a' = a as Element of E by A2;
-        consider f3 being Function of VAR,E such that
-A11:    f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by ZF_MODEL:21;
+          set f3 = h+*(x3,a');
+A11:       f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by FUNCT_7:34,130;
         for x st f3.x <> h.x holds x3 = x by A11;
         then E,f3 |= x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1
         by A9,ZF_MODEL:16;
@@ -143,8 +145,8 @@ A13:    f3.x3 = f3.x0 or f3.x3 = f3.x1 by ZF_MODEL:12;
       assume
 A14:  a = u or a = v;
       then reconsider a' = a as Element of E;
-      consider f3 being Function of VAR,E such that
-A15:  f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by ZF_MODEL:21;
+          set f3 = h+*(x3,a');
+A15:       f3.x3 = a' & for x st x <> x3 holds f3.x = h.x by FUNCT_7:34,130;
       for x st f3.x <> h.x holds x3 = x by A15;
       then E,f3 |= x3 'in' x2 <=> x3 '=' x0 'or' x3 '=' x1 by A9,ZF_MODEL:16;
       then
@@ -163,8 +165,8 @@ A17: for u,v holds { u,v } in E;
   now
     let g such that for x st g.x <> f.x holds x0 = x or x1 = x;
     reconsider w = { g.x0,g.x1 } as Element of E by A17;
-    consider h such that
-A18: h.x2 = w & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x2,w);
+A18:       h.x2 = w & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
     now
       let m be Function of VAR,E;
       assume for x st m.x <> h.x holds x3 = x;
@@ -215,8 +217,8 @@ A2: E |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0) ))
     by ZF_MODEL:25;
     let u;
     consider f0 being Function of VAR,E;
-    consider f such that
-A3: f.x0 = u & for x st x <> x0 holds f.x = f0.x by ZF_MODEL:21;
+          set f = f0+*(x0,u);
+A3:       f.x0= u & for x st x <> x0 holds f.x = f0.x by FUNCT_7:34,130;
     E,f |= Ex(x1,All(x2,x2 'in' x1 <=> Ex(x3,x2 'in' x3 '&' x3 'in' x0 ) ) )
     by A2,ZF_MODEL:def 5;
     then consider g such that
@@ -231,8 +233,8 @@ A4: (for x st g.x <> f.x holds x1 = x) &
 A5:     a in g.x1;
         g.x1 c= E by A1;
         then reconsider a' = a as Element of E by A5;
-        consider h such that
-A6:     h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x2,a');
+A6:       h.x2= a' & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
         h.x1 = g.x1 by A6;
         then
 A7:     E,h |= x2 'in' x1 by A5,A6,ZF_MODEL:13;
@@ -255,10 +257,10 @@ A10:  a in X & X in u;
       then reconsider X as Element of E by A10;
       X c= E by A1;
       then reconsider a' = a as Element of E by A10;
-      consider h such that
-A11:  h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
-      consider m being Function of VAR,E such that
-A12:  m.x3 = X & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+          set h = g+*(x2,a');
+A11:       h.x2= a' & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
+          set m = h+*(x3,X);
+A12:       m.x3= X & for x st x <> x3 holds m.x = h.x by FUNCT_7:34,130;
 A13:  for x st m.x <> h.x holds x3 = x by A12;
       m.x2 = h.x2 & m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 by A4,A11,A12;
       then E,m |= x2 'in' x3 & E,m |= x3 'in' x0 by A3,A10,A11,A12,ZF_MODEL:13;
@@ -280,8 +282,8 @@ A15: for u holds union u in E;
   now
     let f;
     reconsider v = union(f.x0) as Element of E by A15;
-    consider g such that
-A16: g.x1 = v & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+          set g = f+*(x1,v);
+A16:       g.x1= v & for x st x <> x1 holds g.x = f.x by FUNCT_7:34,130;
 A17: for x st g.x <> f.x holds x1 = x by A16;
     now
       let h;
@@ -299,8 +301,8 @@ A19:  h.x1 = g.x1;
 A20:      h.x2 in X & X in f.x0 by A16,A19,TARSKI:def 4;
           f.x0 c= E by A1;
           then reconsider X as Element of E by A20;
-          consider m being Function of VAR,E such that
-A21:      m.x3 = X & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+          set m = h+*(x3,X);
+A21:       m.x3= X & for x st x <> x3 holds m.x = h.x by FUNCT_7:34,130;
 A22:      for x st m.x <> h.x holds x3 = x by A21;
           m.x0 = h.x0 & h.x0 = g.x0 & g.x0 = f.x0 & m.x2 = h.x2
           by A16,A18,A21;
@@ -368,8 +370,8 @@ A2: (for x st g.x <> f.x holds x0 = x or x1 = x) &
     hence u <> {} by ZF_MODEL:13;
     let v such that
 A3: v in u;
-    consider h such that
-A4: h.x2 = v & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x2,v);
+A4:       h.x2= v & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
 A5: for x st h.x <> g.x holds x2 = x by A4;
     E,g |= All(x2,x2 'in' x0 =>
     Ex(x3,x3 'in' x0 '&' 'not' x3 '=' x2 '&' All(x4,x4 'in' x2 => x4 'in'
@@ -394,8 +396,8 @@ A8: E,f |= x3 'in' x0 '&' 'not' x3 '=' x2 &
 A9:   a in v;
       v c= E by A1;
       then reconsider a' = a as Element of E by A9;
-      consider m being Function of VAR,E such that
-A10:  m.x4 = a' & for x st x <> x4 holds m.x = f.x by ZF_MODEL:21;
+          set m = f+*(x4,a');
+A10:       m.x4= a' & for x st x <> x4 holds m.x = f.x by FUNCT_7:34,130;
       for x st m.x <> f.x holds x4 = x by A10;
       then
 A11:  E,m |= x4 'in' x2 => x4 'in' x3 by A8,ZF_MODEL:16;
@@ -419,11 +421,11 @@ A14: for v st v in u ex w st v c< w & w in u;
   u c= E by A1;
   then reconsider a as Element of E by A13,TARSKI:def 3;
   let f0 be Function of VAR,E;
-  consider f1 being Function of VAR,E such that
-A15: f1.x0 = u & for x st x <> x0 holds f1.x = f0.x by ZF_MODEL:21;
+          set f1 = f0+*(x0,u);
+A15:       f1.x0= u & for x st x <> x0 holds f1.x = f0.x by FUNCT_7:34,130;
 A16: for x st f1.x <> f0.x holds x0 = x by A15;
-  consider f2 being Function of VAR,E such that
-A17: f2.x1 = a & for x st x <> x1 holds f2.x = f1.x by ZF_MODEL:21;
+          set f2 = f1+*(x1,a);
+A17:       f2.x1= a & for x st x <> x1 holds f2.x = f1.x by FUNCT_7:34,130;
 A18: for x st f2.x <> f1.x holds x1 = x by A17;
   now
     let f such that
@@ -434,8 +436,8 @@ A19: for x st f.x <> f2.x holds x2 = x;
       then consider w such that
 A20:  f.x2 c< w & w in u by A14,A15;
 A21:  f.x2 c=w & f.x2 <> w by A20,XBOOLE_0:def 8;
-      consider g such that
-A22:  g.x3 = w & for x st x <> x3 holds g.x = f.x by ZF_MODEL:21;
+          set g = f+*(x3,w);
+A22:       g.x3= w & for x st x <> x3 holds g.x = f.x by FUNCT_7:34,130;
 A23:  for x st g.x <> f.x holds x3 = x by A22;
       g.x0 = f.x0 & f.x0 = f2.x0 & f2.x0 = f1.x0 & g.x2 = f.x2 by A17,A19,A22;
       then
@@ -535,8 +537,8 @@ A2: E |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0) ))
     by ZF_MODEL:25;
     let u;
     consider f0 being Function of VAR,E;
-    consider f such that
-A3: f.x0 = u & for x st x <> x0 holds f.x = f0.x by ZF_MODEL:21;
+          set f = f0+*(x0,u);
+A3:       f.x0= u & for x st x <> x0 holds f.x = f0.x by FUNCT_7:34,130;
     E,f |= Ex(x1,All(x2,x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0 ) ) )
     by A2,ZF_MODEL:def 5;
     then consider g such that
@@ -551,8 +553,8 @@ A4: (for x st g.x <> f.x holds x1 = x) &
 A5:     a in g.x1;
         g.x1 c= E by A1;
         then reconsider a' = a as Element of E by A5;
-        consider h such that
-A6:     h.x2 = a' & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x2,a');
+A6:       h.x2= a' & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
         for x st h.x <> g.x holds x2 = x by A6;
         then
 A7:     E,h |= x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
@@ -567,8 +569,8 @@ A8:     E,h |= All(x3,x3 'in' x2 => x3 'in' x0) by A7,ZF_MODEL:19;
 A9:       b in a';
           a' c= E by A1;
           then reconsider b' = b as Element of E by A9;
-          consider m being Function of VAR,E such that
-A10:      m.x3 = b' & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+          set m = h+*(x3,b');
+A10:       m.x3= b' & for x st x <> x3 holds m.x = h.x by FUNCT_7:34,130;
           for x st m.x <> h.x holds x3 = x by A10;
           then
 A11:      E,m |= x3 'in' x2 => x3 'in' x0 by A8,ZF_MODEL:16;
@@ -587,8 +589,8 @@ A13:  a in E /\ bool u;
       then
 A14:  a in E & a in bool u by XBOOLE_0:def 4;
       reconsider a as Element of E by A13,XBOOLE_0:def 4;
-      consider h such that
-A15:  h.x2 = a & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x2,a);
+A15:       h.x2= a & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
       for x st h.x <> g.x holds x2 = x by A15;
       then
 A16:  E,h |= x2 'in' x1 <=> All(x3,x3 'in' x2 => x3 'in' x0)
@@ -618,8 +620,8 @@ A18: for u holds E /\ bool u in E;
   proof
     let f;
     reconsider v = E /\ bool(f.x0) as Element of E by A18;
-    consider g such that
-A19: g.x1 = v & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+          set g = f+*(x1,v);
+A19:       g.x1= v & for x st x <> x1 holds g.x = f.x by FUNCT_7:34,130;
     now
       let h such that
 A20:  for x st h.x <> g.x holds x2 = x;
@@ -654,8 +656,8 @@ A24:    E,h |= All(x3,x3 'in' x2 => x3 'in' x0);
 A25:      a in h.x2;
           h.x2 c= E by A1;
           then reconsider a' = a as Element of E by A25;
-          consider m being Function of VAR,E such that
-A26:      m.x3 = a' & for x st x <> x3 holds m.x = h.x by ZF_MODEL:21;
+          set m = h+*(x3,a');
+A26:       m.x3= a' & for x st x <> x3 holds m.x = h.x by FUNCT_7:34,130;
           (for x st m.x <> h.x holds x3 = x) & m.x2 = h.x2 by A26;
           then E,m |= x3 'in' x2 => x3 'in' x0 & E,m |= x3 'in' x2
           by A24,A25,A26,ZF_MODEL:13,16;
@@ -705,7 +707,7 @@ A1: for k being Nat st k < n
 A2: len H = n and
 A3: not x in Free H & E,f |= H;
 A4: now
-    assume H is_equality;
+    assume H is being_equality;
     then
 A5: H = (Var1 H) '=' Var2 H & Free H = { Var1 H,Var2 H }
     by ZF_LANG:53,ZF_MODEL:1;
@@ -721,7 +723,7 @@ A6: f.(Var1 H) = f.(Var2 H) & x <> Var1 H & x <> Var2 H
     hence thesis by ZF_MODEL:16;
   end;
 A7: now
-    assume H is_membership;
+    assume H is being_membership;
     then
 A8: H = (Var1 H) 'in' Var2 H & Free H = { Var1 H,Var2 H }
     by ZF_LANG:54,ZF_MODEL:1;
@@ -812,9 +814,9 @@ A27:  not E,g |= H by ZF_MODEL:16;
       consider h such that
 A28:  for y st h.y <> g.y holds bound_in H = y and
 A29:  not E,h |= the_scope_of H by A21,A27,ZF_MODEL:16;
-      consider m being Function of VAR,E such that
-A30:  m.(bound_in H) = h.(bound_in H) &
-      for y st y <> bound_in H holds m.y = f.y by ZF_MODEL:21;
+      set m = f+*(bound_in H,h.(bound_in H));
+A30:   m.bound_in H= h.(bound_in H) & for x st x <> bound_in H holds m.x = f.x
+                by FUNCT_7:34,130;
       (for y st m.y <> f.y holds bound_in H = y) &
       the_scope_of H is_immediate_constituent_of H by A21,A30,ZF_LANG:def 39;
       then len the_scope_of H < len H & E,m |= the_scope_of H
@@ -932,17 +934,17 @@ A3:   [a,b] in X & [a,c] in X;
       for f st Like[f] & f.x3 = [a,c]`1 & f.x4 = [a,c]`2 holds E,f |= H by A2;
       then reconsider a' = a, b' = b, c' = c as Element of E by ZFMISC_1:106;
 A4:   [a,b]`1 = a' & [a,b]`2 = b' & [a,c]`1 = a' & [a,c]`2 = c' by MCART_1:7;
-      consider f such that
-A5:   f.x3 = a' & for x st x <> x3 holds f.x = val.x by ZF_MODEL:21;
+          set f = val+*(x3,a');
+A5:       f.x3 = a' & for x st x <> x3 holds f.x = val.x by FUNCT_7:34,130;
       for x st f.x <> val.x holds x = x3 by A5;
       then E,f |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
       then consider g such that
 A6:   (for x st g.x <> f.x holds x0 = x) & E,g |= All(x4,H <=> x4 '=' x0)
       by ZF_MODEL:20;
-      consider g1 being Function of VAR,E such that
-A7:   g1.x4 = b' & for x st x <> x4 holds g1.x = g.x by ZF_MODEL:21;
-      consider g2 being Function of VAR,E such that
-A8:   g2.x4 = c' & for x st x <> x4 holds g2.x = g.x by ZF_MODEL:21;
+          set g1 = g+*(x4,b');
+A7:       g1.x4 = b' & for x st x <> x4 holds g1.x = g.x by FUNCT_7:34,130;
+          set g2 = g+*(x4,c');
+A8:       g2.x4 = c' & for x st x <> x4 holds g2.x = g.x by FUNCT_7:34,130;
       (for x st g1.x <> g.x holds x4 = x) &
       (for x st g2.x <> g.x holds x4 = x) by A7,A8;
       then
@@ -980,8 +982,8 @@ A13: E = dom F
         let a;
         assume a in E;
         then reconsider a' = a as Element of E;
-        consider g such that
-A14:    g.x3 = a' & for x st x <> x3 holds g.x = val.x by ZF_MODEL:21;
+          set g = val+*(x3,a');
+A14:       g.x3 = a' & for x st x <> x3 holds g.x = val.x by FUNCT_7:34,130;
         for x st g.x <> val.x holds x = x3 by A14;
         then E,g |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
         then consider h such that
@@ -992,8 +994,8 @@ A16:    [a',u] in [:E,E:] by ZFMISC_1:106;
         now
           let f such that
 A17:      Like[f] & f.x3 = [a',u]`1 & f.x4 = [a',u]`2;
-          consider m being Function of VAR,E such that
-A18:      m.x4 = u & for x st x <> x4 holds m.x = h.x by ZF_MODEL:21;
+          set m = h+*(x4,u);
+A18:       m.x4 = u & for x st x <> x4 holds m.x = h.x by FUNCT_7:34,130;
           for x st m.x <> h.x holds x4 = x by A18;
           then
 A19:      E,m |= H <=> x4 '=' x0 by A15,ZF_MODEL:16;
@@ -1079,19 +1081,16 @@ A33: for g st for y st g.y <> val.y holds x.0 = y or x.3 = y or x.4 = y
     holds E,g |= H iff F1.(g.x.3) = g.x.4 and
 A34: for g st for y st g.y <> val.y holds x.0 = y or x.3 = y or x.4 = y
     holds E,g |= H iff F2.(g.x.3) = g.x.4;
-    now
-      let a;
-      assume a in E;
-      then reconsider a' = a as Element of E;
-      consider f such that
-A35:  f.x3 = a' & for x st x <> x3 holds f.x = val.x by ZF_MODEL:21;
+      let a be Element of E;
+          set f = val+*(x3,a);
+A35:       f.x3 = a & for x st x <> x3 holds f.x = val.x by FUNCT_7:34,130;
       for x st f.x <> val.x holds x3 = x by A35;
       then E,f |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:16;
       then consider g such that
 A36:  (for x st g.x <> f.x holds x0 = x) & E,g |= All(x4,H <=> x4 '=' x0)
       by ZF_MODEL:20;
-      consider h such that
-A37:  h.x4 = g.x0 & for x st x <> x4 holds h.x = g.x by ZF_MODEL:21;
+          set h = g+*(x4,g.x0);
+A37:       h.x4 = g.x0 & for x st x <> x4 holds h.x = g.x by FUNCT_7:34,130;
       for x st h.x <> g.x holds x4 = x by A37;
       then
 A38:  E,h |= H <=> x4 '=' x0 by A36,ZF_MODEL:16;
@@ -1111,8 +1110,6 @@ A41:    x.0 <> x & x.3 <> x & x.4 <> x;
 A42:  F1.(h.x.3) = h.x.4 & F2.(h.x.3) = h.x.4 by A33,A34,A39;
       h.x3 = g.x3 & g.x3 = f.x3 by A36,A37;
       hence F1.a = F2.a by A35,A42;
-    end;
-    hence F1 = F2 by FUNCT_2:18;
   end;
 end;
 
@@ -1128,12 +1125,12 @@ proof
 A1: for H st H is atomic holds Th[H]
   proof
     let H such that
-A2: H is_equality or H is_membership;
+A2: H is being_equality or H is being_membership;
     let f,g such that
 A3: for x st f.x <> g.x holds not x in Free H and
 A4: E,f |= H;
 A5: now
-      assume H is_equality;
+      assume H is being_equality;
       then
 A6:   H = (Var1 H) '=' Var2 H & Free H = { Var1 H,Var2 H }
       by ZF_LANG:53,ZF_MODEL:1;
@@ -1144,7 +1141,7 @@ A7:   f.(Var1 H) = f.(Var2 H) by A4,ZF_MODEL:12;
       hence E,g |= H by A6,A7,ZF_MODEL:12;
     end;
     now
-      assume H is_membership;
+      assume H is being_membership;
       then
 A8:   H = (Var1 H) 'in' Var2 H & Free H = { Var1 H,Var2 H }
       by ZF_LANG:54,ZF_MODEL:1;
@@ -1229,9 +1226,9 @@ A28: E,f |= H;
     now
       let j such that
 A29:  for x st j.x <> g.x holds bound_in H = x;
-      consider h such that
-A30:  h.(bound_in H) = j.(bound_in H) &
-      for x st x <> bound_in H holds h.x = f.x by ZF_MODEL:21;
+          set h = f+*(bound_in H,j.(bound_in H));
+A30:   h.bound_in H = j.(bound_in H) & for x st x <> bound_in H holds h.x = f.x
+      by FUNCT_7:34,130;
       for x st h.x <> f.x holds bound_in H = x by A30;
       then
 A31:  E,h |= the_scope_of H by A25,A28,ZF_MODEL:16;
@@ -1271,10 +1268,10 @@ A3: E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0))) by A1,ZF_MODEL:def 5;
     proof
       assume
 A4:   E,g |= H;
-      consider g3 being Function of VAR,E such that
-A5:   g3.x3 = g.x3 & for x st x <> x3 holds g3.x = f.x by ZF_MODEL:21;
-      consider g4 being Function of VAR,E such that
-A6:   g4.x4 = g.x4 & for x st x <> x4 holds g4.x = g3.x by ZF_MODEL:21;
+       set g3 = f+*(x3,g.x3);
+A5:    g3.x3 = g.x3 & for x st x <> x3 holds g3.x = f.x by FUNCT_7:34,130;
+       set g4 = g3+*(x4,g.x4);
+A6:    g4.x4 = g.x4 & for x st x <> x4 holds g4.x = g3.x by FUNCT_7:34,130;
       now
         let x;
         assume
@@ -1300,10 +1297,10 @@ A11:    x.0 <> x & x.3 <> x & x.4 <> x;
     assume that
 A12: F.(g.x.3) = g.x.4 and
 A13: not E,g |= H;
-    consider j such that
-A14: j.x3 = g.x3 & for x st x <> x3 holds j.x = f.x by ZF_MODEL:21;
-    consider h such that
-A15: h.x4 = g.x4 & for x st x <> x4 holds h.x = j.x by ZF_MODEL:21;
+       set j = f+*(x3,g.x3);
+A14:    j.x3 = g.x3 & for x st x <> x3 holds j.x = f.x by FUNCT_7:34,130;
+       set h = j+*(x4,g.x4);
+A15:    h.x4 = g.x4 & for x st x <> x4 holds h.x = j.x by FUNCT_7:34,130;
     now
       let x;
       assume
@@ -1331,32 +1328,28 @@ A20:  x.0 <> x & x.3 <> x & x.4 <> x;
     let F1,F2 be Function of E,E such that
 A21: for g holds E,g |= H iff F1.(g.x.3) = g.x.4 and
 A22: for g holds E,g |= H iff F2.(g.x.3) = g.x.4;
-    now
-      let a;
-      assume a in E;
-      then reconsider e = a as Element of E;
+      let a be Element of E;
       consider f;
-      consider g such that
-A23:  g.x3 = e & for x st x <> x3 holds g.x = f.x by ZF_MODEL:21;
+      set g = f+*(x3,a);
+A23:  g.x3 = a by FUNCT_7:130;
       E |= Ex(x0,All(x4,H <=> x4 '=' x0)) by A1,ZF_MODEL:25;
       then E,g |= Ex(x0,All(x4,H <=> x4 '=' x0)) by ZF_MODEL:def 5;
       then consider h such that
 A24:  (for x st h.x <> g.x holds x0 = x) &
       E,h |= All(x4,H <=> x4 '=' x0) by ZF_MODEL:20;
-      consider j such that
-A25:  j.x4 = h.x0 & for x st x <> x4 holds j.x = h.x by ZF_MODEL:21;
-      for x st j.x <> h.x holds x4 = x by A25;
+      set j = h+*(x4,h.x0);
+A25:  j.x4 = h.x0 by FUNCT_7:130;
+B25:  for x st x <> x4 holds j.x = h.x by FUNCT_7:34;
+      then for x st j.x <> h.x holds x4 = x;
       then
 A26:  E,j |= H <=> x4 '=' x0 by A24,ZF_MODEL:16;
-      j.x0 = h.x0 by A25;
+      j.x0 = h.x0 by B25;
       then E,j |= x4 '=' x0 by A25,ZF_MODEL:12;
       then E,j |= H by A26,ZF_MODEL:19;
       then
 A27:  F1.(j.x3) = j.x4 & F2.(j.x3) = j.x4 by A21,A22;
-      j.x3 = h.x3 & h.x3 = g.x3 by A24,A25;
+      j.x3 = h.x3 & h.x3 = g.x3 by A24,B25;
       hence F1.a = F2.a by A23,A27;
-    end;
-    hence thesis by FUNCT_2:18;
   end;
 end;
 
@@ -1445,8 +1438,8 @@ A7: { x1,x2 } misses Free H by XBOOLE_0:3;
     then
 A8: E,f |= All(x1,Ex(x2, All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H) ) ))
     by A5,ZF_MODEL:18;
-    consider g such that
-A9: g.x1 = u & for x st x <> x1 holds g.x = f.x by ZF_MODEL:21;
+       set g = f+*(x1,u);
+A9:    g.x1 = u & for x st x <> x1 holds g.x = f.x by FUNCT_7:34,130;
     for x st g.x <> f.x holds x1 = x by A9;
     then E,g |= Ex(x2,All(x4,x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H)))
     by A8,ZF_MODEL:16;
@@ -1464,20 +1457,20 @@ A13:  b in dom def_func'(H,f) & b in u & def_func'(H,f).b = a by FUNCT_1:def 12
       ;
       reconsider e = a as Element of E by A12;
       reconsider b as Element of E by A13;
-      consider i such that
-A14:  i.x4 = e & for x st x <> x4 holds i.x = h.x by ZF_MODEL:21;
+       set i = h+*(x4,e);
+A14:    i.x4 = e & for x st x <> x4 holds i.x = h.x by FUNCT_7:34,130;
       for x st i.x <> h.x holds x4 = x by A14;
       then
 A15:  E,i |= x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H) by A10,ZF_MODEL:16;
-      consider j such that
-A16:  j.x3 = b & for x st x <> x3 holds j.x = i.x by ZF_MODEL:21;
+       set j = i+*(x3,b);
+A16:    j.x3 = b & for x st x <> x3 holds j.x = i.x by FUNCT_7:34,130;
       j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1 by A10,A14,A16;
       then
 A17:  E,j |= x3 'in' x1 by A9,A13,A16,ZF_MODEL:13;
-      consider m1 being Function of VAR,E such that
-A18:  m1.x3 = b & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
-      consider m being Function of VAR,E such that
-A19:  m.x4 = e & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
+       set m1 = f+*(x3,b);
+A18:    m1.x3 = b & for x st x <> x3 holds m1.x = f.x by FUNCT_7:34,130;
+       set m = m1+*(x4,e);
+A19:    m.x4 = e & for x st x <> x4 holds m.x = m1.x by FUNCT_7:34,130;
       now
         let y;
         assume
@@ -1490,8 +1483,8 @@ A20:    m.y <> f.y;
 A21:  E,m |= H iff def_func'(H,f).(m.x.3) = m.x.4 by A5,A6,Def1;
 A22:  m.x3 = m1.x3 by A19;
 A23:  E,m |= All(x1,x2,H) by A7,A13,A18,A19,A21,Th11;
-      consider k being Function of VAR,E such that
-A24:  k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by ZF_MODEL:21;
+       set k = m+*(x1,j.x1);
+A24:    k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by FUNCT_7:34,130;
       All(x1,x2,H) = All(x1,All(x2,H)) &
       for x st k.x <> m.x holds x1 = x by A24;
       then
@@ -1530,8 +1523,8 @@ A31:  E,j |= x3 'in' x1 '&' H by A17,ZF_MODEL:15;
 A32:  a in v;
       v c= E by A1;
       then reconsider e = a as Element of E by A32;
-      consider i such that
-A33:  i.x4 = e & for x st x <> x4 holds i.x = h.x by ZF_MODEL:21;
+       set i = h+*(x4,e);
+A33:    i.x4 = e & for x st x <> x4 holds i.x = h.x by FUNCT_7:34,130;
       for x st i.x <> h.x holds x4 = x by A33;
       then
 A34:  E,i |= x4 'in' x2 <=> Ex(x3,x3 'in' x1 '&' H) by A10,ZF_MODEL:16;
@@ -1545,10 +1538,10 @@ A36:  E,j |= x3 'in' x1 & E,j |= H by A35,ZF_MODEL:15;
       then
 A37:  j.x3 in j.x1 & j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1
       by A10,A33,A35,ZF_MODEL:13;
-      consider m1 being Function of VAR,E such that
-A38:  m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
-      consider m being Function of VAR,E such that
-A39:  m.x4 = e & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
+       set m1 = f+*(x3,j.x3);
+A38:    m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by FUNCT_7:34,130;
+       set m = m1+*(x4,e);
+A39:    m.x4 = e & for x st x <> x4 holds m.x = m1.x by FUNCT_7:34,130;
       now
         let y;
         assume
@@ -1560,8 +1553,8 @@ A40:    m.y <> f.y;
       then
 A41:  E,m |= H iff def_func'(H,f).(m.x.3) = m.x.4 by A5,A6,Def1;
 A42:  E,j |= All(x1,x2,H) by A7,A36,Th11;
-      consider k being Function of VAR,E such that
-A43:  k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x by ZF_MODEL:21;
+       set k = j+*(x1,m.x1);
+A43:    k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x by FUNCT_7:34,130;
       All(x1,x2,H) = All(x1,All(x2,H)) &
       for x st k.x <> j.x holds x1 = x by A43;
       then
@@ -1627,8 +1620,8 @@ A55:    E,f |= All(x3,Ex(x0,All(x4,H <=> x4 '=' x0)));
 A56:      for x st g.x <> f.x holds x1 = x;
           reconsider v = def_func'(H,f).:
           (g.x1) as Element of E by A51,A52,A55;
-          consider h such that
-A57:      h.x2 = v & for x st x <> x2 holds h.x = g.x by ZF_MODEL:21;
+       set h = g+*(x2,v);
+A57:    h.x2 = v & for x st x <> x2 holds h.x = g.x by FUNCT_7:34,130;
           now
             let i such that
 A58:        for x st i.x <> h.x holds x4 = x;
@@ -1639,15 +1632,15 @@ A59:        now
 A60:          a in dom def_func'(H,f) & a in g.x1 & i.x4 = def_func'(H,f).a
               by A57,FUNCT_1:def 12;
               reconsider a as Element of E by A60;
-              consider j such that
-A61:          j.x3 = a & for x st x <> x3 holds j.x = i.x by ZF_MODEL:21;
+       set j = i+*(x3,a);
+A61:    j.x3 = a & for x st x <> x3 holds j.x = i.x by FUNCT_7:34,130;
               j.x1 = i.x1 & i.x1 = h.x1 & h.x1 = g.x1 by A57,A58,A61;
               then
 A62:          E,j |= x3 'in' x1 by A60,A61,ZF_MODEL:13;
-              consider m1 being Function of VAR,E such that
-A63:          m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
-              consider m being Function of VAR,E such that
-A64:          m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
+       set m1 = f+*(x3,j.x3);
+A63:    m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by FUNCT_7:34,130;
+       set m = m1+*(x4,i.x4);
+A64:    m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x by FUNCT_7:34,130;
               now
                 let x such that
 A65:            m.x <> f.x and
@@ -1659,8 +1652,8 @@ A66:            x.0 <> x & x.3 <> x & x.4 <> x;
               .x3 by A53,A55,A64,Def1;
               then
 A67:          E,m |= All(x1,x2,H) by A54,A60,A61,A63,A64,Th11;
-              consider k being Function of VAR,E such that
-A68:          k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by ZF_MODEL:21;
+       set k = m+*(x1,j.x1);
+A68:    k.x1 = j.x1 & for x st x <> x1 holds k.x = m.x by FUNCT_7:34,130;
               All(x1,x2,H) = All(x1,All(x2,H)) &
               for x st k.x <> m.x holds x1 = x by A68;
               then
@@ -1698,12 +1691,12 @@ A75:          (for x st j.x <> i.x holds x3 = x) &
 A76:          E,j |= x3 'in' x1 & E,j |= H by A75,ZF_MODEL:15;
               then
 A77:          E,j |= All(x1,x2,H) by A54,Th11;
-              consider m1 being Function of VAR,E such that
-A78:          m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by ZF_MODEL:21;
-              consider m being Function of VAR,E such that
-A79:          m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x by ZF_MODEL:21;
-              consider k being Function of VAR,E such that
-A80:          k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x by ZF_MODEL:21;
+       set m1 = f+*(x3,j.x3);
+A78:    m1.x3 = j.x3 & for x st x <> x3 holds m1.x = f.x by FUNCT_7:34,130;
+       set m = m1+*(x4,i.x4);
+A79:    m.x4 = i.x4 & for x st x <> x4 holds m.x = m1.x by FUNCT_7:34,130;
+       set k = j+*(x1,m.x1);
+A80:    k.x1 = m.x1 & for x st x <> x1 holds k.x = j.x by FUNCT_7:34,130;
               All(x1,x2,H) = All(x1,All(x2,H)) &
               for x st k.x <> j.x holds x1 = x by A80;
               then
@@ -1838,7 +1831,7 @@ A5: a in v;
 end;
 
 theorem
-  E is_a_model_of_ZF implies E is epsilon-transitive &
+  E is being_a_model_of_ZF implies E is epsilon-transitive &
   (for u,v st for w holds w in u iff w in v holds u = v) &
   (for u,v holds { u,v } in E) & (for u holds union u in E) &
   (ex u st u <> {} & for v st v in u ex w st v c< w & w in u) &
@@ -1859,7 +1852,7 @@ theorem
   (ex u st u <> {} & for v st v in u ex w st v c< w & w in u) &
   (for u holds E /\ bool u in E) & (for H,f st { x.0,x.1,x.2 } misses Free H &
   E,f |= All(x.3,Ex(x.0,All(x.4,H <=> x.4 '=' x.0)))
-  for u holds def_func'(H,f).:u in E ) implies E is_a_model_of_ZF
+  for u holds def_func'(H,f).:u in E ) implies E is being_a_model_of_ZF
 proof
   assume E is epsilon-transitive & (for u,v holds { u,v } in E) &
   (for u holds union u in E) &

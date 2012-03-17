@@ -20,7 +20,8 @@ environ
       REALSET1, RLVECT_2, WELLORD2, LOPBAN_1, VECTSP_5, FUNCT_7, FUNCT_4,
       XXREAL_0, MATRLIN;
  registrations RELAT_1, FUNCT_1, FUNCT_2, STRUCT_0, CARD_1, FINSET_1, FRAENKEL,
-      VECTSP_9, XBOOLE_0, VECTSP_7, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0;
+      VECTSP_9, XBOOLE_0, VECTSP_7, MATRLIN, FUNCOP_1, ORDINAL1, XREAL_0,
+      SUBSET_1, VECTSP_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, RELAT_1, FUNCT_1, FINSEQ_1, VECTSP_4, VECTSP_6, XBOOLE_0,
       RLVECT_1, STRUCT_0, MOD_2, MATRLIN, FUNCOP_1, LOPBAN_1, FUNCT_2;
@@ -29,7 +30,7 @@ environ
       RLVECT_1, VECTSP_4, VECTSP_6, STRUCT_0, RLVECT_2, MOD_2, MATRLIN, CARD_1,
       FUNCOP_1, VECTSP_5, FUNCT_7, FINSEQ_2, FUNCT_4, ENUMSET1, ORDINAL1,
       PARTFUN1;
- schemes FUNCT_1;
+ schemes CLASSES1;
 
 begin
 
@@ -171,11 +172,11 @@ A1: [#]V is finite;
 end;
 
 theorem
-  for V being finite-dimensional VectSp of F st Card ([#]V) = 1
+  for V being finite-dimensional VectSp of F st card ([#]V) = 1
   holds dim V = 0
 proof
   let V be finite-dimensional VectSp of F such that
-A1: Card ([#]V) = 1;
+A1: card ([#]V) = 1;
   [#]V = {0.V}
   proof
     consider y being set such that
@@ -187,15 +188,13 @@ A2: [#]V = {y} by A1,CARD_2:60;
 end;
 
 theorem
-  Card ([#]V) = 2 implies dim V = 1
+  card ([#]V) = 2 implies dim V = 1
 proof
   assume
-A1: Card ([#]V) = 2;
-A2: [#]V,Card([#]V) are_equipotent by CARD_1:def 5;
-  then
-A3: [#]V is finite by A1,CARD_1:68;
-  reconsider C = [#]V as finite set by A1,A2,CARD_1:68;
-A4: Card ([#]V) = card (C);
+A1: card ([#]V) = 2;
+A3: [#]V is finite by A1;
+  reconsider C = [#]V as finite set by A1;
+A4: card ([#]V) = card (C);
   reconsider V as finite-dimensional VectSp of F by A3,Th4;
   ex v being Vector of V st v <> 0.V & (Omega).V = Lin ({v})
   proof
@@ -259,11 +258,7 @@ A14:      0.L in L by STRUCT_0:def 5;
   hence thesis by VECTSP_9:34;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Basic facts of linear transformations
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-begin
+begin :: Basic facts of linear transformations
 
 definition
   let F be Field, V,W be VectSp of F;
@@ -582,12 +577,8 @@ A3: (x - y) + y = x - (y - y) by RLVECT_1:43
   hence thesis by A1,A2,A3,VECTSP_5:5;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: Some basic facts about linearly independent subsets and linear
-:: combinations
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-begin
+begin :: Some basic facts about linearly independent subsets and linear
+      :: combinations
 
 theorem Th19:
   for X being Subset of V st V is Subspace of W holds X is Subset of W
@@ -1167,7 +1158,6 @@ definition
   proof
     defpred P[set,set] means
     ex w being Element of W st $1 = w & $2 = Sum (l .: (T"{w}));
-A1: for x, y1, y2 being set st x in [#]W & P[x,y1] & P[x,y2] holds y1 = y2;
 A2: for x being set st x in [#]W holds ex y being set st P[x,y]
     proof
       let x be set such that
@@ -1178,7 +1168,7 @@ A3:   x in [#]W;
     end;
     consider f being Function such that
 A4: dom f = [#]W and
-A5: for x being set st x in [#]W holds P[x,f.x] from FUNCT_1:sch 2(A1,A2);
+A5: for x being set st x in [#]W holds P[x,f.x] from CLASSES1:sch 1(A2);
 A6: for w being Element of W holds f.w = Sum (l .: (T"{w}))
     proof
       let w be Element of W;
@@ -1805,7 +1795,7 @@ A10:    v = x and f.v <> 0.F by A9;
       then reconsider C as Subset of V;
       C is finite
       proof
-        Card C c= Card Carrier l
+        card C c= card Carrier l
         proof
           ex g being Function
           st g is one-to-one & dom g = C & rng g c= Carrier l
@@ -1885,7 +1875,7 @@ A31:          y = g.x by A29,FUNCT_1:def 5;
           end;
           hence thesis by CARD_1:26;
         end;
-        hence thesis by CARD_2:68;
+        hence thesis;
       end;
       then reconsider C as finite Subset of V;
       take C;
@@ -2000,11 +1990,7 @@ A20:  Carrier (T#l) c= X by VECTSP_6:def 7;
   end;
 end;
 
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-:: The rank+nullity theorem
-::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-begin
+begin :: The rank+nullity theorem
 
 definition
   let F be Field, V,W be finite-dimensional VectSp of F,

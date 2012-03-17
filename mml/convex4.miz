@@ -28,11 +28,11 @@ environ
  definitions FUNCT_1, TARSKI, XBOOLE_0, BINOP_1, RLVECT_1, RELAT_1, STRUCT_0,
       REALSET1, FINSEQ_1, CLVECT_1, COMPLEX1, RVSUM_1, XCMPLX_0, ALGSTR_0,
       RUSUB_4, RUSUB_5;
- theorems SUBSET_1, STRUCT_0, RVSUM_1, REAL_2, SETFAM_1, ENUMSET1, BINOP_1,
-      CARD_1, CARD_2, FINSEQ_1, FINSEQ_3, FINSEQ_4, FINSET_1, FUNCT_1, FUNCT_2,
-      NAT_1, RLVECT_1, RLVECT_2, TARSKI, ZFMISC_1, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, COMPLEX1, XCMPLX_1, FUNCOP_1, XREAL_1, XXREAL_0, FINSOP_1,
-      CLVECT_1, CSSPACE, CONVEX1, PARTFUN1, XREAL_0, VALUED_1, ALGSTR_0;
+ theorems SUBSET_1, STRUCT_0, RVSUM_1, SETFAM_1, ENUMSET1, BINOP_1, CARD_1,
+      CARD_2, FINSEQ_1, FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2, NAT_1, RLVECT_1,
+      RLVECT_2, TARSKI, ZFMISC_1, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1,
+      COMPLEX1, XCMPLX_1, FUNCOP_1, XREAL_1, XXREAL_0, FINSOP_1, CLVECT_1,
+      CSSPACE, CONVEX1, PARTFUN1, XREAL_0, VALUED_1, ALGSTR_0;
  schemes DOMAIN_1, BINOP_1, SUBSET_1, FINSEQ_1, FUNCT_2, NAT_1, XBOOLE_0;
 
 begin :: Complex Linear Combinations
@@ -1434,7 +1434,7 @@ definition
 let V be non empty CLSStruct, S be Subset of V;
 attr S is Affine means :Def101:
 for x,y being VECTOR of V, z being Complex st
-(ex a being Real st a = z) &
+ z is Real &
 x in S & y in S holds (1r - z) * x + z * y in S;
 end;
 
@@ -1518,26 +1518,25 @@ proof
   end;
 end;
 
-Th100:
-for V being non empty CLSStruct holds [#]V is Affine & {}V is Affine
-proof
-  let V be non empty CLSStruct;
-  for x,y being VECTOR of V, z being Complex st
-    (ex a being Real st z=a ) & x in [#]V & y in [#]V
-    holds (1r - z) * x + z * y in [#]V;
-  hence [#]V is Affine by Def101;
-  for x,y being VECTOR of V, z being Complex st
-    (ex a being Real st z=a ) & x in {}V & y in {}V
-    holds (1r - z) * x + z * y in {}V;
-  hence thesis by Def101;
-end;
-
 registration
 let V be non empty CLSStruct;
 cluster [#]V -> Affine;
-coherence by Th100;
-cluster {}V -> Affine;
-coherence by Th100;
+coherence
+proof
+  for x,y being VECTOR of V, z being Complex st
+    z is Real & x in [#]V & y in [#]V
+    holds (1r - z) * x + z * y in [#]V;
+  hence [#]V is Affine by Def101;
+end;
+cluster empty -> Affine Subset of V;
+coherence
+proof let S be Subset of V;
+ assume S is empty;
+ then for x,y being VECTOR of V, z being Complex st
+     z is Real & x in S & y in S
+    holds (1r - z) * x + z * y in S;
+  hence thesis by Def101;
+end;
 end;
 
 registration
@@ -2305,7 +2304,7 @@ proof
     suppose A6: z1 <> 0 & z2 <> 0;
       then A7: r1 + r2 > 0 + 0 & r1 + r2 > r1 & r1 + r2 > r2 by B1,XREAL_1:31;
       then 0 < r1/(r1+r2) & r1/(r1+r2) < 1 &
-           0 < r2/(r1+r2) & r2/(r1+r2) < 1 by B1,A6,REAL_2:142; then
+           0 < r2/(r1+r2) & r2/(r1+r2) < 1 by B1,A6,XREAL_1:191; then
       z1/(z1+z2) * M + (1r - z1/(z1+z2)) * M c= M by B1,A2,Th204; then
       A10: (z1+z2)*(z1/(z1+z2)*M + (1r-z1/(z1+z2))*M) c= (z1+z2)*M by Lm206;
       A11: (z1+z2)*(z1/(z1+z2)*M) = (z1/(z1+z2))*(z1+z2)*M by Lm204

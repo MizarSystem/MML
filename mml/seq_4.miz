@@ -8,7 +8,7 @@ environ
 
  vocabularies ARYTM, SEQ_1, ORDINAL2, SEQM_3, ARYTM_3, RELAT_1, ARYTM_1, SEQ_2,
       LATTICES, ABSVALUE, FUNCT_1, PROB_1, SEQ_4, MEMBERED, FUNCOP_1, FRECHET2,
-      SQUARE_1, XXREAL_2, SUPINF_1, ANPROJ_1;
+      SQUARE_1, XXREAL_2, SUPINF_1, ANPROJ_1, NORMSP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0, XREAL_0,
       REAL_1, RELAT_1, COMPLEX1, PARTFUN1, FUNCT_2,
       NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2,
@@ -32,7 +32,7 @@ begin
 reserve n,k,k1,m,m1,n1,n2,l for Element of NAT;
 reserve r,r1,r2,p,p1,g,g1,g2,s,s1,s2,t for real number;
 reserve seq,seq1,seq2 for Real_Sequence;
-reserve Nseq for increasing Seq_of_Nat;
+reserve Nseq for increasing sequence of NAT;
 reserve x for set;
 reserve X,Y for Subset of REAL;
 
@@ -961,7 +961,7 @@ A2: for n holds seq.n=1/(n+r);
   let p;
   assume 0<p;
   then
-A3: 0<p" by XREAL_1:124;
+A3: 0<p";
   consider k1 such that
 A4: p"<k1 by Th10;
   take n=k1;
@@ -991,7 +991,7 @@ A3: seq is convergent by A1,A2,Th43;
     let p;
     assume 0<p;
     then
-A4: 0<p" by XREAL_1:124;
+A4: 0<p";
     consider k1 such that
 A5: p"<k1 by Th10;
     take n=k1;
@@ -1053,7 +1053,7 @@ A2: for n holds seq.n=1/(n*n+r);
   assume
 A3: 0<p;
   then
-A4: 0<p" by XREAL_1:124;
+A4: 0<p";
   consider k1 such that
 A5: p"<k1 by Th10;
   take n=k1;
@@ -1095,7 +1095,7 @@ A3: seq is convergent by A1,A2,Th47;
     assume
 A4: 0<p;
     then
-A5: 0<p" by XREAL_1:124;
+A5: 0<p";
     consider k1 such that
 A6: p"<k1 by Th10;
     take n=k1;
@@ -1305,19 +1305,10 @@ proof
 A1: seq is bounded_below and
 A2: seq is non-increasing;
   let m;
-  deffunc U(Nat) = seq.m;
-  consider seq1 such that
-A4: for n being Element of NAT holds seq1.n= U(n) from SEQ_1:sch 1;
-   for n being Nat holds seq1.n= U(n)
-    proof let n be Nat;
-     n in NAT by ORDINAL1:def 13;
-     hence thesis by A4;
-    end;
-    then
-A5: seq1 is constant by A4,VALUED_0:def 18;
-  seq1.0=seq.m by A4;
+  set seq1 = NAT --> seq.m;
+  seq1.0=seq.m by FUNCOP_1:13;
   then
-A7: lim seq1=seq.m by A5,Th40;
+A7: lim seq1=seq.m by Th40;
   deffunc U(Nat) = seq.($1+m);
   consider seq2 such that
 A8: for n holds seq2.n=U(n) from SEQ_1:sch 1;
@@ -1331,11 +1322,11 @@ A9: seq2=seq^\m by NAT_1:def 3;
 A10: lim seq2=lim seq by A1,A2,Th33;
   now
     let n;
-A12: seq1.n=seq.m by A4;
+A12: seq1.n=seq.m by FUNCOP_1:13;
     seq2.n=seq.(m+n) by A8;
     hence seq2.n<=seq1.n by A2,A12,SEQM_3:13;
   end;
-  hence lim seq<=seq.m by A5,A7,A10,A1,A2,A9,SEQ_2:32;
+  hence lim seq<=seq.m by A7,A10,A1,A2,A9,SEQ_2:32;
 end;
 
 theorem Th56:
@@ -1360,8 +1351,7 @@ A6:   not seq.k<seq.m by A1;
       thus seq.n<=seq.k by A6;
     end;
     set seq1=seq ^\(1+k1);
-    seq1 is subsequence of seq;
-    then consider Nseq such that
+    consider Nseq such that
 A7: seq1=seq*Nseq by VALUED_0:def 17;
 A8: now
       let k;
@@ -1427,8 +1417,8 @@ A23: now
       (f.n is Element of NAT) & f.(n+1) is Element of NAT by A23;
       hence f.n<f.(n+1) by A19;
     end;
-    then reconsider f as increasing Seq_of_Nat by SEQM_3:def 11;
-    reconsider Nseq1=Nseq*f as increasing Seq_of_Nat;
+    then reconsider f as increasing sequence of NAT by SEQM_3:def 11;
+    reconsider Nseq1=Nseq*f as increasing sequence of NAT;
     take Nseq1;
     now
       let n;
@@ -1500,7 +1490,7 @@ A41: now
       (f.n is Element of NAT) & f.(n+1) is Element of NAT by A36;
       hence f.n<f.(n+1) by A32;
     end;
-    then reconsider f as increasing Seq_of_Nat by SEQM_3:def 11;
+    then reconsider f as increasing sequence of NAT by SEQM_3:def 11;
     take Nseq=f;
     now
       let n;
@@ -1525,8 +1515,8 @@ A1: seq is bounded;
   consider Nseq such that
 A2: seq*Nseq is monotone by Th56;
   take seq1=seq*Nseq;
-  thus seq1 is subsequence of seq by VALUED_0:def 17;
-  hence seq1 is convergent by A1,A2,Th53,SEQM_3:58;
+  thus seq1 is subsequence of seq;
+  thus seq1 is convergent by A1,A2,Th53,SEQM_3:58;
 end;
 
 theorem :: Cauchy Theorem

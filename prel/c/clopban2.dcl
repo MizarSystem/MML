@@ -224,7 +224,7 @@
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="191"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
 <Adjective nr="102"/>
@@ -232,7 +232,7 @@
 </FCluster>
 <FCluster aid="CLOPBAN2" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="190"/>
+<Func kind="K" nr="191"/>
 <Cluster>
 <Adjective nr="31" value="false"/>
 <Adjective nr="36" value="false"/>

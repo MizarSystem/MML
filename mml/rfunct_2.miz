@@ -7,13 +7,12 @@
 environ
 
  vocabularies SEQ_1, ORDINAL2, SEQM_3, PARTFUN1, FUNCT_1, RELAT_1, BOOLE,
-      ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4,
-      RCOMP_1, ANPROJ_1, PROB_1, REALSET1, OPPCAT_1, SUPINF_1;
+      ARYTM_1, ABSVALUE, SEQ_2, ARYTM, FINSEQ_1, LATTICES, SEQ_4, RCOMP_1,
+      ANPROJ_1, PROB_1, REALSET1, OPPCAT_1, SUPINF_1, NORMSP_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, XREAL_0, COMPLEX1,
-      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, REALSET1,
-      RELSET_1, PARTFUN1, VALUED_0, VALUED_1, SEQ_1,
-      SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1, SEQM_3, XXREAL_0,
-      XXREAL_2, RECDEF_1;
+      REAL_1, NAT_1, RELAT_1, FUNCT_1, FUNCT_2, REALSET1, RELSET_1, PARTFUN1,
+      VALUED_0, VALUED_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN2, RCOMP_1, RFUNCT_1,
+      SEQM_3, XXREAL_0, XXREAL_2, RECDEF_1;
  constructors PARTFUN1, REAL_1, NAT_1, COMPLEX1, SEQ_2, SEQM_3, SEQ_4, RCOMP_1,
       PARTFUN2, RFUNCT_1, VALUED_1, SEQ_1, RECDEF_1, XXREAL_2, REALSET1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0,
@@ -21,10 +20,9 @@ environ
       PARTFUN1;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, SEQM_3, XBOOLE_0, FUNCT_1, VALUED_0, VALUED_1;
- theorems TARSKI, SUBSET_1, FUNCT_1, SEQ_1, SEQ_2, SEQM_3, SEQ_4,
-      PARTFUN1, PARTFUN2, RFUNCT_1, FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0,
-      XBOOLE_1, XREAL_1, XXREAL_0, VALUED_1, XXREAL_1, ZFMISC_1, NAT_1,
-      VALUED_0;
+ theorems TARSKI, FUNCT_1, SEQ_1, SEQ_2, SEQ_4, PARTFUN1, PARTFUN2, RFUNCT_1,
+      FUNCT_2, RELAT_1, RELSET_1, XBOOLE_0, XBOOLE_1, XREAL_1, XXREAL_0,
+      VALUED_1, VALUED_0;
 
 begin
 
@@ -32,7 +30,7 @@ reserve x,y,X,X1,Y for set;
 reserve g,r,r1,r2,p,p1,p2 for Element of REAL;
 reserve R for Subset of REAL;
 reserve seq,seq1,seq2,seq3 for Real_Sequence;
-reserve Ns for increasing Seq_of_Nat;
+reserve Ns for increasing sequence of NAT;
 reserve n,m for Element of NAT;
 reserve h,h1,h2 for PartFunc of REAL,REAL;
 
@@ -48,7 +46,7 @@ proof thus seq1=seq2-seq3 implies for n holds seq1.n=seq2.n-seq3.n
   proof
     assume seq1=seq2-seq3;
     then
-A1: seq1=seq2+-seq3 by SEQ_1:15;
+A1: seq1=seq2+-seq3;
     now
       let n;
       seq1.n=seq2.n+(-seq3).n by A1,SEQ_1:11;
@@ -66,7 +64,7 @@ A2: for n holds seq1.n=seq2.n-seq3.n;
       .= seq2.n+(-seq3).n by SEQ_1:14;
   end;
   then seq1=seq2+(-seq3) by SEQ_1:11;
-  hence thesis by SEQ_1:15;
+  hence thesis;
 end;
 
 canceled 6;
@@ -121,9 +119,9 @@ end;
 theorem
   (-seq)*Ns = -(seq*Ns) & (abs(seq))*Ns = abs((seq*Ns))
 proof
-  thus (-seq)*Ns = ((-1)(#)seq)*Ns by SEQ_1:25
+  thus (-seq)*Ns = ((-1)(#)seq)*Ns
     .= (-1)(#)(seq*Ns) by Th14
-    .= -(seq*Ns) by SEQ_1:25;
+    .= -(seq*Ns);
   now
     let n;
     thus ((abs(seq))*Ns).n = (abs(seq)).(Ns.n) by FUNCT_2:21
@@ -150,10 +148,10 @@ end;
 theorem
   (seq1/"seq)*Ns = (seq1*Ns)/"(seq*Ns)
 proof
-  thus (seq1/"seq)*Ns = (seq1(#)(seq"))*Ns by VALUED_1:def 10
+  thus (seq1/"seq)*Ns = (seq1(#)(seq"))*Ns
     .= (seq1*Ns)(#)((seq")*Ns) by Th13
     .= (seq1*Ns)(#)((seq*Ns)") by Th16
-    .= (seq1*Ns)/"(seq*Ns) by VALUED_1:def 10;
+    .= (seq1*Ns)/"(seq*Ns);
 end;
 
 theorem
@@ -253,7 +251,7 @@ A2: rng seq c= dom abs(h) by VALUED_1:def 11;
       .= (abs(h)/*seq).n by A2,FUNCT_2:185;
   end;
   hence abs(h/*seq) = (abs(h))/*seq by FUNCT_2:113;
-  thus -(h/*seq) = (-1)(#)(h/*seq) by SEQ_1:25
+  thus -(h/*seq) = (-1)(#)(h/*seq)
     .= ((-1)(#)h)/*seq by A1,Th24
     .= (-h)/*seq;
 end;
@@ -459,7 +457,7 @@ proof
 A1: rng h is bounded and
 A2: upper_bound (rng h) = lower_bound (rng h);
   assume
-A3: not h is constant;
+ not h is constant;
   then consider x1,x2 being set such that
 A4: x1 in dom h & x2 in dom h & h.x1 <> h.x2 by FUNCT_1:def 16;
   h.x1 in rng h & h.x2 in rng h by A4,FUNCT_1:def 5;
@@ -474,11 +472,9 @@ proof
   assume that
 A1: Y c= dom h & h.:Y is bounded and
 A2: upper_bound Z = lower_bound Z;
-A3: dom (h|Y) = dom h /\ Y by RELAT_1:90
-    .= Y by A1,XBOOLE_1:28;
 A4: rng (h|Y) is bounded by A1,RELAT_1:148;
-X: rng (h|Y) = Z by RELAT_1:148;
- hence h|Y is constant by A3,A4,Th41,A2,X;
+ rng (h|Y) = Z by RELAT_1:148;
+ hence h|Y is constant by A4,Th41,A2;
 end;
 
 reserve e1,e2 for ext-real number;
@@ -497,7 +493,6 @@ definition
     assume
 Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 < h.r2;
     let e1,e2;
-     dom h c= REAL;
     thus thesis by Z;
    end;
   attr h is decreasing means
@@ -510,10 +505,8 @@ Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 < h.r2;
     assume
 Z:   for r1,r2 st r1 in dom h & r2 in dom h & r1 < r2 holds h.r1 > h.r2;
     let e1,e2;
-     dom h c= REAL;
     thus thesis by Z;
    end;
-E:  dom h c= REAL;
   attr h is non-decreasing means
 :NDef4:  for r1,r2 st r1 in dom h & r2 in dom h & r1<r2 holds h.r1 <= h.r2;
   compatibility

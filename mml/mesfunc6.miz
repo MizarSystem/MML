@@ -9,14 +9,12 @@ environ
  vocabularies ABSVALUE, PARTFUN1, SUPINF_1, MEASURE1, FINSEQ_1, RELAT_1,
       FUNCT_1, RAT_1, ORDINAL2, COMPLEX1, SEQ_1, NAT_1, MEASURE6, BOOLE, ARYTM,
       ARYTM_1, MESFUNC1, TARSKI, ARYTM_3, RFUNCT_3, SQUARE_1, RLVECT_1, PROB_1,
-      INTEGRA1, MESFUNC2, MESFUNC3, SETFAM_1, MESFUNC5, SUPINF_2,
-      VALUED_0;
+      INTEGRA1, MESFUNC2, MESFUNC3, SETFAM_1, MESFUNC5, SUPINF_2, VALUED_0;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       DOMAIN_1, XREAL_0, REAL_1, RAT_1, NAT_1, NAT_D, FUNCT_1, RELSET_1,
-      PARTFUN1, FINSEQ_1, VALUED_1, SUPINF_2, SEQ_1, COMPLEX1,
-      XXREAL_0, VALUED_0,
-      RFUNCT_3, MEASURE6, BINARITH, FUNCT_2, SUPINF_1, MEASURE1, EXTREAL1,
-      MESFUNC1, MESFUNC2, MESFUNC3, SETFAM_1, PROB_1, MESFUNC5;
+      PARTFUN1, FINSEQ_1, VALUED_1, SUPINF_2, SEQ_1, COMPLEX1, XXREAL_0,
+      VALUED_0, RFUNCT_3, MEASURE6, BINARITH, FUNCT_2, SUPINF_1, MEASURE1,
+      EXTREAL1, MESFUNC1, MESFUNC2, MESFUNC3, SETFAM_1, PROB_1, MESFUNC5;
  constructors DOMAIN_1, REAL_1, SQUARE_1, NAT_1, NAT_D, MEASURE3, MEASURE6,
       EXTREAL1, MESFUNC1, EXTREAL2, BINARITH, MESFUNC2, MESFUNC3, MESFUNC5,
       SEQ_1, SUPINF_1;
@@ -28,9 +26,8 @@ environ
  theorems MEASURE1, TARSKI, PARTFUN1, FUNCT_1, NAT_1, SUPINF_2, EXTREAL1,
       EXTREAL2, MESFUNC1, FINSEQ_1, ABSVALUE, PROB_1, XBOOLE_0, XBOOLE_1,
       MESFUNC2, MESFUNC3, XREAL_1, ZFMISC_1, MESFUNC5, XXREAL_0, RFUNCT_3,
-      FUZZY_2, FINSUB_1, NAT_2, FINSEQ_3, BINARITH, FINSEQ_2, NAT_D, NUMBERS,
-      VALUED_1, XREAL_0;
- schemes FINSEQ_1, FINSEQ_2, PARTFUN1;
+      FUZZY_2, FINSUB_1, NAT_2, FINSEQ_3, FINSEQ_2, NAT_D, NUMBERS, VALUED_1;
+ schemes FINSEQ_1, PARTFUN1;
 
 begin :: The Measurability of Real-valued Functions
 
@@ -88,17 +85,19 @@ A3: f is real-valued by MESFUNC2:def 1;
   for n being Nat,x,y being Element of X st
   n in dom F & x in F.n & y in F.n holds f.x = f.y)
   proof
-    deffunc F(Nat) = Df;
-    consider F be FinSequence of S such that
-A4: len F = 1 & for n be Nat st n in dom F holds F.n = F(n)
-    from FINSEQ_2:sch 1;
-A5: dom F = Seg 1 by A4,FINSEQ_1:def 3;
+    set F = <*Df*>;
+A5: dom F = Seg 1 by FINSEQ_1:55;
+A4: for n be Nat st n in dom F holds F.n = Df
+       proof let n be Nat;
+        assume n in dom F;
+         then n = 1 by A5,FINSEQ_1:4,TARSKI:def 1;
+        hence thesis by FINSEQ_1:57;
+       end;
     now
       let i,j be Nat;
       assume
 A6:   i in dom F & j in dom F & i <> j;
-      then i in Seg len F & j in Seg len F by FINSEQ_1:def 3;
-      then i = 1 & j = 1 by A4,FINSEQ_1:4,TARSKI:def 1;
+      then i = 1 & j = 1 by A5,FINSEQ_1:4,TARSKI:def 1;
       hence F.i misses F.j by A6;
     end;
     then reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
@@ -106,15 +105,14 @@ A6:   i in dom F & j in dom F & i <> j;
     1 in Seg 1;
     then
 A7: F.1 = Df by A4,A5;
-    F = <* F.1 *> by A4,FINSEQ_1:57;
+    F = <* F.1 *> by FINSEQ_1:57;
     then rng F = {F.1} by FINSEQ_1:55;
     hence dom f = union rng F by A7,ZFMISC_1:31;
     hereby
       let n be Nat, x,y be Element of X;
       assume
 A8:   n in dom F & x in F.n & y in F.n;
-      then n in Seg 1 by A4,FINSEQ_1:def 3;
-      then F.n = Df by A4,A5;
+      then F.n = Df by A4;
       then f.x = r & f.y = r by A2,A8;
       hence f.x = f.y;
     end;
@@ -1822,22 +1820,24 @@ A2: dom(f+g) = {};
     n in dom F & x in F.n & y in F.n holds (f+g).x = (f+g).y)
     proof
       reconsider EMPTY = {} as Element of S by PROB_1:42;
-      deffunc F(Nat) = EMPTY;
-      consider F being FinSequence of S such that
-A3:   len F = 1 & for n be Nat st n in dom F holds F.n = F(n)
-      from FINSEQ_2:sch 1;
-A4: dom F = Seg 1 by A3,FINSEQ_1:def 3;
+    set F = <*EMPTY*>;
+A4: dom F = Seg 1 by FINSEQ_1:55;
+A3:   for n be Nat st n in dom F holds F.n = EMPTY
+       proof let n be Nat;
+        assume n in dom F;
+         then n = 1 by A4,FINSEQ_1:4,TARSKI:def 1;
+        hence thesis by FINSEQ_1:57;
+       end;
       now
         let i,j be Nat;
         assume
 A5:     i in dom F & j in dom F & i <> j;
-        then i in Seg len F & j in Seg len F by FINSEQ_1:def 3;
-        then i = 1 & j = 1 by A3,FINSEQ_1:4,TARSKI:def 1;
+        then i = 1 & j = 1 by A4,FINSEQ_1:4,TARSKI:def 1;
         hence F.i misses F.j by A5;
       end;
       then reconsider F as Finite_Sep_Sequence of S by MESFUNC3:4;
       take F;
-      F = <* F.1 *> by A3,FINSEQ_1:57;
+      F = <* F.1 *> by FINSEQ_1:57;
       then
 A6:   rng F = {F.1} by FINSEQ_1:56;
       1 in Seg 1;

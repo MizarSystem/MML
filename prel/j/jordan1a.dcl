@@ -41,7 +41,7 @@
 <Cluster/>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="250">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -49,14 +49,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="89"/>
-<Adjective nr="91">
-<Func kind="K" nr="250">
+<Adjective nr="90"/>
+<Adjective nr="92">
+<Func kind="K" nr="251">
 <Num nr="2"/>
 </Func>
 </Adjective>
-<Adjective nr="92" value="false"/>
 <Adjective nr="93" value="false"/>
+<Adjective nr="94" value="false"/>
 </Cluster>
 </RCluster>
 </Registrations>

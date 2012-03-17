@@ -28,12 +28,12 @@ definition
 end;
 
 registration
-  cluster Relation-like empty set;
-  existence
+  cluster empty -> Relation-like set;
+  coherence
   proof
-    take {};
-    thus x in {} implies ex y,z st x = [y,z];
-    thus thesis;
+    let X be set;
+    assume X is empty;
+    hence for p being set st p in X ex x,y st [x,y] = p;
   end;
 end;
 
@@ -1087,16 +1087,6 @@ end;
 
 registration
   cluster empty -> Relation-like set;
-  coherence
-  proof
-    let X be set;
-    assume X is empty;
-    hence for p being set st p in X ex x,y st [x,y] = p;
-  end;
-end;
-
-registration
-  cluster {} -> Relation-like;
   coherence;
 end;
 
@@ -1221,18 +1211,18 @@ theorem Th64:
 theorem
   dom R = {} iff rng R = {} by Th60,Th64;
 
-theorem Th66:
-  {}~ = {}
+registration
+  let X be empty set;
+  cluster X~ -> empty;
+  coherence
 proof
   for x,y st [x,y] in {}~ holds contradiction by Def7;
   hence thesis by Th56;
 end;
-
-registration
-  let X be empty set;
-  cluster X~ -> empty;
-  coherence by Th66;
 end;
+
+theorem
+  {}~ = {};
 
 theorem
   rng R misses dom P implies R*P = {}
@@ -1521,6 +1511,15 @@ A3: [x,y] in P2 iff x in X & [x,y] in R;
     end;
     hence P1=P2 by Def2;
   end;
+end;
+
+registration let R be Relation, X be empty set;
+ cluster R|X -> empty;
+ coherence
+proof
+  not [x,y] in R|{} by Def11;
+  hence thesis by Th56;
+end;
 end;
 
 canceled 3;
@@ -1838,19 +1837,20 @@ A7:   x in X & [x,y] in R by A5,Def11;
   hence thesis by Def2;
 end;
 
-theorem Th110:
-  R|{} = {}
-proof
-  not [x,y] in R|{} by Def11;
-  hence thesis by Th56;
-end;
-
-theorem
-  {}|X = {}
+registration let R be empty Relation, X be set;
+ cluster R|X -> empty;
+ coherence
 proof
   for x,y st [x,y] in {}|X holds contradiction by Def11;
   hence thesis by Th56;
 end;
+end;
+
+theorem
+  R|{} = {};
+
+theorem
+  {}|X = {};
 
 theorem
   (P*R)|X = (P|X)*R
@@ -1908,6 +1908,15 @@ A3: [x,y] in P2 iff y in Y & [x,y] in R;
     end;
     hence P1 = P2 by Def2;
   end;
+end;
+
+registration let R be Relation, X be empty set;
+ cluster X|R -> empty;
+ coherence
+proof
+  not [x,y] in X|R by Def12;
+  hence thesis by Th56;
+end;
 end;
 
 canceled 2;
@@ -2147,11 +2156,7 @@ proof
 end;
 
 theorem
-  {}|R = {}
-proof
-  not [x,y] in {}|R by Def12;
-  hence thesis by Th56;
-end;
+  {}|R = {};
 
 theorem
   Y|{} = {}
@@ -2949,7 +2954,7 @@ proof
 A1: X /\ dom f = {};
   thus f|X = (f|dom f)|X by Th97
     .= f|({} qua set) by A1,Th100
-    .= {} by Th110;
+    .= {};
 end;
 
 :: from AMI_5
@@ -2979,19 +2984,12 @@ end;
 :: missing, 2005.11.13, A.T.
 
 registration
-  cluster {} -> empty-yielding;
+  cluster empty -> empty-yielding Relation;
   coherence
-  proof
-    thus rng {} c= {{}} by XBOOLE_1:2;
-  end;
-end;
-
-registration
-  cluster empty-yielding Relation;
-  existence
-  proof
-    take {};
-    thus thesis;
+  proof let R be Relation;
+   assume R is empty;
+    then rng R = {};
+   hence rng R c= {{}} by XBOOLE_1:2;
   end;
 end;
 
@@ -3199,9 +3197,6 @@ theorem
 proof
   assume
 A1: rng R c= dom (S|X);
-  dom (S|X) = dom S /\ X by Th90;
-  then
-A2: dom (S|X) c= dom S by XBOOLE_1:17;
  let a,b;
   R*(S|X) c= R*S by Th48,Th88;
  hence [a,b] in R*(S|X) implies [a,b] in R*S;

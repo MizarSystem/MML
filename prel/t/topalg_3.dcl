@@ -14,6 +14,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="CONNSP_1"/>
@@ -40,7 +42,7 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -56,21 +58,21 @@
 </Typ>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="48">
+<Adjective nr="53">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="49">
+<Adjective nr="54">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="75"/>
+<Adjective nr="80"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPALG_3" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="40"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -83,69 +85,69 @@
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="46"/>
+<Adjective nr="39"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <FCluster aid="TOPALG_3" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="40"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="40"/>
+<Adjective nr="51"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="199">
+<Func kind="K" nr="207">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="46"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="51"/>
 </Cluster>
 </FCluster>
 <CCluster aid="TOPALG_3" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="22"/>
+<Adjective nr="27"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
+<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPALG_3" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="35"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="32"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="99"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="104"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPALG_3" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -163,8 +165,8 @@
 <LocusVar nr="2"/>
 </Typ>
 <Cluster>
-<Adjective nr="38">
-<Func kind="K" nr="221"/>
+<Adjective nr="43">
+<Func kind="K" nr="229"/>
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

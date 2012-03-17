@@ -1,0 +1,1908 @@
+:: Some Operations on Quaternion Numbers
+::  by Bo Li , Pan Wang , Xiquan Liang and Yanping Zhuang
+:: 
+:: Received October 14, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, RELAT_1, COMPLEX1, QUATERNI, FUNCT_4, ARYTM_1, ARYTM_3,
+      XCMPLX_0, SQUARE_1, POLYEQ_3;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, ARYTM_3, NUMBERS, RELAT_1,
+      FUNCT_1, FUNCT_2, FUNCT_4, ENUMSET1, COMPLEX1, ARYTM_0, ZFMISC_1,
+      QUATERNI, ARYTM_2, XCMPLX_0, XREAL_0, REAL_1, SQUARE_1, XXREAL_0,
+      RELSET_1, QUATERN2;
+ constructors ENUMSET1, FUNCT_4, ARYTM_1, FRAENKEL, ARYTM_0, REAL_1, SQUARE_1,
+      COMPLEX1, VALUED_1, QUATERNI, RFUNCT_1, QUATERN2;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, FUNCT_4,
+      FRAENKEL, NUMBERS, XXREAL_0, XREAL_0, SQUARE_1, MEMBERED, VALUED_0,
+      QUATERNI;
+ requirements NUMERALS, SUBSET, BOOLE, REAL, ARITHM;
+ definitions SQUARE_1, TARSKI, COMPLEX1, ARYTM_3, XCMPLX_0, QUATERNI, QUATERN2,
+      ARYTM_0;
+ theorems ARYTM_0, SQUARE_1, XREAL_1, QUATERNI, QUATERN2, XCMPLX_1,XCMPLX_0;
+
+begin
+
+ reserve z1,z2,z3,z4,z5,z for quaternion number;
+ reserve x,x1,x2,x3,x4,y1,y2,y3,y4 for Element of REAL;
+
+Lm2: for x,y,z being quaternion number st z = x * y
+holds Rea z = Rea x * Rea y - Im1 x * Im1 y - Im2 x * Im2 y - Im3 x * Im3 y &
+Im1 z = Rea x * Im1 y + Im1 x * Rea y + Im2 x * Im3 y - Im3 x * Im2 y &
+Im2 z = Rea x * Im2 y + Im2 x * Rea y + Im3 x * Im1 y - Im1 x * Im3 y &
+Im3 z = Rea x * Im3 y + Im3 x * Rea y + Im1 x * Im2 y - Im2 x * Im1 y
+proof
+  let x,y,z be quaternion number such that
+A1: z = x * y;
+  consider x1,x2,x3,x4,y1,y2,y3,y4 being Element of REAL such that
+A2: x = [*x1,x2,x3,x4*] and
+A3: y = [*y1,y2,y3,y4*] and
+A4: x * y = [* x1*y1-x2*y2-x3*y3-x4*y4, x1*y2+x2*y1+x3*y4-x4*y3,
+  x1*y3+y1*x3+y2*x4-y4*x2, x1*y4+x4*y1+x2*y3-x3*y2 *] by QUATERNI:def 10;
+A5: Rea x = x1 & Rea y = y1 by A2,A3,QUATERNI:23;
+A6: Im1 x = x2 & Im1 y = y2 by A2,A3,QUATERNI:23;
+A7: Im2 x = x3 & Im2 y = y3 by A2,A3,QUATERNI:23;
+  Im3 x = x4 & Im3 y = y4 by A2,A3,QUATERNI:23;
+  hence thesis by A1,A4,A5,A6,A7,QUATERNI:23;
+end;
+
+theorem a:
+  Rea (z1*z2) = Rea (z2*z1)
+proof
+A: z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;
+  z2*z1=
+    [*(Rea z2 * Rea z1 - Im1 z2 * Im1 z1 - Im2 z2 * Im2 z1 - Im3 z2 * Im3 z1),
+    (Rea z2 * Im1 z1 + Im1 z2 * Rea z1 + Im2 z2 * Im3 z1 - Im3 z2 * Im2 z1),
+    (Rea z2 * Im2 z1 + Im2 z2 * Rea z1 + Im3 z2 * Im1 z1 - Im1 z2 * Im3 z1),
+    (Rea z2 * Im3 z1 + Im3 z2 * Rea z1 + Im1 z2 * Im2 z1 - Im2 z2 * Im1 z1)*]
+     by QUATERN2:1;then
+  Rea (z2*z1)=
+    (Rea z2 * Rea z1 - Im1 z2 * Im1 z1 - Im2 z2 * Im2 z1 - Im3 z2 * Im3 z1)
+    by QUATERNI:23;
+  hence thesis by A,QUATERNI:23;
+end;
+
+theorem
+  z is Real implies
+    z+z3 = Rea z + Rea z3+Im1 z3 *<i>+Im2 z3 *<j>+Im3 z3 *<k>
+proof
+   assume z is Real;
+   then reconsider x = z as Real;
+a: Rea z = x & Im1 z = 0 & Im2 z = 0 & Im3 z =0
+   proof
+B2:  x = [*x,0*] by ARYTM_0:def 7;
+     [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+     hence thesis by B2,QUATERNI:23;
+   end;
+   set z2 = [*Rea z+ Rea z3,Im1 z +Im1 z3,Im2 z +Im2 z3,Im3 z +Im3 z3*];
+   reconsider z1 = z + z3 as quaternion number;
+A1: Rea z2 = Rea z + Rea z3 by QUATERNI:23
+             .= Rea z1 by QUATERNI:36;
+A2: Im1 z2 = Im1 z+ Im1 z3 by QUATERNI:23
+             .= Im1 z1 by QUATERNI:36;
+A3: Im2 z2 = Im2 z + Im2 z3 by QUATERNI:23
+             .= Im2 z1 by QUATERNI:36;
+A4: Im3 z2 = Im3 z + Im3 z3 by QUATERNI:23
+             .= Im3 z1 by QUATERNI:36;
+   z+z3 = [* Rea z+Rea z3,Im1 z3,Im2 z3,Im3 z3*] by A1,A2,A3,A4,a,QUATERNI:25;
+   hence thesis by QUATERN2:1;
+end;
+
+theorem
+  z is Real implies
+    z-z3 = [* Rea z -Rea z3,-Im1 z3,-Im2 z3,-Im3 z3*]
+proof
+   assume z is Real;
+   then reconsider x = z as Real;
+a:  Rea z = x & Im1 z = 0 & Im2 z = 0 & Im3 z = 0
+    proof
+   B2: x = [*x,0*] by ARYTM_0:def 7;
+       [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+       hence thesis by B2,QUATERNI:23;
+      end;
+    set z2 = [*Rea z- Rea z3,Im1 z -Im1 z3,Im2 z -Im2 z3,Im3 z -Im3 z3*];
+    reconsider z1 = z+(-z3) as quaternion number;
+A1: Rea z2 = Rea z +(-Rea z3) by QUATERNI:23
+              .= Rea z + Rea (-z3) by QUATERNI:41
+              .= Rea z1 by QUATERNI:36;
+A2: Im1 z2 = Im1 z+(-Im1 z3) by QUATERNI:23
+              .=Im1 z+Im1 (- z3) by QUATERNI:41
+              .= Im1 z1 by QUATERNI:36;
+A3: Im2 z2 = Im2 z +(-Im2 z3) by QUATERNI:23
+              .=Im2 z+Im2 (- z3) by QUATERNI:41
+              .= Im2 z1 by QUATERNI:36;
+    Im3 z2 = Im3 z +(-Im3 z3) by QUATERNI:23
+              .=Im3 z+Im3 (- z3) by QUATERNI:41
+              .= Im3 z1 by QUATERNI:36;
+    hence thesis by A1,A2,A3,a,QUATERNI:25;
+end;
+
+theorem
+  z is Real implies
+    z*z3 = [* Rea z*Rea z3,Rea z*Im1 z3,Rea z*Im2 z3,Rea z*Im3 z3*]
+proof
+  assume z is Real;
+  then reconsider x = z as Real;
+a: Rea z = Rea z & Im1 z=0 & Im2 z = 0 & Im3 z =0
+   proof
+B2:  x = [*x,0*] by ARYTM_0:def 7;
+     [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+     hence thesis by B2,QUATERNI:23;
+   end;
+  z * z3 =
+  [*Rea z * Rea z3 - Im1 z * Im1 z3 - Im2 z * Im2 z3 - Im3 z * Im3 z3,
+  Rea z * Im1 z3 + Im1 z * Rea z3 + Im2 z * Im3 z3 - Im3 z * Im2 z3,
+  Rea z * Im2 z3 + Im2 z * Rea z3 + Im3 z * Im1 z3 - Im1 z * Im3 z3,
+  Rea z * Im3 z3 + Im3 z * Rea z3 + Im1 z * Im2 z3 - Im2 z * Im1 z3 *]
+   proof
+     set z1 =
+   [*Rea z * Rea z3 - Im1 z * Im1 z3 - Im2 z * Im2 z3 - Im3 z * Im3 z3,
+   Rea z * Im1 z3 + Im1 z * Rea z3 + Im2 z * Im3 z3 - Im3 z * Im2 z3,
+   Rea z * Im2 z3 + Im2 z * Rea z3 + Im3 z * Im1 z3 - Im1 z * Im3 z3,
+   Rea z * Im3 z3 + Im3 z * Rea z3 + Im1 z * Im2 z3 - Im2 z * Im1 z3 *];
+   reconsider z' = z * z3 as quaternion number;
+A1: Rea z1 = Rea z * Rea z3 - Im1 z * Im1 z3 -
+   Im2 z * Im2 z3 - Im3 z * Im3 z3 by QUATERNI:23
+    .= Rea z' by Lm2;
+A2: Im1 z1 = Rea z * Im1 z3 + Im1 z * Rea z3 +
+  Im2 z * Im3 z3 - Im3 z * Im2 z3 by QUATERNI:23
+    .= Im1 z' by Lm2;
+A3: Im2 z1 = Rea z * Im2 z3 + Im2 z * Rea z3 +
+   Im3 z * Im1 z3 - Im1 z * Im3 z3 by QUATERNI:23
+    .= Im2 z' by Lm2;
+   Im3 z1 = Rea z * Im3 z3 + Im3 z * Rea z3 +
+   Im1 z * Im2 z3 - Im2 z * Im1 z3 by QUATERNI:23
+    .= Im3 z' by Lm2;
+   hence thesis by A1,A2,A3,QUATERNI:25;
+ end;
+ hence thesis by a;
+end;
+
+theorem
+  z is Real implies z*<i>=[*0,Rea z,0,0*]
+proof
+  assume A1: z is Real;
+  then reconsider x = z as Real;
+a:  x = Rea z
+    proof
+B2:   x = [*x,0*] by ARYTM_0:def 7;
+      [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+      hence thesis by B2,QUATERNI:23;
+    end;
+  z*<i>=[*Rea (z*<i>),Im1 (z*<i>),Im2 (z*<i>),Im3 (z*<i>)*] by QUATERNI:24
+     .=[*0,Im1 (z*<i>),Im2 (z*<i>),Im3 (z*<i>)*] by QUATERNI:33,A1
+     .=[*0,x,Im2 (z*<i>),Im3 (z*<i>)*] by QUATERNI:33
+     .=[*0,x,0,Im3 (z*<i>)*] by QUATERNI:33
+     .=[*0,Rea z,0,0*] by a,QUATERNI:33;
+   hence thesis;
+end;
+
+theorem
+  z is Real implies z*<j>=[*0,0,Rea z,0*]
+proof
+ assume A1: z is Real;
+ then reconsider x = z as Real;
+a:  x = Rea z
+    proof
+   B2: x = [*x,0*] by ARYTM_0:def 7;
+       [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+       hence thesis by B2,QUATERNI:23;
+    end;
+   z*<j>=[*Rea (z*<j>),Im1 (z*<j>),Im2 (z*<j>),Im3 (z*<j>)*] by QUATERNI:24
+     .=[*0,Im1 (z*<j>),Im2 (z*<j>),Im3 (z*<j>)*] by QUATERNI:34,A1
+     .=[*0,0,Im2 (z*<j>),Im3 (z*<j>)*] by QUATERNI:34,A1
+     .=[*0,0,x,Im3 (z*<j>)*] by QUATERNI:34
+     .=[*0,0,Rea z,0*] by a,QUATERNI:34;
+   hence thesis;
+end;
+
+theorem
+  z is Real implies z*<k>=[*0,0,0,Rea z*]
+proof
+ assume A1: z is Real;
+ then reconsider x = z as Real;
+a: x = Rea z
+   proof
+ B2: x = [*x,0*] by ARYTM_0:def 7;
+     [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+     hence thesis by B2,QUATERNI:23;
+   end;
+   z*<k>=[*Rea (z*<k>),Im1 (z*<k>),Im2 (z*<k>),Im3 (z*<k>)*] by QUATERNI:24
+     .=[*0,Im1 (z*<k>),Im2 (z*<k>),Im3 (z*<k>)*] by QUATERNI:35,A1
+     .=[*0,0,Im2 (z*<k>),Im3 (z*<k>)*] by QUATERNI:35,A1
+     .=[*0,0,0,Im3 (z*<k>)*] by QUATERNI:35,A1
+     .=[*0,0,0,Rea z*] by a,QUATERNI:35;
+   hence thesis;
+end;
+
+theorem
+  z - 0q = z
+proof
+  0q = [*0,0*] by ARYTM_0:def 7
+    .= [*0,0,0,0*] by QUATERNI:def 6;then
+A1: -0q=[*-0,-0,-0,-0*] by QUATERN2:4;
+    z in QUATERNION by QUATERNI:def 2; then
+    consider x,y,w,v be Element of REAL such that
+A2: z = [*x,y,w,v*] by QUATERNI:7;
+    z- 0q =[* x+(-0),y+(-0),w+(-0),v+(-0) *] by A1,A2,QUATERNI:def 7
+            .= [*x,y,w,v*];
+   hence thesis by A2;
+end;
+
+theorem
+  z is Real implies z*z1=z1*z
+proof
+  assume z is Real;
+  then reconsider x = z as Real;
+  Rea z = x & Im1 z=0 & Im2 z = 0 & Im3 z = 0
+  proof
+B2: x = [*x,0*] by ARYTM_0:def 7;
+    [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+    hence thesis by B2,QUATERNI:23;
+  end;
+  hence thesis;
+end;
+
+theorem
+  Im1 z = 0 & Im2 z = 0 & Im3 z = 0 implies z = Rea z
+proof
+  set x = Rea z;
+  assume Im1 z=0 & Im2 z = 0 & Im3 z =0;
+  then A2: z=[*x,0,0,0*] by QUATERNI:24;
+  [*x,0,0,0*]=[*x,0*] by QUATERNI:def 6;
+  hence thesis by ARYTM_0:def 7,A2;
+end;
+
+definition let z;
+  func z~ -> real number equals
+    (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2;
+  coherence;
+end;
+
+definition
+  let z be quaternion number;
+  func z- -> real number equals
+    2* Rea z;
+  coherence;
+end;
+
+theorem Th4:
+  z~ = |.z.| ^2
+proof
+a:(Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2 >= 0 by QUATERNI:74;
+  |.z.|^2=
+  sqrt(((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)^2) by a,SQUARE_1:97
+      .= (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2
+        by QUATERNI:74,SQUARE_1:89;
+  hence thesis;
+end;
+
+theorem
+  z~ = |.z*'.| ^2
+proof
+  |.z*'.| ^2 = |.z.| ^2 by QUATERNI:73;
+  hence thesis by Th4;
+end;
+
+theorem
+  z~ = |.z*z*'.|
+proof
+  |.z*z.|=|.z*z*'.| by QUATERNI:89;
+  hence thesis by QUATERNI:88;
+end;
+
+theorem
+  z~ = 0 implies z = 0
+proof
+  assume z~=0; then
+  |.z.|=0 by SQUARE_1:82;
+  hence thesis by QUATERNI:66;
+end;
+
+theorem
+  z~ = Rea (z * z*')
+proof
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43; then
+  Rea z*'= Rea z & Im1 z*'= -Im1 z & Im2 z*'= -Im2 z & Im3 z*'= -Im3 z
+            by QUATERNI:23; then
+  z* z*' =[*(Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2,0,0,0*]
+  by QUATERN2:1;
+  hence thesis by QUATERNI:23;
+end;
+
+theorem
+  z- = Rea (z+ z*')
+proof
+A1: z = [*Rea z, Im1 z, Im2 z, Im3 z*] by QUATERNI:24;
+a:  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43;
+  z + z*' = [*Rea z+Rea z, Im1 z+ -Im1 z, Im2 z+ -Im2 z, Im3 z+ -Im3 z*]
+          by A1,a,QUATERNI:def 7
+     .=[*2*Rea z,0,0,0*];
+  hence thesis by QUATERNI:23;
+end;
+
+theorem
+  z is Real implies (z * z1)*'= z*' * z1*'
+proof
+  assume z is Real;
+  then reconsider x = z as Real;
+B: Rea z = x & Im1 z=0 & Im2 z = 0 & Im3 z =0
+  proof
+    B2: x = [*x,0*] by ARYTM_0:def 7;
+    [*x,0*] = [*x,0,0,0*] by QUATERNI:def 6;
+    hence thesis by B2,QUATERNI:23;
+  end;
+z*z1=
+[*(Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1),
+ (Rea z * Im1 z1 + Im1 z * Rea z1 + Im2 z * Im3 z1 - Im3 z * Im2 z1),
+ (Rea z * Im2 z1 + Im2 z * Rea z1 + Im3 z * Im1 z1 - Im1 z * Im3 z1),
+ (Rea z * Im3 z1 + Im3 z * Rea z1 + Im1 z * Im2 z1 - Im2 z * Im1 z1)*]
+    by QUATERN2:1;then
+a: Rea (z*z1)=
+   (Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1) &
+  Im1 (z*z1)=
+ (Rea z * Im1 z1 + Im1 z * Rea z1 + Im2 z * Im3 z1 - Im3 z * Im2 z1) &
+  Im2 (z*z1)=
+  (Rea z * Im2 z1 + Im2 z * Rea z1 + Im3 z * Im1 z1 - Im1 z * Im3 z1) &
+ Im3 (z*z1)=
+  (Rea z * Im3 z1 + Im3 z * Rea z1 + Im1 z * Im2 z1 - Im2 z * Im1 z1)
+                      by QUATERNI:23;
+B1: Rea z1*' = Rea z1 & Im1 z1*'= -Im1 z1 & Im2 z1*'= -Im2 z1 &
+    Im3 z1*'= -Im3 z1 by QUATERNI:44;
+B2: Rea z*' = Rea z & Im1 z*'= -Im1 z & Im2 z*'= -Im2 z &
+      Im3 z*'= -Im3 z by QUATERNI:44;
+ (z*z1)*' =
+   Rea (z*z1)*'+(Im1 (z*z1)*')*<i> + (Im2 (z*z1)*')*<j> + (Im3 (z*z1)*')*<k>
+        by QUATERNI:37
+   .= (Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1)
+        +(Im1 (z*z1)*')*<i> + (Im2 (z*z1)*')*<j> + (Im3 (z*z1)*')*<k>
+        by a,QUATERNI:44
+   .=(Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1)
+    +(-(Rea z * Im1 z1 + Im1 z * Rea z1 + Im2 z * Im3 z1 - Im3 z * Im2 z1))
+    *<i> + (Im2 (z*z1)*')*<j> + (Im3 (z*z1)*')*<k> by a,QUATERNI:44
+  .=(Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1)
+   +(-(Rea z * Im1 z1 + Im1 z * Rea z1 + Im2 z * Im3 z1 - Im3 z * Im2 z1))
+   *<i> + ( -(Rea z * Im2 z1 + Im2 z * Rea z1 + Im3 z * Im1 z1 - Im1 z *
+   Im3 z1))*<j> + (Im3 (z*z1)*')*<k> by a,QUATERNI:44
+ .=(Rea z * Rea z1 - Im1 z * Im1 z1 - Im2 z * Im2 z1 - Im3 z * Im3 z1)
+   +(-(Rea z * Im1 z1 + Im1 z * Rea z1 + Im2 z * Im3 z1 - Im3 z * Im2 z1))
+    *<i> + ( -(Rea z * Im2 z1 + Im2 z * Rea z1 + Im3 z * Im1 z1 - Im1 z *
+    Im3 z1))*<j> + (-(Rea z * Im3 z1 + Im3 z * Rea z1 + Im1 z * Im2 z1 -
+   Im2 z * Im1 z1))*<k> by a,QUATERNI:44;
+  hence thesis by B,B2,B1;
+end;
+
+theorem
+  (z1*z2)*' = z2*' * z1*'
+proof
+z1*z2=
+ [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+ (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+ (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+ (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+by QUATERN2:1;then
+a: Rea (z1*z2)=
+   (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2) &
+  Im1 (z1*z2)=
+   (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2) &
+  Im2 (z1*z2)=
+  (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2) &
+ Im3 (z1*z2)=
+  (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)
+    by QUATERNI:23;
+A1: (z1*z2)*' =
+ Rea (z1*z2)*'+(Im1 (z1*z2)*')*<i> + (Im2 (z1*z2)*')*<j> + (Im3 (z1*z2)*')*<k>
+   by QUATERNI:37
+  .= (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+   +(Im1 (z1*z2)*')*<i> + (Im2 (z1*z2)*')*<j> + (Im3 (z1*z2)*')*<k>
+        by a,QUATERNI:44
+ .=(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+   +(-(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2))
+    *<i> + (Im2 (z1*z2)*')*<j> + (Im3 (z1*z2)*')*<k> by a,QUATERNI:44
+ .=(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+  +(-(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2))
+   *<i> + ( -(Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 *
+   Im3 z2))*<j> + (Im3 (z1*z2)*')*<k> by a,QUATERNI:44
+ .=(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+  +(-(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2))
+   *<i> + ( -(Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 *
+    Im3 z2))*<j> + (-(Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 -
+   Im2 z1 * Im1 z2))*<k> by a,QUATERNI:44;
+A2:  Rea z2*' = Rea z2 & Im1 z2*'= -Im1 z2 & Im2 z2*'= -Im2 z2 &
+      Im3 z2*'= -Im3 z2 by QUATERNI:44;
+   Rea z1*' = Rea z1 & Im1 z1*'= -Im1 z1 & Im2 z1*'= -Im2 z1 &
+      Im3 z1*'= -Im3 z1 by QUATERNI:44;
+   hence thesis by A1,A2;
+end;
+
+theorem h:
+  (z1*z2)~=z1~*z2~
+proof
+  z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;then
+  Rea (z1*z2)=
+    (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2) &
+    Im1 (z1*z2)=
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2) &
+    Im2 (z1*z2)=
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2) &
+    Im3 (z1*z2)=
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)
+   by QUATERNI:23;
+   hence thesis;
+end;
+
+theorem
+  <i>*z1-z1*<i>=[*0,0,-2*Im3 z1,2*Im2 z1*]
+proof
+ set z = <i>;
+A2: z*z1 =
+    [*-Im1 z1,Rea z1,-Im3 z1,Im2 z1*] by QUATERN2:1,QUATERNI:30;
+A3: z1*z =
+    [*- Im1 z1,Rea z1,Im3 z1,- Im2 z1*] by QUATERN2:1,QUATERNI:30;
+A4: Rea (z*z1)= -Im1 z1 & Im1 (z*z1)=Rea z1 & Im2 (z*z1)= -Im3 z1 &
+    Im3 (z*z1) =Im2 z1 by A2,QUATERNI:23;
+  Rea (z1*z)= -Im1 z1 & Im1 (z1*z)=Rea z1 & Im2 (z1*z)= Im3 z1 &
+  Im3 (z1*z) =-Im2 z1 by A3,QUATERNI:23;
+  hence thesis by A4,QUATERN2:1;
+end;
+
+theorem
+  <i>*z1+z1*<i> = [*-2*Im1 z1,2*Rea z1,0,0*]
+proof
+ set z = <i>;
+A2: z*z1 =
+    [*-Im1 z1,Rea z1,-Im3 z1,Im2 z1*] by QUATERN2:1,QUATERNI:30;
+A3: z1*z =
+    [*- Im1 z1,Rea z1,Im3 z1,- Im2 z1*] by QUATERN2:1,QUATERNI:30;
+A4: Rea (z*z1)= -Im1 z1 & Im1 (z*z1)=Rea z1 & Im2 (z*z1)= -Im3 z1 &
+    Im3 (z*z1) =Im2 z1 by A2,QUATERNI:23;
+A5: Rea (z1*z)= -Im1 z1 & Im1 (z1*z)=Rea z1 & Im2 (z1*z)= Im3 z1 &
+   Im3 (z1*z) =-Im2 z1 by A3,QUATERNI:23;
+  z*z1+z1*z =
+     (-Im1 z1+(-Im1 z1)) + (Rea z1 +Rea z1)*<i> + ((-Im3 z1) + Im3 z1)*<j>
+      +(Im2 z1 +(-Im2 z1))*<k> by A4,A5,QUATERNI:def 22;
+  hence thesis by QUATERN2:1;
+end;
+
+theorem
+  <j>*z1-z1*<j>=[*0,2*Im3 z1,0,-2*Im1 z1*]
+proof
+ set z = <j>;
+A2: z*z1 = [*-Im2 z1,Im3 z1,Rea z1,-Im1 z1*] by QUATERN2:1,QUATERNI:31;
+A3:  z1*z = [*-Im2 z1,- Im3 z1,Rea z1,Im1 z1*] by QUATERN2:1,QUATERNI:31;
+A4: Rea(z*z1)= -Im2 z1 & Im1 (z*z1)=Im3 z1 & Im2(z*z1)=Rea z1
+    & Im3(z*z1) =-Im1 z1 by A2,QUATERNI:23;
+  Rea(z1*z)= -Im2 z1 & Im1 (z1*z)=-Im3 z1 & Im2(z1*z)=Rea z1
+    & Im3(z1*z) =Im1 z1 by A3,QUATERNI:23;
+  hence thesis by A4,QUATERN2:1;
+end;
+
+theorem
+  <j>*z1+z1*<j>=[*-2*Im2 z1,0,2*Rea z1,0*]
+proof
+ set z = <j>;
+A2: z*z1 =
+    [*-Im2 z1,Im3 z1,Rea z1,-Im1 z1*] by QUATERN2:1,QUATERNI:31;
+A3:  z1*z =
+     [*-Im2 z1,- Im3 z1,Rea z1,Im1 z1*] by QUATERN2:1,QUATERNI:31;
+A4: Rea(z*z1)= -Im2 z1 & Im1 (z*z1)=Im3 z1 & Im2(z*z1)=Rea z1
+    & Im3(z*z1) =-Im1 z1 by A2,QUATERNI:23;
+A5: Rea(z1*z)= -Im2 z1 & Im1 (z1*z)=-Im3 z1 & Im2(z1*z)=Rea z1
+    & Im3(z1*z) =Im1 z1 by A3,QUATERNI:23;
+  z1*z+z*z1 =
+     (-Im2 z1+(-Im2 z1)) + (Im3 z1-Im3 z1)*<i> + (Rea z1 + Rea z1)*<j>
+     +(-Im1 z1 +Im1 z1)*<k> by A4,A5,QUATERNI:def 22;
+  hence thesis by QUATERN2:1;
+end;
+
+theorem
+  <k>*z1-z1*<k>=[*0,-2*Im2 z1,2*Im1 z1,0*]
+proof
+ set z = <k>;
+A2: z*z1 = [*-Im3 z1,-Im2 z1,Im1 z1,Rea z1 *] by QUATERN2:1,QUATERNI:31;
+A3: z1*z = [*-Im3 z1,Im2 z1,-Im1 z1,Rea z1*] by QUATERN2:1,QUATERNI:31;
+A4: Rea(z*z1)= -Im3 z1 & Im1 (z*z1)=-Im2 z1 & Im2(z*z1)=Im1 z1
+    & Im3(z*z1) =Rea z1 by A2,QUATERNI:23;
+   Rea(z1*z)= -Im3 z1 & Im1 (z1*z)=Im2 z1 & Im2(z1*z)=-Im1 z1
+    & Im3(z1*z) = Rea z1 by A3,QUATERNI:23;
+   hence thesis by A4,QUATERN2:1;
+end;
+
+theorem
+  <k>*z1+z1*<k>=[*-2*Im3 z1,0,0,2*Rea z1*]
+proof
+ set z = <k>;
+A2: z*z1 = [*-Im3 z1,-Im2 z1,Im1 z1,Rea z1 *] by QUATERN2:1,QUATERNI:31;
+A3:  z1*z = [*-Im3 z1,Im2 z1,-Im1 z1,Rea z1*] by QUATERN2:1,QUATERNI:31;
+A4: Rea(z*z1)= -Im3 z1 & Im1 (z*z1)=-Im2 z1 & Im2(z*z1)=Im1 z1
+    & Im3(z*z1) =Rea z1 by A2,QUATERNI:23;
+A5:  Rea(z1*z)= -Im3 z1 & Im1 (z1*z)=Im2 z1 & Im2(z1*z)=-Im1 z1
+    & Im3(z1*z) = Rea z1 by A3,QUATERNI:23;
+  z1*z+z*z1 =
+     (-Im3 z1+(-Im3 z1)) + (-Im2 z1+Im2 z1)*<i> + (Im1 z1 -Im1 z1)*<j>
+     +(Rea z1 +Rea z1)*<k> by A4,A5,QUATERNI:def 22;
+  hence thesis by QUATERN2:1;
+end;
+
+theorem Th5:
+  Rea (1/z~ * z*') = 1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z
+proof
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43;then
+  (1/z~ * z*')=
+     [*1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*Rea z,
+     1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im1 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im2 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im3 z)*]
+   by QUATERNI:def 21;
+  hence thesis by QUATERNI:23;
+end;
+
+theorem Th6:
+  Im1 (1/z~ * z*') = -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z
+proof
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43;then
+  (1/z~ * z*')=
+     [*1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*Rea z,
+     1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im1 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im2 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im3 z)*]
+   by QUATERNI:def 21;
+  hence thesis by QUATERNI:23;
+end;
+
+theorem Th7:
+  Im2 (1/z~ * z*') = -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z
+proof
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43;then
+  (1/z~ * z*')=
+     [*1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*Rea z,
+     1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im1 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im2 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im3 z)*]
+   by QUATERNI:def 21;
+  hence thesis by QUATERNI:23;
+end;
+
+theorem Th8:
+  Im3 (1/z~ * z*') = -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z
+proof
+  z*' = [*Rea z, -Im1 z, -Im2 z, -Im3 z*] by QUATERNI:43;then
+  (1/z~ * z*')=
+     [*1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*Rea z,
+     1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im1 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im2 z),
+      1/((Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2)*(-Im3 z)*]
+   by QUATERNI:def 21;
+  hence thesis by QUATERNI:23;
+end;
+
+theorem
+  (1/z~ * z*')=[*1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z,
+   -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z,
+   -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z,
+   -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z*]
+proof
+  (1/z~ * z*')=[*Rea ((1/z~ * z*')),Im1 ((1/z~ * z*')),Im2 ((1/z~ * z*')),
+              Im3 ((1/z~ * z*'))*] by QUATERNI:24;then
+  (1/z~ * z*')=[*1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z,
+       Im1 ((1/z~ * z*')),Im2 ((1/z~ * z*')),Im3 ((1/z~ * z*'))*] by Th5;
+  then (1/z~ * z*')=[*1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z,
+       -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z,
+     Im2 ((1/z~ * z*')),Im3 ((1/z~ * z*'))*] by Th6; then
+   (1/z~ * z*')=[*1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z,
+       -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z,
+       -1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z,
+       Im3 ((1/z~ * z*'))*] by Th7;
+ hence thesis by Th8;
+end;
+
+theorem
+  z* (1/z~ * z*') =
+    [*((Rea z)^2+ (Im1 z)^2+(Im2 z)^2 +(Im3 z)^2)/
+   ((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2), 0,0,0*]
+proof
+  z*(1/z~ * z*')=
+   [*(Rea z * Rea (1/z~ * z*') - Im1 z * Im1 (1/z~ * z*') -
+     Im2 z * Im2 (1/z~ * z*') - Im3 z * Im3 (1/z~ * z*')),
+     (Rea z * Im1 (1/z~ * z*') + Im1 z * Rea (1/z~ * z*') +
+     Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by QUATERN2:1
+  .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+      - Im1 z * Im1 (1/z~ * z*') - Im2 z * Im2 (1/z~ * z*')
+     - Im3 z * Im3 (1/z~ * z*')),
+     (Rea z * Im1 (1/z~ * z*')+ Im1 z * Rea (1/z~ * z*') +
+     Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+      Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th5
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * Im2 (1/z~ * z*') - Im3 z * Im3 (1/z~ * z*')),
+     (Rea z * Im1 (1/z~ * z*')+ Im1 z * Rea (1/z~ * z*') +
+    Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th6
+  .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+    - Im3 z * Im3 (1/z~ * z*')),
+     (Rea z * Im1 (1/z~ * z*')+ Im1 z * Rea (1/z~ * z*') +
+     Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th7
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * Im1 (1/z~ * z*')+ Im1 z * Rea (1/z~ * z*') +
+     Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th8
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * Rea (1/z~ * z*') + Im2 z * Im3 (1/z~ * z*') -
+     Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th6
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im2 z * Im3 (1/z~ * z*') - Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th5
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) -
+     Im3 z * Im2 (1/z~ * z*')),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+      Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th8
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * Im2 (1/z~ * z*') + Im2 z * Rea (1/z~ * z*') +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th7
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * Rea (1/z~ * z*') + Im3 z * Im1 (1/z~ * z*')
+    - Im1 z * Im3 (1/z~ * z*')),(Rea z * Im3 (1/z~ * z*') +
+    Im3 z * Rea (1/z~ * z*')  + Im1 z * Im2 (1/z~ * z*') -
+   Im2 z * Im1 (1/z~ * z*'))*] by Th7
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)+
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z) +
+     Im3 z * Im1 (1/z~ * z*') - Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th5
+.=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * Im3 (1/z~ * z*')),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+    Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th6
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * Im3 (1/z~ * z*') + Im3 z * Rea (1/z~ * z*') +
+    Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th8
+  .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) +
+     Im3 z * Rea (1/z~ * z*') + Im1 z * Im2 (1/z~ * z*')
+ - Im2 z * Im1 (1/z~ * z*'))*] by Th8
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) +
+     Im3 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im1 z * Im2 (1/z~ * z*') - Im2 z * Im1 (1/z~ * z*'))*] by Th5
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) +
+     Im3 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)  -
+     Im2 z * Im1 (1/z~ * z*'))*] by Th7
+ .=[*(Rea z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)
+     - Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)
+     - Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)
+     - Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z) +
+     Im1 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)  -
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z) +
+     Im2 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im3 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z)  -
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z)),
+     (Rea z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im3 z) +
+     Im3 z * (1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Rea z)   +
+     Im1 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im2 z)  -
+     Im2 z * (-1/((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2)*Im1 z))*]
+         by Th6
+  .=[*((Rea z)^2+ (Im1 z)^2+(Im2 z)^2 +(Im3 z)^2)/
+   ((Rea z)^2+(Im1 z)^2+(Im2 z)^2+(Im3 z)^2), 0,0,0*];
+  hence thesis;
+end;
+
+theorem th9:
+  Rea (z1*z2) =
+    Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2
+ proof
+  z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;
+   hence thesis by QUATERNI:23;
+ end;
+
+theorem th10:
+  Im1 (z1*z2) =
+    Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2
+ proof
+  z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;
+   hence thesis by QUATERNI:23;
+ end;
+
+theorem th11:
+  Im2 (z1*z2) =
+    Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2
+ proof
+  z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;
+   hence thesis by QUATERNI:23;
+ end;
+
+theorem th12:
+  Im3 (z1*z2) =
+    Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2
+ proof
+  z1*z2=
+    [*(Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2),
+    (Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 - Im3 z1 * Im2 z2),
+    (Rea z1 * Im2 z2 + Im2 z1 * Rea z2 + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2),
+    (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2)*]
+     by QUATERN2:1;
+   hence thesis by QUATERNI:23;
+ end;
+
+theorem
+  (z1*z2*z3)~=z1~*z2~*z3~
+  proof
+   (z1*z2*z3)~=(z1*(z2*z3))~ by QUATERN2:16
+            .=z1~ *(z2*z3)~ by h
+            .=z1~*(z2~*z3~) by h
+            .=z1~*z2~*z3~;
+    hence thesis;
+  end;
+
+theorem
+  Rea(z1*z2*z3) = Rea (z3*z1*z2)
+  proof
+    Rea(z1*z2*z3)=Rea(z1*(z2*z3)) by QUATERN2:16
+       .=Rea((z2*z3)*z1) by a
+       .=Rea(z2*(z3*z1)) by QUATERN2:16
+      .=Rea (z3*z1*z2) by a;
+     hence thesis;
+  end;
+
+theorem thc:
+  |.z*z.| = |.z*'* z*'.|
+proof
+  |.z*'* z*'.|=|.z*'.|*|.z*'.| by QUATERNI:87
+             .=|.z.|*|.z*'.| by QUATERNI:73
+             .=|.z.|*|.z.| by QUATERNI:73;
+    hence thesis by QUATERNI:87;
+end;
+
+theorem
+  |.z*'* z*'.| = (Rea z)^2 + (Im1 z)^2 + (Im2 z)^2 + (Im3 z)^2
+proof
+  |.z*'* z*'.|=|.z*z.| by thc;
+  hence thesis by QUATERNI:88;
+end;
+
+theorem
+  |.z1*z2*z3.| = |.z1.|*|.z2.|*|.z3.|
+ proof
+    |.z1*z2*z3.| =|.z1*(z2*z3).| by QUATERN2:16
+              .=|.z1.|*|.z2*z3.| by QUATERNI:87
+              .=|.z1.|*(|.z2.|*|.z3.|) by QUATERNI:87
+              .=|.z1.|*|.z2.|*|.z3.|;
+     hence thesis;
+ end;
+
+theorem
+  |.z1+z2+z3.| <= |.z1.| + |.z2.|+|.z3.|
+ proof
+     |.z1 + z2+z3.|= |.z1 + (z2+z3).| by QUATERN2:2;then
+     |.z1 + z2+z3.|<= |.z1.| + |.z2+z3.| by QUATERNI:79;then
+   A1: |.z1 + z2+z3.|-|.z1.| <= |.z2+z3.| by XREAL_1:22;
+     |.z2+z3.|<=|.z2.|+|.z3.| by QUATERNI:79; then
+      (|.z1 + z2+z3.|-|.z1.|)+|.z2+z3.| <= |.z2+z3.| +(|.z2.|+|.z3.|)
+          by A1,XREAL_1:9;then
+      (|.z1 + z2+z3.|-|.z1.|) <= |.z2+z3.| +(|.z2.|+|.z3.|)-|.z2+z3.|
+         by XREAL_1:21; then
+     |.z1 + z2+z3.|<= |.z2.|+|.z3.|+|.z1.| by XREAL_1:22;
+   hence thesis;
+ end;
+
+theorem
+  |.z1+z2-z3.| <= |.z1.| + |.z2.| + |.z3.|
+ proof
+     |.z1 + z2-z3.|= |.z1 + (z2-z3).| by QUATERN2:2;then
+     |.z1 + z2-z3.|<= |.z1.| + |.z2-z3.| by QUATERNI:79;then
+   A1: |.z1 + z2-z3.|-|.z1.| <= |.z2-z3.| by XREAL_1:22;
+     |.z2-z3.|<=|.z2.|+|.z3.| by QUATERNI:80; then
+      (|.z1 + z2-z3.|-|.z1.|)+|.z2-z3.| <= |.z2-z3.| +(|.z2.|+|.z3.|)
+          by A1,XREAL_1:9;then
+      (|.z1 + z2-z3.|-|.z1.|) <= |.z2-z3.| +(|.z2.|+|.z3.|)-|.z2-z3.|
+         by XREAL_1:21; then
+     |.z1 + z2-z3.|<= |.z2.|+|.z3.|+|.z1.| by XREAL_1:22;
+   hence thesis;
+ end;
+
+theorem
+  |.z1-z2-z3.| <= |.z1.| + |.z2.| + |.z3.|
+ proof
+   A1: |.z1 - z2-z3.|<=|.z1-z2.|+|.z3.| by QUATERNI:80;
+     |.z1-z2.|<=|.z1.|+|.z2.| by QUATERNI:80;then
+     |.z1 - z2-z3.|+ |.z1-z2.|<=|.z1-z2.|+|.z3.|+(|.z1.|+|.z2.|)
+               by A1,XREAL_1:9;then
+     |.z1 - z2-z3.|<=|.z1-z2.|+|.z3.|+(|.z1.|+|.z2.|)-|.z1-z2.|
+               by XREAL_1:21;
+   hence thesis;
+ end;
+
+theorem
+  |.z1.| - |.z2.| <= (|.z1 + z2.|+|.z1-z2.|)/2
+ proof
+  A: |.z1.| - |.z2.| <= |.z1 + z2.| by QUATERNI:81;
+     |.z1.| - |.z2.| <= |.z1 - z2.| by QUATERNI:82;then
+     (|.z1.| - |.z2.|) +(|.z1.| - |.z2.|) <= |.z1 + z2.| + |.z1 - z2.|
+                          by XREAL_1:9,A;then
+     2*(|.z1.| - |.z2.|) <=|.z1 + z2.| + |.z1 - z2.|;
+    hence thesis by XREAL_1:79;
+ end;
+
+theorem
+  |.z1.| - |.z2.| <= (|.z1 + z2.|+|.z2-z1.|)/2
+ proof
+  A: |.z1.| - |.z2.| <= |.z1 + z2.| by QUATERNI:81;
+     |.z1.| - |.z2.| <= |.z1 - z2.| by QUATERNI:82;then
+     (|.z1.| - |.z2.|) +(|.z1.| - |.z2.|) <= |.z1 + z2.| + |.z1 - z2.|
+                          by XREAL_1:9,A;then
+  2*(|.z1.| - |.z2.|) <=|.z1 + z2.| + |.z2 - z1.| by QUATERNI:83;
+    hence thesis by XREAL_1:79;
+ end;
+
+theorem
+  |.|.z1.| - |.z2.|.| <= |.z2 - z1.|
+proof
+  |.|.z1.| - |.z2.|.| <= |.z1 - z2.| by QUATERNI:86;
+  hence thesis by QUATERNI:83;
+end;
+
+theorem
+  |.|.z1.| - |.z2.|.| <= |.z1.| + |.z2.|
+ proof
+   A1: |.|.z1.| - |.z2.|.| <= |.z1 - z2.| by QUATERNI:86;
+     |.z1 - z2.| <= |.z1.| + |.z2.| by QUATERNI:80;then
+     |.|.z1.| - |.z2.|.|+ |.z1 - z2.| <= |.z1 - z2.|+(|.z1.| + |.z2.|)
+          by XREAL_1:9,A1;then
+     |.|.z1.| - |.z2.|.| <= |.z1 - z2.|+|.z1.| + |.z2.|- |.z1 - z2.|
+          by XREAL_1:21;
+     hence thesis;
+  end;
+
+theorem
+  |.z1.| - |.z2.| <= |.z1 - z.| + |.z - z2.|
+ proof
+  A1: |.z1.| - |.z2.| <= |.z1 - z2.| by QUATERNI:82;
+     |.z1 - z2.| <= |.z1 - z.| + |.z - z2.| by QUATERNI:85;then
+     |.z1.| - |.z2.| + |.z1 - z2.| <= |.z1 - z2.| + (|.z1 - z.| + |.z - z2.|)
+          by XREAL_1:9,A1;then
+     |.z1.| - |.z2.| <= |.z1 - z2.| + |.z1 - z.| + |.z - z2.|-|.z1 - z2.|
+          by XREAL_1:21;
+   hence thesis;
+ end;
+
+theorem
+  |.z1.|-|.z2.|<>0 implies |.z1.|^2+|.z2.|^2 -2*|.z1.|*|.z2.| >0
+proof
+  assume A1: |.z1.|-|.z2.|<>0;
+  (|.z1.|-|.z2.|)^2 >0 by A1,SQUARE_1:74;
+  hence thesis;
+end;
+
+theorem
+  |.z1.| + |.z2.| >= (|.z1 + z2.|+|.z2 - z1.|)/2
+proof
+ A1: |.z1 + z2.| <= |.z1.| + |.z2.| by QUATERNI:79;
+    |.z1 - z2.| <= |.z1.| + |.z2.| by QUATERNI:80;then
+    |.z1 + z2.|+|.z1 - z2.| <= |.z1.| + |.z2.|+(|.z1.| + |.z2.|)
+      by A1,XREAL_1:9;then
+   |.z1 + z2.|+|.z2 - z1.| <= 2*(|.z1.| + |.z2.|) by QUATERNI:83;
+ hence thesis by XREAL_1:81;
+end;
+
+theorem
+  |.z1.| + |.z2.| >= (|.z1 + z2.|+|.z1 - z2.|)/2
+proof
+ A1: |.z1 + z2.| <= |.z1.| + |.z2.| by QUATERNI:79;
+    |.z1 - z2.| <= |.z1.| + |.z2.| by QUATERNI:80;then
+    |.z1 + z2.|+|.z1 - z2.| <= |.z1.| + |.z2.|+(|.z1.| + |.z2.|)
+      by A1,XREAL_1:9;then
+   |.z1 + z2.|+|.z1 - z2.| <= 2*(|.z1.| + |.z2.|);
+ hence thesis by XREAL_1:81;
+end;
+
+theorem
+  (z1*z2)"=z2" * z1"
+proof
+ A: (z1*z2)"= Rea (z1*z2) / (|.z1.|*|.z2.|)^2 -Im1 (z1*z2) / |.z1*z2.|^2*<i> -
+     Im2 (z1*z2) /|.z1*z2.|^2*<j> - (Im3 (z1*z2)) / |.z1*z2.|^2*<k>
+         by QUATERNI:87
+    .= Rea (z1*z2) / (|.z1.|*|.z2.|)^2 -Im1 (z1*z2) / (|.z1.|*|.z2.|)^2*<i> -
+     Im2 (z1*z2) /|.z1*z2.|^2*<j> - (Im3 (z1*z2)) / |.z1*z2.|^2*<k>
+         by QUATERNI:87
+    .= Rea (z1*z2) / (|.z1.|*|.z2.|)^2 -Im1 (z1*z2) / (|.z1.|*|.z2.|)^2*<i> -
+     Im2 (z1*z2) /(|.z1.|*|.z2.|)^2*<j> - (Im3 (z1*z2)) / |.z1*z2.|^2*<k>
+         by QUATERNI:87
+    .= Rea (z1*z2) / (|.z1.|*|.z2.|)^2 -Im1 (z1*z2) / (|.z1.|*|.z2.|)^2*<i> -
+     Im2 (z1*z2) /(|.z1.|*|.z2.|)^2*<j> - (Im3 (z1*z2)) /(|.z1.|*|.z2.|)^2*<k>
+         by QUATERNI:87
+    .= (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+    /(|.z1.|*|.z2.|)^2 -Im1 (z1*z2) / (|.z1.|*|.z2.|)^2*<i> -
+     Im2 (z1*z2) /(|.z1.|*|.z2.|)^2*<j> - (Im3 (z1*z2)) /(|.z1.|*|.z2.|)^2*<k>
+         by th9
+   .= (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+    /(|.z1.|*|.z2.|)^2 -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 -
+    Im3 z1 * Im2 z2) / (|.z1.|*|.z2.|)^2*<i> -Im2 (z1*z2) /(|.z1.|*|.z2.|)^2
+    *<j> - (Im3 (z1*z2)) /(|.z1.|*|.z2.|)^2*<k> by th10
+  .= (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+    /(|.z1.|*|.z2.|)^2 -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 -
+  Im3 z1 * Im2 z2) / (|.z1.|*|.z2.|)^2*<i> -(Rea z1 * Im2 z2 + Im2 z1 * Rea z2
+   + Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2) /(|.z1.|*|.z2.|)^2*<j>
+    - (Im3 (z1*z2)) /(|.z1.|*|.z2.|)^2*<k>
+         by th11
+   .= (Rea z1 * Rea z2 - Im1 z1 * Im1 z2 - Im2 z1 * Im2 z2 - Im3 z1 * Im3 z2)
+    /(|.z1.|*|.z2.|)^2 -(Rea z1 * Im1 z2 + Im1 z1 * Rea z2 + Im2 z1 * Im3 z2 -
+    Im3 z1 * Im2 z2) / (|.z1.|*|.z2.|)^2 *<i> -(Rea z1 * Im2 z2 +
+    Im2 z1 * Rea z2+ Im3 z1 * Im1 z2 - Im1 z1 * Im3 z2) /(|.z1.|*|.z2.|)^2* <j>
+    - (Rea z1 * Im3 z2 + Im3 z1 * Rea z2 + Im1 z1 * Im2 z2 - Im2 z1 * Im1 z2) /
+    (|.z1.|*|.z2.|)^2* <k> by th12;
+B1:  Rea (z2")*Rea (z1") -Im1 (z2")*Im1 (z1")-
+    Im2 (z2")*Im2 (z1")-Im3 (z2")*Im3 (z1")
+    =(Rea z2 / |.z2.|^2)*Rea (z1") -Im1 (z2")*Im1 (z1")-
+      Im2 (z2")*Im2 (z1")-Im3 (z2")*Im3 (z1") by QUATERN2:27
+   .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -Im1 (z2")*Im1 (z1")-
+      Im2 (z2")*Im2 (z1")-Im3 (z2")*Im3 (z1") by QUATERN2:27
+    .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -(-Im1 z2 / |.z2.|^2)*Im1 (z1")-
+      Im2 (z2")*Im2 (z1")-Im3 (z2")*Im3 (z1") by QUATERN2:27
+    .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -
+      (-Im1 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+      Im2 (z2")*Im2 (z1")-Im3 (z2")*Im3 (z1") by QUATERN2:27
+    .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -
+      (-Im1 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+      (-Im2 z2 / |.z2.|^2)*Im2 (z1")-Im3 (z2")*Im3 (z1") by QUATERN2:27
+    .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -
+      (-Im1 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+      (-Im2 z2 / |.z2.|^2)*(-Im2 z1/ |.z1.|^2)-Im3 (z2")*Im3 (z1")
+    by QUATERN2:27
+    .=(Rea z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2) -
+      (-Im1 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+      (-Im2 z2 / |.z2.|^2)*(-Im2 z1/ |.z1.|^2)-
+      (-Im3 z2 / |.z2.|^2)*Im3 (z1") by QUATERN2:27
+    .=(Rea z2/ |.z2.|^2)*(Rea z1 / |.z1.|^2) -
+      (-Im1 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+      (-Im2 z2 / |.z2.|^2)*(-Im2 z1/ |.z1.|^2)-
+      (-Im3 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) by QUATERN2:27
+    .=(Rea z2 * Rea z1) /(|.z2.|^2 * |.z1.|^2) -
+      (Im1 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2)-
+      (Im2 z2 / |.z2.|^2)*(Im2 z1/ |.z1.|^2)-
+      (Im3 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+    .=(Rea z2 * Rea z1) /(|.z2.|^2 * |.z1.|^2) -
+       (Im1 z2 * Im1 z1)/(|.z2.|^2 *|.z1.|^2)-
+      (Im2 z2 / |.z2.|^2)*(Im2 z1/ |.z1.|^2)-
+      (Im3 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+   .=(Rea z2 * Rea z1) /(|.z2.|^2 * |.z1.|^2) -
+      (Im1 z2 * Im1 z1)/(|.z2.|^2 *|.z1.|^2)-
+      (Im2 z2 * Im2 z1)/(|.z2.|^2 * |.z1.|^2)-
+      (Im3 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+ .=((Rea z2 * Rea z1)-(Im1 z2 * Im1 z1)-(Im2 z2 * Im2 z1))/
+    (|.z2.|^2 * |.z1.|^2) -
+      (Im3 z2 * Im3 z1)/(|.z2.|^2 * |.z1.|^2) by XCMPLX_1:77
+ .=(Rea z2 * Rea z1-Im1 z2 * Im1 z1-Im2 z2 * Im2 z1-
+   Im3 z2 * Im3 z1)/(|.z2.| * |.z1.|)^2;
+B2: Rea (z2") * Im1 (z1") +Im1 (z2")*Rea (z1")+
+    Im2 (z2")*Im3 (z1")-Im3 (z2")*Im2 (z1")
+   =(Rea z2 / |.z2.|^2) * Im1 (z1") +Im1 (z2")*Rea (z1")+
+    Im2 (z2")*Im3 (z1")-Im3 (z2")*Im2 (z1") by QUATERN2:27
+  .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +Im1 (z2")*Rea (z1")+
+    Im2 (z2")*Im3 (z1")-Im3 (z2")*Im2 (z1") by QUATERN2:27
+  .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +(-Im1 z2 / |.z2.|^2)*Rea (z1")+
+    Im2 (z2")*Im3 (z1")-Im3 (z2")*Im2 (z1") by QUATERN2:27
+ .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +
+    (-Im1 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    Im2 (z2")*Im3 (z1")-Im3 (z2")*Im2 (z1") by QUATERN2:27
+ .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +
+    (-Im1 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im2 z2 / |.z2.|^2)*Im3 (z1")-Im3 (z2")*Im2 (z1") by QUATERN2:27
+ .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +
+    (-Im1 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im2 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) -
+     Im3 (z2")*Im2 (z1") by QUATERN2:27
+ .=(Rea z2 / |.z2.|^2)* (-Im1 z1 / |.z1.|^2) +
+    (-Im1 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im2 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) -
+    (-Im3 z2 / |.z2.|^2)*Im2 (z1") by QUATERN2:27
+ .=(Rea z2 / |.z2.|^2)* ((-Im1 z1) / |.z1.|^2) +
+    (-Im1 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im2 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) -
+    (-Im3 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2) by QUATERN2:27
+ .= (Rea z2 * (-Im1 z1)) /(|.z2.|^2 *|.z1.|^2) +
+    ((-Im1 z2 )/ |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im2 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) -
+    (-Im3 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2) by XCMPLX_1:77
+ .= ((Rea z2) * (-Im1 z1)) /(|.z2.|^2 *|.z1.|^2) +
+    ((-Im1 z2) *Rea z1) / (|.z2.|^2 * |.z1.|^2)+
+    (Im2 z2/ |.z2.|^2)*(Im3 z1 / |.z1.|^2) -
+    (-Im3 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2) by XCMPLX_1:77
+ .= ((Rea z2) * (-Im1 z1)) /(|.z2.|^2 *|.z1.|^2) +
+    ((-Im1 z2) *Rea z1) / (|.z2.|^2 * |.z1.|^2)+
+    (Im2 z2 * Im3 z1)/ (|.z2.|^2*|.z1.|^2) -
+    (Im3 z2 / |.z2.|^2)*(Im2 z1 / |.z1.|^2) by XCMPLX_1:77
+ .= ((Rea z2)* (-Im1 z1)+(-Im1 z2) *Rea z1+Im2 z2*Im3 z1)
+    /(|.z2.|^2*|.z1.|^2) -
+    (Im3 z2* Im2 z1)/ (|.z2.|^2* |.z1.|^2) by XCMPLX_1:77
+ .= ((Rea z2)* (-Im1 z1)+(-Im1 z2) *Rea z1+Im2 z2*Im3 z1
+    -Im3 z2*Im2 z1)/ (|.z2.|*|.z1.|)^2;
+B3: Rea (z2") * Im2 (z1") +Im2 (z2")*Rea (z1")+
+    Im3 (z2")*Im1 (z1")-Im1 (z2")*Im3 (z1")
+  = (Rea z2 / |.z2.|^2)* Im2 (z1") +Im2 (z2")*Rea (z1")+
+    Im3 (z2")*Im1 (z1")-Im1 (z2")*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +Im2 (z2")*Rea (z1")+
+    Im3 (z2")*Im1 (z1")-Im1 (z2")*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +(-Im2 z2 / |.z2.|^2)*Rea (z1")+
+    Im3 (z2")*Im1 (z1")-Im1 (z2")*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +
+    (-Im2 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    Im3 (z2")*Im1 (z1")-Im1 (z2")*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +
+    (-Im2 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im3 z2 / |.z2.|^2)*Im1 (z1")-Im1 (z2")*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +
+    (-Im2 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im3 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-Im1 (z2")*Im3 (z1")
+           by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +
+    (-Im2 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im3 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+    (-Im1 z2 / |.z2.|^2)*Im3 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im2 z1 / |.z1.|^2) +
+    (-Im2 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im3 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2)-
+    (-Im1 z2 / |.z2.|^2)*(-Im3 z1 / |.z1.|^2) by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* ((-Im2 z1) / |.z1.|^2) +
+    ((-Im2 z2) / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (Im3 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2)-
+    (Im1 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2)
+ .= (Rea z2 *(-Im2 z1))/(|.z2.|^2*|.z1.|^2) +
+    ((-Im2 z2) / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (Im3 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2)-
+    (Im1 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+ .= (Rea z2 *(-Im2 z1))/(|.z2.|^2*|.z1.|^2) +
+    ((-Im2 z2)*Rea z1 )/(|.z2.|^2*|.z1.|^2)+
+    (Im3 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2)-
+    (Im1 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+ .= (Rea z2 *(-Im2 z1))/(|.z2.|^2*|.z1.|^2) +
+    ((-Im2 z2)*Rea z1 )/(|.z2.|^2*|.z1.|^2)+
+    (Im3 z2 * Im1 z1 )/ (|.z2.|^2*|.z1.|^2)-
+    (Im1 z2 / |.z2.|^2)*(Im3 z1 / |.z1.|^2) by XCMPLX_1:77
+.= (Rea z2 *(-Im2 z1)+(-Im2 z2)*Rea z1+Im3 z2 * Im1 z1)/(|.z2.|^2*|.z1.|^2)
+    -(Im1 z2 *Im3 z1) / (|.z2.|^2*|.z1.|^2) by XCMPLX_1:77
+.= (Rea z2 *(-Im2 z1)+(-Im2 z2)*Rea z1+Im3 z2 * Im1 z1-(Im1 z2 *Im3 z1))
+     / (|.z2.|*|.z1.|)^2;
+B4: Rea (z2") * Im3 (z1") +Im3 (z2")*Rea (z1")+
+    Im1 (z2")*Im2 (z1")-Im2 (z2")*Im1 (z1")
+   = (Rea z2 / |.z2.|^2)* Im3 (z1") +Im3 (z2")*Rea (z1")+
+    Im1 (z2")*Im2 (z1")-Im2 (z2")*Im1 (z1") by QUATERN2:27
+  .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +Im3 (z2")*Rea (z1")+
+    Im1 (z2")*Im2 (z1")-Im2 (z2")*Im1 (z1") by QUATERN2:27
+  .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +(-Im3 z2 / |.z2.|^2)*Rea (z1")+
+    Im1 (z2")*Im2 (z1")-Im2 (z2")*Im1 (z1") by QUATERN2:27
+  .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +
+     (-Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    Im1 (z2")*Im2 (z1")-Im2 (z2")*Im1 (z1") by QUATERN2:27
+  .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +
+     (-Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im1 z2 / |.z2.|^2)*Im2 (z1")-Im2 (z2")*Im1 (z1") by QUATERN2:27
+  .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +
+     (-Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im1 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2)-Im2 (z2")*Im1 (z1")
+     by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +
+     (-Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im1 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2)-
+    (-Im2 z2 / |.z2.|^2)*Im1 (z1") by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* (-Im3 z1 / |.z1.|^2) +
+     (-Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (-Im1 z2 / |.z2.|^2)*(-Im2 z1 / |.z1.|^2)-
+    (-Im2 z2 / |.z2.|^2)*(-Im1 z1 / |.z1.|^2) by QUATERN2:27
+ .= (Rea z2 / |.z2.|^2)* ((-Im3 z1) / |.z1.|^2) -
+     (Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (Im1 z2 / |.z2.|^2)*(Im2 z1 / |.z1.|^2)-
+    (Im2 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2)
+.= (Rea z2* (-Im3 z1))/(|.z2.|^2* |.z1.|^2) -
+     (Im3 z2 / |.z2.|^2)*(Rea z1 / |.z1.|^2)+
+    (Im1 z2 / |.z2.|^2)*(Im2 z1 / |.z1.|^2)-
+    (Im2 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2) by XCMPLX_1:77
+.= (Rea z2* (-Im3 z1))/(|.z2.|^2* |.z1.|^2) -
+     (Im3 z2 * Rea z1)/(|.z2.|^2 *|.z1.|^2)+
+    (Im1 z2 / |.z2.|^2)*(Im2 z1 / |.z1.|^2)-
+    (Im2 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2) by XCMPLX_1:77
+.= (Rea z2* (-Im3 z1))/(|.z2.|^2* |.z1.|^2) -
+     (Im3 z2 * Rea z1)/(|.z2.|^2 *|.z1.|^2)+
+    (Im1 z2 * Im2 z1 )/(|.z2.|^2*|.z1.|^2)-
+    (Im2 z2 / |.z2.|^2)*(Im1 z1 / |.z1.|^2) by XCMPLX_1:77
+.= (Rea z2* (-Im3 z1) -(Im3 z2 * Rea z1)+
+    (Im1 z2 * Im2 z1))/(|.z2.|^2* |.z1.|^2)-
+     (Im2 z2 * Im1 z1)/(|.z2.|^2* |.z1.|^2) by XCMPLX_1:77
+.= (Rea z2* (-Im3 z1) -(Im3 z2 * Rea z1)+
+    (Im1 z2 * Im2 z1)-(Im2 z2 * Im1 z1))/(|.z2.|* |.z1.|)^2;
+(z2") * (z1")
+ =(Rea z2 * Rea z1-Im1 z2 * Im1 z1-Im2 z2 * Im2 z1-
+   Im3 z2 * Im3 z1)/(|.z2.| * |.z1.|)^2 +
+   (-(Rea z2* Im1 z1+Im1 z2 *Rea z1-Im2 z2*Im3 z1
+    +Im3 z2*Im2 z1)/ (|.z2.|*|.z1.|)^2)*<i>+(-(Rea z2 *Im2 z1+
+   Im2 z2 *Rea z1-Im3 z2 * Im1 z1+Im1 z2 *Im3 z1)
+     / (|.z2.|*|.z1.|)^2)*<j>+
+  (-(Rea z2* Im3 z1 +Im3 z2 * Rea z1-
+    Im1 z2 * Im2 z1+Im2 z2 * Im1 z1)/(|.z2.|* |.z1.|)^2)*<k> by B1,B2,B3,B4
+.=(Rea z2 * Rea z1-Im1 z2 * Im1 z1-Im2 z2 * Im2 z1-
+   Im3 z2 * Im3 z1)/(|.z2.| * |.z1.|)^2 +
+   -((Rea z2* Im1 z1+Im1 z2 *Rea z1-Im2 z2*Im3 z1
+    +Im3 z2*Im2 z1)/ (|.z2.|*|.z1.|)^2*<i>)+(-(Rea z2 *Im2 z1+
+   Im2 z2 *Rea z1-Im3 z2 * Im1 z1+Im1 z2 *Im3 z1)
+     / (|.z2.|*|.z1.|)^2)*<j>+
+  (-(Rea z2* Im3 z1 +Im3 z2 * Rea z1-
+    Im1 z2 * Im2 z1+Im2 z2 * Im1 z1)/(|.z2.|* |.z1.|)^2)*<k>
+   by QUATERN2:9
+.=(Rea z2 * Rea z1-Im1 z2 * Im1 z1-Im2 z2 * Im2 z1-
+   Im3 z2 * Im3 z1)/(|.z2.| * |.z1.|)^2 +
+   -((Rea z2* Im1 z1+Im1 z2 *Rea z1-Im2 z2*Im3 z1
+    +Im3 z2*Im2 z1)/ (|.z2.|*|.z1.|)^2*<i>)+-((Rea z2 *Im2 z1+
+   Im2 z2 *Rea z1-Im3 z2 * Im1 z1+Im1 z2 *Im3 z1)
+     / (|.z2.|*|.z1.|)^2*<j>)+
+  (-(Rea z2* Im3 z1 +Im3 z2 * Rea z1-
+    Im1 z2 * Im2 z1+Im2 z2 * Im1 z1)/(|.z2.|* |.z1.|)^2)*<k>
+   by QUATERN2:9
+.=(Rea z2 * Rea z1-Im1 z2 * Im1 z1-Im2 z2 * Im2 z1-
+   Im3 z2 * Im3 z1)/(|.z2.| * |.z1.|)^2
+   -(Rea z2* Im1 z1+Im1 z2 *Rea z1-Im2 z2*Im3 z1
+    +Im3 z2*Im2 z1)/ (|.z2.|*|.z1.|)^2*<i>-(Rea z2 *Im2 z1+
+   Im2 z2 *Rea z1-Im3 z2 * Im1 z1+Im1 z2 *Im3 z1)
+     / (|.z2.|*|.z1.|)^2*<j>
+  -(Rea z2* Im3 z1 +Im3 z2 * Rea z1-
+    Im1 z2 * Im2 z1+Im2 z2 * Im1 z1)/(|.z2.|* |.z1.|)^2*<k> by QUATERN2:9;
+ hence thesis by A;
+end;
+
+theorem
+  (z*')"=(z")*'
+proof
+   Rea (z*')" = (Rea z*') / (|.z*'.|^2) &
+   Im1 (z*')" = - (Im1 z*') / (|.z*'.|^2) &
+   Im2 (z*')" = - (Im2 z*') / (|.z*'.|^2) &
+   Im3 (z*')" = - (Im3 z*') / (|.z*'.|^2) by QUATERN2:27;then
+  A1: Rea (z*')" = (Rea z) / (|.z*'.|^2) &
+     Im1 (z*')" = - (-Im1 z) / (|.z*'.|^2) &
+     Im2 (z*')" = - (-Im2 z) / (|.z*'.|^2) &
+     Im3 (z*')" = - (-Im3 z) / (|.z*'.|^2) by QUATERNI:44;
+  A2: Rea (z")*' = Rea z" & Im1 (z")*' = -Im1 z" &
+   Im2 (z")*' = -Im2 z" & Im3 (z")*' = -Im3 z" by QUATERNI:44;then
+   Rea (z")*' = (Rea z) / (|.z.|^2) by QUATERN2:27;then
+ A3: Rea (z")*' = (Rea z) / (|.z*'.|^2) by QUATERNI:73;
+   Im1 (z")*' = -(-(Im1 z) / (|.z.|^2)) by A2,QUATERN2:27;then
+ A4: Im1 (z")*' = -(-(Im1 z) / (|.z*'.|^2)) by QUATERNI:73;
+   Im2 (z")*' = -(-(Im2 z) / (|.z.|^2)) by A2,QUATERN2:27;then
+ A5: Im2 (z")*' = -(-(Im2 z) / (|.z*'.|^2)) by QUATERNI:73;
+   Im3 (z")*' = -(-(Im3 z) / (|.z.|^2)) by A2,QUATERN2:27;then
+   Im3 (z")*' = -(-(Im3 z) / (|.z*'.|^2)) by QUATERNI:73;
+ hence thesis by A1,A3,A4,A5,QUATERNI:25;
+end;
+
+theorem
+  1q"=1q
+proof
+  Rea 1q" = 1 & Im1 1q" =0 &
+  Im2 1q" =0 & Im3 1q" =0 by QUATERNI:68,QUATERN2:27,QUATERNI:29;then
+  1q"=[*1,0,0,0*] by QUATERNI:24;
+  hence thesis by QUATERNI:24, QUATERNI:29;
+end;
+
+definition let z1,z2 be quaternion number;
+  func z1 *' z2 -> quaternion number equals
+  z1*z2";
+  coherence;
+end;
+
+definition let z1,z2 be quaternion number;
+  func z1 +* z2 -> quaternion number equals
+  z2"*z1;
+  coherence;
+end;
+
+theorem
+  (|.z1.|=|.z2.| & |.z1.| <>0 & z1"=z2") implies z1=z2
+proof
+ assume
+ A1: (|.z1.|=|.z2.| & |.z1.| <>0 & z1"=z2");
+ A3: Rea z1" = Rea z1/(|.z1.|^2) & Im1 z1" = -(Im1 z1)/(|.z1.|^2) &
+    Im2 z1" = -(Im2 z1)/(|.z1.|^2) & Im3 z1" = -(Im3 z1)/(|.z1.|^2)
+         by QUATERN2:27;
+ A4: Rea z1/(|.z1.|^2) = Rea z2/(|.z2.|^2) &
+   -(Im1 z1)/(|.z1.|^2)= -(Im1 z2)/(|.z2.|^2)&
+   -(Im2 z1)/(|.z1.|^2)= -(Im2 z2)/(|.z2.|^2)&
+   -(Im3 z1)/(|.z1.|^2)= -(Im3 z2)/(|.z2.|^2) by A1,A3,QUATERN2:27;
+   |.z1.|^2 <>0 by A1,XCMPLX_1:6;then
+    Rea z1= Rea z2 & (Im1 z1)= (Im1 z2)&
+   (Im2 z1)= (Im2 z2)& (Im3 z1)= (Im3 z2) by A4, A1,XCMPLX_1:53;
+  hence thesis by QUATERNI:25;
+end;
+
+theorem
+  (z1-z2)*(z3+z4)=z1*z3-z2*z3+z1*z4-z2*z4
+proof
+   (z1-z2)*(z3+z4)= (z1-z2)*z3 +(z1-z2)*z4 by QUATERN2:17
+               .=z1*z3-z2*z3+(z1-z2)*z4 by QUATERN2:23
+               .=z1*z3-z2*z3+(z1*z4-z2*z4) by QUATERN2:23
+               .=z1*z3-z2*z3+z1*z4-z2*z4 by QUATERN2:2;
+    hence thesis;
+end;
+
+theorem
+  (z1+z2)*(z3+z4)=z1*z3+z2*z3+z1*z4+z2*z4
+proof
+  (z1+z2)*(z3+z4)= (z1+z2)*z3 +(z1+z2)*z4 by QUATERN2:17
+               .=z1*z3+z2*z3+(z1+z2)*z4 by QUATERN2:18
+               .=z1*z3+z2*z3+(z1*z4+z2*z4) by QUATERN2:18
+               .=z1*z3+z2*z3+z1*z4+z2*z4 by QUATERN2:2;
+  hence thesis;
+end;
+
+theorem t1:
+  -(z1+z2)=-z1-z2
+proof
+A: -(z1+z2)=(-1q)*(z1+z2) by QUATERN2:19
+         .=(-1q)*z1+(-1q)*z2 by QUATERN2:17;
+  -z1-z2=(-1q)*z1-z2 by QUATERN2:19
+         .=(-1q)*z1+(-1q)*z2 by QUATERN2:19;
+  hence thesis by A;
+end;
+
+theorem t2:
+  -(z1-z2)=-z1+z2
+proof
+  -(z1-z2)=(-1q)*(z1-z2) by QUATERN2:19
+         .=(-1q)*z1-(-1q)*z2 by QUATERN2:24
+         .=(-1q)*z1-(-z2 ) by QUATERN2:19;
+  hence thesis by QUATERN2:19;
+end;
+
+theorem th13:
+  z-(z1+z2)=z-z1-z2
+proof
+  A:  -(z1+z2)=(-1q)*(z1+z2) by QUATERN2:19
+         .=(-1q)*z1+(-1q)*z2 by QUATERN2:17;
+       z-z1-z2=z+(-1q)*z1+(-z2) by QUATERN2:19
+            .=z+(-1q)*z1+(-1q)*z2 by QUATERN2:19;
+ hence thesis by A, QUATERN2:2;
+end;
+
+theorem th14:
+  z-(z1-z2)=z-z1+z2
+proof
+A:  -(z1-z2)=(-1q)*(z1-z2) by QUATERN2:19
+         .=(-1q)*z1-(-1q)*z2 by QUATERN2:24;
+   z-(z1-z2)= z+((-1q)*z1-(-z2)) by A,QUATERN2:19
+             .=z+(-1q)*z1+z2 by QUATERN2:2;
+  hence thesis by QUATERN2:19;
+end;
+
+theorem
+  (z1+z2)*(z3-z4)=z1*z3+z2*z3-z1*z4-z2*z4
+proof
+  (z1+z2)*(z3-z4)= (z1+z2)*z3 -(z1+z2)*z4 by QUATERN2:24
+          .=z1*z3+z2*z3-(z1+z2)*z4 by QUATERN2:18
+          .=z1*z3+z2*z3-(z1*z4+z2*z4) by QUATERN2:18
+          .=z1*z3+z2*z3-z1*z4-z2*z4 by th13;
+  hence thesis;
+end;
+
+theorem th15:
+  (z1-z2)*(z3-z4)=z1*z3-z2*z3-z1*z4+z2*z4
+proof
+   (z1-z2)*(z3-z4)= (z1-z2)*z3 -(z1-z2)*z4 by QUATERN2:24
+          .=z1*z3-z2*z3-(z1-z2)*z4 by QUATERN2:23
+          .=z1*z3-z2*z3-(z1*z4-z2*z4) by QUATERN2:23
+          .=z1*z3-z2*z3-z1*z4+z2*z4 by th14;
+  hence thesis;
+end;
+
+theorem
+  -(z1+z2+z3)=-z1-z2-z3
+proof
+   -(z1+z2+z3)=-(z1+(z2+z3)) by QUATERN2:2
+          .=-z1-(z2+z3) by t1
+          .=-z1-z2-z3 by th13;
+  hence thesis;
+end;
+
+theorem
+  -(z1-z2-z3)=-z1+z2+z3
+proof
+  -(z1-z2-z3)=-(z1-z2)+z3 by t2
+             .=-z1+z2+z3 by t2;
+   hence thesis;
+end;
+
+theorem
+ -(z1-z2+z3)=-z1+z2-z3
+proof
+  -(z1-z2+z3)=-(z1-z2)-z3 by t1
+             .=-z1+z2-z3 by t2;
+   hence thesis;
+end;
+
+theorem
+  -(z1+z2-z3)=-z1-z2+z3
+proof
+  -(z1+z2-z3)=-(z1+z2)+z3 by t2
+             .=-z1-z2+z3 by t1;
+   hence thesis;
+end;
+
+theorem
+  z1+z=z2+z implies z1=z2
+proof
+  assume A1: z1+z = z2+z;
+A2: Rea (z1+z) = Rea z1 +Rea z & Im1(z1+z)=Im1 z1+Im1 z &
+    Im2 (z1+z) = Im2 z1 + Im2 z & Im3(z1+z)= Im3 z1+ Im3 z by QUATERNI:36;
+  Rea (z2+z) = Rea z2 +Rea z & Im1(z2+z)=Im1 z2+Im1 z &
+    Im2 (z2+z) = Im2 z2 + Im2 z & Im3(z2+z)= Im3 z2+ Im3 z by QUATERNI:36;
+  hence thesis by QUATERNI:25,A1,A2;
+end;
+
+theorem
+  z1-z=z2-z implies z1=z2
+proof
+   assume A1: z1-z = z2-z;
+A2: Rea (z1-z) = Rea z1 -Rea z & Im1(z1-z)=Im1 z1-Im1 z &
+    Im2 (z1-z) = Im2 z1 -Im2 z & Im3(z1-z)= Im3 z1- Im3 z by QUATERNI:42;
+   Rea (z2-z) = Rea z2 -Rea z & Im1(z2-z)=Im1 z2-Im1 z &
+    Im2 (z2-z) = Im2 z2 - Im2 z & Im3(z2-z)= Im3 z2-Im3 z by QUATERNI:42;
+   hence thesis by QUATERNI:25,A1,A2;
+end;
+
+theorem
+  (z1+z2-z3)*z4=z1*z4+z2*z4-z3*z4
+proof
+ (z1+z2-z3)*z4=(z1+z2)*z4-z3*z4 by QUATERN2:23
+             .=z1*z4+z2*z4-z3*z4 by QUATERN2:18;
+  hence thesis;
+end;
+
+theorem
+  (z1-z2+z3)*z4=z1*z4-z2*z4+z3*z4
+proof
+ (z1-z2+z3)*z4=(z1-z2)*z4+z3*z4 by QUATERN2:18
+             .=z1*z4-z2*z4+z3*z4 by QUATERN2:23;
+  hence thesis;
+end;
+
+theorem
+  (z1-z2-z3)*z4=z1*z4-z2*z4-z3*z4
+proof
+ (z1-z2-z3)*z4=(z1-z2)*z4-z3*z4 by QUATERN2:23
+             .=z1*z4-z2*z4-z3*z4 by QUATERN2:23;
+  hence thesis;
+end;
+
+theorem
+  (z1+z2+z3)*z4=z1*z4+z2*z4+z3*z4
+proof
+  (z1+z2+z3)*z4=(z1+z2)*z4+z3*z4 by QUATERN2:18
+             .=z1*z4+z2*z4+z3*z4 by QUATERN2:18;
+  hence thesis;
+end;
+
+theorem
+  (z1-z2)*z3=(z2-z1)*(-z3)
+proof
+ (z2-z1)*(-z3)=z2*(-z3)-z1*(-z3) by QUATERN2:23
+             .=-(z2*z3)-z1*(-z3) by QUATERN2:21
+             .=-(z2*z3)-(-(z1*z3)) by QUATERN2:21
+             .=z1*z3-z2*z3;
+  hence thesis by QUATERN2:23;
+end;
+
+theorem
+  z3*(z1-z2)=(-z3)*(z2-z1)
+proof
+  (-z3)*(z2-z1)=(-z3)*z2-(-z3)*z1 by QUATERN2:24
+             .=-(z3*z2)-(-z3)*z1 by QUATERN2:20
+             .=-(z3*z2)-(-(z3*z1)) by QUATERN2:20
+             .=z3*z1-z3*z2;
+  hence thesis by QUATERN2:24;
+end;
+
+theorem th16:
+  z1-z2-z3+z4 = z4-z3-z2+z1
+proof
+  Rea (z1-z2-z3+z4) =Rea (z1-z2-z3)+Rea z4 &
+  Im1 (z1-z2-z3+z4) =Im1 (z1-z2-z3)+Im1 z4 &
+  Im2 (z1-z2-z3+z4) =Im2 (z1-z2-z3)+Im2 z4 &
+  Im3 (z1-z2-z3+z4) =Im3 (z1-z2-z3)+Im3 z4 by QUATERNI:36;then
+  Rea (z1-z2-z3+z4) =Rea (z1-z2)-Rea z3+Rea z4 &
+  Im1 (z1-z2-z3+z4) =Im1 (z1-z2)-Im1 z3+Im1 z4 &
+  Im2 (z1-z2-z3+z4) =Im2 (z1-z2)-Im2 z3+Im2 z4 &
+  Im3 (z1-z2-z3+z4) =Im3 (z1-z2)-Im3 z3+Im3 z4 by QUATERNI:42;then
+A: Rea (z1-z2-z3+z4) =Rea z1-Rea z2-Rea z3+Rea z4 &
+  Im1 (z1-z2-z3+z4) =Im1 z1-Im1 z2-Im1 z3+Im1 z4 &
+  Im2 (z1-z2-z3+z4) =Im2 z1-Im2 z2-Im2 z3+Im2 z4 &
+  Im3 (z1-z2-z3+z4) =Im3 z1-Im3 z2-Im3 z3+Im3 z4 by QUATERNI:42;
+  Rea(z4-z3-z2+z1)=Rea(z4-z3-z2)+Rea z1 &
+  Im1(z4-z3-z2+z1)=Im1(z4-z3-z2)+Im1 z1 &
+  Im2(z4-z3-z2+z1)=Im2(z4-z3-z2)+Im2 z1 &
+  Im3(z4-z3-z2+z1)=Im3(z4-z3-z2)+Im3 z1 by QUATERNI:36;then
+  Rea(z4-z3-z2+z1)=Rea(z4-z3)-Rea z2+Rea z1 &
+  Im1(z4-z3-z2+z1)=Im1(z4-z3)-Im1 z2+Im1 z1 &
+  Im2(z4-z3-z2+z1)=Im2(z4-z3)-Im2 z2+Im2 z1 &
+  Im3(z4-z3-z2+z1)=Im3(z4-z3)-Im3 z2+Im3 z1 by QUATERNI:42;then
+  Rea(z4-z3-z2+z1)=Rea z4-Rea z3-Rea z2+Rea z1 &
+  Im1(z4-z3-z2+z1)=Im1 z4-Im1 z3-Im1 z2+Im1 z1 &
+  Im2(z4-z3-z2+z1)=Im2 z4-Im2 z3-Im2 z2+Im2 z1 &
+  Im3(z4-z3-z2+z1)=Im3 z4-Im3 z3-Im3 z2+Im3 z1 by QUATERNI:42;
+  hence thesis by A,QUATERNI:25;
+end;
+
+theorem
+  (z1-z2)*(z3-z4)=(z2-z1)*(z4-z3)
+proof
+   (z2-z1)*(z4-z3)= (z2-z1)*z4-(z2-z1)*z3 by QUATERN2:24
+          .=z2*z4-z1*z4-(z2-z1)*z3 by QUATERN2:23
+          .=z2*z4-z1*z4-(z2*z3-z1*z3) by QUATERN2:23
+          .=z2*z4-z1*z4-z2*z3+z1*z3 by th14
+          .=z1*z3-z2*z3-z1*z4+z2*z4 by th16;
+    hence thesis by th15;
+end;
+
+theorem
+  z-z1-z2=z-z2-z1
+proof
+  Rea(z-z1-z2) = Rea (z-z1) -Rea z2 & Im1(z-z1-z2) = Im1 (z-z1) -Im1 z2
+  & Im2(z-z1-z2) = Im2 (z-z1) -Im2 z2 & Im3(z-z1-z2) = Im3 (z-z1) -Im3 z2
+   by QUATERNI:42;then
+A1: Rea(z-z1-z2) = Rea z-Rea z1 -Rea z2 & Im1(z-z1-z2) = Im1 z- Im1 z1 -Im1 z2
+ & Im2(z-z1-z2) =Im2 z-Im2 z1 -Im2 z2 & Im3(z-z1-z2) = Im3 z-Im3 z1 -Im3 z2
+   by QUATERNI:42;
+  Rea(z-z2-z1) = Rea (z-z2) -Rea z1 & Im1(z-z2-z1) = Im1 (z-z2) -Im1 z1
+  & Im2(z-z2-z1) = Im2 (z-z2) -Im2 z1 & Im3(z-z2-z1) = Im3 (z-z2) -Im3 z1
+   by QUATERNI:42;then
+  Rea(z-z2-z1) = Rea z-Rea z2 -Rea z1 & Im1(z-z2-z1) = Im1 z- Im1 z2 -Im1 z1
+ & Im2(z-z2-z1) =Im2 z-Im2 z2 -Im2 z1 & Im3(z-z2-z1) = Im3 z-Im3 z2 -Im3 z1
+   by QUATERNI:42;
+ hence thesis by A1,QUATERNI:25;
+end;
+
+theorem
+  z"=[*Rea z/|.z.|^2,-Im1 z/|.z.|^2,
+     -Im2 z/|.z.|^2,-Im3 z/|.z.|^2*]
+proof
+  z"=[*Rea z",Im1 z",Im2 z",Im3 z"*] by QUATERNI:24
+   .=[*(Rea z)/(|.z.|^2),Im1 z",Im2 z",Im3 z"*] by QUATERN2:27
+   .=[*(Rea z)/(|.z.|^2),-(Im1 z)/(|.z.|^2),Im2 z",Im3 z"*] by QUATERN2:27
+   .=[*(Rea z)/(|.z.|^2),-(Im1 z)/(|.z.|^2),-(Im2 z)/(|.z.|^2),Im3 z"*]
+                  by QUATERN2:27
+   .=[*(Rea z)/(|.z.|^2),-(Im1 z)/(|.z.|^2),
+      -(Im2 z)/(|.z.|^2),-(Im3 z)/(|.z.|^2)*] by QUATERN2:27;
+  hence thesis;
+end;
+
+theorem
+ z1/z2=[*(Rea z2*Rea z1+Im1 z1*Im1 z2+Im2 z2*Im2 z1+Im3 z2 *Im3 z1)/(|.z2.|^2),
+         (Rea z2*Im1 z1-Im1 z2*Rea z1-Im2 z2*Im3 z1+Im3 z2*Im2 z1)/(|.z2.|^2),
+         (Rea z2*Im2 z1+Im1 z2*Im3 z1-Im2 z2*Rea z1-Im3 z2*Im1 z1)/(|.z2.|^2),
+         (Rea z2*Im3 z1-Im1 z2*Im2 z1+Im2 z2*Im1 z1-Im3 z2*Rea z1)/(|.z2.|^2)*]
+proof
+ z1/z2 =[*Rea (z1/z2),Im1 (z1/z2),Im2 (z1/z2),Im3 (z1/z2)*] by QUATERNI:24
+      .=[*(Rea z2*Rea z1+Im1 z1*Im1 z2+Im2 z2*Im2 z1+Im3 z2*Im3 z1)/(|.z2.|^2),
+         Im1 (z1/z2),Im2 (z1/z2),Im3 (z1/z2)*] by QUATERN2:28
+      .=[*(Rea z2*Rea z1+Im1 z1*Im1 z2+Im2 z2*Im2 z1+Im3 z2*Im3 z1)/(|.z2.|^2),
+         (Rea z2*Im1 z1-Im1 z2*Rea z1-Im2 z2*Im3 z1+Im3 z2*Im2 z1)/(|.z2.|^2),
+         Im2 (z1/z2),Im3 (z1/z2)*] by QUATERN2:28
+      .=[*(Rea z2*Rea z1+Im1 z1*Im1 z2+Im2 z2*Im2 z1+Im3 z2*Im3 z1)/(|.z2.|^2),
+         (Rea z2*Im1 z1-Im1 z2*Rea z1-Im2 z2*Im3 z1+Im3 z2*Im2 z1)/(|.z2.|^2),
+         (Rea z2*Im2 z1+Im1 z2*Im3 z1-Im2 z2*Rea z1-Im3 z2*Im1 z1)/(|.z2.|^2),
+         Im3 (z1/z2)*] by QUATERN2:28
+      .=[*(Rea z2*Rea z1+Im1 z1*Im1 z2+Im2 z2*Im2 z1+Im3 z2*Im3 z1)/(|.z2.|^2),
+         (Rea z2*Im1 z1-Im1 z2*Rea z1-Im2 z2*Im3 z1+Im3 z2*Im2 z1)/(|.z2.|^2),
+         (Rea z2*Im2 z1+Im1 z2*Im3 z1-Im2 z2*Rea z1-Im3 z2*Im1 z1)/(|.z2.|^2),
+         (Rea z2*Im3 z1-Im1 z2*Im2 z1+Im2 z2*Im1 z1-Im3 z2*Rea z1)/(|.z2.|^2)*]
+       by QUATERN2:28;
+ hence thesis;
+end;
+
+Lmx: <i> = [*0,1*] by ARYTM_0:def 7;
+
+theorem
+  <i>"=-<i>
+proof
+A1: Rea <i>" = 0 by QUATERNI:30,QUATERN2:27;
+A2: Im1 <i>" = -1 by QUATERNI:30,QUATERN2:27,QUATERNI:69;
+A3: Im2 <i>" = 0 by QUATERNI:30,QUATERN2:27;
+A4: Im3 <i>"= 0 by QUATERNI:30,QUATERN2:27;
+  <i>"=[*-0,-1,-0,-0*] by A1,A2,A3,A4,QUATERNI:24
+      .=-[*0,1,0,0*] by QUATERN2:4
+      .=-<i> by QUATERNI:def 6,Lmx;
+  hence thesis;
+end;
+
+theorem
+  <j>"=-<j>
+proof
+A1: Rea <j>" = 0 by QUATERNI:31,QUATERN2:27;
+A2: Im1 <j>" = 0 by QUATERNI:31,QUATERN2:27;
+A3: Im2 <j>" = -1 by QUATERNI:31,QUATERN2:27,QUATERNI:70;
+A4:  Im3 <j>"= 0 by QUATERNI:31,QUATERN2:27;
+  <j>"=[*-0,-0,-1,-0*] by A1,A2,A3,A4,QUATERNI:24
+     .=-<j> by QUATERN2:4;
+  hence thesis;
+end;
+
+theorem
+  <k>"=-<k>
+proof
+A1: Rea <k>" = 0 by QUATERNI:31,QUATERN2:27;
+A2: Im1 <k>" = 0 by QUATERNI:31,QUATERN2:27;
+A3: Im2 <k>" = 0 by QUATERNI:31,QUATERN2:27;
+A4:  Im3 <k>"= -1 by QUATERNI:31,QUATERN2:27,QUATERNI:71;
+  <k>"=[*-0,-0,-0,-1*] by A1,A2,A3,A4,QUATERNI:24
+     .=-<k> by QUATERN2:4;
+  hence thesis;
+end;
+
+definition let z be quaternion number;
+  func z^2 equals
+    z * z;
+  correctness;
+end;
+
+registration let z be quaternion number;
+  cluster z^2 -> quaternion;
+  coherence;
+end;
+
+definition let z be Element of QUATERNION;
+  redefine func z^2 -> Element of QUATERNION;
+  correctness;
+end;
+
+theorem th:
+  z^2=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2, 2*(Rea z * Im1 z),
+       2*(Rea z * Im2 z), 2*(Rea z * Im3 z)*]
+proof
+ z^2=[*Rea z^2,Im1 z^2,Im2 z^2,Im3 z^2*] by QUATERNI:24
+   .=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2,Im1 z^2,
+       Im2 z^2,Im3 z^2*] by QUATERNI:40
+   .=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2, 2*(Rea z * Im1 z),
+       Im2 z^2,Im3 z^2*] by QUATERNI:40
+   .=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2, 2*(Rea z * Im1 z),
+       2*( Rea z * Im2 z),Im3 z^2*] by QUATERNI:40
+   .=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2, 2*(Rea z * Im1 z),
+       2*(Rea z * Im2 z), 2*(Rea z * Im3 z)*] by QUATERNI:40;
+  hence thesis;
+end;
+
+theorem
+  0q^2 = 0
+proof
+  0q=[*0,0*] by ARYTM_0:def 7
+    .= [*0,0,0,0*] by QUATERNI:def 6;then
+A1: Rea 0q =0 & Im1 0q= 0 & Im2 0q = 0 & Im3 0q = 0 by QUATERNI:23;
+   0q^2=[*(Rea 0q)^2-(Im1 0q)^2-(Im2 0q)^2-(Im3 0q)^2, 2*(Rea 0q * Im1 0q),
+       2*(Rea 0q * Im2 0q), 2*(Rea 0q * Im3 0q)*] by th
+    .=[*0,0*] by QUATERNI:def 6,A1
+     .=0 by ARYTM_0:def 7;
+ hence thesis;
+end;
+
+theorem
+  1q^2=1
+proof
+   1q =[*1,0*] by ARYTM_0:def 7
+     .=[*1,0,0,0*] by QUATERNI:def 6;then
+  A1: Rea 1q =1& Im1 1q= 0 & Im2 1q = 0 & Im3 1q = 0 by QUATERNI:23;
+  1q^2=[*(Rea 1q)^2-(Im1 1q)^2-(Im2 1q)^2-(Im3 1q)^2, 2*(Rea 1q * Im1 1q),
+       2*(Rea 1q * Im2 1q), 2*(Rea 1q * Im3 1q)*] by th
+    .=[*1,0*] by QUATERNI:def 6,A1
+     .=1 by ARYTM_0:def 7;
+ hence thesis;
+end;
+
+theorem th1:
+  z^2=(-z)^2
+proof
+ (-z)^2=[*(Rea (-z))^2-(Im1 (-z))^2-(Im2 (-z))^2-(Im3 (-z))^2,
+   2*(Rea (-z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*] by th
+   .=[*(-Rea (z))^2-(Im1 (-z))^2-(Im2 (-z))^2-(Im3 (-z))^2,
+  2*(Rea (-z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+   .=[*(-Rea z)^2-(-Im1 z)^2-(Im2 (-z))^2-(Im3 (-z))^2,
+  2*(Rea (-z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(Im3 (-z))^2,
+  2*(Rea (-z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+   2*(Rea (-z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*Im1 (-z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*(-Im1 z)),2*(Rea (-z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+ .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*(-Im1 z)),2*((-Rea z)*Im2 (-z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+ .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*(-Im1 z)),2*((-Rea z)*(-Im2 z)), 2*(Rea (-z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*(-Im1 z)),2*((-Rea z)*(-Im2 z)), 2*((-Rea z)*Im3 (-z))*]
+      by QUATERNI:41
+  .=[*(-Rea z)^2-(-Im1 z)^2-(-Im2 z)^2-(-Im3 z)^2,
+  2*((-Rea z)*(-Im1 z)),2*((-Rea z)*(-Im2 z)), 2*((-Rea z)*(-Im3 z))*]
+      by QUATERNI:41
+  .=[*(Rea z)^2-(Im1 z)^2-(Im2 z)^2-(Im3 z)^2,
+  2*(Rea z*Im1 z),2*(Rea z*Im2 z), 2*(Rea z*Im3 z)*];
+  hence thesis by th;
+end;
+
+definition let z be quaternion number;
+  func z^3 equals
+  z*z*z;
+  coherence;
+end;
+
+registration let z be quaternion number;
+  cluster z^3 -> quaternion;
+  coherence;
+end;
+
+definition let z be Element of QUATERNION;
+  redefine func z^3 -> Element of QUATERNION;
+  correctness;
+end;
+
+theorem
+  0q^3=0
+proof
+  0q=[*0,0*] by ARYTM_0:def 7
+    .= [*0,0,0,0*] by QUATERNI:def 6;then
+A1: Rea 0q =0 & Im1 0q= 0 & Im2 0q = 0 & Im3 0q = 0 by QUATERNI:23;
+  0q^2=[*(Rea 0q)^2-(Im1 0q)^2-(Im2 0q)^2-(Im3 0q)^2, 2*(Rea 0q * Im1 0q),
+       2*(Rea 0q * Im2 0q), 2*(Rea 0q * Im3 0q)*] by th
+    .=[*0,0*] by QUATERNI:def 6,A1
+     .=0 by ARYTM_0:def 7;
+ hence thesis;
+end;
+
+theorem
+  1q^3=1
+proof
+  1q =[*1,0*] by ARYTM_0:def 7
+    .=[*1,0,0,0*] by QUATERNI:def 6;then
+A1: Rea 1q =1& Im1 1q= 0 & Im2 1q = 0 & Im3 1q = 0 by QUATERNI:23;
+  1q^2=[*(Rea 1q)^2-(Im1 1q)^2-(Im2 1q)^2-(Im3 1q)^2, 2*(Rea 1q * Im1 1q),
+       2*(Rea 1q * Im2 1q), 2*(Rea 1q * Im3 1q)*] by th
+    .=[*1,0*] by QUATERNI:def 6,A1
+     .=1 by ARYTM_0:def 7;
+  hence thesis;
+end;
+
+theorem
+  <i>^3=-<i>
+proof
+ <i> = [*0,1,0,0*] by QUATERNI:def 6,Lmx; then
+ <i> * <i> *<i>=( [* 0*0-1*1-0*0-0*0, 0*1+1*0+0*0-0*0,
+  0*0+0*0+1*0-0*1, 0*0+0*0+1*0-0*1 *]) *[*0,1,0,0*] by QUATERNI:def 10
+        .=[* (-1)*0-0*1-0*0-0*0,(-1)*1+0*0+0*0-0*0,
+         (-1)*0+0*0+1*0-0*0,(-1)*0+0*0+0*0-0*1 *] by QUATERNI:def 10
+         .=-[*0,1,0,0*] by QUATERN2:4;
+   hence thesis by QUATERNI:def 6,Lmx;
+end;
+
+theorem
+  <j>^3=-<j>
+proof
+  <j>*<j>*<j> = ([* 0*0-0*0-1*1-0*0, 0*0+0*0+0*0-0*1,
+  0*1+0*1+0*0-0*0, 0*0+0*0+0*1-1*0 *])* [*0,0,1,0*] by QUATERNI:def 10
+    .= [* (-1)*0-0*0-0*1-0*0,(-1)*0+0*0+0*0-0*1,
+    (-1)*1+0*0+0*0-0*0, (-1)*0+0*0+0*1-0*0 *] by QUATERNI:def 10
+    .=-[*0,0,1,0*] by QUATERN2:4;
+  hence thesis;
+end;
+
+theorem
+  <k>^3=-<k>
+proof
+  <k>*<k>*<k> = ([* 0*0-0*0-0*0-1*1, 0*0+0*0+0*1-1*0,
+  0*0+0*0+0*1-1*0, 0*1+1*0+0*0-0*0 *])*[*0,0,0,1*] by QUATERNI:def 10
+    .= [* (-1)*0-0*0-0*0-0*1,(-1)*0+0*0+0*1-0*0,
+   (-1)*0+0*0+0*0-1*0,(-1)*1+0*0+0*0-0*0 *] by QUATERNI:def 10
+    .=-[*0,0,0,1*] by QUATERN2:4;
+  hence thesis;
+end;
+
+theorem
+  (-1q)^2=1
+proof
+  1q =[*1,0*] by ARYTM_0:def 7
+   .=[*1,0,0,0*] by QUATERNI:def 6; then
+  -1q=[*-1,-0,-0,-0*] by QUATERN2:4; then
+A1: Rea -1q =-1& Im1 -1q= 0 & Im2 -1q = 0 & Im3 -1q = 0 by QUATERNI:23;
+  (-1q)^2=[*(Rea -1q)^2-(Im1 -1q)^2-(Im2 -1q)^2-(Im3 -1q)^2,
+          2*(Rea (-1q) * Im1 (-1q)), 2*(Rea (-1q) * Im2 (-1q)),
+          2*(Rea (-1q) * Im3 (-1q))*] by th
+       .=[*1,0*] by QUATERNI:def 6,A1
+      .=1 by ARYTM_0:def 7;
+ hence thesis;
+end;
+
+theorem
+  (-1q)^3=-1
+proof
+A:  1q =[*1,0*] by ARYTM_0:def 7
+   .=[*1,0,0,0*] by QUATERNI:def 6; then
+  -1q=[*-1,-0,-0,-0*] by QUATERN2:4; then
+A1: Rea -1q =-1& Im1 -1q= 0 & Im2 -1q = 0 & Im3 -1q = 0 by QUATERNI:23;
+  (-1q)^2=[*(Rea -1q)^2-(Im1 -1q)^2-(Im2 -1q)^2-(Im3 -1q)^2,
+          2*(Rea (-1q) * Im1 (-1q)), 2*(Rea (-1q) * Im2 (-1q)),
+          2*(Rea (-1q) * Im3 (-1q))*] by th
+       .=[*1,0*] by QUATERNI:def 6,A1
+      .=1 by ARYTM_0:def 7;then
+  (-1q)^3=-1q by QUATERN2:15
+        .=[*-1,-0,-0,-0*] by QUATERN2:4,A
+        .=[*-1,-0*] by QUATERNI:def 6
+        .=-1 by ARYTM_0:def 7;
+  hence thesis;
+end;
+
+theorem
+  z^3=-(-z)^3
+proof
+A1: z^3=z*z^2 by QUATERN2:16;
+  (-z)^3 =(-z)*(-z)^2 by QUATERN2:16
+        .=(-z)*z^2 by th1
+        .=((-1q) *z)* z^2 by QUATERN2:19
+        .=(-1q)*(z*z^2) by QUATERN2:16
+        .=-z^3 by A1,QUATERN2:19;
+  hence thesis;
+end;

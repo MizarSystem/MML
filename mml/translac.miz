@@ -6,8 +6,8 @@
 
 environ
 
- vocabularies DIRAF, VECTSP_1, ANALOAF, PASCH, FUNCT_2, TRANSGEO, FUNCT_1,
-      AFF_2, INCSP_1, AFF_1, RELAT_1;
+ vocabularies DIRAF, VECTSP_1, ANALOAF, FUNCT_2, TRANSGEO, FUNCT_1, AFF_2,
+      INCSP_1, AFF_1, RELAT_1;
  notations PARTFUN1, FUNCT_2, STRUCT_0, ANALOAF, DIRAF, AFF_1, AFF_2, TRANSGEO;
  constructors RELAT_2, PARTFUN1, AFF_1, AFF_2, TRANSGEO;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, PARTFUN1, FUNCT_2, STRUCT_0;
@@ -25,11 +25,6 @@ definition
   attr AS is Fanoian means
   :Def1:
   for a,b,c,d st a,b // c,d & a,c // b,d & a,d // b,c holds LIN a,b,c;
-end;
-
-notation
-  let AS;
-  synonym AS satisfies_Fano for AS is Fanoian;
 end;
 
 Lm1: (LIN a,b,c & a<>b & a<>c & b<>c & not LIN a,b,p) implies
@@ -266,7 +261,7 @@ reserve AFP for AffinPlane,
 canceled;
 
 theorem Th4:
-  (AFP satisfies_Fano &
+  (AFP is Fanoian &
 
 a,b // c,d & a,c // b,d & not LIN a,b,c) implies ex p st LIN b,c,p & LIN a,d,p
 proof
@@ -325,12 +320,13 @@ A2: a,b // x,y & a,x // b,y;
 end;
 
 theorem Th5:
-  f is_Tr & not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y implies y=f.x
+  f is translation & not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y
+   implies y=f.x
 proof
   assume
-A1: f is_Tr;
+A1: f is translation;
   then
-A2: f is_Dil by TRANSGEO:def 11;
+A2: f is dilatation by TRANSGEO:def 11;
   assume
 A3: not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y;
   a,x // f.a,f.x & a,f.a // x,f.x by A1,A2,TRANSGEO:85,100;
@@ -338,16 +334,16 @@ A3: not LIN a,f.a,x & a,f.a // x,y & a,x // f.a,y;
 end;
 
 theorem Th6:
-  AFP satisfies_des iff
+  AFP is translational iff
   (for a,a',b,c,b',c' st not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
   a,a' // c,c' & a,b // a',b' & a,c // a',c' holds b,c // b',c')
 proof
-  thus AFP satisfies_des implies
+  thus AFP is translational implies
   (for a,a',b,c,b',c' st not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
   a,a' // c,c' & a,b // a',b' & a,c // a',c' holds b,c // b',c')
   proof
     assume
-A1: AFP satisfies_des;
+A1: AFP is translational;
     let a,a',b,c,b',c';
     assume
 A2: not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
@@ -369,7 +365,8 @@ A5: c <>c'
       hence contradiction by A2,AFF_1:15;
     end;
 A6: a in A & a' in A & b in P & b' in P & c in C & c' in C by AFF_1:26;
-A7: A is_line & P is_line & C is_line by A3,A4,A5,AFF_1:def 3;
+A7: A is being_line & P is being_line & C is being_line
+ by A3,A4,A5,AFF_1:def 3;
 A8: A // P & A // C by A2,A3,A4,A5,AFF_1:51;
 A9: A<>P by A2,A6,A7,AFF_1:33;
     A<>C by A2,A6,A7,AFF_1:33;
@@ -382,8 +379,8 @@ A10: for a,a',b,c,b',c' st not LIN a,a',b & not LIN a,a',c & a,a' // b,b' &
     let A,P,C,a,b,c,a',b',c';
     assume
 A11: A // P & A // C & a in A & a' in A &
-    b in P & b' in P & c in C & c' in C & A is_line & P is_line &
-    C is_line & A<>P & A<>C & a,b // a',b' & a,c // a',c';
+    b in P & b' in P & c in C & c' in C & A is being_line & P is being_line &
+    C is being_line & A<>P & A<>C & a,b // a',b' & a,c // a',c';
     then
 A12: a,a' // b,b' & a,a' // c,c' by AFF_1:53;
 A13: now
@@ -421,7 +418,7 @@ A17:  not LIN a,a',b
 end;
 
 theorem Th7:
-  ex f st f is_Tr & f.a=a
+  ex f st f is translation & f.a=a
 proof
   take id the carrier of AFP;
   thus thesis by FUNCT_1:35,TRANSGEO:99;
@@ -495,13 +492,13 @@ A11:  a,b // x,y or p=q by A8,A10,AFF_1:14;
   hence thesis by A2;
 end;
 
-Lm8: AFP satisfies_des &
+Lm8: AFP is translational &
 a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' & a,p // b,q &
 a,p' // b,q' & p,q // x,y & p',q' // x,y' & p,x // q,y &
 p',x // q',y' & not LIN a,b,p & not LIN a,b,p' & not LIN p,q,p' implies y=y'
 proof
   assume that
-A1: AFP satisfies_des and
+A1: AFP is translational and
 A2: a<>b and
 A3: LIN a,b,x and
 A4: a,b // p,q and
@@ -602,13 +599,13 @@ A7: a=z or b=z by A1,A3;
   hence thesis by A6,A7,AFF_1:13;
 end;
 
-Lm9: AFP satisfies_des &
+Lm9: AFP is translational &
 a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' & a,p // b,q &
 a,p' // b,q' & p,q // x,y & p',q' // x,y' & p,x // q,y &
 p',x // q',y' & not LIN a,b,p & not LIN a,b,p' implies y=y'
 proof
   assume
-A1: AFP satisfies_des & a<>b & LIN a,b,x & a,b // p,q &
+A1: AFP is translational & a<>b & LIN a,b,x & a,b // p,q &
   a,b // p',q' & a,p // b,q & a,p' // b,q' & p,q // x,y &
   p',q' // x,y' & p,x // q,y & p',x // q',y' & not LIN a,b,p & not LIN a,b,p';
   then
@@ -777,12 +774,12 @@ A6: not LIN a,b,p;
   hence LIN a,b,y by A1,A2,AFF_1:18;
 end;
 
-Lm11: AFP satisfies_des & a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' &
+Lm11: AFP is translational & a<>b & LIN a,b,x & a,b // p,q & a,b // p',q' &
 a,p // b,q & a,p' // b,q' & p,q // x,y & p,x // q,y &
 p',q' // x',y & p',x' // q',y & not LIN a,b,p & not LIN a,b,p' implies x=x'
 proof
   assume that
-A1: AFP satisfies_des and
+A1: AFP is translational and
 A2: a<>b and
 A3: LIN a,b,x and
 A4: a,b // p,q and
@@ -811,14 +808,14 @@ A23: not LIN b,a,q by A4,A6,A12,Lm5;
   hence x=x' by A1,A2,A14,A15,A16,A17,A18,A19,A20,A21,A22,A23,Lm9;
 end;
 
-Lm12: AFP satisfies_des & a<>b implies ex f st f is_Tr & f.a=b
+Lm12: AFP is translational & a<>b implies ex f st f is translation & f.a=b
 proof
   defpred X[Element of AFP,Element of AFP] means
   (not LIN a,b,$1 & a,b // $1,$2 & a,$1 // b,$2) or
   (LIN a,b,$1 & (ex p,q st not LIN a,b,p & a,b // p,q &
   a,p // b,q & p,q // $1,$2 & p,$1 // q,$2));
   assume
-A1: AFP satisfies_des & a<>b;
+A1: AFP is translational & a<>b;
   then
 A2: ex y st X[x,y] by Lm6;
 A3: ex x st X[x,y] by A1,Lm7;
@@ -922,9 +919,9 @@ A29:  a,b // x,f.x & a,x // b,f.x by A15;
     end;
     hence thesis by A20,A22,A25;
   end;
-  then f is_Dil by TRANSGEO:85;
+  then f is dilatation by TRANSGEO:85;
   then
-A30: f is_Tr by A19,TRANSGEO:100;
+A30: f is translation by A19,TRANSGEO:100;
   f.a=b
   proof consider p such that
 A31: not LIN a,b,p by A1,AFF_1:22;
@@ -938,43 +935,43 @@ A33: p,q // a,b & p,a // q,b by A32,AFF_1:13;
 end;
 
 theorem Th9:
-  AFP satisfies_des implies ex f st f is_Tr & f.a=b
+  AFP is translational implies ex f st f is translation & f.a=b
 proof
   assume
-A1: AFP satisfies_des;
+A1: AFP is translational;
   a=b implies thesis by Th7;
   hence thesis by A1,Lm12;
 end;
 
 theorem
-  (for a,b ex f st f is_Tr & f.a=b) implies AFP satisfies_des
+  (for a,b ex f st f is translation & f.a=b) implies AFP is translational
 proof
   assume
-A1: for a,b ex f st f is_Tr & f.a=b;
+A1: for a,b ex f st f is translation & f.a=b;
   now
     let a,a',b,c,b',c';
     assume
 A2: not LIN a,a',b & not LIN a,a',c &
     a,a' // b,b' & a,a' // c,c' & a,b // a',b' & a,c // a',c';
     consider f such that
-A3: f is_Tr and
+A3: f is translation and
 A4: f.a=a' by A1;
 A5: b'=f.b by A2,A3,A4,Th5;
 A6: c'=f.c by A2,A3,A4,Th5;
-    f is_Dil by A3,TRANSGEO:def 11;
+    f is dilatation by A3,TRANSGEO:def 11;
     hence b,c // b',c' by A5,A6,TRANSGEO:85;
   end;
   hence thesis by Th6;
 end;
 
 theorem Th11:
-  f is_Tr & g is_Tr & not LIN a,f.a,g.a implies f*g=g*f
+  f is translation & g is translation & not LIN a,f.a,g.a implies f*g=g*f
 proof
   assume
-A1: f is_Tr & g is_Tr;
+A1: f is translation & g is translation;
   assume
 A2: not LIN a,f.a,g.a;
-A3: f is_Dil & g is_Dil by A1,TRANSGEO:def 11;
+A3: f is dilatation & g is dilatation by A1,TRANSGEO:def 11;
   then
 A4: a,f.a // g.a,g.(f.a) by TRANSGEO:85;
   a,g.a // f.a,g.(f.a) by A1,A3,TRANSGEO:100;
@@ -982,18 +979,18 @@ A4: a,f.a // g.a,g.(f.a) by TRANSGEO:85;
   then (f*g).a=g.(f.a) by FUNCT_2:21;
   then
 A5: (f*g).a=(g*f).a by FUNCT_2:21;
-  f*g is_Tr & g*f is_Tr by A1,TRANSGEO:105;
+  f*g is translation & g*f is translation by A1,TRANSGEO:105;
   hence thesis by A5,TRANSGEO:103;
 end;
 
 theorem Th12:
-  AFP satisfies_des & f is_Tr & g is_Tr implies f*g=g*f
+  AFP is translational & f is translation & g is translation implies f*g=g*f
 proof
   assume that
-A1: AFP satisfies_des and
-A2: f is_Tr and
-A3: g is_Tr;
-A4: g is_Dil by A3,TRANSGEO:def 11;
+A1: AFP is translational and
+A2: f is translation and
+A3: g is translation;
+A4: g is dilatation by A3,TRANSGEO:def 11;
   now
     assume that
 A5: f<>id the carrier of AFP and
@@ -1007,7 +1004,7 @@ A9:   LIN a,f.a,g.a;
       consider b such that
 A10:  not LIN a,f.a,b by A7,AFF_1:22;
       consider h such that
-A11:  h is_Tr and
+A11:  h is translation and
 A12:  h.a=b by A1,Th9;
       not LIN a,f.a,h.(g.a)
       proof
@@ -1029,7 +1026,8 @@ A15:    g.b=h.(g.a) by A12,FUNCT_2:21;
         hence contradiction by A7,A9,A13,AFF_1:17;
       end;
       then
-A16:  h *g is_Tr & not LIN a,f.a,(h*g).a by A3,A11,FUNCT_2:21,TRANSGEO:105;
+A16:  h *g is translation & not LIN a,f.a,(h*g).a
+ by A3,A11,FUNCT_2:21,TRANSGEO:105;
       h*(f*g)=(h*f)*g by RELAT_1:55
         .=(f*h)*g by A2,A10,A11,A12,Th11
         .=f*(h*g) by RELAT_1:55
@@ -1043,13 +1041,14 @@ A16:  h *g is_Tr & not LIN a,f.a,(h*g).a by A3,A11,FUNCT_2:21,TRANSGEO:105;
 end;
 
 theorem Th13:
-  f is_Tr & g is_Tr & p,f.p // p,g.p implies p,f.p // p,(f*g).p
+  f is translation & g is translation & p,f.p // p,g.p
+   implies p,f.p // p,(f*g).p
 proof
   assume that
-A1: f is_Tr and
-A2: g is_Tr and
+A1: f is translation and
+A2: g is translation and
 A3: p,f.p // p,g.p;
-A4: f is_Dil by A1,TRANSGEO:def 11;
+A4: f is dilatation by A1,TRANSGEO:def 11;
 A5: now
     assume g=id the carrier of AFP;
     then f*g=f by FUNCT_2:23;
@@ -1071,17 +1070,17 @@ A6: g.p<>p by A2,TRANSGEO:def 11;
 end;
 
 theorem
-  AFP satisfies_Fano & AFP satisfies_des & f is_Tr
-  implies ex g st g is_Tr & g*g=f
+  AFP is Fanoian & AFP is translational & f is translation
+  implies ex g st g is translation & g*g=f
 proof
   assume that
-A1: AFP satisfies_Fano & AFP satisfies_des and
-A2: f is_Tr;
+A1: AFP is Fanoian & AFP is translational and
+A2: f is translation;
 A3: now
     assume
 A4: f=id the carrier of AFP;
     set g=id the carrier of AFP;
-A5: g is_Tr by TRANSGEO:99;
+A5: g is translation by TRANSGEO:99;
     g*g=id the carrier of AFP by FUNCT_2:23;
     hence thesis by A4,A5;
   end;
@@ -1100,34 +1099,34 @@ A9: c,b // a,d & c,a // b,d by DIRAF:47;
 A10: LIN b,a,p and
 A11: LIN c,d,p by A1,A8,A9,Th4;
     consider h such that
-A12: h is_Tr and
+A12: h is translation and
 A13: h.c = a by A1,Th9;
 A14: h.b=d by A8,A9,A12,A13,Th5;
     consider f1 being Permutation of the carrier of AFP such that
-A15: f1 is_Tr and
+A15: f1 is translation and
 A16: f1.p=a by A1,Th9;
     consider f2 being Permutation of the carrier of AFP such that
-A17: f2 is_Tr and
+A17: f2 is translation and
 A18: f2.p=b by A1,Th9;
     consider f3 being Permutation of the carrier of AFP such that
-A19: f3 is_Tr and
+A19: f3 is translation and
 A20: f3.p=c by A1,Th9;
     consider f4 being Permutation of the carrier of AFP such that
-A21: f4 is_Tr and
+A21: f4 is translation and
 A22: f4.p=d by A1,Th9;
-A23: (f2)" is_Tr by A17,TRANSGEO:104;
+A23: (f2)" is translation by A17,TRANSGEO:104;
 A24: f1*f2=f4*f3
     proof f1.((f3)".c)=f1.p by A20,TRANSGEO:4;
       then
 A25:  (f1*(f3)").c = a by A16,FUNCT_2:21;
-      (f3)" is_Tr by A19,TRANSGEO:104;
-      then f1*(f3)" is_Tr by A15,TRANSGEO:105;
+      (f3)" is translation by A19,TRANSGEO:104;
+      then f1*(f3)" is translation by A15,TRANSGEO:105;
       then
 A26:  f1*(f3)"=h by A12,A13,A25,TRANSGEO:103;
       f4.((f2)".b)=f4.p by A18,TRANSGEO:4;
       then
 A27:  (f4*f2").b=d by A22,FUNCT_2:21;
-      f4*f2" is_Tr by A21,A23,TRANSGEO:105;
+      f4*f2" is translation by A21,A23,TRANSGEO:105;
       then f1*f3"=f4*f2" by A12,A14,A26,A27,TRANSGEO:103;
       then f1*(f3"*f3)=(f4*f2")*f3 by RELAT_1:55;
       then f1*(id the carrier of AFP)=(f4*f2")*f3 by FUNCT_2:88;
@@ -1163,7 +1162,8 @@ A31: p,a // p,(f1*f2).p by A15,A16,A17,Th13;
       then LIN a,c,b by AFF_1:def 1;
       hence contradiction by A7,AFF_1:15;
     end;
-    then p=(f1*f2).p & f1*f2 is_Tr by A15,A17,A30,A31,AFF_1:14,TRANSGEO:105;
+    then p=(f1*f2).p & f1*f2 is translation
+     by A15,A17,A30,A31,AFF_1:14,TRANSGEO:105;
     then f1"*(f1*f2)=f1"*(id the carrier of AFP) by TRANSGEO:def 11;
     then (f1"*f1)*f2=f1"*(id the carrier of AFP) by RELAT_1:55;
     then (id the carrier of AFP)*f2=f1"*(id the carrier of AFP) by FUNCT_2:88;
@@ -1171,26 +1171,26 @@ A31: p,a // p,(f1*f2).p by A15,A16,A17,Th13;
     then (f2*f2).a=(f2*f1").a by FUNCT_2:23
       .=f2.(f1".a) by FUNCT_2:21
       .=b by A16,A18,TRANSGEO:4;
-    then (f2*f2).a=f.a & f2*f2 is_Tr by A17,TRANSGEO:105;
+    then (f2*f2).a=f.a & f2*f2 is translation by A17,TRANSGEO:105;
     hence thesis by A2,A17,TRANSGEO:103;
   end;
   hence thesis by A3;
 end;
 
 theorem Th15:
-  AFP satisfies_Fano &
-  f is_Tr & f*f=id the carrier of AFP implies f=id the carrier of AFP
+  AFP is Fanoian &
+  f is translation & f*f=id the carrier of AFP implies f=id the carrier of AFP
 proof
   assume that
-A1: AFP satisfies_Fano and
-A2: f is_Tr and
+A1: AFP is Fanoian and
+A2: f is translation and
 A3: f*f=id the carrier of AFP;
   consider a;
   assume f<>id the carrier of AFP;
   then a<>f.a by A2,TRANSGEO:def 11;
   then consider b such that
 A4: not LIN a,f.a,b by AFF_1:22;
-A5: f is_Dil by A2,TRANSGEO:def 11;
+A5: f is dilatation by A2,TRANSGEO:def 11;
   then f.b,a // f.(f.b),f.a by TRANSGEO:85;
   then f.b,a // (f*f).b,f.a by FUNCT_2:21;
   then f.b,a // b,f.a by A3,FUNCT_1:35;
@@ -1200,17 +1200,18 @@ A5: f is_Dil by A2,TRANSGEO:def 11;
 end;
 
 theorem
-  AFP satisfies_des & AFP satisfies_Fano &
-  g is_Tr & f1 is_Tr & f2 is_Tr & g=f1*f1 & g=f2*f2 implies f1=f2
+  AFP is translational & AFP is Fanoian &
+  g is translation & f1 is translation & f2 is translation &
+   g=f1*f1 & g=f2*f2 implies f1=f2
 proof
   assume that
-A1: AFP satisfies_des & AFP satisfies_Fano and g is_Tr and
-A2: f1 is_Tr and
-A3: f2 is_Tr and
+A1: AFP is translational & AFP is Fanoian and g is translation and
+A2: f1 is translation and
+A3: f2 is translation and
 A4: g=f1*f1 and
 A5: g=f2*f2;
   set h=f2"*f1;
-A6: f2" is_Tr by A3,TRANSGEO:104;
+A6: f2" is translation by A3,TRANSGEO:104;
   h*h=f2"*(f1*(f2"*f1)) by RELAT_1:55
     .=f2"*((f1*f2")*f1) by RELAT_1:55
     .=f2"*((f2"*f1)*f1) by A1,A2,A6,Th12

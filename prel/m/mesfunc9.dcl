@@ -48,18 +48,18 @@
 <Func kind="K" nr="49"/>
 </Func>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="36">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="112">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Func>
 </Adjective>
-<Adjective nr="36">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 <Func kind="K" nr="49"/>
 </Adjective>
-<Adjective nr="38">
+<Adjective nr="39">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

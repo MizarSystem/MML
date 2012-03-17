@@ -9,15 +9,16 @@ environ
  vocabularies RELAT_1, PROB_1, SEQ_1, SEQ_2, SETLIM_2, ABSVALUE, VECTSP_1,
       SETWISEO, FINSOP_1, ARYTM_1, ORDINAL2, ARYTM, BOOLE, SUBSET_1, PROB_2,
       SETFAM_1, TARSKI, SEQM_3, FINSUB_1, LATTICES, SERIES_1, RLVECT_1,
-      FINSEQ_1, FUNCT_1, PROB_3;
+      FINSEQ_1, FUNCT_1, PROB_3, FINSEQ_2;
  notations FINSEQ_1, ORDINAL1, CARD_3, FINSUB_1, REAL_1, RELAT_1, TARSKI,
       XBOOLE_0, RVSUM_1, FINSOP_1, SUBSET_1, NUMBERS, XCMPLX_0, XREAL_0,
-      SETFAM_1, BINOP_1, SETWOP_2, BINOP_2, SETWISEO, NAT_1, COMPLEX1, SEQ_1,
-      SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1, PROB_2, KURATO_2,
-      SETLIM_2, SEQM_3, SETLIM_1, RINFSUP1, SERIES_1, PCOMPS_1, XXREAL_0;
+      SETFAM_1, BINOP_1, SETWOP_2, BINOP_2, SETWISEO, NAT_1, FINSEQ_2,
+      COMPLEX1, SEQ_1, SEQ_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, PROB_1,
+      PROB_2, KURATO_2, SETLIM_2, SEQM_3, SETLIM_1, RINFSUP1, SERIES_1,
+      PCOMPS_1, XXREAL_0;
  constructors SETFAM_1, PARTFUN1, SETWISEO, XXREAL_0, REAL_1, NAT_1, BINOP_2,
       COMPLEX1, SEQ_2, SEQM_3, PROB_2, FINSOP_1, RVSUM_1, SERIES_1, PCOMPS_1,
-      KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2, SEQ_1;
+      KURATO_2, SETLIM_1, RINFSUP1, SETLIM_2, SEQ_1, PROB_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XREAL_0, NAT_1,
       MEMBERED, PROB_1, VALUED_0, SEQ_2;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
@@ -399,38 +400,41 @@ definition
 :: PROB_3:def 12
 
   for A1 being SetSequence of X st A1 is non-descending &
-  (for n holds A1.n in IT) holds Union A1 in IT;
+   rng A1 c= IT holds Union A1 in IT;
   attr IT is non-increasing-closed means
 :: PROB_3:def 13
 
   for A1 being SetSequence of X st A1 is non-ascending &
-  (for n holds A1.n in IT) holds Intersection A1 in IT;
+   rng A1 c= IT holds Intersection A1 in IT;
 end;
 
 theorem :: PROB_3:71
   for IT be Subset-Family of X holds
-  IT is non-decreasing-closed iff (for A1 being SetSequence of X st
-  (A1 is non-descending & (for n holds A1.n in IT)) holds lim A1 in IT);
+  IT is non-decreasing-closed iff for A1 being SetSequence of X st
+  A1 is non-descending & rng A1 c= IT holds lim A1 in IT;
 
 theorem :: PROB_3:72
   for IT be Subset-Family of X holds
-  IT is non-increasing-closed iff (for A1 being SetSequence of X st
-  A1 is non-ascending & (for n holds A1.n in IT) holds lim A1 in IT);
+  IT is non-increasing-closed iff for A1 being SetSequence of X st
+  A1 is non-ascending & rng A1 c= IT holds lim A1 in IT;
 
 theorem :: PROB_3:73
   bool X is non-decreasing-closed & bool X is non-increasing-closed;
 
+registration
+  let X;
+  cluster non-decreasing-closed non-increasing-closed Subset-Family of X;
+end;
+
 definition
   let X;
-  mode MonotoneClass of X -> Subset-Family of X means
-:: PROB_3:def 14
-
-    it is non-decreasing-closed & it is non-increasing-closed;
+  mode MonotoneClass of X is
+      non-decreasing-closed non-increasing-closed Subset-Family of X;
 end;
 
 theorem :: PROB_3:74
   Z is MonotoneClass of X iff Z c= bool X & (for A1 being SetSequence of X st
-  A1 is monotone & (for n holds A1.n in Z) holds lim A1 in Z);
+  A1 is monotone & rng A1 c= Z holds lim A1 in Z);
 
 theorem :: PROB_3:75
   for F being Field_Subset of X holds
@@ -444,6 +448,7 @@ theorem :: PROB_3:77
   X c= Y & for Z st X c= Z & Z is MonotoneClass of Omega holds Y c= Z;
 
 definition
+ canceled;
   let Omega;
   let X be Subset-Family of Omega;
   func monotoneclass(X) -> MonotoneClass of Omega means

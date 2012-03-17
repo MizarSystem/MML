@@ -75,7 +75,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="22"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -138,7 +138,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="13"/>
-<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </CCluster>
 </Registrations>

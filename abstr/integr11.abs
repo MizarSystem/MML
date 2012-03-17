@@ -1,0 +1,493 @@
+:: Several Integrability Formulas of Special Functions -- Part {II}
+::  by Bo Li , Yanping Zhuang , Yanhong Men and Xiquan Liang
+:: 
+:: Received October 14, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies ARYTM, RELAT_1, FUNCT_1, ARYTM_1, JGRAPH_2, SEQ_1, SIN_COS,
+      INTEGRA1, FDIFF_1, BOOLE, SQUARE_1, ARYTM_3, ORDINAL2, RCOMP_1, PREPOWER,
+      LATTICES, SIN_COS2, PRE_TOPC, PARTFUN1, TAYLOR_1, FINSEQ_1, SIN_COS4,
+      SIN_COS6, SIN_COS9, SUBSET_1;
+ notations TARSKI, XBOOLE_0, SEQ_1, SIN_COS, SUBSET_1, NUMBERS, VALUED_1,
+      NAT_1, XXREAL_0, REAL_1, RELAT_1, RELSET_1, PARTFUN1, PARTFUN2, RCOMP_1,
+      RFUNCT_1, PSCOMP_1, INTEGRA1, FCONT_1, SQUARE_1, INTEGRA5, PREPOWER,
+      TAYLOR_1, FDIFF_1, JORDAN16, SEQ_2, SIN_COS2, FDIFF_9, SIN_COS6,
+      SIN_COS9, BINOP_2;
+ constructors SIN_COS, TAYLOR_1, SEQ_1, REAL_1, FDIFF_1, FCONT_1, PSCOMP_1,
+      BINOP_2, SQUARE_1, PREPOWER, INTEGRA5, JORDAN16, SIN_COS2, SEQ_4,
+      SIN_COS9, PARTFUN1, PARTFUN2, FUNCT_1, RCOMP_1, RELAT_1, SIN_COS6,
+      RFUNCT_1, VALUED_1, FDIFF_9, SIN_COS4, LIMFUNC1, NAT_1, POWER;
+ registrations VALUED_1, NAT_1, XBOOLE_0, NUMBERS, MEMBERED, VALUED_0,
+      INTEGRA1, INT_1, RELAT_1, ORDINAL1, FUNCT_2, RCOMP_1, FCONT_1, TOPREALB,
+      RELSET_1, RFUNCT_1, XREAL_0, NEWTON, SQUARE_1, FUNCT_1, XXREAL_0, SEQM_3,
+      SIN_COS9, FINSET_1, TAYLOR_1, FCONT_3;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Differentiation Formulas
+
+ reserve r,x,x0,a,b for Real;
+ reserve n,m for Element of NAT;
+ reserve A for closed-interval Subset of REAL;
+ reserve Z for open Subset of REAL;
+
+:: f.x = (1/2)*x-(1/4)*sin(2*x)
+theorem :: INTEGR11:1
+  AffineMap(1/2,0)-(1/4)(#)(sin*AffineMap(2,0)) is_differentiable_on REAL &
+  for x holds ((AffineMap(1/2,0)-(1/4)(#)(sin*AffineMap(2,0)))`|REAL).x
+    = (sin.x)^2;
+
+:: f.x = (1/2)*x+(1/4)*sin(2*x)
+theorem :: INTEGR11:2
+ AffineMap(1/2,0)+(1/4)(#)(sin*AffineMap(2,0)) is_differentiable_on REAL &
+   for x holds ((AffineMap(1/2,0)+(1/4)(#)(sin*AffineMap(2,0)))`|REAL).x
+     = (cos.x)^2;
+
+:: f.x = (1/(n+1))*(sin.x)^(n+1)
+theorem :: INTEGR11:3
+  (1/(n+1))(#)( #Z (n+1)*sin) is_differentiable_on REAL
+  & for x holds (((1/(n+1))(#)( #Z (n+1)*sin))`|REAL).x
+  = ((sin.x) #Z n)*cos.x;
+
+:: f.x = (-1/(n+1))*(cos.x)^(n+1)
+theorem :: INTEGR11:4
+  (-1/(n+1))(#)( #Z (n+1)*cos) is_differentiable_on REAL
+  & for x holds (((-1/(n+1))(#)( #Z (n+1)*cos))`|REAL).x
+  = ((cos.x) #Z n)*sin.x;
+
+:: f.x=sin.((m+n)*x)/(2*(m+n))+sin.((m-n)*x)/(2*(m-n))
+theorem :: INTEGR11:5
+  m+n<>0 & m-n<>0 implies ((1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))+
+  (1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))) is_differentiable_on REAL
+  & for x holds (((1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))+
+  (1/(2*(m-n)))(#)(sin*AffineMap(m-n,0)))`|REAL).x = cos.(m*x) *cos.(n*x);
+
+:: f.x=sin.((m-n)*x)/(2*(m-n))-sin.((m+n)*x)/(2*(m+n))
+theorem :: INTEGR11:6
+  m+n<>0 & m-n<>0 implies ((1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))-
+  (1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))) is_differentiable_on REAL
+  & for x holds (((1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))-
+  (1/(2*(m+n)))(#)(sin*AffineMap(m+n,0)))`|REAL).x
+  = sin.(m*x)*sin.(n*x);
+
+:: f.x=-cos.((m+n)*x)/(2*(m+n))-cos.((m-n)*x)/(2*(m-n))
+theorem :: INTEGR11:7
+  m+n<>0 & m-n<>0 implies ((-(1/(2*(m+n)))(#)(cos*AffineMap(m+n,0))) -
+  (1/(2*(m-n)))(#)(cos*AffineMap(m-n,0))) is_differentiable_on REAL
+  & for x holds ((-((1/(2*(m+n)))(#)(cos*AffineMap(m+n,0)))-
+  (1/(2*(m-n)))(#)(cos*AffineMap(m-n,0)))`|REAL).x
+    = sin.(m*x) * cos.(n*x);
+
+:: f.x = (1/(n^2))*sin.(n*x)-(1/n)*x*cos.(n*x)
+theorem :: INTEGR11:8
+ n<>0 implies ((1/(n^2))(#)(sin*AffineMap(n,0))-
+(AffineMap(1/n,0))(#)(cos*AffineMap(n,0))) is_differentiable_on REAL
+ & for x holds (((1/(n^2))(#)(sin*AffineMap(n,0))-
+(AffineMap(1/n,0))(#)(cos*AffineMap(n,0)))`|REAL).x=x*sin.(n*x);
+
+:: f.x = (1/(n^2))*cos.(n*x)+(1/n)*x*sin.(n*x)
+theorem :: INTEGR11:9
+  n<>0 implies ((1/(n^2))(#)(cos*AffineMap(n,0))+
+  (AffineMap(1/n,0))(#)(sin*AffineMap(n,0))) is_differentiable_on REAL
+  & for x holds (((1/(n^2))(#)(cos*AffineMap(n,0))+
+  (AffineMap(1/n,0))(#)(sin*AffineMap(n,0)))`|REAL).x=x*cos.(n*x);
+
+:: f.x = x*cosh.x-sinh.x
+theorem :: INTEGR11:10
+ (AffineMap(1,0))(#)cosh-sinh is_differentiable_on REAL
+ & for x holds (((AffineMap(1,0))(#)cosh-sinh)`|REAL).x=x*sinh.x;
+
+:: f.x = x*sinh.x-cosh.x
+theorem :: INTEGR11:11
+ (AffineMap(1,0))(#)sinh-cosh is_differentiable_on REAL
+ & for x holds (((AffineMap(1,0))(#)sinh-cosh)`|REAL).x=x*cosh.x;
+
+:: f.x = (1/(a*(n+1)))*(a*x+b)^(n+1)
+theorem :: INTEGR11:12
+ a*(n+1) <> 0 implies (1/(a*(n+1)))(#)( #Z (n+1)*AffineMap(a,b))
+ is_differentiable_on REAL & for x holds
+ (((1/(a*(n+1)))(#)( #Z (n+1)*AffineMap(a,b)))`|REAL).x
+  = (a*x+b) #Z n;
+
+begin :: Integrability Formulas
+
+:: f.x = (sin.x)^2
+theorem :: INTEGR11:13
+  integral(sin^2,A)
+ = (AffineMap(1/2,0)-(1/4)(#)(sin*AffineMap(2,0))).(sup A)
+  -(AffineMap(1/2,0)-(1/4)(#)(sin*AffineMap(2,0))).(inf A);
+
+theorem :: INTEGR11:14
+  A = [.0,PI.] implies integral(sin^2,A) = PI/2;
+
+theorem :: INTEGR11:15
+  A = [.0,2*PI.] implies integral(sin^2,A) = PI;
+
+:: f.x = (cos.x)^2
+theorem :: INTEGR11:16
+  integral(cos^2,A)
+    = (AffineMap(1/2,0)+(1/4)(#)(sin*AffineMap(2,0))).(sup A)
+    -(AffineMap(1/2,0)+(1/4)(#)(sin*AffineMap(2,0))).(inf A);
+
+theorem :: INTEGR11:17
+  A = [.0,PI.] implies integral(cos^2,A) = PI/2;
+
+theorem :: INTEGR11:18
+  A = [.0,2*PI.] implies integral(cos^2,A) = PI;
+
+:: f.x = (sin.x)^n*(cos.x)
+theorem :: INTEGR11:19
+  integral(( #Z n*sin)(#)cos,A)
+ = ((1/(n+1))(#)( #Z (n+1)*sin)).(sup A)
+  -((1/(n+1))(#)( #Z (n+1)*sin)).(inf A);
+
+theorem :: INTEGR11:20
+  A = [.0,PI.] implies integral(( #Z n*sin)(#)cos,A) = 0;
+
+theorem :: INTEGR11:21
+  A = [.0,2*PI.] implies integral(( #Z n*sin)(#)cos,A) = 0;
+
+:: f.x = (cos.x)^n*(sin.x)
+theorem :: INTEGR11:22
+  integral(( #Z n*cos)(#)sin,A)
+ = ((-1/(n+1))(#)( #Z (n+1)*cos)).(sup A)
+  -((-1/(n+1))(#)( #Z (n+1)*cos)).(inf A);
+
+theorem :: INTEGR11:23
+  A = [.0,2*PI.] implies integral(( #Z n*cos)(#)sin,A) = 0;
+
+theorem :: INTEGR11:24
+  A = [.-PI/2,PI/2.] implies integral(( #Z n*cos)(#)sin,A) = 0;
+
+:: f.x = cos.(m*x)*cos.(n*x)
+theorem :: INTEGR11:25
+  m+n<>0 & m-n<>0 implies
+ integral((cos*AffineMap(m,0))(#)(cos*AffineMap(n,0)),A)
+ = ((1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))+
+ (1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))).(sup A)
+  -((1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))+
+ (1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))).(inf A);
+
+:: f.x = sin.(m*x)*sin.(n*x)
+theorem :: INTEGR11:26
+ m+n<>0 & m-n<>0 implies
+ integral((sin*AffineMap(m,0))(#)(sin*AffineMap(n,0)),A)
+ = ((1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))-
+ (1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))).(sup A)
+  -((1/(2*(m-n)))(#)(sin*AffineMap(m-n,0))-
+ (1/(2*(m+n)))(#)(sin*AffineMap(m+n,0))).(inf A);
+
+:: f.x = sin.(m*x)*cos.(n*x)
+theorem :: INTEGR11:27
+ m+n<>0 & m-n<>0 implies
+ integral((sin*AffineMap(m,0))(#)(cos*AffineMap(n,0)),A)
+ = ((-(1/(2*(m+n)))(#)(cos*AffineMap(m+n,0)))-
+ (1/(2*(m-n)))(#)(cos*AffineMap(m-n,0))).(sup A)
+  -((-(1/(2*(m+n)))(#)(cos*AffineMap(m+n,0)))-
+ (1/(2*(m-n)))(#)(cos*AffineMap(m-n,0))).(inf A);
+
+:: f.x = x*sin.(n*x)
+theorem :: INTEGR11:28
+ n<>0 implies integral((AffineMap(1,0))(#)(sin*AffineMap(n,0)),A)
+ = ((1/(n^2))(#)(sin*AffineMap(n,0))-
+ (AffineMap(1/n,0))(#)(cos*AffineMap(n,0))).(sup A)
+  -((1/(n^2))(#)(sin*AffineMap(n,0))-
+ (AffineMap(1/n,0))(#)(cos*AffineMap(n,0))).(inf A);
+
+:: f.x = x*cos.(n*x)
+theorem :: INTEGR11:29
+ n<>0 implies integral((AffineMap(1,0))(#)(cos*AffineMap(n,0)),A)
+ = ((1/(n^2))(#)(cos*AffineMap(n,0))+
+ (AffineMap(1/n,0))(#)(sin*AffineMap(n,0))).(sup A)
+  -((1/(n^2))(#)(cos*AffineMap(n,0))+
+ (AffineMap(1/n,0))(#)(sin*AffineMap(n,0))).(inf A);
+
+theorem :: INTEGR11:30
+ integral((AffineMap(1,0))(#)sinh,A)
+ = ((AffineMap(1,0))(#)cosh-sinh).(sup A)
+  -((AffineMap(1,0))(#)cosh-sinh).(inf A);
+
+theorem :: INTEGR11:31
+ integral((AffineMap(1,0))(#)cosh,A)
+ = ((AffineMap(1,0))(#)sinh-cosh).(sup A)
+  -((AffineMap(1,0))(#)sinh-cosh).(inf A);
+
+:: f.x = (a*x+b)^n
+theorem :: INTEGR11:32
+ a*(n+1) <> 0 implies integral( #Z n*AffineMap(a,b),A)
+ = ((1/(a*(n+1)))(#)( #Z (n+1)*AffineMap(a,b))).(sup A)
+  -((1/(a*(n+1)))(#)( #Z (n+1)*AffineMap(a,b))).(inf A);
+
+begin :: Addenda
+
+ reserve f, f1, f2, f3, g for PartFunc of REAL, REAL;
+
+:: f.x = (1/2)*x^2
+theorem :: INTEGR11:33
+  Z c= dom ((1/2)(#)f) & f=#Z 2 implies
+  (1/2)(#)f is_differentiable_on Z &
+  for x st x in Z holds (((1/2)(#)f)`|Z).x = x;
+
+:: f.x = x
+theorem :: INTEGR11:34
+  A c= Z & f=#Z 2 & Z = dom ((1/2)(#)f) implies
+  integral(id Z,A) = ((1/2)(#)f).(sup A)-((1/2)(#)f).(inf A);
+
+:: f.x = -1/x^2 :: INTEGRA9
+theorem :: INTEGR11:35
+  A c= Z & (for x st x in Z holds g.x = x & g.x<>0 & f.x = -1/x^2)
+  & Z = dom g & dom f = Z & f|A is continuous implies
+  integral(f,A) = (g^).(sup A)-(g^).(inf A);
+
+:: f.x = 2*x/(1+x^2)^2
+theorem :: INTEGR11:36
+  A c= Z & f1=#Z 2 & (for x st x in Z holds f2.x=1 & x<>0 & f.x=2*x/(1+x^2)^2)
+  & dom (f1/(f2+f1))=Z & Z = dom f & f|A is continuous implies
+  integral(f,A) = (f1/(f2+f1)).(sup A)-(f1/(f2+f1)).(inf A);
+
+theorem :: INTEGR11:37
+  (Z c= dom (tan+sec) & for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0)
+  implies tan+sec is_differentiable_on Z &
+  for x st x in Z holds ((tan+sec)`|Z).x = 1/(1-sin.x);
+
+:: f.x = 1/(1-sin.x)
+theorem :: INTEGR11:38
+  A c= Z & (for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0
+  & f.x = 1/(1-sin.x)) & dom (tan+sec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (tan+sec).(sup A)-(tan+sec).(inf A);
+
+theorem :: INTEGR11:39
+  (Z c= dom (tan-sec) & for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0)
+  implies tan-sec is_differentiable_on Z &
+  for x st x in Z holds ((tan-sec)`|Z).x = 1/(1+sin.x);
+
+:: f.x = 1/(1+sin.x)
+theorem :: INTEGR11:40
+  A c= Z & (for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0
+  & f.x = 1/(1+sin.x)) & dom (tan-sec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (tan-sec).(sup A)-(tan-sec).(inf A);
+
+theorem :: INTEGR11:41
+  (Z c= dom (-cot+cosec) & for x st x in Z holds (1+cos.x)<>0 & (1-cos.x)<>0)
+  implies -cot+cosec is_differentiable_on Z &
+  for x st x in Z holds ((-cot+cosec)`|Z).x = 1/(1+cos.x);
+
+:: f.x = 1/(1+cos.x)
+theorem :: INTEGR11:42
+  A c= Z & (for x st x in Z holds (1+cos.x)<>0 & (1-cos.x)<>0
+   & f.x = 1/(1+cos.x)) & dom (-cot+cosec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (-cot+cosec).(sup A)-(-cot+cosec).(inf A);
+
+theorem :: INTEGR11:43
+  (Z c= dom (-cot-cosec) & for x st x in Z holds (1+cos.x)<>0
+  & (1-cos.x)<>0) implies -cot-cosec is_differentiable_on Z &
+  for x st x in Z holds ((-cot-cosec)`|Z).x = 1/(1-cos.x);
+
+:: f.x = 1/(1-cos.x)
+theorem :: INTEGR11:44
+  A c= Z & (for x st x in Z holds (1+cos.x)<>0 & (1-cos.x)<>0
+  & f.x = 1/(1-cos.x)) & dom (-cot-cosec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (-cot-cosec).(sup A)-(-cot-cosec).(inf A);
+
+:: f.x = 1/(1+x^2)
+theorem :: INTEGR11:45
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds f.x=1/(1+x^2))
+  & dom arctan=Z & Z = dom f & f|A is continuous implies
+  integral(f,A) = arctan.(sup A) - arctan.(inf A);
+
+:: f.x = r/(1+x^2)
+theorem :: INTEGR11:46
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds f.x=r/(1+x^2))
+  & dom (r(#)arctan)=Z & Z = dom f & f|A is continuous implies
+  integral(f,A) = (r(#)arctan).(sup A) - (r(#)arctan).(inf A);
+
+:: f.x = -1/(1+x^2)
+theorem :: INTEGR11:47
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds f.x=-1/(1+x^2))
+  & dom arccot=Z & Z = dom f & f|A is continuous implies
+  integral(f,A) = arccot.(sup A) - arccot.(inf A);
+
+:: f.x = -r/(1+x^2)
+theorem :: INTEGR11:48
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds f.x=-r/(1+x^2))
+  & dom (r(#)arccot)=Z & Z = dom f & f|A is continuous implies
+  integral(f,A) = (r(#)arccot).(sup A) - (r(#)arccot).(inf A);
+
+:: f.x = x+cot.x-cosec.x
+theorem :: INTEGR11:49
+  (Z c= dom ((id Z)+cot-cosec) & for x st x in Z holds (1+cos.x)<>0 &
+  (1-cos.x)<>0) implies (id Z)+cot-cosec is_differentiable_on Z &
+  for x st x in Z holds ((id Z+cot-cosec)`|Z).x = cos.x/(1+cos.x);
+
+:: f.x = cos.x/(1+cos.x)
+theorem :: INTEGR11:50
+  A c= Z & (for x st x in Z holds (1+cos.x)<>0 & (1-cos.x)<>0
+   & f.x = cos.x/(1+cos.x)) & dom (id Z+cot-cosec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (id Z+cot-cosec).(sup A)-(id Z+cot-cosec).(inf A);
+
+:: f.x = x+cot.x+cosec.x
+theorem :: INTEGR11:51
+  (Z c= dom ((id Z)+cot+cosec) & for x st x in Z holds (1+cos.x)<>0
+   & (1-cos.x)<>0) implies (id Z)+cot+cosec is_differentiable_on Z &
+ for x st x in Z holds ((id Z+cot+cosec)`|Z).x = cos.x/(cos.x-1);
+
+:: f.x = cos.x/(cos.x-1)
+theorem :: INTEGR11:52
+  A c= Z & (for x st x in Z holds (1+cos.x)<>0 & (1-cos.x)<>0
+  & f.x = cos.x/(cos.x-1)) & dom (id Z+cot+cosec)=Z
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (id Z+cot+cosec).(sup A)-(id Z+cot+cosec).(inf A);
+
+:: f.x = x-tan.x+sec.x
+theorem :: INTEGR11:53
+  (Z c= dom (id Z-tan+sec) & for x st x in Z holds (1+sin.x)<>0
+  & (1-sin.x)<>0) implies (id Z)-tan+sec is_differentiable_on Z &
+  for x st x in Z holds ((id Z-tan+sec)`|Z).x = sin.x/(sin.x+1);
+
+:: f.x = sin.x/(1+sin.x)
+theorem :: INTEGR11:54
+  A c= Z & (for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0
+   & f.x = sin.x/(1+sin.x)) & Z c= dom (id Z-tan+sec) &
+  Z = dom f & f|A is continuous implies
+  integral(f,A) = (id Z-tan+sec).(sup A)-(id Z-tan+sec).(inf A);
+
+:: f.x = x-tan.x-sec.x
+theorem :: INTEGR11:55
+  (Z c= dom (id Z-tan-sec) & for x st x in Z holds (1+sin.x)<>0
+   & (1-sin.x)<>0) implies id Z-tan-sec is_differentiable_on Z &
+ for x st x in Z holds ((id Z-tan-sec)`|Z).x = sin.x/(sin.x-1);
+
+:: f.x = sin.x/(sin.x-1)
+theorem :: INTEGR11:56
+  A c= Z & (for x st x in Z holds (1+sin.x)<>0 & (1-sin.x)<>0
+   & f.x = sin.x/(sin.x-1)) & Z c= dom (id Z-tan-sec)
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = (id Z-tan-sec).(sup A)-(id Z-tan-sec).(inf A);
+
+:: f.x = tan.x-x
+theorem :: INTEGR11:57
+  Z c= dom (tan-id Z) implies tan-id Z is_differentiable_on Z &
+  for x st x in Z holds ((tan-id Z)`|Z).x=(tan.x)^2;
+
+:: f.x = (tan.x)^2
+theorem :: INTEGR11:58
+  A c= Z & (for x st x in Z holds cos.x >0 & f.x = (tan.x)^2)
+  & Z c= dom (tan-id Z) & Z = dom f & f|A is continuous
+  implies integral(f,A) = (tan-id Z).(sup A)-(tan-id Z).(inf A);
+
+:: f.x = -cot.x-x
+theorem :: INTEGR11:59
+  Z c= dom (-cot-id Z) implies -cot-id Z is_differentiable_on Z &
+  for x st x in Z holds ((-cot-id Z)`|Z).x = (cot.x)^2;
+
+:: f.x = (cot.x)^2
+theorem :: INTEGR11:60
+  A c= Z & (for x st x in Z holds sin.x >0 & f.x = (cot.x)^2)
+  & Z c= dom (-cot-id Z) & Z = dom f & f|A is continuous
+  implies integral(f,A) = (-cot-id Z).(sup A)-(-cot-id Z).(inf A);
+
+:: f.x = 1/(cos.x)^2
+theorem :: INTEGR11:61
+  A c= Z & (for x st x in Z holds f.x = 1/(cos.x)^2 & cos.x <> 0)
+  & dom tan=Z & Z = dom f & f|A is continuous
+  implies integral(f,A) = tan.(sup A)-tan.(inf A);
+
+:: f.x = -1/(sin.x)^2
+theorem :: INTEGR11:62
+  A c= Z & (for x st x in Z holds f.x = -1/(sin.x)^2 & sin.x <> 0)
+  & dom cot=Z & Z = dom f & f|A is continuous
+  implies integral(f,A) = cot.(sup A)-cot.(inf A);
+
+:: f.x = (sin.x-(cos.x)^2)/(cos.x)^2
+theorem :: INTEGR11:63
+  A c= Z & (for x st x in Z holds f.x = (sin.x-(cos.x)^2)/(cos.x)^2)
+  & Z c= dom (sec-id Z) & Z = dom f & f|A is continuous
+  implies integral(f,A) = (sec-id Z).(sup A)-(sec-id Z).(inf A);
+
+:: f.x = (cos.x-(sin.x)^2)/(sin.x)^2
+theorem :: INTEGR11:64
+  A c= Z & (for x st x in Z holds f.x = (cos.x-(sin.x)^2)/(sin.x)^2)
+  & Z c= dom (-cosec-id Z) & Z = dom f & f|A is continuous
+ implies integral(f,A) =(-cosec-id Z).(sup A)-(-cosec-id Z).(inf A);
+
+:: f.x = cot(x)
+theorem :: INTEGR11:65
+  A c= Z & (for x st x in Z holds sin.x >0)
+  & Z c= dom (ln*sin) & Z = dom cot & cot|A is continuous
+  implies integral(cot,A) = (ln*sin).(sup A)-(ln*sin).(inf A);
+
+:: f.x = arcsin.x / sqrt(1-x^2)
+theorem :: INTEGR11:66
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds
+  f.x=arcsin.x/sqrt(1-x^2)) & Z c= dom ((1/2)(#)(( #Z 2)*(arcsin)))
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = ((1/2)(#)(( #Z 2)*(arcsin))).(sup A)
+     -((1/2)(#)(( #Z 2)*(arcsin))).(inf A);
+
+:: f.x = -arccos.x / sqrt(1-x^2)
+theorem :: INTEGR11:67
+  A c= Z & Z c= ]. -1,1 .[ & (for x st x in Z holds
+  f.x=-arccos.x / sqrt(1-x^2)) & Z c= dom ((1/2)(#)(( #Z 2)*(arccos)))
+  & Z = dom f & f|A is continuous implies
+  integral(f,A) = ((1/2)(#)(( #Z 2)*(arccos))).(sup A)
+     -((1/2)(#)(( #Z 2)*(arccos))).(inf A);
+
+:: f.x = arcsin.x
+theorem :: INTEGR11:68
+  A c= Z & Z c= ]. -1,1 .[ & f=f1-f2 & f2=#Z 2
+  & (for x st x in Z holds f1.x=1 & f.x >0 & x<>0) & dom arcsin=Z
+  & Z c= dom ((id Z)(#)(arcsin)+( #R (1/2))*f) implies
+  integral(arcsin,A) = ((id Z)(#)(arcsin)+( #R (1/2))*f).(sup A)
+     -((id Z)(#)(arcsin) + ( #R (1/2))*f).(inf A);
+
+:: f.x = arcsin.(x/a)
+theorem :: INTEGR11:69
+  A c= Z & Z c= ]. -1,1 .[ & f=f1-f2 & f2=#Z 2
+  & (for x st x in Z holds f1.x=a^2 & f.x >0 &
+  f3.x=x/a & f3.x > -1 & f3.x < 1 & x<>0 & a>0) & dom ((arcsin)*f3)=Z
+  & Z c= dom ((id Z)(#)((arcsin)*f3)+( #R (1/2))*f)
+  & ((arcsin)*f3)|A is continuous implies
+  integral((arcsin)*f3,A) = ((id Z)(#)((arcsin)*f3)+( #R (1/2))*f).(sup A)
+     -((id Z)(#)((arcsin)*f3)+( #R (1/2))*f).(inf A);
+
+:: f.x = arccos.x
+theorem :: INTEGR11:70
+  A c= Z & Z c= ]. -1,1 .[ & f=f1-f2 & f2=#Z 2
+  & (for x st x in Z holds f1.x=1 & f.x >0 & x<>0) & dom arccos=Z
+  & Z c= dom ((id Z)(#)(arccos)-( #R (1/2))*f) implies
+  integral(arccos,A) = ((id Z)(#)(arccos)-( #R (1/2))*f).(sup A)
+     -((id Z)(#)(arccos)-( #R (1/2))*f).(inf A);
+
+:: f.x = arccos.(x/a)
+theorem :: INTEGR11:71
+  A c= Z & Z c= ]. -1,1 .[ & f=f1-f2 & f2=#Z 2
+  & (for x st x in Z holds f1.x=a^2 & f.x >0 &
+  f3.x=x/a & f3.x > -1 & f3.x < 1 & x<>0 & a>0) & dom ((arccos)*f3)=Z
+  & Z = dom ((id Z)(#)((arccos)*f3)-( #R (1/2))*f)
+  & ((arccos)*f3)|A is continuous implies
+  integral((arccos)*f3,A) = ((id Z)(#)((arccos)*f3)-( #R (1/2))*f).(sup A)
+     -((id Z)(#)((arccos)*f3)-( #R (1/2))*f).(inf A);
+
+:: f.x = arctan.x
+theorem :: INTEGR11:72
+  A c= Z & Z c= ]. -1,1 .[ & f2=#Z 2 & (for x st x in Z holds f1.x=1 )
+  & Z = dom arctan & Z = dom ((id Z)(#)(arctan)-(1/2)(#)(ln*(f1+f2)))
+  implies
+  integral(arctan,A) = ((id Z)(#)(arctan)-(1/2)(#)(ln*(f1+f2))).(sup A)
+     -((id Z)(#)(arctan)-(1/2)(#)(ln*(f1+f2))).(inf A);
+
+:: f.x = arccot.x
+theorem :: INTEGR11:73
+  A c= Z & Z c= ]. -1,1 .[ & f2=#Z 2 & (for x st x in Z holds f1.x=1)
+  & dom arccot=Z & Z = dom ((id Z)(#)(arccot)+(1/2)(#)(ln*(f1+f2)))
+  implies
+  integral(arccot,A) = ((id Z)(#)(arccot)+(1/2)(#)(ln*(f1+f2))).(sup A)
+     -((id Z)(#)(arccot)+(1/2)(#)(ln*(f1+f2))).(inf A);
+

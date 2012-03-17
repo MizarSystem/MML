@@ -19,10 +19,10 @@
 <ArticleID name="XREAL_0"/>
 <ArticleID name="NAT_1"/>
 <ArticleID name="FUNCOP_1"/>
-<ArticleID name="STRUCT_0"/>
-<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSET_1"/>
 <ArticleID name="CARD_1"/>
+<ArticleID name="STRUCT_0"/>
+<ArticleID name="PARTFUN1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="ALGSTR_0"/>
@@ -42,7 +42,7 @@
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -54,14 +54,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -73,14 +73,14 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="120"/>
+<Adjective nr="121"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="1">
@@ -113,7 +113,7 @@
 <Typ kind="M" nr="1">
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="38"/>
+<Adjective nr="24"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -123,14 +123,14 @@
 </Func>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="38"/>
+<Adjective nr="24"/>
 </Cluster>
 </FCluster>
 <FCluster aid="MONOID_1" nr="5">
 <ArgTypes>
 <Typ kind="G" nr="8">
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -138,7 +138,7 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="25" value="false"/>
+<Adjective nr="30" value="false"/>
 </Cluster>
 </FCluster>
 </Registrations>

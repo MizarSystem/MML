@@ -14,7 +14,8 @@ environ
       CARD_3, ARYTM, ALGSTR_0, VECTSP_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, RELAT_1,
       FINSOP_1, RELAT_2, RELSET_1, FUNCT_1, FINSET_1, ORDINAL1, PARTFUN1,
-      FUNCT_2, BINOP_1, FUNCT_4, REAL_1, NAT_1, ALGSTR_1, ORDERS_1, FINSEQ_1,
+      FUNCT_2, BINOP_1, FUNCT_4, FUNCT_7,
+      REAL_1, NAT_1, ALGSTR_1, ORDERS_1, FINSEQ_1,
       POLYNOM1, STRUCT_0, ALGSTR_0, RLVECT_1, FUNCOP_1, VECTSP_1, GROUP_1,
       GROUP_4, QUOFIELD, FINSEQ_5, GRCAT_1, TRIANG_1, RFINSEQ, YELLOW_1,
       GROUP_6, XXREAL_0, RECDEF_1;
@@ -23,16 +24,16 @@ environ
       RECDEF_1;
  registrations XBOOLE_0, FUNCT_1, ORDINAL1, RELSET_1, FUNCOP_1, FINSET_1,
       NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, FINSEQ_1, STRUCT_0, VECTSP_1,
-      ALGSTR_1, MONOID_0, POLYNOM1, VALUED_0, CARD_1;
+      ALGSTR_1, MONOID_0, POLYNOM1, VALUED_0, CARD_1, SUBSET_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions QUOFIELD, GROUP_1, BINOP_1, FUNCOP_1, ALGSTR_0;
  theorems TARSKI, RELSET_1, FINSEQ_1, FUNCT_1, FUNCT_2, ORDINAL1, RELAT_1,
       ZFMISC_1, VECTSP_1, POLYNOM1, PBOOLE, RELAT_2, WELLORD2, FUNCT_7,
-      FUNCT_4, FUNCOP_1, ORDERS_1, FINSET_1, NAT_1, FINSEQ_4, GRCAT_1,
-      TRIANG_1, INT_1, FINSEQ_3, RLVECT_1, GROUP_4, PARTFUN2, CARD_1, RFINSEQ,
-      FINSOP_1, FINSEQ_5, CARD_2, FINSEQ_2, ALGSTR_1, GROUP_1,
-      XBOOLE_0, XBOOLE_1, PARTFUN1, XREAL_1, GROUP_6, XXREAL_0, VALUED_0;
- schemes FUNCT_1, FUNCT_2, NAT_1, RECDEF_1;
+      FUNCT_4, FUNCOP_1, ORDERS_1, NAT_1, FINSEQ_4, GRCAT_1, TRIANG_1, INT_1,
+      FINSEQ_3, RLVECT_1, GROUP_4, PARTFUN2, CARD_1, RFINSEQ, FINSOP_1,
+      FINSEQ_5, CARD_2, FINSEQ_2, ALGSTR_1, GROUP_1, XBOOLE_0, XBOOLE_1,
+      PARTFUN1, XREAL_1, GROUP_6, XXREAL_0, VALUED_0;
+ schemes CLASSES1, FUNCT_2, NAT_1, RECDEF_1;
 
 begin :: Preliminaries ------------------------------------------------------------
 
@@ -47,7 +48,7 @@ proof
   suppose
 A2: N() = 0;
     take <*>(D());
-    thus thesis by A2,FINSEQ_1:4,RELAT_1:60;
+    thus thesis by A2,RELAT_1:60;
   end;
   suppose
 A3: N() <> 0;
@@ -62,8 +63,7 @@ A4:   Seg N() = {};
           then 1 <= N() by NAT_1:14;
           then
 A5:       Seg 1 c= Seg N() by FINSEQ_1:7;
-          1 in (Seg 1) by FINSEQ_1:4,TARSKI:def 1;
-          hence contradiction by A4,A5;
+          thus contradiction by A4,A5;
         end;
       end;
       hence contradiction;
@@ -142,19 +142,9 @@ A6: for x being set st x in REAL ex y being set st Q[x,y]
     take f.(r-1);
     thus thesis;
   end;
-A7: for x,y1,y2 being set st x in REAL & Q[x,y1] & Q[x,y2] holds y1 = y2
-  proof
-    let x,y1,y2 be set;
-    assume
-A8: x in REAL & (for r being Real st r=x holds y1=f.(r-1)) &
-    (for r being Real st r=x holds y2=f.(r-1));
-    then reconsider r = x as Real;
-    thus y1 = f.(r-1) by A8
-      .= y2 by A8;
-  end;
   consider g being Function such that
 A9: dom g = REAL &
-  for x being set st x in REAL holds Q[x,g.x] from FUNCT_1:sch 2(A7,A6);
+  for x being set st x in REAL holds Q[x,g.x] from CLASSES1:sch 1(A6);
   Seg N() c= REAL by XBOOLE_1:1;
   then
 A10: dom (g|Seg N()) = Seg N() by A9,RELAT_1:91;
@@ -377,10 +367,10 @@ proof
 end;
 
 Lm3: for X being set, S being Subset of X,
-R being Order of X st R is_linear-order holds R linearly_orders S
+R being Order of X st R is being_linear-order holds R linearly_orders S
 proof
   let X be set, S be Subset of X, R be Order of X;
-  assume R is_linear-order;
+  assume R is being_linear-order;
   then R is connected by ORDERS_1:def 5;
   then
 A1: R is_connected_in field R by RELAT_2:def 14;
@@ -1006,7 +996,7 @@ A10: dom sga = Seg lensga by FINSEQ_1:def 2;
 A11: dom sgb = Seg lensgb by FINSEQ_1:def 2;
   reconsider lensga,lensgb as Element of NAT by ORDINAL1:def 13;
   lensgb = len sgb by A11,FINSEQ_1:def 3
-    .= Card B by A3,TRIANG_1:9
+    .= card B by A3,TRIANG_1:9
     .= card A + 1 by A1,A2,CARD_2:54
     .= len sga + 1 by A2,A3,Lm4,TRIANG_1:9
     .= lensga + 1 by A10,FINSEQ_1:def 3;
@@ -1190,7 +1180,7 @@ A9: dom sga = Seg lensga by FINSEQ_1:def 2;
 A10: dom sgb = Seg lensgb by FINSEQ_1:def 2;
   reconsider lensga,lensgb as Element of NAT by ORDINAL1:def 13;
 A11: lensgb = len sgb by A10,FINSEQ_1:def 3
-    .= Card B by A3,TRIANG_1:9
+    .= card B by A3,TRIANG_1:9
     .= card A + 1 by A1,A2,CARD_2:54
     .= len sga + 1 by A2,A3,Lm4,TRIANG_1:9
     .= lensga + 1 by A9,FINSEQ_1:def 3;
@@ -1296,7 +1286,7 @@ A39: for j' being Element of NAT st k <= j' & j' <= j holds P[j'];
 A40: sgb/.((j+1)+1) <> sga/.(j+1);
 A41: (j + 1) + 1 = j + (1 + 1);
 A42: 1 <= j + 2 by NAT_1:12;
-    len sgb = Card B by A3,TRIANG_1:9
+    len sgb = card B by A3,TRIANG_1:9
       .= card A + 1 by A1,A2,CARD_2:54
       .= len sga + 1 by A2,A3,Lm4,TRIANG_1:9;
     then j + 1 < len sgb by A38,XREAL_1:8;
@@ -1470,7 +1460,7 @@ A3: R linearly_orders B;
 A4: k+1 in dom(SgmX(R,B)) & SgmX(R,B)/.(k+1) = a;
 A5: k + 1 - 1 = k + 0;
   set sgb = SgmX(R,B), sga = Ins(SgmX(R,A),k,a);
-A6: len sgb = Card B by A3,TRIANG_1:9
+A6: len sgb = card B by A3,TRIANG_1:9
     .= card A + 1 by A1,A2,CARD_2:54
     .= len SgmX(R,A) + 1 by A2,A3,Lm4,TRIANG_1:9;
   then

@@ -12,6 +12,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="ORDERS_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
 <ArticleID name="YELLOW_0"/>
@@ -21,13 +24,13 @@
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="17" value="false"/>
+<Adjective nr="29" value="false"/>
 </Cluster>
 </Typ>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>
@@ -42,8 +45,8 @@
 <For>
 <Typ kind="G" nr="7">
 <Cluster>
-<Adjective nr="17" value="false"/>
-<Adjective nr="49"/>
+<Adjective nr="29" value="false"/>
+<Adjective nr="61"/>
 </Cluster>
 <Func kind="F" nr="1"/>
 </Typ>

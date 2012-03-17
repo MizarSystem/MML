@@ -15,13 +15,13 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XCMPLX_0"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="BINOP_1"/>
 <ArticleID name="FUNCT_5"/>
 <ArticleID name="METRIC_1"/>
-<ArticleID name="FINSET_1"/>
-<ArticleID name="CARD_1"/>
 <ArticleID name="FINSEQ_1"/>
 <ArticleID name="FINSEQ_2"/>
 <ArticleID name="INT_1"/>
@@ -42,7 +42,7 @@
 </Cluster>
 <Func kind="K" nr="24">
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -54,7 +54,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 </Func>
@@ -67,7 +67,7 @@
 <Not>
 <Pred kind="R" nr="1">
 <Var nr="1"/>
-<Func kind="K" nr="276">
+<Func kind="K" nr="277">
 <Num nr="2"/>
 </Func>
 </Pred>
@@ -75,8 +75,8 @@
 </And>
 </Fraenkel>
 <Func kind="U" nr="1">
-<Func kind="K" nr="103">
-<Func kind="K" nr="275">
+<Func kind="K" nr="111">
+<Func kind="K" nr="276">
 <Num nr="2"/>
 </Func>
 <Func kind="F" nr="1"/>
@@ -87,17 +87,17 @@
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="33">
 <Func kind="U" nr="1">
-<Func kind="K" nr="275">
-<Num nr="2"/>
-</Func>
-</Func>
-<Func kind="K" nr="249">
-<Func kind="U" nr="1">
-<Func kind="K" nr="275">
-<Num nr="2"/>
-</Func>
-</Func>
 <Func kind="K" nr="276">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="250">
+<Func kind="U" nr="1">
+<Func kind="K" nr="276">
+<Num nr="2"/>
+</Func>
+</Func>
+<Func kind="K" nr="277">
 <Num nr="2"/>
 </Func>
 </Func>

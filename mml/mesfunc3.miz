@@ -14,25 +14,23 @@ environ
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, CARD_1, NUMBERS,
       XCMPLX_0, NAT_1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2,
       SETWOP_2, FINSEQ_1, SETFAM_1, FUNCOP_1, FINSOP_1, FUNCT_3, FINSET_1,
-      CARD_4, PROB_1, PROB_2, XXREAL_0, XXREAL_2, VALUED_0,
-      SUPINF_1, SUPINF_2, MEASURE1, MEASURE3,
-      FINSEQOP, FINSEQ_2, BINOP_1, SEQ_1, BINOP_2, RVSUM_1, EXTREAL1, MESFUNC1,
-      MESFUNC2, CONVFUN1;
+      CARD_3, PROB_1, PROB_2, XXREAL_0, XXREAL_2, VALUED_0, SUPINF_1, SUPINF_2,
+      MEASURE1, MEASURE3, FINSEQOP, FINSEQ_2, BINOP_1, SEQ_1, BINOP_2, RVSUM_1,
+      EXTREAL1, MESFUNC1, MESFUNC2, CONVFUN1;
  constructors PARTFUN1, BINOP_1, SETWISEO, REAL_1, NAT_1, FINSEQOP, PROB_2,
       FINSOP_1, RVSUM_1, MEASURE3, MEASURE6, EXTREAL1, MESFUNC1, BINARITH,
       MESFUNC2, CONVFUN1, SEQ_1, BINOP_2, SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_2, NUMBERS,
       XXREAL_0, XREAL_0, NAT_1, BINOP_2, MEMBERED, FINSEQ_1, SUPINF_2,
-      MEASURE1, FINSET_1, VALUED_0, CARD_1, CARD_4;
+      MEASURE1, FINSET_1, VALUED_0, CARD_1, CARD_3;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions TARSKI, XBOOLE_0, BINOP_1, SUPINF_2;
- theorems MEASURE1, TARSKI, SUPINF_1, FUNCT_1, FUNCT_2, NAT_1,
-      SUPINF_2, EXTREAL1, EXTREAL2, MESFUNC1, ZFMISC_1, FINSEQ_1, FINSEQ_2,
-      FINSEQ_3, FUNCOP_1, FINSEQ_4, PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1,
-      RELAT_1, RVSUM_1, BINOP_2, MESFUNC2, CONVFUN1, MEASURE2, FINSOP_1,
-      FINSET_1, CARD_4, CARD_1, CARD_2, XREAL_1, PROB_1, XXREAL_0, XREAL_0,
-      ORDINAL1, NUMBERS, VALUED_1, XXREAL_2;
- schemes FUNCT_2, FINSEQ_1, FINSEQ_2, NAT_1, PARTFUN1, BINOP_1;
+ theorems MEASURE1, TARSKI, FUNCT_1, FUNCT_2, NAT_1, SUPINF_2, EXTREAL1,
+      EXTREAL2, MESFUNC1, ZFMISC_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FUNCOP_1,
+      FINSEQ_4, PROB_2, FUNCT_3, XBOOLE_0, XBOOLE_1, RELAT_1, RVSUM_1, BINOP_2,
+      MESFUNC2, CONVFUN1, MEASURE2, FINSOP_1, CARD_2, XREAL_1, XXREAL_0,
+      ORDINAL1, NUMBERS, VALUED_1, XXREAL_2, VALUED_0;
+ schemes FINSEQ_1, FINSEQ_2, NAT_1, PARTFUN1, BINOP_1;
 
 begin  :: Integral of Simple Valued Function ::
 
@@ -274,16 +272,7 @@ A1: F = f;
   defpred P[Nat] means
   for G be FinSequence of ExtREAL, g be FinSequence of REAL st
   G=F|(Seg $1) & g = f|(Seg $1) & $1 <= len F holds Sum(G) = Sum(g);
-A2: P[0]
-  proof
-    let G be FinSequence of ExtREAL, g be FinSequence of REAL;
-    assume
-A3: G=F|(Seg 0 qua set) & g = f|(Seg 0 qua set) & 0 <= len F;
-    0 <= len F & 0 <= len f;
-    then len G = 0 & len g = 0 by A3,FINSEQ_1:21;
-    then G = <*>ExtREAL & g=<*>REAL;
-    hence thesis by CONVFUN1:4,RVSUM_1:102;
-  end;
+A2: P[0] by CONVFUN1:4,RVSUM_1:102;
 A4: for k be Nat st P[k] holds P[k+1]
   proof
     let k be Nat;
@@ -584,7 +573,7 @@ A6: G.0 = {} by A2;
 A7: dom G = NAT by FUNCT_2:def 1;
   then
 A8: Ser(M*G).0 = M.(G.0) by A5,FUNCT_1:23
-    .= 0. by A6,MEASURE1:def 11;
+    .= 0. by A6,VALUED_0:def 19;
 A9: for i be Nat st i < len F1 holds Ser(M*G).(i+1) = Ser(M*G).i + F1.(i+1)
   proof
     let i be Nat;
@@ -643,7 +632,7 @@ A23:    Ser(M*G).(k+1) = Ser(M*G).(len F1) + G1.(k+1)
 A24:    not k+1 in dom F by Th8;
         G1.(k+1) = M.(G.(k+1)) by A7,FUNCT_1:23
           .= M.{} by A2,A24
-          .= 0. by MEASURE1:def 11;
+          .= 0. by VALUED_0:def 19;
         hence thesis by A23,SUPINF_2:18;
       end;
       case k < len F1;
@@ -1639,44 +1628,7 @@ A13: F'=Fn & Fn in rng F1 & for x be Element of X st x in Fn holds f.x = 0.;
   then reconsider F0 as Subset-Family of X by TARSKI:def 3;
   defpred P[set,set] means ($1 in dom F1 implies $2 = F1.$1) &
   (not ($1 in dom F1) implies $2 = {});
-A14: for x be set st x in NAT ex y be set st y in S & P[x,y]
-  proof
-    let x be set;
-    assume x in NAT;
-    then reconsider x as Element of NAT;
-    now per cases;
-      case
-A15:    x in dom F1;
-        then
-A16:    F1.x in rng F1 & rng F1 c= S by FUNCT_1:12;
-        reconsider y = F1.x as set;
-        take y;
-        thus thesis by A15,A16;
-      end;
-      case
-A17:    not (x in dom F1);
-        take y = {};
-        y in S by PROB_1:10;
-        hence thesis by A17;
-      end;
-    end;
-    hence thesis;
-  end;
-  consider F2 be Function of NAT,S such that
-A18: for x be set st x in NAT holds P[x,F2.x] from FUNCT_2:sch 1(A14);
-  for z be set st z in rng F1 holds z in rng F2
-  proof
-    let z be set;
-    assume z in rng F1;
-    then consider n' be set such that
-A19: n' in dom F1 & z = F1.n' by FUNCT_1:def 5;
-A20: F2.n' = F1.n' by A18,A19;
-    dom F1 c= NAT & dom F2 = NAT by FUNCT_2:def 1;
-    hence thesis by A19,A20,FUNCT_1:12;
-  end;
-  then rng F1 c= rng F2 by TARSKI:def 3;
-  then
-A21: rng F1 is countable;
+  consider F2 be Function of NAT,S;
   for z be set st z in F0 holds z in rng F1
   proof
     let z be set;
@@ -1703,7 +1655,7 @@ A24: n0 = n0' & n0' in dom F1 &
   end;
   then
 A25: F1.n0 in F0;
-  then reconsider F0 as N_Sub_set_fam of X by A21,A23;
+  then reconsider F0 as N_Sub_set_fam of X by A23;
   for F' be set st F' in F0 holds F' in S
   proof
     let F' be set;
@@ -2487,7 +2439,6 @@ A22:  dom x2 = dom F2 and
 A23:  (for n be Nat st n in dom x2 holds x2.n=a2.n*(M*F2).n) and
 A24:  s2=Sum(x2) by A11;
 A25:  dom F2 = dom a2 by A19,Def1;
-A26:  M is nonnegative & M.{} = 0. by MEASURE1:def 11;
 A27:  for n be Nat st n in dom F1 holds 0. <= (M*F1).n
       proof
         let n be Nat;
@@ -2496,7 +2447,7 @@ A28:    n in dom F1;
         then
 A29:    (M*F1).n=M.(F1.n) by FUNCT_1:23;
         F1.n in rng F1 by A28,FUNCT_1:12;
-        hence thesis by A26,A29,SUPINF_2:58;
+        hence thesis by A29,SUPINF_2:58;
       end;
 A30:  for n be Nat st n in dom F2 holds 0. <= (M*F2).n
       proof
@@ -2506,7 +2457,7 @@ A31:    n in dom F2;
         then
 A32:    (M*F2).n=M.(F2.n) by FUNCT_1:23;
         F2.n in rng F2 by A31,FUNCT_1:12;
-        hence thesis by A26,A32,SUPINF_2:58;
+        hence thesis by A32,SUPINF_2:58;
       end;
 A33:  for n be Nat st n in dom a1 holds 0. <= a1.n
       proof
@@ -2653,7 +2604,7 @@ A68:                  ky < 2;
 A69:                  ky <= 1 by A68,NAT_1:8;
                       now per cases;
                         case F1.kx /\ F2.ky = {};
-                          hence F(kx,ky) = a1.kx * 0. by MEASURE1:def 11
+                          hence F(kx,ky) = a1.kx * 0. by VALUED_0:def 19
                             .=0 by EXTREAL1:def 1;
                         end;
                         case F1.kx /\ F2.ky <> {};
@@ -2673,8 +2624,7 @@ A71:                      x in F1.kx & x in F2.ky by A70,XBOOLE_0:def 4;
                 end;
                 case
 A72:              2 <= kx & 2 <= ky;
-                  M is nonnegative by MEASURE1:def 11;
-                  then 0. <= M.(F1.kx /\ F2.ky) by A65,SUPINF_2:58;
+                  0. <= M.(F1.kx /\ F2.ky) by A65,SUPINF_2:58;
                   then reconsider r3=M.(F1.kx /\ F2.ky) as Real
                   by A57,A62,A63,A72,XXREAL_0:14;
                   a1.kx is Real
@@ -2932,11 +2882,11 @@ A145:           i in dom s;
                 now per cases;
                   case
 A146:               F1.i /\ F2.k = {};
-                    then M.(F1.i /\ F2.k)=0. by MEASURE1:def 11;
+                    then M.(F1.i /\ F2.k)=0. by VALUED_0:def 19;
                     hence s.i = a1.i * 0. by A142,A145
                       .=0. by EXTREAL1:def 1
                       .=a2.k *0. by EXTREAL1:def 1
-                      .=a2.k *M.(F1.i /\ F2.k) by A146,MEASURE1:def 11;
+                      .=a2.k *M.(F1.i /\ F2.k) by A146,VALUED_0:def 19;
                   end;
                   case F1.i /\ F2.k <> {};
                     then consider x be set such that

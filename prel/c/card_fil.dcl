@@ -34,10 +34,10 @@
 </Typ>
 <Cluster>
 <Adjective nr="1" value="false"/>
-<Adjective nr="34" value="false">
+<Adjective nr="36" value="false">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -126,10 +126,10 @@
 </Typ>
 </ArgTypes>
 <Cluster>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="35">
+<Adjective nr="37">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -138,7 +138,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="34" value="false">
+<Adjective nr="36" value="false">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -148,7 +148,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="36"/>
+<Adjective nr="38"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -157,7 +157,7 @@
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
 <Adjective nr="27"/>
-<Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="3">
@@ -165,7 +165,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="37"/>
+<Adjective nr="39"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -181,7 +181,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="38"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -189,8 +189,8 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
-<Adjective nr="37"/>
+<Adjective nr="34"/>
+<Adjective nr="39"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="5">
@@ -198,7 +198,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="38"/>
+<Adjective nr="40"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -206,7 +206,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="36"/>
+<Adjective nr="38"/>
 </Cluster>
 </CCluster>
 <CCluster aid="CARD_FIL" nr="6">
@@ -222,7 +222,7 @@
 <Cluster>
 <Adjective nr="23" value="false"/>
 <Adjective nr="26"/>
-<Adjective nr="32"/>
+<Adjective nr="34"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -18,7 +18,8 @@ environ
       INT_2, NAT_1, NAT_D, PREPOWER, POWER, BINOP_1, RELAT_1, FUNCT_1,
       PARTFUN1, FUNCT_2, FINSEQ_1, RAT_1, FINSEQ_2, FINSOP_1, DOMAIN_1,
       FINSET_1, STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_2, VECTSP_1, GROUP_4,
-      BINARITH, RVSUM_1, ALGSEQ_1, COMPLFLD, HAHNBAN1, POLYNOM3, POLYNOM4,
+      BINARITH, RVSUM_1, FUNCT_7,
+      ALGSEQ_1, COMPLFLD, HAHNBAN1, POLYNOM3, POLYNOM4,
       POLYNOM5, COMPTRIG, GROUP_2, NEWTON, GROUP_1, MOD_2, GRAPH_2, ORDINAL1,
       BINOP_2, POLYNOM1, FVSUM_1, UPROOTS, SIN_COS;
  constructors WELLORD2, BINOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_D, FINSEQOP,
@@ -29,20 +30,19 @@ environ
       XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1, MEMBERED,
       FINSEQ_1, FINSEQ_2, REALSET1, WSIERP_1, STRUCT_0, GROUP_1, VECTSP_1,
       COMPLFLD, QUOFIELD, POLYNOM1, POLYNOM3, POLYNOM5, VALUED_0, ALGSTR_0,
-      POWER;
+      POWER, UPROOTS, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
  definitions TARSKI, GROUP_1, XBOOLE_0, BINOP_1, REALSET1, SQUARE_1, HAHNBAN1,
-      POLYNOM3, FINSEQ_2, COMPLEX1, GROUP_4, RLVECT_1, ALGSTR_0;
+      POLYNOM3, FINSEQ_2, COMPLEX1, GROUP_4, RLVECT_1, ALGSTR_0, STRUCT_0;
  theorems GROUP_1, CARD_1, FINSEQ_1, ZFMISC_1, NAT_1, FUNCT_1, FUNCT_2,
       RELAT_1, TARSKI, XBOOLE_0, XBOOLE_1, VECTSP_1, PREPOWER, COMPTRIG,
       COMPLFLD, BINOP_1, XCMPLX_1, COMPLEX1, HAHNBAN1, SIN_COS, POWER,
-      REAL_2, SIN_COS2, POLYNOM5, BINARITH, INT_1, COMPLEX2, XCMPLX_0, XREAL_0,
-      SQUARE_1, RVSUM_1, FVSUM_1, FINSEQ_3, FINSEQ_2, FINSEQ_4, POLYNOM4,
-      INT_2, ABSVALUE, WSIERP_1, NAT_2, PEPIN, POLYNOM3, COMPUT_1, NORMSP_1,
-      FUNCT_7, ALGSEQ_1, RLVECT_1, NEWTON, POLYNOM2, CARD_4,
-      POLYNOM1, MATRIX_3, VECTSP_2, MOD_2, CARD_2, GRAPH_2, FINSEQ_5, UPROOTS,
-      RELSET_1, GROUP_2, BINOP_2, XREAL_1, XXREAL_0, GROUP_4, FUNCOP_1,
-      ORDINAL1, FINSOP_1, NAT_D, PARTFUN1;
+      SIN_COS2, POLYNOM5, INT_1, COMPLEX2, XCMPLX_0, XREAL_0, SQUARE_1,
+      RVSUM_1, FVSUM_1, FINSEQ_3, FINSEQ_2, FINSEQ_4, POLYNOM4, INT_2,
+      WSIERP_1, NAT_2, PEPIN, POLYNOM3, COMPUT_1, NORMSP_1, FUNCT_7, ALGSEQ_1,
+      RLVECT_1, NEWTON, POLYNOM2, POLYNOM1, MATRIX_3, VECTSP_2, MOD_2, CARD_2,
+      GRAPH_2, FINSEQ_5, UPROOTS, RELSET_1, GROUP_2, BINOP_2, XREAL_1,
+      XXREAL_0, GROUP_4, FUNCOP_1, ORDINAL1, FINSOP_1, NAT_D, PARTFUN1;
  schemes NAT_1, FUNCT_2, FINSEQ_1, POLYNOM2;
 
 begin :: Preliminaries
@@ -204,7 +204,7 @@ proof
 A1: len r = card s and
 A2: for i being Element of NAT, c being Element of FC
   st i in dom r & c = (canFS(s)).i holds r.i = |.x-c.|;
-  len canFS(s) = card s by UPROOTS:def 1;
+  len canFS(s) = card s by UPROOTS:5;
   then
 A3: dom canFS(s) = Seg card s by FINSEQ_1:def 3;
 A4: dom r = Seg card s by A1,FINSEQ_1:def 3;
@@ -325,7 +325,7 @@ A2: |.r.| = 1 and
 A3: r <> [**1,0**];
   set a = Re r;
   set b = Im r;
-A4: a^2 + b^2 = 1 by A2,COMPTRIG:7,SQUARE_1:59;
+A4: a^2 + b^2 = 1^2 by A2,COMPTRIG:7;
   now
     assume
 A5: a = 1;
@@ -336,8 +336,7 @@ A5: a = 1;
   then
 A6: a < 1 by XXREAL_0:1;
 A7: Re[**q-a,-b**] = q-a & Im[**q-a,-b**] = -b by COMPLEX1:28;
-  2*q > 0 by A1;
-  then 2*q > 2*q*a by A6,REAL_2:145;
+  2*q > 2*q*a by A6,XREAL_1:159,A1;
   then -2*q*a > -2*q by XREAL_1:26;
   then -2*q + q^2 < -2*q*a + q^2 by XREAL_1:10;
   then
@@ -406,7 +405,7 @@ A16: f=v^<*w*> by FINSEQ_1:63;
     k + 1 = len f1 + len f2 by A14,A16,FINSEQ_1:35;
     then
 A17: k + 1 = len f1 + 1 by FINSEQ_1:56;
-    for j being Element of NAT st j in dom f1 holds f1.j > x
+B20: for j being Element of NAT st j in dom f1 holds f1.j > x
     proof
       let j be Element of NAT such that
 A18:  j in dom f1;
@@ -414,22 +413,21 @@ A19:  dom f1 c= dom f by A16,FINSEQ_1:39;
       f.j = f1.j by A16,A18,FINSEQ_1:def 7;
       hence thesis by A15,A18,A19;
     end;
-    then
-A20: Product f1*y2 > x by A13,A17;
     rng f2 c= REAL;
     then {w} c= REAL by FINSEQ_1:55;
     then reconsider m=w as Real by ZFMISC_1:37;
 A21: f.(len f) = m by A14,A16,A17,FINSEQ_1:59;
     len f in Seg len f by A14,FINSEQ_1:5;
-    then len f in dom f by FINSEQ_1:def 3;
+    then
+B22: len f in dom f by FINSEQ_1:def 3;
     then
 A22: m > x by A15,A21;
-    then m > 1 by A1,XXREAL_0:2;
+    m > 1 by A1,XXREAL_0:2,A15,A21,B22;
     then
-A23: x*m > x by A1,REAL_2:144;
+A23: x*m > x by A1,XREAL_1:157;
     Product f = Product f1 * m by A16,RVSUM_1:126;
     then Product f*y2 = (Product f1 * y2) * m;
-    then Product f*y2 > x*m by A1,A20,A22,XREAL_1:70;
+    then Product f*y2 > x*m by A1,B20,A22,XREAL_1:70,A13,A17;
     hence thesis by A23,XXREAL_0:2;
   end;
 A24: for k being Element of NAT holds P[k] from NAT_1:sch 1(A10,A12);
@@ -460,7 +458,6 @@ proof
   per cases;
   suppose
 A1: n <> 0;
-    then n > 0;
     then i = n*j + (i mod n) by NAT_D:2;
     then
 A2: (2*PI*i)/n = (2*PI*(n*j) + 2*PI*(i mod n))/n
@@ -797,12 +794,12 @@ end;
 
 theorem :: WEDDWITT
   for R being finite Skew-Field
-  holds ord MultGroup R = card (the carrier of R) - 1
+  holds card MultGroup R = card R - 1
 proof
   let R be finite Skew-Field;
   set G = MultGroup R;
   the carrier of G = (the carrier of R) \ {0.R} by Def1;
-  then card the carrier of G = card (the carrier of R) - card {0.R}
+  then card the carrier of G = card R - card {0.R}
   by CARD_2:63;
   hence thesis by CARD_1:50;
 end;
@@ -896,8 +893,7 @@ A5: |.x.| <> 1;
 A6: |.x.| < 1;
     reconsider n' = n as Rational;
     |.x.| #Q n' < 1 by A4,A6,PREPOWER:76;
-    then |.x.| |^ n < 1 by A4,PREPOWER:60;
-    hence contradiction by A3;
+    hence contradiction by A3,A4,PREPOWER:60;
   end;
   suppose |.x.| > 1;
     hence contradiction by A3,POWER:40;
@@ -937,8 +933,7 @@ A8:   |.x.| > 0 by A2,COMPLFLD:96;
 A9:     |.x.| < 1;
         reconsider n' = n as Rational;
         |.x.| #Q n' < 1 by A8,A9,PREPOWER:76;
-        then |.x.| |^ n < 1 by A8,PREPOWER:60;
-        hence contradiction by A5;
+        hence contradiction by A5,A8,PREPOWER:60;
       end;
       suppose |.x.| > 1;
         hence contradiction by A5,POWER:40;
@@ -956,11 +951,9 @@ A13: cos(n*Arg x) = 1 & sin(n*Arg x) = 0 by A5,A11,COMPLEX1:163;
     consider r being real number such that
 A14: r = (2*PI) * (-[\ ((n*Arg x)/(2*PI)) /]) + (n*Arg x) &
     0 <= r & r < (2*PI) by COMPLEX2:2,COMPTRIG:21;
-    0 <= n*Arg x by A3;
-    then
-A15: 0 <= (n*Arg x)/(2*PI) by COMPTRIG:21;
+A15: 0 <= (n*Arg x)/(2*PI) by A3;
     set m2 = [\ ((n*Arg x)/(2*PI))/];
-A16: 0+-1 <= (n*Arg x)/(2*PI) +-1 by A15,XREAL_1:9;
+A16: 0+-1 <= (n*Arg x)/(2*PI) +-1 by A3,XREAL_1:9;
     (n*Arg x)/(2*PI)-1 < m2 by INT_1:def 4;
     then not m2 <= -1 by A16,XXREAL_0:2;
     then -1+1 <= m2 by INT_1:20;
@@ -1045,7 +1038,7 @@ A3:   a = [** cos((2*PI*(k mod n))/n), sin((2*PI*(k mod n))/n) **] by A2,Th12;
 end;
 
 theorem Th30:
-  for n being non empty Element of NAT holds Card (n-roots_of_1) = n
+  for n being non empty Element of NAT holds card (n-roots_of_1) = n
 proof
   let n be non empty Element of NAT;
   set X = {[**cos((2*PI*k)/n),sin((2*PI*k)/n)**]
@@ -1111,17 +1104,15 @@ A21: j-'1 < n by A19,XREAL_1:235;
 A22: k-'1 < n by A20,XREAL_1:235;
     set a1 = (2*PI*(j-'1))/n;
     set a2 = (2*PI*(k-'1))/n;
-A23: 0 <= 2*PI*(j-'1) by COMPTRIG:21;
     (j-'1)/n < n/n by A21,XREAL_1:76;
     then (j-'1)/n < 1 by XCMPLX_1:60;
     then (j-'1)/n*(2*PI) < 1*(2*PI) by COMPTRIG:21,XREAL_1:70;
     then
-A24: 0 <= a1 & a1 < 2*PI by A23,XCMPLX_1:75;
-A25: 0 <= 2*PI*(k-'1) by COMPTRIG:21;
+A24: 0 <= a1 & a1 < 2*PI by COMPTRIG:21,XCMPLX_1:75;
     (k-'1)/n < n/n by A22,XREAL_1:76;
     then (k-'1)/n < 1 by XCMPLX_1:60;
     then (k-'1)/n*(2*PI) < 1*(2*PI) by COMPTRIG:21,XREAL_1:70;
-    then 0 <= a2 & a2 < 2*PI by A25,XCMPLX_1:75;
+    then 0 <= a2 & a2 < 2*PI by COMPTRIG:21,XCMPLX_1:75;
     then a1 = a2 by A18,A24,COMPLEX2:12;
     then (2*PI*(j-'1))/n*n = 2*PI*(k-'1) by XCMPLX_1:88;
     then j-'1 = k-'1 by COMPTRIG:21,XCMPLX_1:5,88;
@@ -1131,8 +1122,8 @@ A25: 0 <= 2*PI*(k-'1) by COMPTRIG:21;
   then F is one-to-one by FUNCT_1:def 8;
   then Seg n, F.:(Seg n) are_equipotent by A8,CARD_1:60;
   then Seg n, rng F are_equipotent by A8,RELAT_1:146;
-  then Card (Seg n) = Card X by A13,CARD_1:21;
-  hence Card (n-roots_of_1) = n by A1,FINSEQ_1:78;
+  then card (Seg n) = card X by A13,CARD_1:21;
+  hence card (n-roots_of_1) = n by A1,FINSEQ_1:78;
 end;
 
 registration
@@ -1141,7 +1132,7 @@ registration
   correctness by Th25;
   cluster n-roots_of_1 -> finite;
   correctness
-  proof Card (n-roots_of_1) = n by Th30;
+  proof card (n-roots_of_1) = n by Th30;
     hence thesis;
   end;
 end;
@@ -1198,7 +1189,7 @@ end;
 
 theorem Th33:
   for n being non empty Element of NAT, x being Element of MultGroup F_Complex
-  st x in n-roots_of_1 holds x is_not_of_order_0
+  st x in n-roots_of_1 holds x is not being_of_order_0
 proof
   set FC = F_Complex;
   set cMGFC = the carrier of MultGroup F_Complex;
@@ -1211,7 +1202,7 @@ A3: c is CRoot of n,1_FC by A1;
 A4: 1_MGFC = 1_FC by Th20;
   (power FC).(c,n) = 1_FC by A3,COMPLFLD:def 2;
   then x |^ n = 1_MGFC by A2,A4,Th32;
-  hence x is_not_of_order_0 by GROUP_1:def 11;
+  hence x is not being_of_order_0 by GROUP_1:def 11;
 end;
 
 theorem Th34:
@@ -1223,11 +1214,8 @@ proof
   let x be Element of MultGroup F_Complex such that
 A1: x = [** cos((2*PI*k)/n), sin((2*PI*k)/n) **];
 A2: (k gcd n) divides n by INT_2:32;
-  abs(n) > 0 by ABSVALUE:def 1;
-  then
-A3: abs(n) hcf abs(k) > 0 by NEWTON:71;
 A4: n gcd k > 0 by NEWTON:71;
-  reconsider kgn=(k gcd n) as Element of NAT by A3,INT_2:51;
+  reconsider kgn=(k gcd n) as Element of NAT;
   consider vn being Nat such that
 A5: n = kgn * vn by A2,NAT_D:def 3;
   reconsider vn as Element of NAT by ORDINAL1:def 13;
@@ -1257,19 +1245,18 @@ A12: x |^ (n div kgn) = (power F_Complex).(y, vn) by A9,Th32
     .= 1_MultGroup F_Complex by Th20,COMPLFLD:10;
   x in n-roots_of_1 by A1,Th27;
   then
-A13: x is_not_of_order_0 by Th33;
+A13: x is not being_of_order_0 by Th33;
   for m being Nat st x |^ m = 1_MultGroup F_Complex & m <> 0
   holds n div kgn <= m
   proof
     let m be Nat such that
 A14: x |^ m = 1_MultGroup F_Complex and
 A15: m <> 0;
-A16: 0 < m by A15;
     reconsider m as Element of NAT by ORDINAL1:def 13;
     now
       assume
 A17:  m < vn;
-      now
+B23:  now
         assume k*m mod n = 0;
         then
 A18:    n divides k*m by PEPIN:6;
@@ -1287,10 +1274,8 @@ A22:    k*m = n*j by A18,NAT_D:def 3;
         then m*a = ((j*b)*kgn)/kgn by A4,XCMPLX_1:90;
         then m*a = j*b by A4,XCMPLX_1:90;
         then bi divides m*ai by NAT_D:def 3;
-        hence contradiction by A16,A20,A21,INT_2:40,NAT_D:7;
+        hence contradiction by A15,A20,A21,INT_2:40,NAT_D:7;
       end;
-      then
-A23:  0 < (k*m mod n) & (k*m mod n) < n by NAT_D:1;
 A24:  2*PI*k/n*m = (2*PI*k)/(n / m) by XCMPLX_1:83
         .= (2*PI*k*m)/n by XCMPLX_1:78;
 A25:  x |^ m = (power F_Complex).(y, m) by Th32
@@ -1301,13 +1286,11 @@ A25:  x |^ m = (power F_Complex).(y, m) by Th32
       1_MultGroup F_Complex = [**1, 0**] by Th20,COMPLFLD:10;
       then
 A26:  cos((2*PI*(k*m mod n))/n) = 1 by A14,A25,COMPLEX1:163;
-      2*PI*0 < 2*PI*(k*m mod n) by A23,COMPTRIG:21;
-      then
-A27:  0/n < 2*PI*(k*m mod n)/n;
+B27:  2*PI*0 < 2*PI*(k*m mod n) by B23,COMPTRIG:21;
       2*PI*(k*m mod n) < 2*PI*n by COMPTRIG:21,NAT_D:1,XREAL_1:70;
       then 2*PI*(k*m mod n)/n < 2*PI*n/n by XREAL_1:76;
       then 2*PI*(k*m mod n)/n < 2*PI by XCMPLX_1:90;
-      hence contradiction by A26,A27,COMPTRIG:79;
+      hence contradiction by A26,B23,COMPTRIG:21,COMPTRIG:79;
     end;
     hence thesis by A4,A8,NAT_D:def 1;
   end;
@@ -1442,7 +1425,7 @@ A1: multcomplex = the multF of F_Complex by COMPLFLD:def 1;
     then X c= [:COMPLEX, COMPLEX:] by ZFMISC_1:119;
     then
 A2: X c= dom multcomplex by FUNCT_2:def 1;
-    dom mru = dom multcomplex /\ X by A1,RELAT_1:90;
+B3: dom mru = dom multcomplex /\ X by A1,RELAT_1:90;
     then
 A3: dom mru = X by A2,XBOOLE_1:28;
     for x being set st x in X holds mru.x in n-roots_of_1
@@ -1458,7 +1441,8 @@ A7:   multcomplex.(a,b) = a*b by BINOP_2:def 5;
       mru.[a,b] = multcomplex.[a,b] by A1,A3,A4,A5,FUNCT_1:70;
       hence thesis by A5,A6,A7,Th28;
     end;
-    then reconsider uM = mru as BinOp of n-roots_of_1 by A3,FUNCT_2:5;
+    then reconsider uM = mru as BinOp of n-roots_of_1
+     by B3,FUNCT_2:5,A2,XBOOLE_1:28;
 A8: rng uM c= n-roots_of_1 by RELSET_1:12;
     set H = multMagma(# n-roots_of_1, uM #);
 A9: for r,s,t being Element of H holds (r * s) * t = r * (s * t)
@@ -1957,13 +1941,12 @@ theorem Th48:
   st y = x & eval(unital_poly(F_Complex,n),y) = (x |^ n) - 1
 proof
   let n be non empty Element of NAT, x be Real;
-A1: x = x+0*<i>
-    .= [*x,0*] by COMPLEX1:27;
-  reconsider y=[*x,0*] as Element of F_Complex by COMPLFLD:def 1;
+  x in COMPLEX by XCMPLX_0:def 2;
+  then reconsider y=x as Element of F_Complex by COMPLFLD:def 1;
   consider x2 being Real such that
-A2: x2 = y & (power F_Complex).(y,n) = x2 |^ n by A1,Th47;
-  eval(unital_poly(F_Complex,n),y) = (x |^ n) - 1 by A1,A2,Th45;
-  hence thesis by A1;
+A2: x2 = y & (power F_Complex).(y,n) = x2 |^ n by Th47;
+  eval(unital_poly(F_Complex,n),y) = (x |^ n) - 1 by A2,Th45;
+  hence thesis;
 end;
 
 theorem Th49:
@@ -2165,9 +2148,8 @@ A14: F.1 = poly_with_roots((sB,1)-bag) by Def5;
 A15:    x = y and
 A16:    y in nr1 and
 A17:    ord y <= 1;
-        y is_not_of_order_0 by A16,Th33;
+        y is not being_of_order_0 by A16,Th33;
         then ord y <> 0 by GROUP_1:def 12;
-        then 0 < ord y;
         then 0+1 <= ord y by NAT_1:13;
         then ord y = 1 by A17,XXREAL_0:1;
         hence x in sB by A13,A15;
@@ -2505,8 +2487,6 @@ A9:   for i being non empty Element of NAT st i in Seg k holds
       (i divides k & i <> k implies f.i = cp(i)) and
 A10:  unital_poly(F_Complex,k) = (cyclotomic_poly k)*'p by Th54;
 A11:  k = len f by A8,FINSEQ_1:def 3;
-      then
-A12:  k in Seg len f by FINSEQ_1:5;
       defpred G[Nat,set] means
       ex g being FinSequence of cPRFC, p being Polynomial of F_Complex
       st g = f | Seg $1 & p = Product(g) & $2 = p & (p.0 = 1 or p.0 = -1) &
@@ -2533,7 +2513,7 @@ reconsider p = Product(g) as Polynomial of F_Complex by POLYNOM3:def 12;
           thus g = f | Seg (l+1) & p = Product(g) & p = p;
 
 reconsider fl1 = f.(l+1) as Element of cPRFC by A8,A11,A17,FINSEQ_2:13;
-          <*>cPRFC = f |(Seg 0 qua set) by FINSEQ_1:93;
+          <*>cPRFC = f |(Seg 0 qua set);
           then g = (<*>cPRFC)^<*f.(l+1)*> by A8,A11,A17,A18,FINSEQ_5:11
             .= <*f.(l+1)*> by FINSEQ_1:47;
           then
@@ -2712,7 +2692,7 @@ A52:  for i being Nat st i in Seg len f holds G[i,F.i] from FINSEQ_1:sch 1
       p1 being Polynomial of F_Complex such that
 A53:  g = f | Seg k & p1 = Product(g) & F.k = p1 and
 A54:  (p1.0 = 1 or p1.0 = -1) & for j being Element of NAT
-      holds p1.j is integer by A12,A52;
+      holds p1.j is integer by A11,A52,FINSEQ_1:5;
 A55:  p = p1 by A7,A11,A53,FINSEQ_3:55;
       consider r be FinSequence of cFC such that
 A56:  len r = 0+1 and
@@ -2780,7 +2760,6 @@ A73:      i in dom s;
           per cases;
           suppose len r < 2;
             then s = {} by GRAPH_2:def 1;
-            then 1 <= i & i <= 0 by A73;
             hence s.i is integer;
           end;
           suppose
@@ -2807,7 +2786,7 @@ A79:          s.i = r.(1+1+i1) by A74,A78,GRAPH_2:def 1
               1 <= i+1 & i+1 <= len s +1 by A77,NAT_1:11,XREAL_1:8;
               then 1+i in dom r by A75,FINSEQ_3:27;
               then r.(1+i) = p.(1+i-'1) * cp(k).(m+1-'(1+i)) by A67
-                .= p.(i+1-'1) * cp(k).(m+1-'1-'i) by POLYNOM1:3
+                .= p.(i+1-'1) * cp(k).(m+1-'1-'i) by NAT_2:32
                 .= p.i * cp(k).(m+1-'1-'i) by NAT_D:34
                 .= ppi *cpkmi by NAT_D:34;
               hence s.i is integer by A79;
@@ -2942,7 +2921,6 @@ A18:  ord y1 divides n & not ord y1 divides ni & ord y1 <> n by A1,A15;
 A19:    n = 0 * u by A18,NAT_D:def 3;
         thus contradiction by A19;
       end;
-      then 0 < ord y1;
       then 0+1 <= ord y1 by NAT_1:13;
       hence contradiction by A13,A16,A17,A18,XXREAL_0:1;
     end;
@@ -3428,8 +3406,7 @@ A3: k = eval(unital_poly(F_Complex, n),qc);
   end;
   suppose
 A4: n > 1;
-    1 divides n by NAT_D:6;
-    then consider f being FinSequence of (the carrier of Polynom-Ring
+    consider f being FinSequence of (the carrier of Polynom-Ring
     F_Complex), p being Polynomial of F_Complex such that
 A5: p = Product(f) and
 A6: dom f = Seg n and
@@ -3438,7 +3415,7 @@ A7: for i being non empty Element of NAT st i in Seg n holds
     (i divides n & not i divides 1 & i <> n
     implies f.i = cyclotomic_poly(i)) and
 A8: unital_poly(F_Complex,n)
-    = unital_poly(F_Complex,1)*'(cyclotomic_poly n)*'p by A4,Th58;
+    = unital_poly(F_Complex,1)*'(cyclotomic_poly n)*'p by A4,Th58,NAT_D:6;
     set epfc = eval(p,qc);
     now
       let i be non empty Element of NAT;
@@ -3585,19 +3562,16 @@ A5: 1+1+-1 <= qi +-1 by XREAL_1:9;
   consider S being non empty finite Subset of F_Complex such that
 A6: S = {y where y is Element of cMGFC : ord y = n} and
 A7: cyclotomic_poly(n) = poly_with_roots((S,1)-bag) by Def5;
-  rng canFS(S) = S by UPROOTS:5;
+  rng canFS(S) = S by FUNCT_2:def 3;
   then reconsider fs = canFS(S) as FinSequence of F_Complex by FINSEQ_1:def 4;
-A8: rng fs = S by UPROOTS:5;
-A9: len fs = card S by UPROOTS:def 1;
+A8: rng fs = S by FUNCT_2:def 3;
+A9: len fs = card S by UPROOTS:5;
   consider nth being Element of MGFC;
-  fs <> {} by A8;
-  then
-A10: len fs <> 0;
+B10: fs <> {} by A8;
   deffunc F(set) = |.qc - fs/.$1.|;
   consider p1 being FinSequence such that
 A11: len p1 = len fs & for i being Nat st i in dom p1 holds p1.i = F(i)
   from FINSEQ_1:sch 2;
-A12: dom p1 = Seg len fs by A11,FINSEQ_1:def 3;
 A13: for i being Element of NAT, c being Element of F_Complex
   st i in dom p1 & c = (canFS(S)).i holds p1.i = |.qc - c.|
   proof
@@ -3606,9 +3580,8 @@ A14: i in dom p1 and
 A15: c = (canFS(S)).i;
     i in dom fs by A11,A14,FINSEQ_3:31;
     then
-A16: fs/.i = (canFS(S)).i by PARTFUN1:def 8;
-    i in Seg len p1 by A14,FINSEQ_1:def 3;
-    hence thesis by A11,A15,A16,A12;
+     fs/.i = (canFS(S)).i by PARTFUN1:def 8;
+    hence thesis by A11,A15,A14;
   end;
   for x being set st x in rng p1 holds x in REAL
   proof
@@ -3624,7 +3597,7 @@ A19: p1.i = x by A17,FINSEQ_2:11;
   end;
   then rng p1 c= REAL by TARSKI:def 3;
   then reconsider ps=p1 as non empty FinSequence of REAL
-  by A10,A11,FINSEQ_1:def 4;
+  by B10,A11,FINSEQ_1:def 4;
 A20: |.eval(cyclotomic_poly(n),qc).| = Product(ps) by A7,A9,A11,A13,Th4;
   for i being Element of NAT st i in dom ps holds ps.i > q - 1
   proof

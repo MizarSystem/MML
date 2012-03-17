@@ -12,6 +12,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FUNCOP_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="ORDERS_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ORDERS_2"/>
@@ -23,8 +26,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FIN_TOPO" nr="2">
@@ -33,27 +36,27 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="24"/>
-<Adjective nr="30"/>
-<Adjective nr="32"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="36"/>
+<Adjective nr="42"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <FCluster aid="FIN_TOPO" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="122"/>
 <Cluster>
-<Adjective nr="18" value="false"/>
-<Adjective nr="30"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="42"/>
 </Cluster>
 </FCluster>
 <FCluster aid="FIN_TOPO" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="109"/>
+<Func kind="K" nr="122"/>
 <Cluster>
-<Adjective nr="24"/>
-<Adjective nr="30"/>
-<Adjective nr="32"/>
+<Adjective nr="36"/>
+<Adjective nr="42"/>
+<Adjective nr="44"/>
 </Cluster>
 </FCluster>
 </Registrations>

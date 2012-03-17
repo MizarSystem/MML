@@ -1,0 +1,4635 @@
+:: Operations from Sets into Functional Sets
+::  by Artur Korni{\l}owicz
+:: 
+:: Received October 15, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies RELAT_1, BOOLE, FUNCT_1, PARTFUN1, VALUED_0, ZF_REFLE, FRAENKEL,
+      MEMBERED, ARYTM_1, SEQ_1, FUNCT_2, COMPLEX1, ARYTM_3, ABSVALUE, MATHMORP,
+      XCMPLX_0, ARYTM, RAT_1, INT_1, SUPINF_1, FINSEQ_1, ORDINAL2, COMPUT_1,
+      SUBSET_1, VALUED_2;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, RELAT_1, FUNCT_1, RELSET_1,
+      PARTFUN1, MCART_1, FUNCT_2, ORDINAL1, NUMBERS, VALUED_0, FRAENKEL,
+      VALUED_1, INT_1, NAT_1, XCMPLX_0, XREAL_0, RAT_1, MEMBERED, FINSEQ_1;
+ constructors RELAT_2, PARTFUN1, MCART_1, FUNCT_2, VALUED_0, FRAENKEL,
+      VALUED_1, NAT_1, ARYTM_0, XCMPLX_0, FINSEQ_1, ARYTM_2, NUMBERS, XXREAL_0,
+      XREAL_0, COMPLEX1;
+ registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, PARTFUN1, VALUED_0,
+      FRAENKEL, VALUED_1, RELSET_1, MEMBERED, ORDINAL1, XCMPLX_0, NUMBERS,
+      RAT_1, XREAL_0, INT_1;
+ requirements SUBSET, BOOLE, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, FUNCT_1, FRAENKEL, XCMPLX_0, VALUED_1, NUMBERS;
+ theorems TARSKI, SUBSET_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, VALUED_1,
+      XCMPLX_1, XBOOLE_0, XBOOLE_1, RFUNCT_1, FINSEQ_1, RELAT_1;
+ schemes XBOOLE_0, FUNCT_1, CLASSES1;
+
+begin :: Functional sets
+
+reserve x, X, X1, X2, X3, X4, X5 for set;
+
+theorem Th1:
+  X1 /\ (X2 /\ X3) = (X1 /\ X2) /\ (X1 /\ X3)
+  proof
+    thus X1 /\ (X2 /\ X3) = X1 /\ X1 /\ X2 /\ X3 by XBOOLE_1:16
+    .= X1 /\ (X1 /\ X2) /\ X3 by XBOOLE_1:16
+    .= (X1 /\ X2) /\ (X1 /\ X3) by XBOOLE_1:16;
+  end;
+
+definition
+  let X;
+  attr X is complex-functions-membered means
+:Def1:
+  x in X implies x is complex-valued Function;
+end;
+
+definition
+  let X;
+  attr X is ext-real-functions-membered means
+:Def2:
+  x in X implies x is ext-real-valued Function;
+end;
+
+definition
+  let X;
+  attr X is real-functions-membered means
+:Def3:
+  x in X implies x is real-valued Function;
+end;
+
+definition
+  let X;
+  attr X is rational-functions-membered means
+:Def4:
+  x in X implies x is rational-valued Function;
+end;
+
+definition
+  let X;
+  attr X is integer-functions-membered means
+:Def5:
+  x in X implies x is integer-valued Function;
+end;
+
+definition
+  let X;
+  attr X is natural-functions-membered means
+:Def6:
+  x in X implies x is natural-valued Function;
+end;
+
+registration
+  cluster natural-functions-membered -> integer-functions-membered set;
+  coherence
+  proof
+    let X;
+    assume
+A1: for x being set st x in X holds x is natural-valued Function;
+    let x;
+    thus thesis by A1;
+  end;
+  cluster integer-functions-membered -> rational-functions-membered set;
+  coherence
+  proof
+    let X;
+    assume
+A2: for x being set st x in X holds x is integer-valued Function;
+    let x;
+    thus thesis by A2;
+  end;
+  cluster rational-functions-membered -> real-functions-membered set;
+  coherence
+  proof
+    let X;
+    assume
+A3: for x being set st x in X holds x is rational-valued Function;
+    let x;
+    thus thesis by A3;
+  end;
+  cluster real-functions-membered -> complex-functions-membered set;
+  coherence
+  proof
+    let X;
+    assume
+A4: for x being set st x in X holds x is real-valued Function;
+    let x;
+    thus thesis by A4;
+  end;
+  cluster real-functions-membered -> ext-real-functions-membered set;
+  coherence
+  proof
+    let X;
+    assume
+A5: for x being set st x in X holds x is real-valued Function;
+    let x;
+    thus thesis by A5;
+  end;
+end;
+
+registration
+  cluster empty -> natural-functions-membered set;
+  coherence
+  proof let X be set such that
+Z:  X is empty;
+    let x;
+    thus thesis by Z;
+  end;
+end;
+
+registration
+  let f be complex-valued Function;
+  cluster {f} -> complex-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by TARSKI:def 1;
+  end;
+end;
+
+registration
+  cluster complex-functions-membered -> functional set;
+  coherence
+  proof
+    let X;
+    assume
+A1: X is complex-functions-membered;
+    let x;
+    thus thesis by A1,Def1;
+  end;
+  cluster ext-real-functions-membered -> functional set;
+  coherence
+  proof
+    let X;
+    assume
+A2: X is ext-real-functions-membered;
+    let x;
+    thus thesis by A2,Def2;
+  end;
+end;
+
+consider ff being natural-valued Function;
+
+registration
+  cluster natural-functions-membered non empty set;
+  existence
+  proof
+    take {ff};
+    thus for x being set st x in {ff} holds
+    x is natural-valued Function by TARSKI:def 1;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X be complex-functions-membered set;
+  cluster -> complex-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def1;
+  end;
+end;
+
+registration
+  let X be ext-real-functions-membered set;
+  cluster -> ext-real-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def2;
+  end;
+end;
+
+registration
+  let X be real-functions-membered set;
+  cluster -> real-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def3;
+  end;
+end;
+
+registration
+  let X be rational-functions-membered set;
+  cluster -> rational-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def4;
+  end;
+end;
+
+registration
+  let X be integer-functions-membered set;
+  cluster -> integer-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def5;
+  end;
+end;
+
+registration
+  let X be natural-functions-membered set;
+  cluster -> natural-functions-membered Subset of X;
+  coherence
+  proof
+    let S be Subset of X;
+    let x;
+    thus thesis by Def6;
+  end;
+end;
+
+definition
+  let D be set;
+  set A = COMPLEX;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func C_PFuncs(D) -> set means
+:Def7:
+  for f being set holds f in it iff f is PartFunc of D,COMPLEX;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = COMPLEX;
+  defpred P[set] means $1 is Function of D,A;
+  func C_Funcs(D) -> set means
+:Def8:
+  for f being set holds f in it iff f is Function of D,COMPLEX;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = ExtREAL;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func E_PFuncs(D) -> set means
+:Def9:
+  for f being set holds f in it iff f is PartFunc of D,ExtREAL;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = ExtREAL;
+  defpred P[set] means $1 is Function of D,A;
+  func E_Funcs(D) -> set means
+:Def10:
+  for f being set holds f in it iff f is Function of D,ExtREAL;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = REAL;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func R_PFuncs(D) -> set means
+:Def11:
+  for f being set holds f in it iff f is PartFunc of D,REAL;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = REAL;
+  defpred P[set] means $1 is Function of D,A;
+  func R_Funcs(D) -> set means
+:Def12:
+  for f being set holds f in it iff f is Function of D,REAL;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = RAT;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func Q_PFuncs(D) -> set means
+:Def13:
+  for f being set holds f in it iff f is PartFunc of D,RAT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = RAT;
+  defpred P[set] means $1 is Function of D,A;
+  func Q_Funcs(D) -> set means
+:Def14:
+  for f being set holds f in it iff f is Function of D,RAT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = INT;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func I_PFuncs(D) -> set means
+:Def15:
+  for f being set holds f in it iff f is PartFunc of D,INT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = INT;
+  defpred P[set] means $1 is Function of D,A;
+  func I_Funcs(D) -> set means
+:Def16:
+  for f being set holds f in it iff f is Function of D,INT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = NAT;
+  defpred P[set] means $1 is PartFunc of D,A;
+  func N_PFuncs(D) -> set means
+:Def17:
+  for f being set holds f in it iff f is PartFunc of D,NAT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in PFuncs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is PartFunc of D,A by A1;
+    assume
+A2: f is PartFunc of D,A;
+    then f in PFuncs(D,A) by PARTFUN1:119;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is PartFunc of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is PartFunc of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+definition
+  let D be set;
+  set A = NAT;
+  defpred P[set] means $1 is Function of D,A;
+  func N_Funcs(D) -> set means
+:Def18:
+  for f being set holds f in it iff f is Function of D,NAT;
+  existence
+  proof
+    consider X being set such that
+A1: for x being set holds x in X iff x in Funcs(D,A) & P[x]
+    from XBOOLE_0:sch 1;
+    take X;
+    let f be set;
+    thus f in X implies f is Function of D,A by A1;
+    assume
+A2: f is Function of D,A;
+    then f in Funcs(D,A) by FUNCT_2:11;
+    hence thesis by A1,A2;
+  end;
+  uniqueness
+  proof
+    let P, Q be set;
+    assume for f being set holds f in P iff f is Function of D,A;
+    then
+A3: for f being set holds f in P iff P[f];
+    assume for f being set holds f in Q iff f is Function of D,A;
+    then
+A4: for f being set holds f in Q iff P[f];
+    thus P = Q from XBOOLE_0:sch 2(A3,A4);
+  end;
+end;
+
+theorem Th2:
+  C_Funcs(X) is Subset of C_PFuncs(X)
+  proof
+    C_Funcs(X) c= C_PFuncs(X)
+    proof
+      let x;
+      assume x in C_Funcs(X);
+      then x is Function of X,COMPLEX by Def8;
+      hence thesis by Def7;
+    end;
+    hence thesis;
+  end;
+
+theorem Th3:
+  E_Funcs(X) is Subset of E_PFuncs(X)
+  proof
+    E_Funcs(X) c= E_PFuncs(X)
+    proof
+      let x;
+      assume x in E_Funcs(X);
+      then x is Function of X,ExtREAL by Def10;
+      hence thesis by Def9;
+    end;
+    hence thesis;
+  end;
+
+theorem Th4:
+  R_Funcs(X) is Subset of R_PFuncs(X)
+  proof
+    R_Funcs(X) c= R_PFuncs(X)
+    proof
+      let x;
+      assume x in R_Funcs(X);
+      then x is Function of X,REAL by Def12;
+      hence thesis by Def11;
+    end;
+    hence thesis;
+  end;
+
+theorem Th5:
+  Q_Funcs(X) is Subset of Q_PFuncs(X)
+  proof
+    Q_Funcs(X) c= Q_PFuncs(X)
+    proof
+      let x;
+      assume x in Q_Funcs(X);
+      then x is Function of X,RAT by Def14;
+      hence thesis by Def13;
+    end;
+    hence thesis;
+  end;
+
+theorem Th6:
+  I_Funcs(X) is Subset of I_PFuncs(X)
+  proof
+    I_Funcs(X) c= I_PFuncs(X)
+    proof
+      let x;
+      assume x in I_Funcs(X);
+      then x is Function of X,INT by Def16;
+      hence thesis by Def15;
+    end;
+    hence thesis;
+  end;
+
+theorem Th7:
+  N_Funcs(X) is Subset of N_PFuncs(X)
+  proof
+    N_Funcs(X) c= N_PFuncs(X)
+    proof
+      let x;
+      assume x in N_Funcs(X);
+      then x is Function of X,NAT by Def18;
+      hence thesis by Def17;
+    end;
+    hence thesis;
+  end;
+
+registration
+  let X;
+  cluster C_PFuncs(X) -> complex-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def7;
+  end;
+  cluster C_Funcs(X) -> complex-functions-membered;
+  coherence
+  proof
+    reconsider C = C_Funcs(X) as Subset of C_PFuncs(X) by Th2;
+    C is complex-functions-membered;
+    hence thesis;
+  end;
+  cluster E_PFuncs(X) -> ext-real-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def9;
+  end;
+  cluster E_Funcs(X) -> ext-real-functions-membered;
+  coherence
+  proof
+    reconsider C = E_Funcs(X) as Subset of E_PFuncs(X) by Th3;
+    C is ext-real-functions-membered;
+    hence thesis;
+  end;
+  cluster R_PFuncs(X) -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def11;
+  end;
+  cluster R_Funcs(X) -> real-functions-membered;
+  coherence
+  proof
+    reconsider C = R_Funcs(X) as Subset of R_PFuncs(X) by Th4;
+    C is real-functions-membered;
+    hence thesis;
+  end;
+  cluster Q_PFuncs(X) -> rational-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def13;
+  end;
+  cluster Q_Funcs(X) -> rational-functions-membered;
+  coherence
+  proof
+    reconsider C = Q_Funcs(X) as Subset of Q_PFuncs(X) by Th5;
+    C is rational-functions-membered;
+    hence thesis;
+  end;
+  cluster I_PFuncs(X) -> integer-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def15;
+  end;
+  cluster I_Funcs(X) -> integer-functions-membered;
+  coherence
+  proof
+    reconsider C = I_Funcs(X) as Subset of I_PFuncs(X) by Th6;
+    C is integer-functions-membered;
+    hence thesis;
+  end;
+  cluster N_PFuncs(X) -> natural-functions-membered;
+  coherence
+  proof
+    let x;
+    thus thesis by Def17;
+  end;
+  cluster N_Funcs(X) -> natural-functions-membered;
+  coherence
+  proof
+    reconsider C = N_Funcs(X) as Subset of N_PFuncs(X) by Th7;
+    C is natural-functions-membered;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X be complex-functions-membered set;
+  cluster -> complex-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def1,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X be ext-real-functions-membered set;
+  cluster -> ext-real-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def2,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X be real-functions-membered set;
+  cluster -> real-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def3,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X be rational-functions-membered set;
+  cluster -> rational-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def4,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X be integer-functions-membered set;
+  cluster -> integer-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def5,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X be natural-functions-membered set;
+  cluster -> natural-valued Element of X;
+  coherence
+  proof
+    X is empty or X is non empty;
+    hence thesis by Def6,SUBSET_1:def 2;
+  end;
+end;
+
+registration
+  let X, x be set;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> Function-like Relation-like;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x be set;
+  let Y be ext-real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> Function-like Relation-like;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> complex-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be ext-real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> ext-real-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> real-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> rational-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> integer-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X, x;
+  let Y be natural-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster f.x -> natural-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-membered set;
+  cluster PFuncs(X,Y) -> complex-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be ext-real-membered set;
+  cluster PFuncs(X,Y) -> ext-real-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-membered set;
+  cluster PFuncs(X,Y) -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-membered set;
+  cluster PFuncs(X,Y) -> rational-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-membered set;
+  cluster PFuncs(X,Y) -> integer-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-membered set;
+  cluster PFuncs(X,Y) -> natural-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in PFuncs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f c= X & rng f c= Y by PARTFUN1:def 5;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-membered set;
+  cluster Funcs(X,Y) -> complex-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be ext-real-membered set;
+  cluster Funcs(X,Y) -> ext-real-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-membered set;
+  cluster Funcs(X,Y) -> real-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-membered set;
+  cluster Funcs(X,Y) -> rational-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-membered set;
+  cluster Funcs(X,Y) -> integer-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-membered set;
+  cluster Funcs(X,Y) -> natural-functions-membered;
+  coherence
+  proof
+    let x;
+    assume x in Funcs(X,Y);
+    then consider f being Function such that
+A1: x = f and
+A2: dom f = X & rng f c= Y by FUNCT_2:def 2;
+    reconsider f as PartFunc of X,Y by A2,RELSET_1:11;
+    f is set;
+    hence thesis by A1;
+  end;
+end;
+
+definition
+  let R be Relation;
+  attr R is complex-functions-valued means
+:Def19:
+  rng R is complex-functions-membered;
+  attr R is ext-real-functions-valued means
+:Def20:
+  rng R is ext-real-functions-membered;
+  attr R is real-functions-valued means
+:Def21:
+  rng R is real-functions-membered;
+  attr R is rational-functions-valued means
+:Def22:
+  rng R is rational-functions-membered;
+  attr R is integer-functions-valued means
+:Def23:
+  rng R is integer-functions-membered;
+  attr R is natural-functions-valued means
+:Def24:
+  rng R is natural-functions-membered;
+end;
+
+definition
+  let f be Function;
+  redefine attr f is complex-functions-valued means
+  for x being set st x in dom f holds f.x is complex-valued Function;
+  compatibility
+  proof
+    thus f is complex-functions-valued implies
+    for x being set st x in dom f holds f.x is complex-valued Function
+    proof
+      assume
+A1:   rng f is complex-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A1;
+    end;
+    assume
+A2: for x being set st x in dom f holds f.x is complex-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A2;
+  end;
+  redefine attr f is ext-real-functions-valued means
+  for x being set st x in dom f holds f.x is ext-real-valued Function;
+  compatibility
+  proof
+    thus f is ext-real-functions-valued implies
+    for x being set st x in dom f holds f.x is ext-real-valued Function
+    proof
+      assume
+A3:   rng f is ext-real-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A3;
+    end;
+    assume
+A4: for x being set st x in dom f holds f.x is ext-real-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A4;
+  end;
+  redefine attr f is real-functions-valued means
+  for x being set st x in dom f holds f.x is real-valued Function;
+  compatibility
+  proof
+    thus f is real-functions-valued implies
+    for x being set st x in dom f holds f.x is real-valued Function
+    proof
+      assume
+A5:   rng f is real-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A5;
+    end;
+    assume
+A6: for x being set st x in dom f holds f.x is real-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A6;
+  end;
+  redefine attr f is rational-functions-valued means
+  for x being set st x in dom f holds f.x is rational-valued Function;
+  compatibility
+  proof
+    thus f is rational-functions-valued implies
+    for x being set st x in dom f holds f.x is rational-valued Function
+    proof
+      assume
+A7:   rng f is rational-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A7;
+    end;
+    assume
+A8: for x being set st x in dom f holds f.x is rational-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A8;
+  end;
+  redefine attr f is integer-functions-valued means
+  for x being set st x in dom f holds f.x is integer-valued Function;
+  compatibility
+  proof
+    thus f is integer-functions-valued implies
+    for x being set st x in dom f holds f.x is integer-valued Function
+    proof
+      assume
+A9:   rng f is integer-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A9;
+    end;
+    assume
+A10: for x being set st x in dom f holds f.x is integer-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A10;
+  end;
+  redefine attr f is natural-functions-valued means
+  for x being set st x in dom f holds f.x is natural-valued Function;
+  compatibility
+  proof
+    thus f is natural-functions-valued implies
+    for x being set st x in dom f holds f.x is natural-valued Function
+    proof
+      assume
+A11:   rng f is natural-functions-membered;
+      let x;
+      assume x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis by A11;
+    end;
+    assume
+A12: for x being set st x in dom f holds f.x is natural-valued Function;
+    let y be set;
+    assume y in rng f;
+    then ex x being set st x in dom f & f.x = y by FUNCT_1:def 5;
+    hence thesis by A12;
+  end;
+end;
+
+registration
+  cluster natural-functions-valued -> integer-functions-valued Relation;
+  coherence
+  proof
+    let R be Relation such that
+A1: rng R is natural-functions-membered;
+    let y be set;
+    thus thesis by A1;
+  end;
+  cluster integer-functions-valued -> rational-functions-valued Relation;
+  coherence
+  proof
+    let R be Relation such that
+A2: rng R is integer-functions-membered;
+    let y be set;
+    thus thesis by A2;
+  end;
+  cluster rational-functions-valued -> real-functions-valued Relation;
+  coherence
+  proof
+    let R be Relation such that
+A3: rng R is rational-functions-membered;
+    let y be set;
+    thus thesis by A3;
+  end;
+  cluster real-functions-valued -> ext-real-functions-valued Relation;
+  coherence
+  proof
+    let R be Relation such that
+A4: rng R is real-functions-membered;
+    let y be set;
+    thus thesis by A4;
+  end;
+  cluster real-functions-valued -> complex-functions-valued Relation;
+  coherence
+  proof
+    let R be Relation such that
+A5: rng R is real-functions-membered;
+    let y be set;
+    thus thesis by A5;
+  end;
+end;
+
+registration
+  cluster empty -> natural-functions-valued Relation;
+  coherence
+  proof let X be Relation such that
+Z:  X is empty;
+    let x;
+    thus thesis by Z;
+  end;
+end;
+
+registration
+  let R be complex-functions-valued Relation;
+  cluster rng R -> complex-functions-membered;
+  coherence by Def19;
+end;
+
+registration
+  let R be ext-real-functions-valued Relation;
+  cluster rng R -> ext-real-functions-membered;
+  coherence by Def20;
+end;
+
+registration
+  let R be real-functions-valued Relation;
+  cluster rng R -> real-functions-membered;
+  coherence by Def21;
+end;
+
+registration
+  let R be rational-functions-valued Relation;
+  cluster rng R -> rational-functions-membered;
+  coherence by Def22;
+end;
+
+registration
+  let R be integer-functions-valued Relation;
+  cluster rng R -> integer-functions-membered;
+  coherence by Def23;
+end;
+
+registration
+  let R be natural-functions-valued Relation;
+  cluster rng R -> natural-functions-membered;
+  coherence by Def24;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  cluster -> complex-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be ext-real-functions-membered set;
+  cluster -> ext-real-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  cluster -> real-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  cluster -> rational-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  cluster -> integer-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-functions-membered set;
+  cluster -> natural-functions-valued PartFunc of X,Y;
+  coherence
+  proof
+    let f be PartFunc of X,Y;
+    let x;
+    thus thesis;
+  end;
+end;
+
+registration
+  let f be complex-functions-valued Function;
+  let x;
+  cluster f.x -> Function-like Relation-like;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be ext-real-functions-valued Function;
+  let x;
+  cluster f.x -> Function-like Relation-like;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be complex-functions-valued Function;
+  let x;
+  cluster f.x -> complex-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be ext-real-functions-valued Function;
+  let x;
+  cluster f.x -> ext-real-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be real-functions-valued Function;
+  let x;
+  cluster f.x -> real-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be rational-functions-valued Function;
+  let x;
+  cluster f.x -> rational-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be integer-functions-valued Function;
+  let x;
+  cluster f.x -> integer-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+registration
+  let f be natural-functions-valued Function;
+  let x;
+  cluster f.x -> natural-valued;
+  coherence
+  proof
+    per cases;
+    suppose x in dom f;
+      then f.x in rng f by FUNCT_1:def 5;
+      hence thesis;
+    end;
+    suppose not x in dom f;
+      hence thesis by FUNCT_1:def 4;
+    end;
+  end;
+end;
+
+begin :: Operations
+
+reserve
+  Y, Y1, Y2, Y3, Y4, Y5 for complex-functions-membered set,
+  c, c1, c2 for complex number,
+  f for PartFunc of X,Y,
+  f1 for PartFunc of X1,Y1,
+  f2 for PartFunc of X2,Y2,
+  f3 for PartFunc of X3,Y3,
+  f4 for PartFunc of X4,Y4,
+  f5 for PartFunc of X5,Y5,
+  g, h, k for complex-valued Function;
+
+theorem Tha:
+  g <> {} & g + c1 = g + c2 implies c1 = c2
+  proof
+    assume that
+A2: g <> {} and
+A0: g+c1 = g+c2;
+    consider x such that
+A1: x in dom g by A2,XBOOLE_0:def 1;
+    dom g = dom(g+c1) & dom g = dom(g+c2) by VALUED_1:def 2;
+    then (g+c1).x = g.x+c1 & (g+c2).x = g.x+c2 by A1,VALUED_1:def 2;
+    hence c1 = c2 by A0;
+  end;
+
+theorem Thb:
+  g <> {} & g - c1 = g - c2 implies c1 = c2
+  proof
+    assume that
+A2: g <> {} and
+A0: g-c1 = g-c2;
+    consider x such that
+A1: x in dom g by A2,XBOOLE_0:def 1;
+    dom g = dom(g-c1) & dom g = dom(g-c2) by VALUED_1:def 2;
+    then (g-c1).x = g.x-c1 & (g-c2).x = g.x-c2 by A1,VALUED_1:def 2;
+    hence c1 = c2 by A0;
+  end;
+
+theorem Thc:
+  g <> {} & g is non-empty & g (#) c1 = g (#) c2 implies c1 = c2
+  proof
+    assume that
+A2: g <> {} and
+A4: g is non-empty and
+A0: g(#)c1 = g(#)c2;
+    consider x such that
+A1: x in dom g by A2,XBOOLE_0:def 1;
+    g.x in rng g by A1,FUNCT_1:def 5;
+    then
+A3: g.x <> {} by A4,RELAT_1:def 9;
+    (g(#)c1).x = g.x*c1 & (g(#)c2).x = g.x*c2 by VALUED_1:6;
+    hence c1 = c2 by A0,A3,XCMPLX_1:5;
+  end;
+
+theorem Th81:
+  - (g + c) = -g - c
+  proof
+A1: dom(g+c) = dom g by VALUED_1:def 2;
+A2: dom(-g-c) = dom -g by VALUED_1:def 2;
+A3: dom -(g+c) = dom(g+c) by VALUED_1:8;
+A4: dom -g = dom g by VALUED_1:8;
+    thus dom -(g+c) = dom(-g-c) by A1,A2,A3,VALUED_1:8;
+    let x;
+    assume
+A5: x in dom -(g+c);
+    thus (-(g+c)).x = -(g+c).x by VALUED_1:8
+    .= -(g.x+c) by A3,A5,VALUED_1:def 2
+    .= -g.x-c
+    .= (-g).x-c by VALUED_1:8
+    .= (-g-c).x by A1,A2,A3,A4,A5,VALUED_1:def 2;
+  end;
+
+theorem Th82:
+  - (g - c) = -g + c
+  proof
+A1: dom(g-c) = dom g by VALUED_1:def 2;
+A2: dom(-g+c) = dom -g by VALUED_1:def 2;
+A3: dom -(g-c) = dom(g-c) by VALUED_1:8;
+A4: dom -g = dom g by VALUED_1:8;
+    thus dom -(g-c) = dom(-g+c) by A1,A2,A3,VALUED_1:8;
+    let x;
+    assume
+A5: x in dom -(g-c);
+    thus (-(g-c)).x = -(g-c).x by VALUED_1:8
+    .= -(g.x-c) by A3,A5,VALUED_1:def 2
+    .= -g.x+c
+    .= (-g).x+c by VALUED_1:8
+    .= (-g+c).x by A1,A2,A3,A4,A5,VALUED_1:def 2;
+  end;
+
+theorem Th8:
+  (g + c1) + c2 = g + (c1 + c2)
+  proof
+A1: dom((g+c1)+c2) = dom(g+c1) by VALUED_1:def 2;
+A2: dom(g+c1) = dom g by VALUED_1:def 2;
+A3: dom(g+(c1+c2)) = dom(g) by VALUED_1:def 2;
+    thus dom((g+c1)+c2) = dom(g+(c1+c2)) by A1,A2,VALUED_1:def 2;
+    let x;
+    assume
+A4: x in dom((g+c1)+c2);
+    hence ((g+c1)+c2).x = (g+c1).x+c2 by VALUED_1:def 2
+    .= g.x+c1+c2 by A1,A4,VALUED_1:def 2
+    .= g.x+(c1+c2)
+    .= (g+(c1+c2)).x by A1,A2,A3,A4,VALUED_1:def 2;
+  end;
+
+theorem Th9:
+  (g + c1) - c2 = g + (c1 - c2)
+  proof
+A1: dom((g+c1)-c2) = dom(g+c1) by VALUED_1:def 2;
+A2: dom(g+c1) = dom g by VALUED_1:def 2;
+A3: dom(g+(c1-c2)) = dom(g) by VALUED_1:def 2;
+    thus dom((g+c1)-c2) = dom(g+(c1-c2)) by A1,A2,VALUED_1:def 2;
+    let x;
+    assume
+A4: x in dom((g+c1)-c2);
+    hence ((g+c1)-c2).x = (g+c1).x-c2 by VALUED_1:def 2
+    .= g.x+c1-c2 by A1,A4,VALUED_1:def 2
+    .= g.x+(c1-c2)
+    .= (g+(c1-c2)).x by A1,A2,A3,A4,VALUED_1:def 2;
+  end;
+
+theorem Th10:
+  (g - c1) + c2 = g - (c1 - c2)
+  proof
+A1: dom((g-c1)+c2) = dom(g-c1) by VALUED_1:def 2;
+A2: dom(g-c1) = dom g by VALUED_1:def 2;
+A3: dom(g-(c1-c2)) = dom(g) by VALUED_1:def 2;
+    thus dom((g-c1)+c2) = dom(g-(c1-c2)) by A1,A2,VALUED_1:def 2;
+    let x;
+    assume
+A4: x in dom((g-c1)+c2);
+    hence ((g-c1)+c2).x = (g-c1).x+c2 by VALUED_1:def 2
+    .= g.x-c1+c2 by A1,A4,VALUED_1:def 2
+    .= g.x-(c1-c2)
+    .= (g-(c1-c2)).x by A1,A2,A3,A4,VALUED_1:def 2;
+  end;
+
+theorem Th11:
+  (g - c1) - c2 = g - (c1 + c2)
+  proof
+A1: dom((g-c1)-c2) = dom(g-c1) by VALUED_1:def 2;
+A2: dom(g-c1) = dom g by VALUED_1:def 2;
+A3: dom(g-(c1+c2)) = dom(g) by VALUED_1:def 2;
+    thus dom((g-c1)-c2) = dom(g-(c1+c2)) by A1,A2,VALUED_1:def 2;
+    let x;
+    assume
+A4: x in dom((g-c1)-c2);
+    hence ((g-c1)-c2).x = (g-c1).x-c2 by VALUED_1:def 2
+    .= g.x-c1-c2 by A1,A4,VALUED_1:def 2
+    .= g.x-(c1+c2)
+    .= (g-(c1+c2)).x by A1,A2,A3,A4,VALUED_1:def 2;
+  end;
+
+theorem Th12:
+  g (#) c1 (#) c2 = g (#) (c1 * c2)
+  proof
+A1: dom((g(#)c1)(#)c2) = dom(g(#)c1) by VALUED_1:def 5;
+    dom(g(#)c1) = dom g by VALUED_1:def 5;
+    hence dom((g(#)c1)(#)c2) = dom(g(#)(c1*c2)) by A1,VALUED_1:def 5;
+    let x;
+    assume x in dom((g(#)c1)(#)c2);
+    thus ((g(#)c1)(#)c2).x = (g(#)c1).x*c2 by VALUED_1:6
+    .= g.x*c1*c2 by VALUED_1:6
+    .= g.x*(c1*c2)
+    .= (g(#)(c1*c2)).x by VALUED_1:6;
+  end;
+
+theorem Th13a:
+  - (g + h) = (-g) - h
+  proof
+A1: dom(g+h) = dom g /\ dom h by VALUED_1:def 1;
+a1: dom(-g-h) = dom(-g) /\ dom h by VALUED_1:12;
+A2: dom -(g+h) = dom(g+h) by VALUED_1:8;
+    hence
+A3: dom -(g+h) = dom(-g-h) by A1,a1,VALUED_1:8;
+    let x;
+    assume
+A4: x in dom -(g+h);
+    thus (-(g+h)).x = -(g+h).x by VALUED_1:8
+    .= -(g.x+h.x) by A2,A4,VALUED_1:def 1
+    .= -g.x-h.x
+    .= (-g).x-h.x by VALUED_1:8
+    .= (-g-h).x by A3,A4,VALUED_1:13;
+  end;
+
+theorem Th13:
+  g - h = - (h - g)
+  proof
+A1: dom(g-h) = dom g /\ dom h by VALUED_1:12;
+A2: dom -(h-g) = dom(h-g) by VALUED_1:8;
+    hence
+A3: dom(g-h) = dom -(h-g) by A1,VALUED_1:12;
+    let x;
+    assume
+A4: x in dom(g-h);
+    hence (g-h).x = g.x-h.x by VALUED_1:13
+    .= -(h.x-g.x)
+    .= -(h-g).x by A2,A4,A3,VALUED_1:13
+    .= (-(h-g)).x by VALUED_1:8;
+  end;
+
+theorem Th14b:
+  g (#) h /" k = g (#) (h /" k)
+  proof
+A1: dom(g (#) h) = dom g /\ dom h by VALUED_1:def 4;
+A2: dom(h /" k) = dom h /\ dom k by VALUED_1:16;
+A3: dom(g (#) (h /" k)) = dom g /\ dom(h /" k) by VALUED_1:def 4;
+    dom(g (#) h /" k) = dom(g (#) h) /\ dom k by VALUED_1:16;
+    hence dom(g (#) h /" k) = dom(g (#) (h /" k)) by A1,A2,A3,XBOOLE_1:16;
+    let x;
+    assume x in dom(g (#) h /" k);
+    thus (g (#) h /" k).x = (g (#) h).x / k.x by VALUED_1:17
+    .= g.x * h.x / k.x by VALUED_1:5
+    .= g.x * (h.x / k.x)
+    .= g.x * (h /" k).x by VALUED_1:17
+    .= (g (#) (h /" k)).x by VALUED_1:5;
+  end;
+
+theorem Th14a:
+  g /" h (#) k = g (#) k /" h
+  proof
+A1: dom(g /" h) = dom g /\ dom h by VALUED_1:16;
+A2: dom(g (#) k) = dom g /\ dom k by VALUED_1:def 4;
+A3: dom(g /" h (#) k) = dom(g /" h) /\ dom k by VALUED_1:def 4;
+    dom(g (#) k /" h) = dom(g (#) k) /\ dom h by VALUED_1:16;
+    hence dom(g /" h (#) k) = dom(g (#) k /" h) by A1,A2,A3,XBOOLE_1:16;
+    let x;
+    assume x in dom(g /" h (#) k);
+    thus (g /" h (#) k).x = (g /" h).x * k.x by VALUED_1:5
+    .= g.x / h.x * k.x by VALUED_1:17
+    .= g.x * k.x / h.x
+    .= (g(#)k).x / h.x by VALUED_1:5
+    .= (g (#) k /" h).x by VALUED_1:17;
+  end;
+
+theorem Th14:
+  g /" h /" k = g /" (h (#) k)
+  proof
+A1: dom(g /" h) = dom g /\ dom h by VALUED_1:16;
+A2: dom(h (#) k) = dom h /\ dom k by VALUED_1:def 4;
+A3: dom(g /" h /" k) = dom(g /" h) /\ dom k by VALUED_1:16;
+    dom(g /" (h (#) k)) = dom g /\ dom(h (#) k) by VALUED_1:16;
+    hence dom(g /" h /" k) = dom(g /" (h (#) k)) by A1,A2,A3,XBOOLE_1:16;
+    let x;
+    assume x in dom(g /" h /" k);
+    thus (g /" h /" k).x = (g /" h).x / k.x by VALUED_1:17
+    .= g.x / h.x / k.x by VALUED_1:17
+    .= g.x / (h.x * k.x) by XCMPLX_1:79
+    .= g.x / (h (#) k).x by VALUED_1:5
+    .= (g /" (h (#) k)).x by VALUED_1:17;
+  end;
+
+theorem Th17:
+  c(#)-g = (-c)(#)g
+  proof
+    dom(c(#)-g) = dom -g by VALUED_1:def 5
+    .= dom g by VALUED_1:8;
+    hence dom(c(#)-g) = dom((-c)(#)g) by VALUED_1:def 5;
+    let x;
+    assume x in dom(c(#)-g);
+    thus (c(#)-g).x = c*((-g).x) by VALUED_1:6
+    .= c*(-g.x) by VALUED_1:8
+    .= (-c)*g.x
+    .= ((-c)(#)g).x by VALUED_1:6;
+  end;
+
+theorem Th18:
+  c(#)-g = -(c(#)g)
+  proof
+A1: dom(c(#)-g) = dom -g by VALUED_1:def 5
+    .= dom g by VALUED_1:8;
+    dom(-(c(#)g)) = dom(c(#)g) by VALUED_1:8
+    .= dom g by VALUED_1:def 5;
+    hence dom(c(#)-g) = dom -(c(#)g) by A1;
+    let x;
+    assume x in dom(c(#)-g);
+    thus (c(#)-g).x = c*((-g).x) by VALUED_1:6
+    .= c*(-g.x) by VALUED_1:8
+    .= -(c*g.x)
+    .= -(c(#)g).x by VALUED_1:6
+    .= (-(c(#)g)).x by VALUED_1:8;
+  end;
+
+theorem Th19:
+  (-c)(#)g = -(c(#)g)
+  proof
+    thus (-c)(#)g = c(#)-g by Th17
+    .= -(c(#)g) by Th18;
+  end;
+
+theorem Th13b:
+  - (g (#) h) = (-g) (#) h
+  proof
+A1: dom(g(#)h) = dom g /\ dom h by VALUED_1:def 4;
+a1: dom((-g)(#)h) = dom(-g) /\ dom h by VALUED_1:def 4;
+    dom -(g(#)h) = dom(g(#)h) by VALUED_1:8;
+    hence dom -(g(#)h) = dom((-g)(#)h) by A1,a1,VALUED_1:8;
+    let x;
+    assume x in dom -(g(#)h);
+    thus (-(g(#)h)).x = -(g(#)h).x by VALUED_1:8
+    .= -(g.x*h.x) by VALUED_1:5
+    .= (-g.x)*h.x
+    .= (-g).x*h.x by VALUED_1:8
+    .= ((-g)(#)h).x by VALUED_1:5;
+  end;
+
+theorem
+  - (g /" h) = (-g) /" h
+  proof
+A1: dom(g/"h) = dom g /\ dom h by VALUED_1:16;
+a1: dom((-g)/"h) = dom(-g) /\ dom h by VALUED_1:16;
+    dom -(g/"h) = dom(g/"h) by VALUED_1:8;
+    hence dom -(g/"h) = dom((-g)/"h) by A1,a1,VALUED_1:8;
+    let x;
+    assume x in dom -(g/"h);
+    thus (-(g/"h)).x = -(g/"h).x by VALUED_1:8
+    .= -(g.x/h.x) by VALUED_1:17
+    .= (-g.x)/h.x
+    .= (-g).x/h.x by VALUED_1:8
+    .= ((-g)/"h).x by VALUED_1:17;
+  end;
+
+theorem Th13d:
+  - (g /" h) = g /" -h
+  proof
+A1: dom(g/"h) = dom g /\ dom h by VALUED_1:16;
+a1: dom(g/"-h) = dom g /\ dom -h by VALUED_1:16;
+    dom -h = dom h by VALUED_1:8;
+    hence dom -(g/"h) = dom(g/"-h) by A1,a1,VALUED_1:8;
+    let x;
+    assume x in dom -(g/"h);
+    thus (-(g/"h)).x = -(g/"h).x by VALUED_1:8
+    .= -(g.x/h.x) by VALUED_1:17
+    .= g.x/-h.x by XCMPLX_1:189
+    .= g.x/(-h).x by VALUED_1:8
+    .= (g/"-h).x by VALUED_1:17;
+  end;
+
+definition
+  let f be complex-valued Function, c be complex number;
+  func f (/) c -> Function equals
+  (1/c) (#) f;
+  coherence;
+end;
+
+registration
+  let f be complex-valued Function, c be complex number;
+  cluster f (/) c -> complex-valued;
+  coherence;
+end;
+
+registration
+  let f be real-valued Function, r be real number;
+  cluster f (/) r -> real-valued;
+  coherence;
+end;
+
+registration
+  let f be complex-valued FinSequence, c be complex number;
+  cluster f (/) c -> FinSequence-like;
+  coherence;
+end;
+
+theorem
+  dom(g(/)c) = dom g by VALUED_1:def 5;
+
+theorem
+  (g(/)c).x = g.x / c by VALUED_1:6;
+
+theorem Th20:
+  (-g) (/) c = -(g(/)c)
+  proof
+    thus (-g) (/) c = (-(1/c)) (#) g by Th17
+    .= -(g(/)c) by Th19;
+  end;
+
+theorem Th21:
+  g (/) -c = -(g(/)c)
+  proof
+    thus g (/) -c = (-1/c) (#) g by XCMPLX_1:189
+    .= -(g(/)c) by Th19;
+  end;
+
+theorem
+  g (/) -c = (-g) (/) c
+  proof
+    thus g (/) -c = - (g(/)c) by Th21
+    .= (-g) (/) c by Th20;
+  end;
+
+theorem Thd:
+  g <> {} & g is non-empty & g (/) c1 = g (/) c2 implies c1 = c2
+  proof
+    assume that
+A2: g <> {} and
+A4: g is non-empty and
+A0: g(/)c1 = g(/)c2;
+    consider x such that
+A1: x in dom g by A2,XBOOLE_0:def 1;
+    g.x in rng g by A1,FUNCT_1:def 5;
+    then
+A3: g.x <> {} by A4,RELAT_1:def 9;
+    (g(/)c1).x = g.x/c1 & (g(/)c2).x = g.x/c2 by VALUED_1:6;
+    then c1" = c2" by A0,A3,XCMPLX_1:5;
+    hence c1 = c2 by XCMPLX_1:202;
+  end;
+
+theorem
+  g (#) c1 (/) c2 = g (#) (c1 / c2)
+  proof
+A2: dom(g(#)c1) = dom g by VALUED_1:def 5;
+    dom(g(#)c1(/)c2) = dom(g(#)c1) by VALUED_1:def 5;
+    hence dom(g(#)c1(/)c2) = dom(g(#)(c1/c2)) by A2,VALUED_1:def 5;
+    let x;
+    assume x in dom(g(#)c1(/)c2);
+    thus (g(#)c1(/)c2).x = (g(#)c1).x * c2" by VALUED_1:6
+    .= g.x * c1 * c2" by VALUED_1:6
+    .= g.x*(c1/c2)
+    .= (g(#)(c1/c2)).x by VALUED_1:6;
+  end;
+
+theorem
+  g (/) c1 (#) c2 = g (#) c2 (/) c1
+  proof
+A2: dom(g(/)c1) = dom g by VALUED_1:def 5;
+A3: dom(g(#)c2) = dom g by VALUED_1:def 5;
+    dom(g(/)c1(#)c2) = dom(g(/)c1) by VALUED_1:def 5;
+    hence dom(g(/)c1(#)c2) = dom(g(#)c2(/)c1) by A2,A3,VALUED_1:def 5;
+    let x;
+    assume x in dom(g(/)c1(#)c2);
+    thus (g(/)c1(#)c2).x = (g(/)c1).x * c2 by VALUED_1:6
+    .= g.x * c1" * c2 by VALUED_1:6
+    .= (g.x*c2)*c1"
+    .= (g(#)c2).x*c1" by VALUED_1:6
+    .= (g(#)c2(/)c1).x by VALUED_1:6;
+  end;
+
+theorem
+  g (/) c1 (/) c2 = g (/) (c1*c2)
+  proof
+A2: dom(g(/)c1) = dom g by VALUED_1:def 5;
+    dom(g(/)(c1*c2)) = dom g by VALUED_1:def 5;
+    hence dom(g(/)c1(/)c2) = dom(g(/)(c1*c2)) by A2,VALUED_1:def 5;
+    let x;
+    assume x in dom(g(/)c1(/)c2);
+    thus (g(/)c1(/)c2).x = (g(/)c1).x * c2" by VALUED_1:6
+    .= g.x * c1" * c2" by VALUED_1:6
+    .= g.x * (c1" * c2")
+    .= g.x * (c1*c2)" by XCMPLX_1:205
+    .= (g(/)(c1*c2)).x by VALUED_1:6;
+  end;
+
+theorem
+  (g+h) (/) c = g(/)c + h(/)c
+  proof
+A3: dom(g(/)c) = dom g by VALUED_1:def 5;
+A4: dom(h(/)c) = dom h by VALUED_1:def 5;
+A2: dom((g+h)(/)c) = dom(g+h) by VALUED_1:def 5;
+    dom(g+h) = dom g /\ dom h by VALUED_1:def 1;
+    hence
+A6: dom((g+h)(/)c) = dom(g(/)c+h(/)c) by A3,A4,A2,VALUED_1:def 1;
+    let x;
+    assume
+A5: x in dom((g+h)(/)c);
+    thus ((g+h)(/)c).x = (g+h).x * c" by VALUED_1:6
+    .= (g.x+h.x)*c" by A2,A5,VALUED_1:def 1
+    .= g.x*c" + h.x*c"
+    .= (g(/)c).x + h.x*c" by VALUED_1:6
+    .= (g(/)c).x + (h(/)c).x by VALUED_1:6
+    .= (g(/)c+h(/)c).x by A5,A6,VALUED_1:def 1;
+  end;
+
+theorem
+  (g-h) (/) c = g(/)c - h(/)c
+  proof
+A3: dom(g(/)c) = dom g by VALUED_1:def 5;
+A4: dom(h(/)c) = dom h by VALUED_1:def 5;
+A2: dom((g-h)(/)c) = dom(g-h) by VALUED_1:def 5;
+    dom(g-h) = dom g /\ dom h by VALUED_1:12;
+    hence
+A6: dom((g-h)(/)c) = dom(g(/)c-h(/)c) by A3,A4,A2,VALUED_1:12;
+    let x;
+    assume
+A5: x in dom((g-h)(/)c);
+    thus ((g-h)(/)c).x = (g-h).x * c" by VALUED_1:6
+    .= (g.x-h.x)*c" by A2,A5,VALUED_1:13
+    .= g.x*c" - h.x*c"
+    .= (g(/)c).x - h.x*c" by VALUED_1:6
+    .= (g(/)c).x - (h(/)c).x by VALUED_1:6
+    .= (g(/)c-h(/)c).x by A5,A6,VALUED_1:13;
+  end;
+
+theorem
+  (g(#)h) (/) c = g (#) (h(/)c)
+  proof
+A3: dom(g(#)h) = dom g /\ dom h by VALUED_1:def 4;
+A4: dom(h(/)c) = dom h by VALUED_1:def 5;
+    dom((g(#)h)(/)c) = dom(g(#)h) by VALUED_1:def 5;
+    hence dom((g(#)h)(/)c) = dom(g(#)(h(/)c)) by A3,A4,VALUED_1:def 4;
+    let x;
+    assume x in dom((g(#)h)(/)c);
+    thus ((g(#)h)(/)c).x = (g(#)h).x * c" by VALUED_1:6
+    .= g.x*h.x*c" by VALUED_1:5
+    .= g.x*(h.x*c")
+    .= g.x * (h(/)c).x by VALUED_1:6
+    .= (g(#)(h(/)c)).x by VALUED_1:5;
+  end;
+
+theorem
+  (g/"h) (/) c = g /" (h(#)c)
+  proof
+A3: dom(g/"h) = dom g /\ dom h by VALUED_1:16;
+A4: dom(h(#)c) = dom h by VALUED_1:def 5;
+    dom((g/"h)(/)c) = dom(g/"h) by VALUED_1:def 5;
+    hence dom((g/"h)(/)c) = dom(g/"(h(#)c)) by A3,A4,VALUED_1:16;
+    let x;
+    assume x in dom((g/"h)(/)c);
+    thus ((g/"h)(/)c).x = (g/"h).x * c" by VALUED_1:6
+    .= g.x/h.x/c by VALUED_1:17
+    .= g.x/(h.x*c) by XCMPLX_1:79
+    .= g.x / (h(#)c).x by VALUED_1:6
+    .= (g/"(h(#)c)).x by VALUED_1:17;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  deffunc F(set) = -f.$1;
+  func <->f -> Function means
+:Def32:
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = -f.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f &
+    for x being set st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster <->f -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom<->f;
+    then (<->f).x = -f.x by Def32;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster <->f -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom<->f;
+    then (<->f).x = -f.x by Def32;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster <->f -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom<->f;
+    then (<->f).x = -f.x by Def32;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster <->f -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom<->f;
+    then (<->f).x = -f.x by Def32;
+    hence thesis;
+  end;
+end;
+
+registration
+  let Y be complex-functions-membered set;
+  let f be FinSequence of Y;
+  cluster <->f -> FinSequence-like;
+  coherence
+  proof
+A1: dom<->f = dom f by Def32;
+    ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
+    hence thesis by A1,FINSEQ_1:def 2;
+  end;
+end;
+
+:: --f = f
+theorem
+  f1 = <->f implies <->f1 = f
+  proof
+    assume
+A1: f1 = <->f;
+    then
+A2: dom f1 = dom f by Def32;
+    hence
+A3: dom<->f1 = dom f by Def32;
+    let x;
+    assume
+A4: x in dom<->f1;
+    hence (<->f1).x = -f1.x by Def32
+    .= -(-f.x) by A1,A2,A3,A4,Def32
+    .= f.x;
+  end;
+
+theorem
+  <->f1 = <->f2 implies f1 = f2
+  proof
+    assume
+A1: <->f1 = <->f2;
+A2: dom <->f1 = dom f1 & dom <->f2 = dom f2 by Def32;
+    hence dom f1 = dom f2 by A1;
+    let x;
+    assume
+A4: x in dom f1;
+    thus f1.x = --f1.x
+    .= -(<->f1).x by A2,A4,Def32
+    .= --f2.x by A1,A2,A4,Def32
+    .= f2.x;
+  end;
+
+definition
+  let X be complex-functions-membered set;
+  let Y be set;
+  let f be PartFunc of X,Y;
+  defpred P[set,set] means ex a being complex-valued Function st
+  $1 = a & $2 = f.-a;
+  func f(-) -> Function means
+  dom it = dom f &
+  for x being complex-valued Function st x in dom it holds it.x = f.-x;
+  existence
+  proof
+A2: for x being set st x in dom f ex y being set st P[x,y]
+    proof
+      let x;
+      assume x in dom f;
+      then reconsider a = x as complex-valued Function;
+      take f.-a, a;
+      thus thesis;
+    end;
+    consider F being Function such that
+A3: dom F = dom f and
+A4: for x being set st x in dom f holds P[x,F.x] from CLASSES1:sch 1(A2);
+    take F;
+    thus dom F = dom f by A3;
+    let x be complex-valued Function;
+    assume x in dom F;
+    then P[x,F.x] by A3,A4;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F, G be Function such that
+A5: dom F = dom f and
+A6: for x being complex-valued Function st x in dom F holds F.x = f.-x and
+A7: dom G = dom f and
+A8: for x being complex-valued Function st x in dom G holds G.x = f.-x;
+    thus dom F = dom G by A5,A7;
+    let x;
+    assume
+A9: x in dom F;
+    then reconsider y = x as complex-valued Function by A5;
+    thus F.x = f.-y by A6,A9
+    .= G.x by A5,A7,A8,A9;
+  end;
+end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  deffunc F(set) = (f.$1)";
+  func </>f -> Function means
+:Def34:
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = (f.x)";
+  existence
+  proof
+    ex F being Function st dom F = dom f &
+    for x being set st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster </>f -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom </>f;
+    then (</>f).x = (f.x)" by Def34;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster </>f -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom </>f;
+    then (</>f).x = (f.x)" by Def34;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster </>f -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom </>f;
+    then (</>f).x = (f.x)" by Def34;
+    hence thesis;
+  end;
+end;
+
+registration
+  let Y be complex-functions-membered set;
+  let f be FinSequence of Y;
+  cluster </>f -> FinSequence-like;
+  coherence
+  proof
+A1: dom </>f = dom f by Def34;
+    ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
+    hence thesis by A1,FINSEQ_1:def 2;
+  end;
+end;
+
+:: </></>f = f
+theorem
+  f1 = </>f implies </>f1 = f
+  proof
+    assume
+A1: f1 = </>f;
+    then
+A2: dom f1 = dom f by Def34;
+    hence
+A3: dom </>f1 = dom f by Def34;
+    let x;
+    assume
+A4: x in dom </>f1;
+    hence (</>f1).x = (f1.x)" by Def34
+    .= (f.x)"" by A1,A2,A3,A4,Def34
+    .= f.x;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  deffunc F(set) = abs(f.$1);
+  func abs(f) -> Function means
+:Def35:
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = abs(f.x);
+  existence
+  proof
+    ex F being Function st dom F = dom f &
+    for x being set st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster abs(f) -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom abs f;
+    then (abs f).x = abs(f.x) by Def35;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster abs(f) -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom abs f;
+    then (abs f).x = abs(f.x) by Def35;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster abs(f) -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom abs f;
+    then (abs f).x = abs(f.x) by Def35;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  cluster abs(f) -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom abs f;
+    then (abs f).x = abs(f.x) by Def35;
+    hence thesis;
+  end;
+end;
+
+registration
+  let Y be complex-functions-membered set;
+  let f be FinSequence of Y;
+  cluster abs(f) -> FinSequence-like;
+  coherence
+  proof
+A1: dom abs(f) = dom f by Def35;
+    ex n being Nat st dom f = Seg n by FINSEQ_1:def 2;
+    hence thesis by A1,FINSEQ_1:def 2;
+  end;
+end;
+
+:: abs abs f = abs f
+theorem
+  f1 = abs f implies abs f1 = abs f
+  proof
+    assume
+A1: f1 = abs f;
+    hence
+A2: dom abs f1 = dom abs f by Def35;
+    let x;
+    assume
+A3: x in dom abs f1;
+    hence (abs f1).x = abs(f1.x) by Def35
+    .= abs(abs(f.x)) by A1,A2,A3,Def35
+    .= (abs f).x by A2,A3,Def35;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  deffunc F(set) = c+(f.$1);
+  func f[+]c -> Function means
+:Def36:
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = c + f.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f &
+    for x being set st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  cluster f[+]c -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[+]c);
+    then (f[+]c).x = c+f.x by Def36;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be real number;
+  cluster f[+]c -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[+]c);
+    then (f[+]c).x = c+f.x by Def36;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be rational number;
+  cluster f[+]c -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[+]c);
+    then (f[+]c).x = c+f.x by Def36;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be integer number;
+  cluster f[+]c -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[+]c);
+    then (f[+]c).x = c+f.x by Def36;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be natural number;
+  cluster f[+]c -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[+]c);
+    then (f[+]c).x = c+f.x by Def36;
+    hence thesis;
+  end;
+end;
+
+:: f+c1+c2 = f+(c1+c2)
+theorem
+  f1 = f[+]c1 implies f1 [+] c2 = f [+] (c1+c2)
+  proof
+    assume
+A1: f1 = f[+]c1;
+    then
+A2: dom f1 = dom f by Def36;
+A3: dom(f1[+]c2) = dom f1 by Def36;
+    hence
+A4: dom(f1[+]c2) = dom(f[+](c1+c2)) by A2,Def36;
+    let x;
+    assume
+A5: x in dom(f1[+]c2);
+    hence (f1[+]c2).x = f1.x + c2 by Def36
+    .= f.x + c1 + c2 by A1,A3,A5,Def36
+    .= f.x + (c1 + c2) by Th8
+    .= (f[+](c1+c2)).x by A5,A4,Def36;
+  end;
+
+theorem
+  f <> {} & f is non-empty & f [+] c1 = f [+] c2 implies c1 = c2
+  proof
+    assume that
+A2: f <> {} and
+A5: f is non-empty and
+A0: f[+]c1 = f[+]c2;
+    consider x such that
+A1: x in dom f by A2,XBOOLE_0:def 1;
+    f.x in rng f by A1,FUNCT_1:def 5;
+    then
+A4: f.x <> {} by A5,RELAT_1:def 9;
+    dom f = dom(f[+]c1) & dom f = dom(f[+]c2) by Def36;
+    then (f[+]c1).x = f.x+c1 & (f[+]c2).x = f.x+c2 by A1,Def36;
+    hence c1 = c2 by A0,A4,Tha;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  func f[-]c -> Function equals
+  f [+] -c;
+  coherence;
+end;
+
+theorem
+  dom(f[-]c) = dom f by Def36;
+
+theorem
+  x in dom(f[-]c) implies (f[-]c).x = f.x - c by Def36;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  cluster f[-]c -> complex-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be real number;
+  cluster f[-]c -> real-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be rational number;
+  cluster f[-]c -> rational-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be integer number;
+  cluster f[-]c -> integer-functions-valued;
+  coherence;
+end;
+
+theorem
+  f <> {} & f is non-empty & f [-] c1 = f [-] c2 implies c1 = c2
+  proof
+    assume that
+A2: f <> {} and
+A5: f is non-empty and
+A0: f[-]c1 = f[-]c2;
+    consider x such that
+A1: x in dom f by A2,XBOOLE_0:def 1;
+    f.x in rng f by A1,FUNCT_1:def 5;
+    then
+A4: f.x <> {} by A5,RELAT_1:def 9;
+    dom f = dom(f[-]c1) & dom f = dom(f[-]c2) by Def36;
+    then (f[-]c1).x = f.x-c1 & (f[-]c2).x = f.x-c2 by A1,Def36;
+    hence c1 = c2 by A0,A4,Thb;
+  end;
+
+:: f+c1-c2 = f+(c1-c2)
+theorem
+  f1 = f[+]c1 implies f1 [-] c2 = f [+] (c1-c2)
+  proof
+    assume
+A1: f1 = f[+]c1;
+    then
+A2: dom f1 = dom f by Def36;
+A3: dom(f1[-]c2) = dom f1 by Def36;
+    hence
+A4: dom(f1[-]c2) = dom(f[+](c1-c2)) by A2,Def36;
+    let x;
+    assume
+A5: x in dom(f1[-]c2);
+    hence (f1[-]c2).x = f1.x - c2 by Def36
+    .= f.x + c1 - c2 by A1,A3,A5,Def36
+    .= f.x + (c1 - c2) by Th8
+    .= (f[+](c1-c2)).x by A5,A4,Def36;
+  end;
+
+:: f-c1+c2 = f-(c1-c2)
+theorem
+  f1 = f[-]c1 implies f1 [+] c2 = f [-] (c1-c2)
+  proof
+    assume
+A1: f1 = f[-]c1;
+    then
+A2: dom f1 = dom f by Def36;
+A3: dom(f1[+]c2) = dom f1 by Def36;
+    hence
+A4: dom(f1[+]c2) = dom(f[-](c1-c2)) by A2,Def36;
+    let x;
+    assume
+A5: x in dom(f1[+]c2);
+    hence (f1[+]c2).x = f1.x + c2 by Def36
+    .= f.x - c1 + c2 by A1,A3,A5,Def36
+    .= f.x - (c1 - c2) by Th10
+    .= (f[-](c1-c2)).x by A5,A4,Def36;
+  end;
+
+:: f-c1-c2 = f-(c1+c2)
+theorem
+  f1 = f[-]c1 implies f1 [-] c2 = f [-] (c1+c2)
+  proof
+    assume
+A1: f1 = f[-]c1;
+    then
+A2: dom f1 = dom f by Def36;
+A3: dom(f1[-]c2) = dom f1 by Def36;
+    hence
+A4: dom(f1[-]c2) = dom(f[-](c1+c2)) by A2,Def36;
+    let x;
+    assume
+A5: x in dom(f1[-]c2);
+    hence (f1[-]c2).x = f1.x - c2 by Def36
+    .= f.x - c1 - c2 by A1,A3,A5,Def36
+    .= f.x - (c1 + c2) by Th11
+    .= (f[-](c1+c2)).x by A5,A4,Def36;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  deffunc F(set) = c(#)(f.$1);
+  func f[#]c -> Function means
+:Def38:
+  dom it = dom f &
+  for x being set st x in dom it holds it.x = c (#) (f.x);
+  existence
+  proof
+    ex F being Function st dom F = dom f &
+    for x being set st x in dom f holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  cluster f[#]c -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[#]c);
+    then (f[#]c).x = c(#)f.x by Def38;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be real number;
+  cluster f[#]c -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[#]c);
+    then (f[#]c).x = c(#)f.x by Def38;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be rational number;
+  cluster f[#]c -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[#]c);
+    then (f[#]c).x = c(#)f.x by Def38;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be integer number;
+  cluster f[#]c -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[#]c);
+    then (f[#]c).x = c(#)f.x by Def38;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be natural number;
+  cluster f[#]c -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f[#]c);
+    then (f[#]c).x = c(#)f.x by Def38;
+    hence thesis;
+  end;
+end;
+
+:: f(#)c1*c2 = f(#)(c1*c2)
+theorem
+  f1 = f[#]c1 implies f1 [#] c2 = f [#] (c1*c2)
+  proof
+    assume
+A1: f1 = f[#]c1;
+    then
+A2: dom f1 = dom f by Def38;
+A3: dom(f1[#]c2) = dom f1 by Def38;
+    hence
+A4: dom(f1[#]c2) = dom(f[#](c1*c2)) by A2,Def38;
+    let x;
+    assume
+A5: x in dom(f1[#]c2);
+    hence (f1[#]c2).x = f1.x (#) c2 by Def38
+    .= f.x (#) c1 (#) c2 by A1,A3,A5,Def38
+    .= f.x (#) (c1 * c2) by Th12
+    .= (f[#](c1*c2)).x by A5,A4,Def38;
+  end;
+
+theorem
+  f <> {} & f is non-empty & (for x st x in dom f holds f.x is non-empty) &
+  f [#] c1 = f [#] c2 implies c1 = c2
+  proof
+    assume that
+A2: f <> {} and
+A5: f is non-empty and
+B1: for x st x in dom f holds f.x is non-empty and
+A0: f[#]c1 = f[#]c2;
+    consider x such that
+A1: x in dom f by A2,XBOOLE_0:def 1;
+    f.x in rng f by A1,FUNCT_1:def 5;
+    then
+A4: f.x <> {} by A5,RELAT_1:def 9;
+A6: f.x is non-empty by A1,B1;
+    dom f = dom(f[#]c1) & dom f = dom(f[#]c2) by Def38;
+    then (f[#]c1).x = f.x(#)c1 & (f[#]c2).x = f.x(#)c2 by A1,Def38;
+    hence c1 = c2 by A0,A4,A6,Thc;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  func f[/]c -> Function equals
+  f [#] (c");
+  coherence;
+end;
+
+theorem
+  dom(f[/]c) = dom f by Def38;
+
+theorem
+  x in dom(f[/]c) implies (f[/]c).x = c" (#) f.x by Def38;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be complex number;
+  cluster f[/]c -> complex-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be real number;
+  cluster f[/]c -> real-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let c be rational number;
+  cluster f[/]c -> rational-functions-valued;
+  coherence;
+end;
+
+:: f(/)c1(/)c2 = f(/)(c1*c2)
+theorem
+  f1 = f[/]c1 implies f1 [/] c2 = f [/] (c1*c2)
+  proof
+    assume
+A1: f1 = f[/]c1;
+    then
+A2: dom f1 = dom f by Def38;
+A3: dom(f1[/]c2) = dom f1 by Def38;
+    hence
+A4: dom(f1[/]c2) = dom(f[/](c1*c2)) by A2,Def38;
+    let x;
+    assume
+A5: x in dom(f1[/]c2);
+    hence (f1[/]c2).x = f1.x (#) c2" by Def38
+    .= f.x (#) c1" (#) c2" by A1,A3,A5,Def38
+    .= f.x (#) (c1" * c2") by Th12
+    .= f.x (#) (c1*c2)" by XCMPLX_1:205
+    .= (f[/](c1*c2)).x by A5,A4,Def38;
+  end;
+
+theorem
+  f <> {} & f is non-empty & (for x st x in dom f holds f.x is non-empty) &
+  f [/] c1 = f [/] c2 implies c1 = c2
+  proof
+    assume that
+A2: f <> {} and
+A5: f is non-empty and
+B1: for x st x in dom f holds f.x is non-empty and
+A0: f[/]c1 = f[/]c2;
+    consider x such that
+A1: x in dom f by A2,XBOOLE_0:def 1;
+    f.x in rng f by A1,FUNCT_1:def 5;
+    then
+A4: f.x <> {} by A5,RELAT_1:def 9;
+A6: f.x is non-empty by A1,B1;
+    dom f = dom(f[/]c1) & dom f = dom(f[/]c2) by Def38;
+    then (f[/]c1).x = f.x(/)c1 & (f[/]c2).x = f.x(/)c2 by A1,Def38;
+    hence c1 = c2 by A0,A4,A6,Thd;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  deffunc F(set) = f.$1+g.$1;
+  func f<+>g -> Function means
+:Def40:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x + g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  cluster f<+>g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<+>g);
+    then (f<+>g).x = f.x+g.x by Def40;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be real-valued Function;
+  cluster f<+>g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<+>g);
+    then (f<+>g).x = f.x+g.x by Def40;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be rational-valued Function;
+  cluster f<+>g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<+>g);
+    then (f<+>g).x = f.x+g.x by Def40;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be integer-valued Function;
+  cluster f<+>g -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<+>g);
+    then (f<+>g).x = f.x+g.x by Def40;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be natural-valued Function;
+  cluster f<+>g -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<+>g);
+    then (f<+>g).x = f.x+g.x by Def40;
+    hence thesis;
+  end;
+end;
+
+:: f+g+h = f+(g+h)
+theorem
+  f1 = f<+>g implies f1 <+> h = f <+> (g+h)
+  proof
+    assume
+A1: f1 = f<+>g;
+    then
+A2: dom f1 = dom f /\ dom g by Def40;
+A3: dom(f1<+>h) = dom f1 /\ dom h by Def40;
+A4: dom(f<+>(g+h)) = dom f /\ dom(g+h) by Def40;
+    dom(g+h) = dom g /\ dom h by VALUED_1:def 1;
+    hence
+A5: dom(f1<+>h) = dom(f<+>(g+h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1<+>h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+A8: x in dom(g+h) by A4,A6,A5,XBOOLE_0:def 4;
+    thus (f1<+>h).x = f1.x + h.x by A6,Def40
+    .= f.x + g.x + h.x by A1,A7,Def40
+    .= f.x + (g.x + h.x) by Th8
+    .= f.x + ((g+h).x) by A8,VALUED_1:def 1
+    .= (f<+>(g+h)).x by A6,A5,Def40;
+  end;
+
+:: -(f+g) = -f+-g
+theorem
+  f1 = f<+>g & f2 = <->f implies <->f1 = f2 <+> -g
+  proof
+    assume that
+A1: f1 = f<+>g and
+A2: f2 = <->f;
+A3: dom <->f1 = dom f1 by Def32;
+A4: dom f1 = dom f /\ dom g by A1,Def40;
+A5: dom f2 = dom f by A2,Def32;
+    dom -g = dom g by VALUED_1:8;
+    hence
+A7: dom <->f1 = dom(f2<+>-g) by A3,A4,A5,Def40;
+    let x;
+    assume
+A8: x in dom <->f1;
+    then
+A9: x in dom f2 by A3,A4,A5,XBOOLE_0:def 4;
+    thus (<->f1).x = -f1.x by A8,Def32
+    .= -(f.x+g.x) by A1,A3,A8,Def40
+    .= -f.x-g.x by Th81
+    .= -f.x+(-g).x by VALUED_1:8
+    .= f2.x+(-g).x by A2,A9,Def32
+    .= (f2<+>-g).x by A7,A8,Def40;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  func f<->g -> Function equals
+  f <+> -g;
+  coherence;
+end;
+
+theorem Th35:
+  dom(f<->g) = dom f /\ dom g
+  proof
+    thus dom(f<->g) = dom f /\ dom -g by Def40
+    .= dom f /\ dom g by VALUED_1:8;
+  end;
+
+theorem Th36:
+  x in dom(f<->g) implies (f<->g).x = f.x - g.x
+  proof
+    assume x in dom(f<->g);
+    hence (f<->g).x = f.x + (-g).x by Def40
+    .= f.x - g.x by VALUED_1:8;
+  end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  cluster f<->g -> complex-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be real-valued Function;
+  cluster f<->g -> real-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be rational-valued Function;
+  cluster f<->g -> rational-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be integer-valued Function;
+  cluster f<->g -> integer-functions-valued;
+  coherence;
+end;
+
+theorem
+  f <-> -g = f <+> g;
+
+:: -(f-g) = -f+g
+theorem
+  f1 = f<->g & f2 = <->f implies <->f1 = f2 <+> g
+  proof
+    assume that
+A1: f1 = f<->g and
+A2: f2 = <->f;
+A3: dom <->f1 = dom f1 by Def32;
+A4: dom f1 = dom f /\ dom g by A1,Th35;
+A5: dom f2 = dom f by A2,Def32;
+    hence
+A7: dom <->f1 = dom(f2<+>g) by A3,A4,Def40;
+    let x;
+    assume
+A8: x in dom <->f1;
+    then
+A9: x in dom f2 by A3,A4,A5,XBOOLE_0:def 4;
+    thus (<->f1).x = -f1.x by A8,Def32
+    .= -(f.x-g.x) by A1,A3,A8,Th36
+    .= -f.x+g.x by Th82
+    .= f2.x+g.x by A2,A9,Def32
+    .= (f2<+>g).x by A7,A8,Def40;
+  end;
+
+:: f+g-h = f+(g-h)
+theorem
+  f1 = f<+>g implies f1 <-> h = f <+> (g-h)
+  proof
+    assume
+A1: f1 = f<+>g;
+    then
+A2: dom f1 = dom f /\ dom g by Def40;
+A3: dom(f1<->h) = dom f1 /\ dom h by Th35;
+A4: dom(f<+>(g-h)) = dom f /\ dom(g-h) by Def40;
+    dom(g-h) = dom g /\ dom h by VALUED_1:12;
+    hence
+A5: dom(f1<->h) = dom(f<+>(g-h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1<->h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+A8: x in dom(g-h) by A4,A6,A5,XBOOLE_0:def 4;
+    thus (f1<->h).x = f1.x - h.x by A6,Th36
+    .= f.x + g.x - h.x by A1,A7,Def40
+    .= f.x + (g.x - h.x) by Th9
+    .= f.x + ((g-h).x) by A8,VALUED_1:13
+    .= (f<+>(g-h)).x by A6,A5,Def40;
+  end;
+
+:: f-g+h = f-(g-h)
+theorem
+  f1 = f<->g implies f1 <+> h = f <-> (g-h)
+  proof
+    assume
+A1: f1 = f<->g;
+    then
+A2: dom f1 = dom f /\ dom g by Th35;
+A3: dom(f1<+>h) = dom f1 /\ dom h by Def40;
+A4: dom(f<->(g-h)) = dom f /\ dom(g-h) by Th35;
+    dom(g-h) = dom g /\ dom h by VALUED_1:12;
+    hence
+A5: dom(f1<+>h) = dom(f<->(g-h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1<+>h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+A8: x in dom(g-h) by A4,A6,A5,XBOOLE_0:def 4;
+    thus (f1<+>h).x = f1.x + h.x by A6,Def40
+    .= f.x - g.x + h.x by A1,A7,Th36
+    .= f.x - (g.x - h.x) by Th10
+    .= f.x - ((g-h).x) by A8,VALUED_1:13
+    .= (f<->(g-h)).x by A6,A5,Th36;
+  end;
+
+:: f-g-h = f-(g+h)
+theorem
+  f1 = f<->g implies f1 <-> h = f <-> (g+h)
+  proof
+    assume
+A1: f1 = f<->g;
+    then
+A2: dom f1 = dom f /\ dom g by Th35;
+A3: dom(f1<->h) = dom f1 /\ dom h by Th35;
+A4: dom(f<->(g+h)) = dom f /\ dom(g+h) by Th35;
+    dom(g+h) = dom g /\ dom h by VALUED_1:def 1;
+    hence
+A5: dom(f1<->h) = dom(f<->(g+h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1<->h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+A8: x in dom(g+h) by A4,A6,A5,XBOOLE_0:def 4;
+    thus (f1<->h).x = f1.x - h.x by A6,Th36
+    .= f.x - g.x - h.x by A1,A7,Th36
+    .= f.x - (g.x + h.x) by Th11
+    .= f.x - ((g+h).x) by A8,VALUED_1:def 1
+    .= (f<->(g+h)).x by A6,A5,Th36;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  deffunc F(set) = f.$1(#)g.$1;
+  func f<#>g -> Function means
+:Def42:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x (#) g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  cluster f<#>g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<#>g);
+    then (f<#>g).x = f.x(#)g.x by Def42;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be real-valued Function;
+  cluster f<#>g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<#>g);
+    then (f<#>g).x = f.x(#)g.x by Def42;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be rational-valued Function;
+  cluster f<#>g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<#>g);
+    then (f<#>g).x = f.x(#)g.x by Def42;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be integer-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be integer-valued Function;
+  cluster f<#>g -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<#>g);
+    then (f<#>g).x = f.x(#)g.x by Def42;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X;
+  let Y be natural-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be natural-valued Function;
+  cluster f<#>g -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<#>g);
+    then (f<#>g).x = f.x(#)g.x by Def42;
+    hence thesis;
+  end;
+end;
+
+:: f<#>-g = (<->f)<#>g
+theorem
+  f1 = <->f implies f <#> -g = f1 <#> g
+  proof
+    assume
+A1: f1 = <->f;
+    then
+A2: dom f1 = dom f by Def32;
+A3: dom(f1<#>g) = dom f1 /\ dom g by Def42;
+A9: dom(f<#>-g) = dom f /\ dom -g by Def42;
+    hence
+A5: dom(f<#>-g) = dom(f1<#>g) by A2,A3,VALUED_1:8;
+    let x;
+    assume
+A6: x in dom(f<#>-g);
+    then
+A7: x in dom f1 by A9,A2,XBOOLE_0:def 4;
+    thus (f<#>-g).x = f.x (#) (-g).x by A6,Def42
+    .= f.x(#)-g.x by VALUED_1:8
+    .= (-f.x)(#)g.x by Th17
+    .= f1.x(#)g.x by A1,A7,Def32
+    .= (f1<#>g).x by A6,A5,Def42;
+  end;
+
+:: f<#>-g = <->(f<#>g)
+theorem
+  f1 = f <#> g implies f <#> -g = <-> f1
+  proof
+    assume
+A1: f1 = f<#>g;
+    then
+A2: dom f1 = dom f /\ dom g by Def42;
+A9: dom(f<#>-g) = dom f /\ dom -g by Def42;
+A4: dom(<->f1) = dom f1 by Def32;
+    hence
+A5: dom(f<#>-g) = dom(<->f1) by A2,A9,VALUED_1:8;
+    let x;
+    assume
+A6: x in dom(f<#>-g);
+    thus (f<#>-g).x = f.x (#) (-g).x by A6,Def42
+    .= f.x(#)-g.x by VALUED_1:8
+    .= -(f.x(#)g.x) by Th19
+    .= -f1.x by A1,A6,A4,A5,Def42
+    .= (<->f1).x by A6,A5,Def32;
+  end;
+
+:: f<#>g<#>h = f<#>(g(#)h)
+theorem
+  f1 = f<#>g implies f1 <#> h = f <#> (g(#)h)
+  proof
+    assume
+A1: f1 = f<#>g;
+    then
+A2: dom f1 = dom f /\ dom g by Def42;
+A3: dom(f1<#>h) = dom f1 /\ dom h by Def42;
+A4: dom(f<#>(g(#)h)) = dom f /\ dom(g(#)h) by Def42;
+    dom(g(#)h) = dom g /\ dom h by VALUED_1:def 4;
+    hence
+A5: dom(f1<#>h) = dom(f<#>(g(#)h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1<#>h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+A8: x in dom(g(#)h) by A4,A6,A5,XBOOLE_0:def 4;
+    thus (f1<#>h).x = f1.x (#) h.x by A6,Def42
+    .= f.x (#) g.x (#) h.x by A1,A7,Def42
+    .= f.x (#) (g.x * h.x) by Th12
+    .= f.x (#) ((g(#)h).x) by A8,VALUED_1:def 4
+    .= (f<#>(g(#)h)).x by A6,A5,Def42;
+  end;
+
+definition
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  func f</>g -> Function equals
+  f <#> (g");
+  coherence;
+end;
+
+theorem Th100:
+  dom(f</>g) = dom f /\ dom g
+  proof
+    thus dom(f</>g) = dom f /\ dom(g") by Def42
+    .= dom f /\ dom g by VALUED_1:def 7;
+  end;
+
+theorem Th101:
+  x in dom(f</>g) implies (f</>g).x = f.x (/) g.x
+  proof
+    assume x in dom(f</>g);
+    hence (f</>g).x = f.x (#) (g").x by Def42
+    .= f.x (/) g.x by VALUED_1:10;
+  end;
+
+registration
+  let X;
+  let Y be complex-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be complex-valued Function;
+  cluster f</>g -> complex-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be real-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be real-valued Function;
+  cluster f</>g -> real-functions-valued;
+  coherence;
+end;
+
+registration
+  let X;
+  let Y be rational-functions-membered set;
+  let f be PartFunc of X,Y;
+  let g be rational-valued Function;
+  cluster f</>g -> rational-functions-valued;
+  coherence;
+end;
+
+:: f<#>g</>h = f<#>(g(/)h)
+theorem
+  f1 = f<#>g implies f1 </> h = f <#> (g/"h)
+  proof
+    assume
+A1: f1 = f<#>g;
+    then
+A2: dom f1 = dom f /\ dom g by Def42;
+A3: dom(f1</>h) = dom f1 /\ dom h by Th100;
+A4: dom(f<#>(g/"h)) = dom f /\ dom(g/"h) by Def42;
+    dom(g/"h) = dom g /\ dom h by VALUED_1:16;
+    hence
+A5: dom(f1</>h) = dom(f<#>(g/"h)) by A2,A3,A4,XBOOLE_1:16;
+    let x;
+    assume
+A6: x in dom(f1</>h);
+    then
+A7: x in dom f1 by A3,XBOOLE_0:def 4;
+    thus (f1</>h).x = f1.x (/) h.x by A6,Th101
+    .= f.x (#) g.x (/) h.x by A1,A7,Def42
+    .= f.x (#) (g.x / h.x) by Th12
+    .= f.x (#) ((g/"h).x) by VALUED_1:17
+    .= (f<#>(g/"h)).x by A6,A5,Def42;
+  end;
+
+definition
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  deffunc F(set) = f.$1+g.$1;
+  func f<++>g -> Function means
+:Def44:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x + g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<++>g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<++>g);
+    then (f<++>g).x = f.x+g.x by Def44;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be real-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<++>g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<++>g);
+    then (f<++>g).x = f.x+g.x by Def44;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be rational-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<++>g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<++>g);
+    then (f<++>g).x = f.x+g.x by Def44;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be integer-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<++>g -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<++>g);
+    then (f<++>g).x = f.x+g.x by Def44;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be natural-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<++>g -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<++>g);
+    then (f<++>g).x = f.x+g.x by Def44;
+    hence thesis;
+  end;
+end;
+
+theorem Th43:
+  f1 <++> f2 = f2 <++> f1
+  proof
+    dom(f1<++>f2) = dom f1 /\ dom f2 by Def44;
+    hence
+A1: dom(f1<++>f2) = dom(f2<++>f1) by Def44;
+    let x;
+    assume
+A2: x in dom(f1<++>f2);
+    hence (f1<++>f2).x = f1.x + f2.x by Def44
+    .= (f2<++>f1).x by A2,A1,Def44;
+  end;
+
+:: (f+f1)+f2 = f+(f1+f2)
+theorem
+  f3 = f<++>f1 & f4 = f1<++>f2 implies f3 <++> f2 = f <++> f4
+  proof
+    assume that
+A1: f3 = f<++>f1 and
+A2: f4 = f1<++>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def44;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def44;
+A5: dom(f3<++>f2) = dom f3 /\ dom f2 by Def44;
+A6: dom(f<++>f4) = dom f /\ dom f4 by Def44;
+    hence
+A7: dom(f3<++>f2) = dom(f<++>f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<++>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<++>f2).x = f3.x + f2.x by A8,Def44
+    .= f.x + f1.x + f2.x by A1,A9,Def44
+    .= f.x + (f1.x + f2.x) by RFUNCT_1:19
+    .= f.x + f4.x by A10,A2,Def44
+    .= (f<++>f4).x by A8,A7,Def44;
+  end;
+
+:: -(f+g) = -f + -g
+theorem
+  f3 = f1 <++> f2 & f4 = <->f1 & f5 = <->f2 implies <->f3 = f4 <++> f5
+  proof
+    assume that
+a1: f3 = f1 <++> f2 and
+a2: f4 = <->f1 and
+a3: f5 = <->f2;
+a4: dom(f1 <++> f2) = dom f1 /\ dom f2 by Def44;
+a5: dom <->f1 = dom f1 by Def32;
+a6: dom <->f2 = dom f2 by Def32;
+a7: dom <->f3 = dom f3 by Def32;
+    hence
+A1: dom(<->f3) = dom(f4<++>f5) by a1,a2,a3,a4,a5,a6,Def44;
+    let x;
+    assume
+A2: x in dom(<->f3);
+    then
+a8: x in dom f4 by a1,a2,a4,a5,a7,XBOOLE_0:def 4;
+a9: x in dom f5 by a1,a3,a4,a6,a7,A2,XBOOLE_0:def 4;
+    thus (<->f3).x = -f3.x by A2,Def32
+    .= -(f1.x+f2.x) by a1,a7,A2,Def44
+    .= -f1.x-f2.x by Th13a
+    .= f4.x + -f2.x by a2,a8,Def32
+    .= f4.x + f5.x by a3,a9,Def32
+    .= (f4<++>f5).x by A2,A1,Def44;
+  end;
+
+definition
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  deffunc F(set) = f.$1-g.$1;
+  func f<-->g -> Function means
+:Def45:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x - g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<-->g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<-->g);
+    then (f<-->g).x = f.x-g.x by Def45;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be real-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<-->g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<-->g);
+    then (f<-->g).x = f.x-g.x by Def45;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be rational-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<-->g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<-->g);
+    then (f<-->g).x = f.x-g.x by Def45;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be integer-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<-->g -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<-->g);
+    then (f<-->g).x = f.x-g.x by Def45;
+    hence thesis;
+  end;
+end;
+
+:: f1<-->f2 = -(f2<-->f1)
+theorem
+  f = f2 <--> f1 implies f1 <--> f2 = <->f
+  proof
+    assume
+A1: f = f2<-->f1;
+A2: dom(f1<-->f2) = dom f1 /\ dom f2 by Def45;
+A3: dom(f2<-->f1) = dom f2 /\ dom f1 by Def45;
+    hence
+A4: dom(f1<-->f2) = dom<->f by A1,A2,Def32;
+    let x;
+    assume
+A5: x in dom(f1<-->f2);
+    hence (f1<-->f2).x = f1.x-f2.x by Def45
+    .= -(f2.x-f1.x) by Th13
+    .= -f.x by A1,A2,A3,A5,Def45
+    .= (<->f).x by A5,A4,Def32;
+  end;
+
+:: -(f-g) = -f + g
+theorem
+  f3 = f1 <--> f2 & f4 = <->f1 implies <->f3 = f4 <++> f2
+  proof
+    assume that
+a1: f3 = f1 <--> f2 and
+a2: f4 = <->f1;
+a4: dom(f1 <--> f2) = dom f1 /\ dom f2 by Def45;
+a5: dom <->f1 = dom f1 by Def32;
+a7: dom <->f3 = dom f3 by Def32;
+    hence
+A1: dom(<->f3) = dom(f4<++>f2) by a1,a2,a4,a5,Def44;
+    let x;
+    assume
+A2: x in dom(<->f3);
+    then
+a8: x in dom f4 by a1,a2,a4,a5,a7,XBOOLE_0:def 4;
+    thus (<->f3).x = -f3.x by A2,Def32
+    .= -(f1.x-f2.x) by a1,a7,A2,Def45
+    .= -f1.x--f2.x by Th13a
+    .= f4.x + f2.x by a2,a8,Def32
+    .= (f4<++>f2).x by A2,A1,Def44;
+  end;
+
+:: (f+f1)-f2 = f+(f1-f2)
+theorem
+  f3 = f<++>f1 & f4 = f1<-->f2 implies f3 <--> f2 = f <++> f4
+  proof
+    assume that
+A1: f3 = f<++>f1 and
+A2: f4 = f1<-->f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def44;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def45;
+A5: dom(f3<-->f2) = dom f3 /\ dom f2 by Def45;
+A6: dom(f<++>f4) = dom f /\ dom f4 by Def44;
+    hence
+A7: dom(f3<-->f2) = dom(f<++>f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<-->f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<-->f2).x = f3.x - f2.x by A8,Def45
+    .= f.x + f1.x - f2.x by A1,A9,Def44
+    .= f.x + (f1.x - f2.x) by RFUNCT_1:19
+    .= f.x + f4.x by A10,A2,Def45
+    .= (f<++>f4).x by A8,A7,Def44;
+  end;
+
+:: (f-f1)+f2 = f-(f1-f2)
+theorem
+  f3 = f<-->f1 & f4 = f1<-->f2 implies f3 <++> f2 = f <--> f4
+  proof
+    assume that
+A1: f3 = f<-->f1 and
+A2: f4 = f1<-->f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def45;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def45;
+A5: dom(f3<++>f2) = dom f3 /\ dom f2 by Def44;
+A6: dom(f<-->f4) = dom f /\ dom f4 by Def45;
+    hence
+A7: dom(f3<++>f2) = dom(f<-->f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<++>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<++>f2).x = f3.x + f2.x by A8,Def44
+    .= f.x - f1.x + f2.x by A1,A9,Def45
+    .= f.x - (f1.x - f2.x) by RFUNCT_1:34
+    .= f.x - f4.x by A10,A2,Def45
+    .= (f<-->f4).x by A8,A7,Def45;
+  end;
+
+:: (f-f1)-f2 = f-(f1+f2)
+theorem
+  f3 = f<-->f1 & f4 = f1<++>f2 implies f3 <--> f2 = f <--> f4
+  proof
+    assume that
+A1: f3 = f<-->f1 and
+A2: f4 = f1<++>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def45;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def44;
+A5: dom(f3<-->f2) = dom f3 /\ dom f2 by Def45;
+A6: dom(f<-->f4) = dom f /\ dom f4 by Def45;
+    hence
+A7: dom(f3<-->f2) = dom(f<-->f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<-->f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<-->f2).x = f3.x - f2.x by A8,Def45
+    .= f.x - f1.x - f2.x by A1,A9,Def45
+    .= f.x - (f1.x + f2.x) by RFUNCT_1:32
+    .= f.x - f4.x by A10,A2,Def44
+    .= (f<-->f4).x by A8,A7,Def45;
+  end;
+
+:: (f-f1)-f2 = f-f2-f1
+theorem
+  f3 = f<-->f1 & f4 = f<-->f2 implies f3 <--> f2 = f4 <--> f1
+  proof
+    assume that
+A1: f3 = f<-->f1 and
+A2: f4 = f<-->f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def45;
+A4: dom f4 = dom f /\ dom f2 by A2,Def45;
+A5: dom(f3<-->f2) = dom f3 /\ dom f2 by Def45;
+A6: dom(f4<-->f1) = dom f4 /\ dom f1 by Def45;
+    hence
+A7: dom(f3<-->f2) = dom(f4<-->f1) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<-->f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<-->f2).x = f3.x - f2.x by A8,Def45
+    .= f.x - f1.x - f2.x by A1,A9,Def45
+    .= f.x - f2.x - f1.x by RFUNCT_1:35
+    .= f4.x - f1.x by A10,A2,Def45
+    .= (f4<-->f1).x by A8,A7,Def45;
+  end;
+
+definition
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  deffunc F(set) = f.$1(#)g.$1;
+  func f<##>g -> Function means
+:Def46:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x (#) g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<##>g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<##>g);
+    then (f<##>g).x = f.x(#)g.x by Def46;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be real-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<##>g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<##>g);
+    then (f<##>g).x = f.x(#)g.x by Def46;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be rational-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<##>g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<##>g);
+    then (f<##>g).x = f.x(#)g.x by Def46;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be integer-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<##>g -> integer-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<##>g);
+    then (f<##>g).x = f.x(#)g.x by Def46;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be natural-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<##>g -> natural-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<##>g);
+    then (f<##>g).x = f.x(#)g.x by Def46;
+    hence thesis;
+  end;
+end;
+
+theorem Th49:
+  f1 <##> f2 = f2 <##> f1
+  proof
+    dom(f1<##>f2) = dom f1 /\ dom f2 by Def46;
+    hence
+A1: dom(f1<##>f2) = dom(f2<##>f1) by Def46;
+    let x;
+    assume
+A2: x in dom(f1<##>f2);
+    hence (f1<##>f2).x = f1.x (#) f2.x by Def46
+    .= (f2<##>f1).x by A2,A1,Def46;
+  end;
+
+:: (f*f1)*f2 = f*(f1*f2)
+theorem
+  f3 = f<##>f1 & f4 = f1<##>f2 implies f3 <##> f2 = f <##> f4
+  proof
+    assume that
+A1: f3 = f<##>f1 and
+A2: f4 = f1<##>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def46;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def46;
+A5: dom(f3<##>f2) = dom f3 /\ dom f2 by Def46;
+A6: dom(f<##>f4) = dom f /\ dom f4 by Def46;
+    hence
+A7: dom(f3<##>f2) = dom(f<##>f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<##>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<##>f2).x = f3.x (#) f2.x by A8,Def46
+    .= f.x (#) f1.x (#) f2.x by A1,A9,Def46
+    .= f.x (#) (f1.x (#) f2.x) by RFUNCT_1:21
+    .= f.x (#) f4.x by A10,A2,Def46
+    .= (f<##>f4).x by A8,A7,Def46;
+  end;
+
+:: -f1 * f2 = -(f1*f2)
+theorem
+  f3 = f1<##>f2 & f4 = <->f1 implies f4 <##> f2 = <->f3
+  proof
+    assume that
+A1: f3 = f1<##>f2 and
+A2: f4 = <->f1;
+A4: dom f3 = dom f1 /\ dom f2 by A1,Def46;
+A5: dom f4 = dom f1 by A2,Def32;
+    dom(f4<##>f2) = dom f4 /\ dom f2 by Def46;
+    hence
+A8: dom(f4<##>f2) = dom(<->f3) by A4,A5,Def32;
+    let x;
+    assume
+A9: x in dom(f4<##>f2);
+    then
+A10: x in dom f3 by A4,A5,Def46;
+    then
+A11: x in dom <->f1 by A2,A4,A5,XBOOLE_0:def 4;
+    thus (f4<##>f2).x = f4.x (#) f2.x by A9,Def46
+    .= (-(f1.x)) (#) f2.x by A2,A11,Def32
+    .= -(f1.x) (#) f2.x by Th13b
+    .= -f3.x by A1,A10,Def46
+    .= (<->f3).x by A9,A8,Def32;
+  end;
+
+:: f1 * -f2 = -(f1*f2)
+theorem
+  f3 = f1<##>f2 & f4 = <->f2 implies f1 <##> f4 = <->f3
+  proof
+    assume that
+A1: f3 = f1<##>f2 and
+A2: f4 = <->f2;
+A4: dom f3 = dom f1 /\ dom f2 by A1,Def46;
+A5: dom f4 = dom f2 by A2,Def32;
+    dom(f1<##>f4) = dom f1 /\ dom f4 by Def46;
+    hence
+A8: dom(f1<##>f4) = dom(<->f3) by A4,A5,Def32;
+    let x;
+    assume
+A9: x in dom(f1<##>f4);
+    then
+A10: x in dom f3 by A4,A5,Def46;
+    then
+A11: x in dom <->f2 by A2,A4,A5,XBOOLE_0:def 4;
+    thus (f1<##>f4).x = f1.x (#) f4.x by A9,Def46
+    .= f1.x (#) -f2.x by A2,A11,Def32
+    .= -(f1.x) (#) f2.x by Th13b
+    .= -f3.x by A1,A10,Def46
+    .= (<->f3).x by A9,A8,Def32;
+  end;
+
+:: f*(f1+f2) = f*f1 + f*f2
+theorem Th51:
+  f3 = f<##>f1 & f4 = f<##>f2 & f5 = f1<++>f2 implies
+  f <##> f5 = f3 <++> f4
+  proof
+    assume that
+A1: f3 = f<##>f1 and
+A2: f4 = f<##>f2 and
+A3: f5 = f1<++>f2;
+A4: dom f3 = dom f /\ dom f1 by A1,Def46;
+A5: dom f4 = dom f /\ dom f2 by A2,Def46;
+A6: dom(f<##>f5) = dom f /\ dom f5 by Def46;
+A7: dom(f3<++>f4) = dom f3 /\ dom f4 by Def44;
+    dom f5 = dom f1 /\ dom f2 by A3,Def44;
+    hence
+A8: dom(f<##>f5) = dom(f3<++>f4) by A7,A4,A5,A6,Th1;
+    let x;
+    assume
+A9: x in dom(f<##>f5);
+    then
+A10: x in dom f3 by A7,A8,XBOOLE_0:def 4;
+A11: x in dom f4 by A7,A9,A8,XBOOLE_0:def 4;
+A12: x in dom f5 by A6,A9,XBOOLE_0:def 4;
+    thus (f<##>f5).x = f.x (#) f5.x by A9,Def46
+    .= f.x (#) (f1.x + f2.x) by A3,A12,Def44
+    .= f.x (#) f1.x + f.x (#) f2.x by RFUNCT_1:22
+    .= f3.x + f.x (#) f2.x by A1,A10,Def46
+    .= f3.x + f4.x by A11,A2,Def46
+    .= (f3<++>f4).x by A9,A8,Def44;
+  end;
+
+:: (f1+f2)*f = f1*f + f2*f
+theorem
+  f3 = f1<##>f & f4 = f2<##>f & f5 = f1<++>f2 implies
+  f5 <##> f = f3 <++> f4
+  proof
+    assume
+A1: f3 = f1<##>f & f4 = f2<##>f & f5 = f1<++>f2;
+A2: f1<##>f = f<##>f1 & f2<##>f = f<##>f2 & f1<++>f2 = f2<++>f1 by Th43,Th49;
+    thus f5 <##> f = f <##> f5 by Th49
+    .= f3 <++> f4 by A1,A2,Th51;
+  end;
+
+:: f*(f1-f2) = f*f1 - f*f2
+theorem Th53:
+  f3 = f<##>f1 & f4 = f<##>f2 & f5 = f1<-->f2 implies
+  f <##> f5 = f3 <--> f4
+  proof
+    assume that
+A1: f3 = f<##>f1 and
+A2: f4 = f<##>f2 and
+A3: f5 = f1<-->f2;
+A4: dom f3 = dom f /\ dom f1 by A1,Def46;
+A5: dom f4 = dom f /\ dom f2 by A2,Def46;
+A6: dom(f<##>f5) = dom f /\ dom f5 by Def46;
+A7: dom(f3<-->f4) = dom f3 /\ dom f4 by Def45;
+    dom f5 = dom f1 /\ dom f2 by A3,Def45;
+    hence
+A8: dom(f<##>f5) = dom(f3<-->f4) by A7,A4,A5,A6,Th1;
+    let x;
+    assume
+A9: x in dom(f<##>f5);
+    then
+A10: x in dom f3 by A7,A8,XBOOLE_0:def 4;
+A11: x in dom f4 by A7,A9,A8,XBOOLE_0:def 4;
+A12: x in dom f5 by A6,A9,XBOOLE_0:def 4;
+    thus (f<##>f5).x = f.x (#) f5.x by A9,Def46
+    .= f.x (#) (f1.x - f2.x) by A3,A12,Def45
+    .= f.x (#) f1.x - f.x (#) f2.x by RFUNCT_1:27
+    .= f3.x - f.x (#) f2.x by A1,A10,Def46
+    .= f3.x - f4.x by A11,A2,Def46
+    .= (f3<-->f4).x by A9,A8,Def45;
+  end;
+
+:: (f1-f2)*f = f1*f - f2*f
+theorem
+  f3 = f1<##>f & f4 = f2<##>f & f5 = f1<-->f2 implies
+  f5 <##> f = f3 <--> f4
+  proof
+    assume
+A1: f3 = f1<##>f & f4 = f2<##>f & f5 = f1<-->f2;
+A2: f1<##>f = f<##>f1 & f2<##>f = f<##>f2 by Th49;
+    thus f5 <##> f = f <##> f5 by Th49
+    .= f3 <--> f4 by A1,A2,Th53;
+  end;
+
+definition
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  deffunc F(set) = f.$1/"g.$1;
+  func f<//>g -> Function means
+:Def47:
+  dom it = dom f /\ dom g &
+  for x being set st x in dom it holds it.x = f.x /" g.x;
+  existence
+  proof
+    ex F being Function st dom F = dom f /\ dom g &
+    for x being set st x in dom f /\ dom g holds F.x = F(x) from FUNCT_1:sch 3;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be Function such that
+A1: dom F = dom f /\ dom g and
+A2: for x being set st x in dom F holds F.x = F(x) and
+A3: dom G = dom f /\ dom g and
+A4: for x being set st x in dom G holds G.x = F(x);
+    thus dom F = dom G by A1,A3;
+    let x;
+    assume
+A5: x in dom F;
+    hence F.x = F(x) by A2
+    .= G.x by A1,A3,A4,A5;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be complex-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<//>g -> complex-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<//>g);
+    then (f<//>g).x = f.x/"g.x by Def47;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be real-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<//>g -> real-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<//>g);
+    then (f<//>g).x = f.x/"g.x by Def47;
+    hence thesis;
+  end;
+end;
+
+registration
+  let X1, X2 be set;
+  let Y1, Y2 be rational-functions-membered set;
+  let f be PartFunc of X1,Y1;
+  let g be PartFunc of X2,Y2;
+  cluster f<//>g -> rational-functions-valued;
+  coherence
+  proof
+    let x;
+    assume x in dom(f<//>g);
+    then (f<//>g).x = f.x/"g.x by Def47;
+    hence thesis;
+  end;
+end;
+
+:: -f1 / f2 = -(f1/f2)
+theorem
+  f3 = f1<//>f2 & f4 = <->f1 implies f4 <//> f2 = <->f3
+  proof
+    assume that
+A1: f3 = f1<//>f2 and
+A2: f4 = <->f1;
+A4: dom f3 = dom f1 /\ dom f2 by A1,Def47;
+A5: dom f4 = dom f1 by A2,Def32;
+    dom(f4<//>f2) = dom f4 /\ dom f2 by Def47;
+    hence
+A8: dom(f4<//>f2) = dom(<->f3) by A4,A5,Def32;
+    let x;
+    assume
+A9: x in dom(f4<//>f2);
+    then
+A10: x in dom f3 by A4,A5,Def47;
+    then
+A11: x in dom <->f1 by A2,A4,A5,XBOOLE_0:def 4;
+    thus (f4<//>f2).x = f4.x /" f2.x by A9,Def47
+    .= (-(f1.x)) /" f2.x by A2,A11,Def32
+    .= -(f1.x) /" f2.x by Th13b
+    .= -f3.x by A1,A10,Def47
+    .= (<->f3).x by A9,A8,Def32;
+  end;
+
+:: f1 / -f2 = -(f1/f2)
+theorem
+  f3 = f1<//>f2 & f4 = <->f2 implies f1 <//> f4 = <->f3
+  proof
+    assume that
+A1: f3 = f1<//>f2 and
+A2: f4 = <->f2;
+A4: dom f3 = dom f1 /\ dom f2 by A1,Def47;
+A5: dom f4 = dom f2 by A2,Def32;
+    dom(f1<//>f4) = dom f1 /\ dom f4 by Def47;
+    hence
+A8: dom(f1<//>f4) = dom(<->f3) by A4,A5,Def32;
+    let x;
+    assume
+A9: x in dom(f1<//>f4);
+    then
+A10: x in dom f3 by A4,A5,Def47;
+    then
+A11: x in dom <->f2 by A2,A4,A5,XBOOLE_0:def 4;
+    thus (f1<//>f4).x = f1.x /" f4.x by A9,Def47
+    .= f1.x /" -f2.x by A2,A11,Def32
+    .= -(f1.x) /" f2.x by Th13d
+    .= -f3.x by A1,A10,Def47
+    .= (<->f3).x by A9,A8,Def32;
+  end;
+
+:: (f*f1)/f2 = f*(f1/f2)
+theorem
+  f3 = f<##>f1 & f4 = f1<//>f2 implies f3 <//> f2 = f <##> f4
+  proof
+    assume that
+A1: f3 = f<##>f1 and
+A2: f4 = f1<//>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def46;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def47;
+A5: dom(f3<//>f2) = dom f3 /\ dom f2 by Def47;
+A6: dom(f<##>f4) = dom f /\ dom f4 by Def46;
+    hence
+A7: dom(f3<//>f2) = dom(f<##>f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<//>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<//>f2).x = f3.x /" f2.x by A8,Def47
+    .= f.x (#) f1.x /" f2.x by A1,A9,Def46
+    .= f.x (#) (f1.x /" f2.x) by Th14b
+    .= f.x (#) f4.x by A10,A2,Def47
+    .= (f<##>f4).x by A8,A7,Def46;
+  end;
+
+:: (f/f1)*f2 = (f*f2)/f1
+theorem
+  f3 = f<//>f1 & f4 = f<##>f2 implies f3 <##> f2 = f4 <//> f1
+  proof
+    assume that
+A1: f3 = f<//>f1 and
+A2: f4 = f<##>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def47;
+A4: dom f4 = dom f /\ dom f2 by A2,Def46;
+A5: dom(f3<##>f2) = dom f3 /\ dom f2 by Def46;
+A6: dom(f4<//>f1) = dom f4 /\ dom f1 by Def47;
+    hence
+A7: dom(f3<##>f2) = dom(f4<//>f1) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<##>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<##>f2).x = f3.x (#) f2.x by A8,Def46
+    .= f.x /" f1.x (#) f2.x by A1,A9,Def47
+    .= f.x (#) f2.x /" f1.x by Th14a
+    .= f4.x /" f1.x by A10,A2,Def46
+    .= (f4<//>f1).x by A8,A7,Def47;
+  end;
+
+:: (f/f1)/f2 = f/(f1*f2)
+theorem
+  f3 = f<//>f1 & f4 = f1<##>f2 implies f3 <//> f2 = f <//> f4
+  proof
+    assume that
+A1: f3 = f<//>f1 and
+A2: f4 = f1<##>f2;
+A3: dom f3 = dom f /\ dom f1 by A1,Def47;
+A4: dom f4 = dom f1 /\ dom f2 by A2,Def46;
+A5: dom(f3<//>f2) = dom f3 /\ dom f2 by Def47;
+A6: dom(f<//>f4) = dom f /\ dom f4 by Def47;
+    hence
+A7: dom(f3<//>f2) = dom(f<//>f4) by A3,A5,A4,XBOOLE_1:16;
+    let x;
+    assume
+A8: x in dom(f3<//>f2);
+    then
+A9: x in dom f3 by A5,XBOOLE_0:def 4;
+A10: x in dom f4 by A6,A8,A7,XBOOLE_0:def 4;
+    thus (f3<//>f2).x = f3.x /" f2.x by A8,Def47
+    .= f.x /" f1.x /" f2.x by A1,A9,Def47
+    .= f.x /" (f1.x (#) f2.x) by Th14
+    .= f.x /" f4.x by A10,A2,Def46
+    .= (f<//>f4).x by A8,A7,Def47;
+  end;
+
+:: (f1+f2)/f = f1+f / f2+f
+theorem
+  f3 = f1<//>f & f4 = f2<//>f & f5 = f1<++>f2 implies
+  f5 <//> f = f3 <++> f4
+  proof
+    assume that
+A1: f3 = f1<//>f and
+A2: f4 = f2<//>f and
+A3: f5 = f1<++>f2;
+A4: dom f3 = dom f1 /\ dom f by A1,Def47;
+A5: dom f4 = dom f2 /\ dom f by A2,Def47;
+A6: dom(f5<//>f) = dom f /\ dom f5 by Def47;
+A7: dom(f3<++>f4) = dom f3 /\ dom f4 by Def44;
+    dom f5 = dom f1 /\ dom f2 by A3,Def44;
+    hence
+A8: dom(f5<//>f) = dom(f3<++>f4) by A7,A4,A5,A6,Th1;
+    let x;
+    assume
+A9: x in dom(f5<//>f);
+    then
+A10: x in dom f3 by A7,A8,XBOOLE_0:def 4;
+A11: x in dom f4 by A7,A9,A8,XBOOLE_0:def 4;
+A12: x in dom f5 by A6,A9,XBOOLE_0:def 4;
+    thus (f5<//>f).x = f5.x /" f.x by A9,Def47
+    .= (f1.x+f2.x) /" f.x by A3,A12,Def44
+    .= f1.x /" f.x + f2.x /" f.x by RFUNCT_1:22
+    .= f3.x + f2.x /" f.x by A1,A10,Def47
+    .= f3.x + f4.x by A11,A2,Def47
+    .= (f3<++>f4).x by A9,A8,Def44;
+  end;
+
+:: (f1-f2)/f = f1-f / f2-f
+theorem
+  f3 = f1<//>f & f4 = f2<//>f & f5 = f1<-->f2 implies
+  f5 <//> f = f3 <--> f4
+  proof
+    assume that
+A1: f3 = f1<//>f and
+A2: f4 = f2<//>f and
+A3: f5 = f1<-->f2;
+A4: dom f3 = dom f1 /\ dom f by A1,Def47;
+A5: dom f4 = dom f2 /\ dom f by A2,Def47;
+A6: dom(f5<//>f) = dom f /\ dom f5 by Def47;
+A7: dom(f3<-->f4) = dom f3 /\ dom f4 by Def45;
+    dom f5 = dom f1 /\ dom f2 by A3,Def45;
+    hence
+A8: dom(f5<//>f) = dom(f3<-->f4) by A7,A4,A5,A6,Th1;
+    let x;
+    assume
+A9: x in dom(f5<//>f);
+    then
+A10: x in dom f3 by A7,A8,XBOOLE_0:def 4;
+A11: x in dom f4 by A7,A9,A8,XBOOLE_0:def 4;
+A12: x in dom f5 by A6,A9,XBOOLE_0:def 4;
+    thus (f5<//>f).x = f5.x /" f.x by A9,Def47
+    .= (f1.x-f2.x) /" f.x by A3,A12,Def45
+    .= f1.x /" f.x - f2.x /" f.x by RFUNCT_1:26
+    .= f3.x - f2.x /" f.x by A1,A10,Def47
+    .= f3.x - f4.x by A11,A2,Def47
+    .= (f3<-->f4).x by A9,A8,Def45;
+  end;

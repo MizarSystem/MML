@@ -6,16 +6,17 @@
 
 environ
 
- vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, TARSKI, FUNCT_2, FINSET_1,
-      FINSEQ_1, ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, CAT_1,
-      FUNCT_4, ARYTM;
+ vocabularies RELAT_1, CARD_1, FUNCT_1, BOOLE, FUNCT_2, FINSET_1, FINSEQ_1,
+      ARYTM_1, SQUARE_1, RLVECT_1, PROB_1, ARYTM_3, RFINSEQ, CAT_1, FUNCT_4,
+      ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, CARD_1, NUMBERS, RELAT_1, FUNCT_1,
-      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, XREAL_0, NAT_1, REAL_1, SEQ_1,
-      SEQM_3, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1, XXREAL_0;
+      RELSET_1, FUNCT_2, FINSEQ_1, XCMPLX_0, XREAL_0, INT_1, NAT_1, REAL_1,
+      SEQ_1, CLASSES1, SEQM_3, FINSEQ_4, FINSET_1, FUNCOP_1, FUNCT_4, RVSUM_1,
+      XXREAL_0;
  constructors PARTFUN1, WELLORD2, REAL_1, SQUARE_1, NAT_1, BINOP_2, SEQM_3,
-      FINSEQ_4, FINSOP_1, RVSUM_1, SEQ_1, FUNCOP_1;
+      FINSEQ_4, FINSOP_1, RVSUM_1, SEQ_1, FUNCOP_1, CLASSES1;
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCT_2, FINSET_1, NUMBERS, XREAL_0,
-      NAT_1, MEMBERED, FINSEQ_1, FUNCOP_1, VALUED_0, CARD_1;
+      NAT_1, MEMBERED, FINSEQ_1, FUNCOP_1, VALUED_0, CARD_1, INT_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
@@ -25,66 +26,11 @@ reserve x,y for set,
   n,m for Element of NAT,
   r,s for Real;
 
-definition
-  let F,G be Relation;
-  pred F,G are_fiberwise_equipotent means
-:: RFINSEQ:def 1
+canceled 13;
 
-  for x be set holds Card (F"{x}) = Card (G"{x});
-  reflexivity;
-  symmetry;
+registration let f be FinSequence, x be set;
+ cluster Coim(f,x) -> finite;
 end;
-
-theorem :: RFINSEQ:1
-  for F,G be Function st F,G are_fiberwise_equipotent holds rng F = rng G;
-
-theorem :: RFINSEQ:2
-  for F,G,H be Function
-  st F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent holds
-  G,H are_fiberwise_equipotent;
-
-theorem :: RFINSEQ:3
-  for F,G be Function holds F,G are_fiberwise_equipotent iff
-  ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
-;
-
-theorem :: RFINSEQ:4
-  for F,G be Function holds
-  F,G are_fiberwise_equipotent iff for X be set holds Card (F"X) = Card (G"X);
-
-theorem :: RFINSEQ:5
-  for D be non empty set, F,G be Function st rng F c= D & rng G c= D holds
-  F,G are_fiberwise_equipotent iff
-  for d be Element of D holds Card (F"{d}) = Card (G"{d});
-
-theorem :: RFINSEQ:6
-  for F,G be Function st dom F = dom G holds
-  F,G are_fiberwise_equipotent iff ex P be Permutation of dom F st F = G*P;
-
-theorem :: RFINSEQ:7
-  for F,G be Function
-  st F,G are_fiberwise_equipotent holds Card (dom F) = Card (dom G);
-
-canceled;
-
-theorem :: RFINSEQ:9
-  for F,G be finite Function holds
-  F,G are_fiberwise_equipotent iff for X be set holds card (F"X) = card (G"X);
-
-theorem :: RFINSEQ:10
-  for F,G be finite Function st
-  F,G are_fiberwise_equipotent holds card (dom F) = card (dom G);
-
-theorem :: RFINSEQ:11
-  for D be non empty set, F,G be finite Function st rng F c= D & rng G c= D
-  holds F,G are_fiberwise_equipotent iff
-  for d be Element of D holds card (F"{d}) = card (G"{d});
-
-canceled;
-
-theorem :: RFINSEQ:13
-  for f,g be FinSequence holds
-  f,g are_fiberwise_equipotent iff for X be set holds card (f"X) = card (g"X);
 
 theorem :: RFINSEQ:14
   for f,g,h be FinSequence holds
@@ -111,6 +57,7 @@ theorem :: RFINSEQ:18
   ex f be FinSequence st F|X, f are_fiberwise_equipotent;
 
 definition
+ canceled;
   let f be FinSequence, n be Nat;
   func f /^ n -> FinSequence means
 :: RFINSEQ:def 2
@@ -252,4 +199,21 @@ reserve k for Nat;
 theorem :: RFINSEQ:42
   for D being non empty set, f being FinSequence of D, k being Nat holds
   len (f/^k)=len f-'k;
+
+:: from SCPQSORT, 2008.10.12, A.T.
+
+theorem :: RFINSEQ:43   :: RFINSEQ:17
+  for f,g be FinSequence,x be set st x in dom g & f,g are_fiberwise_equipotent
+  holds ex y be set st y in dom g & f.x=g.y;
+
+theorem :: RFINSEQ:44    ::Th14
+  for f,g,h be FinSequence holds
+  f,g are_fiberwise_equipotent iff h^f, h^g are_fiberwise_equipotent;
+
+theorem :: RFINSEQ:45
+  for f,g be FinSequence,m,n,j be Element of NAT
+  st f,g are_fiberwise_equipotent &
+  m<=n & n <= len f & (for i be Element of NAT st 1<=i & i<=m holds f.i=g.i) &
+  (for i be Element of NAT st n<i & i<=len f holds f.i=g.i) & (m<j & j<=n)
+  holds ex k be Element of NAT st m<k & k<=n & f.j=g.k;
 

@@ -13,6 +13,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="ALGSTR_3"/>
 </Signature>
@@ -22,7 +24,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="33"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="2">
@@ -31,7 +33,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
+<Adjective nr="26" value="false"/>
 </Cluster>
 </RCluster>
 <RCluster aid="ALGSTR_3" nr="3">
@@ -40,17 +42,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <FCluster aid="ALGSTR_3" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="97"/>
+<Func kind="K" nr="105"/>
 <Cluster>
-<Adjective nr="21" value="false"/>
-<Adjective nr="33"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 </Registrations>

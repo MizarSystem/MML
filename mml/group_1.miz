@@ -482,7 +482,8 @@ proof
 end;
 
 theorem Th34:
-  for G being unital (non empty multMagma) holds the multF of G has_a_unity
+  for G being unital (non empty multMagma)
+   holds the multF of G is having_a_unity
 proof
   let G be unital (non empty multMagma);
   take 1_G;
@@ -502,7 +503,7 @@ proof
 end;
 
 theorem Th36:
-  the multF of G has_an_inverseOp
+  the multF of G is having_an_inverseOp
 proof inverse_op(G) is_an_inverseOp_wrt the multF of G by Th35;
   hence thesis by FINSEQOP:def 2;
 end;
@@ -511,7 +512,7 @@ theorem
   the_inverseOp_wrt the multF of G = inverse_op(G)
 proof
   set o = the multF of G;
-  o has_a_unity & o is associative & o has_an_inverseOp &
+  o is having_a_unity & o is associative & o is having_an_inverseOp &
   inverse_op(G) is_an_inverseOp_wrt o by Th31,Th34,Th35,Th36;
   hence thesis by FINSEQOP:def 3;
 end;
@@ -1292,16 +1293,10 @@ definition
   h |^ n = 1_G implies n = 0;
 end;
 
-notation
-  let G,h;
-  antonym h is_not_of_order_0 for h is being_of_order_0;
-  synonym h is_of_order_0 for h is being_of_order_0;
-end;
-
 canceled;
 
 theorem Th79:
-  1_G is_not_of_order_0
+  1_G is not being_of_order_0
 proof (1_G) |^ 8 = 1_G & 0 <> 8 by Th42;
   hence thesis by Def11;
 end;
@@ -1310,14 +1305,14 @@ definition
   let G,h;
   func ord h -> Element of NAT means
   :Def12:
-  it = 0 if h is_of_order_0 otherwise h |^ it = 1_G & it <> 0 &
+  it = 0 if h is being_of_order_0 otherwise h |^ it = 1_G & it <> 0 &
   for m st h |^ m = 1_G & m <> 0 holds it <= m;
   existence
   proof
     defpred P[Nat] means h |^ $1 = 1_G & $1 <> 0;
-    thus h is_of_order_0 implies ex n being Element of NAT st n=0;
+    thus h is being_of_order_0 implies ex n being Element of NAT st n=0;
     hereby
-      assume not h is_of_order_0;
+      assume not h is being_of_order_0;
       then consider n be Nat such that
 A1:   h |^ n = 1_G & n <> 0 by Def11;
 A2:   ex n being Nat st P[n] by A1;
@@ -1335,8 +1330,8 @@ A4:   for n being Nat st P[n] holds k <= n from NAT_1:sch 5(A2);
   uniqueness
   proof
     let n1,n2 be Element of NAT;
-    thus h is_of_order_0 & n1 = 0 & n2 = 0 implies n1 = n2;
-    assume that not h is_of_order_0 and
+    thus h is being_of_order_0 & n1 = 0 & n2 = 0 implies n1 = n2;
+    assume that not h is being_of_order_0 and
 A5: h |^ n1 = 1_G & n1 <> 0 & for m st h |^ m = 1_G & m <> 0 holds n1 <= m and
 A6: h |^ n2 = 1_G & n2 <> 0 & for m st h |^ m = 1_G & m <> 0 holds n2 <= m;
     n1 <= n2 & n2 <= n1 by A5,A6;
@@ -1351,11 +1346,11 @@ theorem Th82:
   h |^ ord h = 1_G
 proof
   per cases;
-  suppose h is_of_order_0;
+  suppose h is being_of_order_0;
     then ord h = 0 by Def12;
     hence thesis by Def8;
   end;
-  suppose h is_not_of_order_0;
+  suppose h is not being_of_order_0;
     hence thesis by Def12;
   end;
 end;
@@ -1365,7 +1360,7 @@ canceled;
 theorem
   ord 1_G = 1
 proof
-A1: not 1_G is_of_order_0 by Th79;
+A1: not 1_G is being_of_order_0 by Th79;
 A2: (1_G) |^ 1 = 1_G & 1 <> 0 by Th42;
   for n st (1_G) |^ n = 1_G & n <> 0 holds 1 <= n by NAT_1:14;
   hence thesis by A1,A2,Def12;
@@ -1376,7 +1371,7 @@ theorem
 proof
   assume
 A1: ord h = 1;
-  then not h is_of_order_0 by Def12;
+  then not h is being_of_order_0 by Def12;
   then h |^ 1 = 1_G by A1,Def12;
   hence thesis by Th44;
 end;
@@ -1400,12 +1395,12 @@ A3: h |^ n = 1_G;
 A4:   n <> 0;
       per cases;
       suppose ord h = 0;
-        then h is_of_order_0 by Def12;
+        then h is being_of_order_0 by Def12;
         hence thesis by A3,A4,Def11;
       end;
       suppose
 A5:     ord h <> 0;
-        then h is_not_of_order_0 by Def12;
+        then h is not being_of_order_0 by Def12;
         then ord h <= n by A3,A4,Def12;
         then consider m being Nat such that
 A6:     n = ord h + m by NAT_1:10;
@@ -1425,36 +1420,20 @@ A7:     m = ord h * i by NAT_D:def 3;
 end;
 
 definition
-  let G be 1-sorted;
-  func Ord G -> Cardinal equals
-
-  Card the carrier of G;
-  correctness;
-end;
-
-notation
-  let G be finite 1-sorted;
-  synonym ord G for Ord G;
-end;
-
-definition
   let G be finite 1-sorted;
   canceled;
-  redefine func ord G -> Element of NAT equals
-
-  card the carrier of G;
+  redefine func card G -> Element of NAT;
   coherence
   proof
     card the carrier of G in NAT;
     hence thesis;
   end;
-  correctness;
 end;
 
 canceled 3;
 
 theorem
-  for G being non empty finite 1-sorted holds ord G >= 1
+  for G being non empty finite 1-sorted holds card G >= 1
 proof
   let G be non empty finite 1-sorted;
   consider g being Element of G;
@@ -1463,6 +1442,7 @@ proof
 end;
 
 definition
+ canceled 2;
   let IT be non empty multMagma;
   attr IT is commutative means
   :Def16:

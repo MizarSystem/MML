@@ -48,13 +48,13 @@
 <Adjective nr="26"/>
 <Adjective nr="27"/>
 <Adjective nr="30"/>
-<Adjective nr="45"/>
 <Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
 <Adjective nr="49"/>
 <Adjective nr="50"/>
 <Adjective nr="51"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="NEWTON" nr="2">

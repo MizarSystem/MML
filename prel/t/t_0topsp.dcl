@@ -9,6 +9,9 @@
 <ArticleID name="RELAT_1"/>
 <ArticleID name="FUNCT_1"/>
 <ArticleID name="RELSET_1"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="STRUCT_0"/>
@@ -24,26 +27,26 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="31"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="43"/>
 </Cluster>
 </RCluster>
 <FCluster aid="T_0TOPSP" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="106">
+<Func kind="K" nr="119">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -56,11 +56,11 @@
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="113"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
+<Adjective nr="115"/>
 <Adjective nr="140"/>
-<Adjective nr="156"/>
+<Adjective nr="141"/>
+<Adjective nr="142"/>
+<Adjective nr="158"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL33" nr="2">
@@ -72,7 +72,7 @@
 <Adjective nr="68"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
-<Adjective nr="139"/>
+<Adjective nr="141"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -88,9 +88,9 @@
 <Adjective nr="73"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
-<Adjective nr="139"/>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
+<Adjective nr="141"/>
+<Adjective nr="157"/>
+<Adjective nr="158"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL33" nr="1">
@@ -102,23 +102,23 @@
 <Adjective nr="68"/>
 <Adjective nr="104"/>
 <Adjective nr="105"/>
-<Adjective nr="139"/>
+<Adjective nr="141"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="316">
+<Func kind="K" nr="317">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="155"/>
-<Adjective nr="156"/>
+<Adjective nr="157"/>
+<Adjective nr="158"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL33" nr="1">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="37" value="false"/>
-<Adjective nr="156"/>
+<Adjective nr="158"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -136,8 +136,8 @@
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
+<Adjective nr="140"/>
+<Adjective nr="141"/>
 </Cluster>
 <Typ kind="G" nr="12">
 <Cluster/>
@@ -147,9 +147,9 @@
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="138"/>
-<Adjective nr="139"/>
-<Adjective nr="156"/>
+<Adjective nr="140"/>
+<Adjective nr="141"/>
+<Adjective nr="158"/>
 </Cluster>
 </CCluster>
 <CCluster aid="WAYBEL33" nr="3">
@@ -178,7 +178,7 @@
 <Adjective nr="66"/>
 <Adjective nr="67"/>
 <Adjective nr="68"/>
-<Adjective nr="139"/>
+<Adjective nr="141"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -188,7 +188,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="139"/>
+<Adjective nr="141"/>
 </Cluster>
 </CCluster>
 </Registrations>

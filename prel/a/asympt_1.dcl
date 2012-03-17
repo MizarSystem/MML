@@ -58,7 +58,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="2">
@@ -70,7 +70,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="3">
@@ -89,7 +89,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="4">
@@ -103,7 +103,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="57"/>
+<Adjective nr="58"/>
 </Cluster>
 </FCluster>
 <FCluster aid="ASYMPT_1" nr="5">
@@ -122,7 +122,7 @@
 <Func kind="K" nr="78"/>
 <Func kind="K" nr="74"/>
 </Adjective>
-<Adjective nr="59"/>
+<Adjective nr="60"/>
 </Cluster>
 </FCluster>
 </Registrations>

@@ -7,19 +7,20 @@
 environ
 
  vocabularies CAT_1, FUNCOP_1, FUNCT_1, RELAT_1, BOOLE, QC_LANG1, FINSEQ_1,
-      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG, CAT_4, FUNCT_4, ARYTM;
+      PARTFUN1, QC_LANG3, ZF_MODEL, ZF_LANG, CQC_LANG, CAT_4, FUNCT_4, ARYTM,
+      FINSEQ_2;
  notations TARSKI, XBOOLE_0, ENUMSET1, SUBSET_1, NUMBERS, RELAT_1, FUNCT_1,
-      FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, FINSEQ_1, QC_LANG1,
-      QC_LANG2, QC_LANG3, XXREAL_0, NAT_1;
+      FUNCT_2, BINOP_1, PARTFUN1, FUNCOP_1, FUNCT_4, FINSEQ_1, FINSEQ_2,
+      QC_LANG1, QC_LANG2, QC_LANG3, XXREAL_0, NAT_1;
  constructors ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FUNCT_4, XXREAL_0,
-      MEMBERED, QC_LANG2, QC_LANG3;
+      MEMBERED, QC_LANG2, QC_LANG3, FINSEQ_2;
  registrations XBOOLE_0, RELSET_1, FUNCOP_1, FUNCT_4, MEMBERED, QC_LANG1,
       XXREAL_0;
  requirements NUMERALS, SUBSET, BOOLE;
- definitions TARSKI, FUNCOP_1;
+ definitions TARSKI, FUNCOP_1, FINSEQ_2;
  theorems TARSKI, ENUMSET1, ZFMISC_1, FUNCT_1, FUNCT_2, FINSEQ_1, PARTFUN1,
       FUNCOP_1, QC_LANG1, QC_LANG2, QC_LANG3, FINSEQ_2, RELSET_1, FINSEQ_3,
-      XBOOLE_1, FUNCT_4, ORDINAL1;
+      FUNCT_4, ORDINAL1;
  schemes FINSEQ_1, QC_LANG1, QC_LANG3;
 
 begin
@@ -252,10 +253,9 @@ registration
   cluster CQC-variable_list-like QC-variable_list of k;
   existence
   proof
-    deffunc f(set) = x.0;
-    consider l being FinSequence such that
-A1: len l = k and
-A2: for i be Nat st i in dom l holds l.i = f(i) from FINSEQ_1:sch 2;
+    set l = k |-> x.0;
+A1: len l = k by FINSEQ_2:69;
+B2: dom l = Seg k by FUNCOP_1:19;
     rng l c= QC-variables
     proof
       let y be set;
@@ -264,7 +264,7 @@ A2: for i be Nat st i in dom l holds l.i = f(i) from FINSEQ_1:sch 2;
 A3:   x in dom l and
 A4:   l.x = y by FUNCT_1:def 5;
       reconsider x as Element of NAT by A3;
-      y = x.0 by A2,A4,A3;
+      y = x.0 by B2,A4,A3,FINSEQ_2:71;
       hence y in QC-variables;
     end;
     then l is FinSequence of QC-variables by FINSEQ_1:def 4;
@@ -276,7 +276,7 @@ A4:   l.x = y by FUNCT_1:def 5;
 A5: i in dom l and
 A6: x = l.i by FUNCT_1:def 5;
     reconsider i as Element of NAT by A5;
-    l.i = x.0 by A2,A5;
+    l.i = x.0 by B2,A5,FINSEQ_2:71;
     hence x in bound_QC-variables by A6;
   end;
 end;

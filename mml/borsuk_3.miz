@@ -21,9 +21,8 @@ environ
  definitions TARSKI, TOPS_2, COMPTS_1, T_0TOPSP, FUNCT_1, XBOOLE_0, BINOP_1,
       STRUCT_0;
  theorems BORSUK_1, FUNCOP_1, TOPS_2, FUNCT_2, FUNCT_1, PRE_TOPC, TARSKI,
-      TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, STRUCT_0, FUNCT_3, COMPTS_1,
-      FINSET_1, T_0TOPSP, YELLOW12, TSEP_1, TOPGRP_1, XBOOLE_0, XBOOLE_1,
-      SETFAM_1;
+      TOPS_1, TOPMETR, ZFMISC_1, CONNSP_2, FUNCT_3, COMPTS_1, FINSET_1,
+      T_0TOPSP, YELLOW12, TSEP_1, TOPGRP_1, XBOOLE_0, XBOOLE_1, SETFAM_1;
  schemes PBOOLE, CLASSES1, XBOOLE_0;
 
 begin :: Preliminaries
@@ -77,8 +76,8 @@ proof
   let S, T be non empty TopStruct;
   assume S, T are_homeomorphic;
   then consider f being Function of S, T such that
-A1: f is_homeomorphism by T_0TOPSP:def 1;
-  f" is_homeomorphism by A1,TOPS_2:70;
+A1: f is being_homeomorphism by T_0TOPSP:def 1;
+  f" is being_homeomorphism by A1,TOPS_2:70;
   hence thesis by T_0TOPSP:def 1;
 end;
 
@@ -103,10 +102,10 @@ proof
   assume
 A1: S, T are_homeomorphic & T, V are_homeomorphic;
   then consider f being Function of S, T such that
-A2: f is_homeomorphism by T_0TOPSP:def 1;
+A2: f is being_homeomorphism by T_0TOPSP:def 1;
   consider g being Function of T, V such that
-A3: g is_homeomorphism by A1,T_0TOPSP:def 1;
-  g * f is_homeomorphism by A2,A3,TOPS_2:71;
+A3: g is being_homeomorphism by A1,T_0TOPSP:def 1;
+  g * f is being_homeomorphism by A2,A3,TOPS_2:71;
   hence thesis by T_0TOPSP:def 1;
 end;
 
@@ -128,20 +127,6 @@ registration
   end;
 end;
 
-theorem Th4:
-  for T1 being TopSpace,
-  T2 being empty TopSpace holds [:T1, T2:] is empty & [:T2, T1:] is empty
-proof
-  let T1 be TopSpace, T2 be empty TopSpace;
-  the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:] &
-  the carrier of [:T2, T1:] = [:the carrier of T2, the carrier of T1:]
-  by BORSUK_1:def 5;
-  hence thesis;
-end;
-
-theorem
-  for T being empty TopSpace holds T is compact;
-
 registration
   cluster empty -> compact TopSpace;
   coherence;
@@ -150,8 +135,22 @@ end;
 registration
   let T1 be TopSpace, T2 be empty TopSpace;
   cluster [:T1, T2:] -> empty;
-  coherence by Th4;
+  coherence
+proof
+  the carrier of [:T1, T2:] = [:the carrier of T1, the carrier of T2:]
+  by BORSUK_1:def 5;
+  hence thesis;
 end;
+  cluster [:T2, T1:] -> empty;
+  coherence
+proof
+  the carrier of [:T2, T1:] = [:the carrier of T2, the carrier of T1:]
+  by BORSUK_1:def 5;
+  hence thesis;
+end;
+end;
+
+canceled 2;
 
 theorem Th6:
   for X, Y being non empty TopSpace, x being Point of X,
@@ -310,7 +309,7 @@ end;
 theorem
   for X, Y being non empty TopSpace, x being Point of X,
   f being Function of [:Y, X | {x}:], Y st
-  f = pr1(the carrier of Y, {x}) holds f is_homeomorphism
+  f = pr1(the carrier of Y, {x}) holds f is being_homeomorphism
 proof
   let X, Y be non empty TopSpace, x be Point of X,
   f be Function of [:Y, X | {x}:], Y;
@@ -333,7 +332,7 @@ end;
 theorem Th11:
   for X, Y being non empty TopSpace, x being Point of X,
   f being Function of [:X | {x}, Y:], Y st
-  f = pr2({x}, the carrier of Y) holds f is_homeomorphism
+  f = pr2({x}, the carrier of Y) holds f is being_homeomorphism
 proof
   let X, Y be non empty TopSpace, x be Point of X,
   f be Function of [:X | {x}, Y:], Y;
@@ -535,11 +534,11 @@ proof
 A1: [: X | Z, Y :], Y are_homeomorphic by Th15;
 A2: [: Y, X | Z :], [: X | Z, Y :] are_homeomorphic by YELLOW12:44;
   consider f being Function of [: X | Z, Y :], Y such that
-A3: f is_homeomorphism by A1,T_0TOPSP:def 1;
+A3: f is being_homeomorphism by A1,T_0TOPSP:def 1;
   consider g being Function of [: Y, X | Z :], [: X | Z, Y :] such that
-A4: g is_homeomorphism by A2,T_0TOPSP:def 1;
+A4: g is being_homeomorphism by A2,T_0TOPSP:def 1;
   reconsider gf = f * g as Function of [: Y, X | Z :], Y;
-  gf is_homeomorphism by A3,A4,TOPS_2:71;
+  gf is being_homeomorphism by A3,A4,TOPS_2:71;
   hence thesis by T_0TOPSP:def 1;
 end;
 
@@ -551,7 +550,7 @@ proof
   assume
 A1: S, T are_homeomorphic & S is compact;
   then consider f being Function of S, T such that
-A2: f is_homeomorphism by T_0TOPSP:def 1;
+A2: f is being_homeomorphism by T_0TOPSP:def 1;
   f is continuous & rng f = [#] T by A2,TOPS_2:def 5;
   hence thesis by A1,COMPTS_1:23;
 end;
@@ -1121,13 +1120,10 @@ proof
   hence thesis by Th23;
 end;
 
-theorem Th24:
-  for T1, T2 be TopSpace st T1 is compact & T2 is compact holds
-  [:T1, T2:] is compact
+registration let T1,T2 be compact TopSpace;
+ cluster [:T1, T2:] -> compact;
+ coherence
 proof
-  let T1, T2 be TopSpace;
-  assume T1 is compact & T2 is compact;
-  then reconsider T1, T2 as compact TopSpace;
   per cases;
   suppose T1 is non empty & T2 is non empty;
     hence thesis by Lm5;
@@ -1137,7 +1133,7 @@ proof
     hence thesis;
   end;
   suppose T1 is empty & T2 is non empty;
-    then [:T1, T2:] is empty by Th4;
+    then [:T1, T2:] is empty;
     hence thesis;
   end;
   suppose T1 is non empty & T2 is empty;
@@ -1145,11 +1141,6 @@ proof
     hence thesis;
   end;
 end;
-
-registration
-  let T1, T2 be compact TopSpace;
-  cluster [:T1, T2:] -> compact;
-  coherence by Th24;
 end;
 
 Lm6: for X, Y being TopSpace, XV being SubSpace of X holds
@@ -1335,6 +1326,8 @@ A31:  e' = [:X1 /\ [#]XV, Y1 /\ [#]Y:] by A29,A30,ZFMISC_1:123;
   hence thesis by A4,PRE_TOPC:def 9;
 end;
 
+canceled;
+
 theorem Th25:
   for X, Y being TopSpace, XV being SubSpace of X,
   YV being SubSpace of Y holds [:XV, YV:] is SubSpace of [:X, Y:]
@@ -1364,16 +1357,6 @@ A2: the carrier of A = [:the carrier of (Y|W), the carrier of (X|V):]
 A3: A is SubSpace of [:Y, X:] | Z by TOPMETR:4;
   [:Y, X:] | Z is SubSpace of A by A2,TOPMETR:4;
   hence thesis by A3,TSEP_1:6;
-end;
-
-registration
-  let T be TopStruct;
-  cluster compact Subset of T;
-  existence
-  proof
-    take {}T;
-    thus thesis by COMPTS_1:9;
-  end;
 end;
 
 registration
@@ -1417,17 +1400,17 @@ A4: y in S2 by A2,XBOOLE_0:def 1;
   suppose S1 is empty & S2 is non empty;
     then reconsider S1 as empty Subset of T1;
     [:S1, S2:] = {}([:T1, T2:]);
-    hence thesis by COMPTS_1:9;
+    hence thesis;
   end;
   suppose S1 is non empty & S2 is empty;
     then reconsider S2 as empty Subset of T2;
     [:S1, S2:] = {}([:T1, T2:]);
-    hence thesis by COMPTS_1:9;
+    hence thesis;
   end;
   suppose S1 is empty & S2 is empty;
     then reconsider S2 as empty Subset of T2;
     [:S1, S2:] = {}([:T1, T2:]);
-    hence thesis by COMPTS_1:9;
+    hence thesis;
   end;
 end;
 

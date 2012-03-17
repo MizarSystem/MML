@@ -8,8 +8,7 @@ environ
 
  vocabularies ORDINAL1, CARD_1, FUNCT_1, FINSET_1, TARSKI, ORDINAL2, BOOLE,
       RELAT_1, CARD_2, ZFMISC_1, GROUP_1, ARYTM_3, MCART_1, FINSEQ_2, FINSEQ_1,
-      PROB_1, RLVECT_1, FUNCOP_1, FUNCT_2, PARTFUN1, FUNCT_4, CARD_4, HAHNBAN,
-      FINSUB_1, ARYTM, SUPINF_2;
+      PROB_1, PARTFUN1, FUNCT_4, CARD_4, HAHNBAN, ARYTM;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       REAL_1, NAT_1, NAT_D, RELAT_1, FUNCT_1, FINSEQ_1, FINSET_1, ORDINAL1,
       WELLORD2, ORDINAL2, MCART_1, DOMAIN_1, CARD_2, FINSUB_1, FINSEQ_2,
@@ -24,11 +23,11 @@ environ
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions TARSKI, FUNCT_1, WELLORD2, RELAT_1, XBOOLE_0, BINOP_1, ORDINAL1,
       CARD_3;
- theorems TARSKI, ZFMISC_1, NAT_1, ORDINAL1, ORDINAL2, ORDINAL3, WELLORD2,
-      FUNCT_1, FUNCT_2, FUNCT_4, FUNCT_5, FUNCOP_1, PARTFUN1, MCART_1, CARD_3,
-      ORDERS_1, CARD_1, CARD_2, NEWTON, FINSEQ_1, FINSET_1, FINSEQ_2, RELAT_1,
-      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, NAT_D, RELSET_1;
- schemes NAT_1, FUNCT_1, ORDINAL2, CARD_3, XBOOLE_0, BINOP_1, CLASSES1;
+ theorems TARSKI, ZFMISC_1, NAT_1, ORDINAL1, ORDINAL3, WELLORD2, FUNCT_1,
+      FUNCT_2, FUNCT_4, PARTFUN1, MCART_1, CARD_3, ORDERS_1, CARD_1, CARD_2,
+      NEWTON, FINSEQ_1, FINSEQ_2, RELAT_1, XBOOLE_0, XBOOLE_1, XCMPLX_1,
+      XREAL_1, XXREAL_0, NAT_D;
+ schemes NAT_1, FUNCT_1, XBOOLE_0, BINOP_1, CLASSES1;
 
 begin
 
@@ -39,542 +38,15 @@ reserve X,Y,Z,x,y,y1,y2 for set,
   L,K,M,N for Cardinal,
   f,g for Function;
 
-Lm1: 0 = Card(0 qua set) & 1 = Card 1 & 2 = Card 2 by CARD_1:def 5;
-
-canceled;
-
-theorem
-  X is finite iff Card X in omega by CARD_1:84,CARD_3:58;
-
-canceled 5;
-
-theorem Th8:
-  A is infinite iff omega c= A
-proof (omega c= A iff not A in omega) & (A is finite iff A in omega)
-  by CARD_1:103,ORDINAL1:26;
-  hence thesis;
-end;
-
-canceled 4;
-
-theorem Th13:
-  N is finite & not M is finite implies N in M & N c= M
-proof
-  assume
-Z:  N is finite & not M is finite;
-  then N in omega & omega c= M by Th8,CARD_1:103;
-  hence N in M;
-  thus thesis by Z;
-end;
-
-theorem
-  not X is finite iff ex Y st Y c= X & Card Y = omega
-proof
-  thus not X is finite implies ex Y st Y c= X & Card Y = omega
-  proof
-    assume not X is finite;
-    then not Card X in omega;
-    then
-A1: omega c= Card X by CARD_1:14;
-    Card X,X are_equipotent by CARD_1:def 5;
-    then consider f such that
-A2: f is one-to-one & dom f = Card X & rng f = X by WELLORD2:def 4;
-    take Y = f.:(omega);
-    thus Y c= X by A2,RELAT_1:144;
-    omega,Y are_equipotent
-    proof
-      take f|(omega);
-      thus thesis by A1,A2,FUNCT_1:84,RELAT_1:91,148;
-    end;
-    hence Card Y = omega by CARD_1:def 5;
-  end;
-  given Y such that
-A3: Y c= X & Card Y = omega;
-  thus thesis by A3;
-end;
-
-canceled 5;
-
-theorem Th20:
-  Card X = Card Y iff nextcard X = nextcard Y
-proof
-  thus Card X = Card Y implies nextcard X = nextcard Y by CARD_1:34;
-  assume
-A1: nextcard X = nextcard Y & Card X <> Card Y;
-  then Card X in Card Y or Card Y in Card X by ORDINAL1:24;
-  then nextcard X c= Card Y & Card Y in nextcard Y or
-  nextcard Y c= Card X & Card X in nextcard X by CARD_1:def 6;
-  hence thesis by A1,ORDINAL1:22;
-end;
-
-theorem
-  M = N iff nextcard N = nextcard M
-proof Card N = N & Card M = M by CARD_1:def 5;
-  hence thesis by Th20;
-end;
-
-theorem Th22:
-  N in M iff nextcard N c= M
-proof N in nextcard N & Card N = N by CARD_1:32,def 5;
-  hence thesis by CARD_1:def 6;
-end;
-
-theorem
-  N in nextcard M iff N c= M
-proof
-  (not N c= M iff M in N) & (N in nextcard M iff not nextcard M c= N)
-  by CARD_1:14;
-  hence thesis by Th22;
-end;
-
-theorem Th24:
-  0 in M iff 1 c= M
-proof 0+1 = 1;
-  then nextcard Card(0 qua set) = Card 1 by NAT_1:43;
-  hence thesis by Lm1,Th22;
-end;
-
-theorem
-  1 in M iff 2 c= M
-proof 1+1 = 2;
-  then nextcard Card 1 = Card 2 by NAT_1:43;
-  hence thesis by Lm1,Th22;
-end;
-
-theorem Th26:
-  M is finite & (N c= M or N in M) implies N is finite
-proof
-  assume
-A1: M is finite & (N c= M or N in M);
-  then N c= M by CARD_1:13;
-  hence thesis by A1;
-end;
-
-theorem Th27:
-  A is limit_ordinal iff for B,n st B in A holds B+^ n in A
-proof
-  thus A is limit_ordinal implies for B,n st B in A holds B+^ n in A
-  proof
-    assume
-A1: A is limit_ordinal;
-    let B,n;
-    defpred P[Nat] means B+^ $1 in A;
-    assume B in A;
-    then
-A2: P[0] by ORDINAL2:44;
-A3: P[k] implies P[k+1]
-    proof (k+1) = succ k by NAT_1:39;
-      then B+^(k+1) = succ (B+^ k) by ORDINAL2:45;
-      hence thesis by A1,ORDINAL1:41;
-    end;
-    P[k] from NAT_1:sch 2(A2,A3);
-    hence thesis;
-  end;
-  assume
-A4: for B,n st B in A holds B+^ n in A;
-  now
-    let B;
-    assume B in A;
-    then B+^ 1 in A & 1 = 0+1 by A4;
-    hence succ B in A by ORDINAL2:48;
-  end;
-  hence thesis by ORDINAL1:41;
-end;
-
-theorem Th28:
-  A+^succ n = succ A +^ n & A +^ (n+1) = succ A +^ n
-proof
-  defpred P[Nat] means A+^succ $1 = succ A +^ $1;
-A1: P[0]
-  proof
-    thus A+^succ 0 = succ A by ORDINAL2:48
-      .= succ A +^ 0 by ORDINAL2:44;
-  end;
-A2: P[k] implies P[k+1]
-  proof
-    assume
-A3: P[k];
-A4: k+1 = succ k by NAT_1:39;
-    hence A+^succ (k+1) = succ (succ A +^ k) by A3,ORDINAL2:45
-      .= succ A +^ k +^ 1 by ORDINAL2:48
-      .= succ A +^ ( k +^ 1) by ORDINAL3:33
-      .= succ A +^ (k+1) by A4,ORDINAL2:48;
-  end;
-  P[k] from NAT_1:sch 2(A1,A2);
-  hence A+^succ n = succ A +^ n;
-  hence thesis by NAT_1:39;
-end;
-
-theorem Th29:
-  ex n st A*^succ 1 = A +^ n
-proof
-  defpred P[Ordinal] means ex n st $1*^2 = $1+^ n;
-  {}+^{} = {} & {}*^2 = {} by ORDINAL2:44,52;
-  then
-A1: P[0];
-A2: for A st P[A] holds P[succ A]
-  proof
-    let A;
-    given n such that
-A3: A*^2 = A+^ n;
-    take n+1;
-    (succ A)*^2 = A*^2+^2 by ORDINAL2:53
-      .= succ(A*^succ 1+^1) by ORDINAL2:45
-      .= succ succ(A+^ n) by A3,ORDINAL2:48
-      .= succ (A+^succ n) by ORDINAL2:45
-      .= succ (A+^ (n+1)) by NAT_1:39
-      .= A+^succ (n+1) by ORDINAL2:45;
-    hence thesis by Th28;
-  end;
-A4: for A st A <> {} & A is limit_ordinal & for B st B in A holds P[B]
-  holds P[A]
-  proof
-    let A;
-    assume that
-A5: A <> {} & A is limit_ordinal and
-A6: for B st B in A holds P[B];
-    take 0;
-    deffunc f(Ordinal) = $1*^2;
-    consider phi being Ordinal-Sequence such that
-A7: dom phi = A and
-A8: for B st B in A holds phi.B = f(B) from ORDINAL2:sch 3;
-A9: A*^2 = union sup phi by A5,A7,A8,ORDINAL2:54
-      .= union sup rng phi by ORDINAL2:35;
-    thus A*^2 c= A+^ 0
-    proof
-      let B;
-      assume B in A*^2;
-      then consider X such that
-A10:  B in X & X in sup rng phi by A9,TARSKI:def 4;
-      reconsider X as Ordinal by A10;
-      consider C being Ordinal such that
-A11:  C in rng phi & X c= C by A10,ORDINAL2:29;
-      consider x such that
-A12:  x in dom phi & C = phi.x by A11,FUNCT_1:def 5;
-      reconsider x as Ordinal by A12;
-A13:  ex n st x*^2 = x+^ n by A6,A7,A12;
-      C = x*^2 by A7,A8,A12;
-      then C in A by A5,A7,A12,A13,Th27;
-      then X in A & A+^{} = A by A11,ORDINAL1:22,ORDINAL2:44;
-      hence thesis by A10,ORDINAL1:19;
-    end;
-    1 in succ 1 by ORDINAL1:10;
-    then A+^ 0 = A & A = A*^1 & 1 c= 2 by ORDINAL1:def 2,ORDINAL2:44,56;
-    hence thesis by ORDINAL2:59;
-  end;
-  for A holds P[A] from ORDINAL2:sch 1(A1,A2,A4);
-  hence thesis;
-end;
-
-theorem Th30:
-  A is limit_ordinal implies A *^ succ 1 = A
-proof consider n such that
-A1: A*^2 = A+^ n by Th29;
-  assume A is limit_ordinal;
-  then
-A2: A+^ n is limit_ordinal by A1,ORDINAL3:48;
-  now
-    assume n <> 0;
-    then consider k being Nat such that
-A3: n = k+1 by NAT_1:6;
-    reconsider k as Element of NAT by ORDINAL1:def 13;
-    n = succ k by A3,NAT_1:39;
-    then A+^ n = succ(A+^ k) by ORDINAL2:45;
-    hence contradiction by A2,ORDINAL1:42;
-  end;
-  hence thesis by A1,ORDINAL2:44;
-end;
-
-Lm2: omega is limit_ordinal by ORDINAL1:def 12;
-
-theorem Th31:
-  omega c= A implies 1+^A = A
-proof
-  deffunc f(Ordinal) = 1+^$1;
-  consider phi being Ordinal-Sequence such that
-A1: dom phi = omega & for B st B in omega holds phi.B = f(B)
-  from ORDINAL2:sch 3;
-A2: 1+^omega = sup phi by A1,Lm2,ORDINAL2:46
-    .= sup rng phi by ORDINAL2:35;
-A3: 1+^omega c= omega
-  proof
-    let B;
-    assume B in 1+^omega;
-    then consider C being Ordinal such that
-A4: C in rng phi & B c= C by A2,ORDINAL2:29;
-    consider x such that
-A5: x in dom phi & C = phi.x by A4,FUNCT_1:def 5;
-    reconsider x as Ordinal by A5;
-    reconsider x' = x as Cardinal by A1,A5;
-    reconsider x as finite Ordinal by A1,A5;
-    Card card x = Card x & Card card x = card x & Card x' = x &
-    0+1 = 1 by CARD_1:def 5;
-    then x+^1 = (card x+1) & 1+^x = (1+card x) by CARD_2:49;
-    then C = 1+^x & 1+^x = x+^1 & succ x in omega by A1,A5,Lm2,ORDINAL1:41;
-    then C in omega by ORDINAL2:48;
-    hence thesis by A4,ORDINAL1:22;
-  end;
-  assume omega c= A;
-  then
-A6: ex B st A = omega+^B by ORDINAL3:30;
-  omega c= 1+^omega by ORDINAL3:27;
-  then omega = 1+^omega by A3,XBOOLE_0:def 10;
-  hence 1+^A = A by A6,ORDINAL3:33;
-end;
-
-registration
- cluster infinite -> limit_ordinal Cardinal;
- coherence
-proof let M be Cardinal;
-  assume M is infinite;
-  then
-A1: not M in omega;
-  assume not thesis;
-  then consider A such that
-A2: M = succ A by ORDINAL1:42;
-  omega <> M & omega c= M iff omega c< M by XBOOLE_0:def 8;
-  then omega = succ A or omega in succ A by A1,A2,CARD_1:14,ORDINAL1:21;
-  then
-A3: omega c= A by Lm2,ORDINAL1:34,42;
-  Card (A+^1) = Card 1 +` Card A by CARD_2:24
-    .= Card (1+^A) by CARD_2:24
-    .= Card A by A3,Th31;
-  then Card succ A = Card A & A in succ A by ORDINAL1:10,ORDINAL2:48;
-  then A,succ A are_equipotent & not succ A c= A & ex B st succ A = B &
-  for A st A,B are_equipotent holds B c= A by A2,CARD_1:21,def 1,ORDINAL1:7;
-  hence contradiction;
-end;
-end;
-
-canceled;
-
-theorem Th33:
-  not M is finite implies M+`M = M
-proof
-  assume not M is finite;
-  then ( M)*^2 = M by Th30;
-  then Card M = (Card 2)*`Card M by CARD_2:25
-    .= Card (succ 1*^ M) by CARD_2:25
-    .= Card (1*^ M+^ M) by ORDINAL2:53
-    .= Card ( M+^ M) by ORDINAL2:56
-    .= M+`M by CARD_2:def 1;
-  hence thesis by CARD_1:def 5;
-end;
-
-theorem Th34:
-  not M is finite & (N c= M or N in M) implies M+`N = M & N+`M = M
-proof
-  assume not M is finite & (N c= M or N in M);
-  then
-A1: M+`M = M & M+`M = Card ( M +^ M) & M+`N = Card ( M +^ N) &
-  N c= M & N = N & M = M by Th33,CARD_1:13,CARD_2:def 1;
-  then M +^ N c= M +^ M & M c= M +^ N & Card M = M by ORDINAL2:50,ORDINAL3:27;
-  then M+`N c= M & M c= M+`N & M+`N = N+`M by A1,CARD_1:27;
-  hence M+`N = M & N+`M = M by XBOOLE_0:def 10;
-end;
-
-theorem
-  not X is finite & (X,Y are_equipotent or Y,X are_equipotent) implies
-  X \/ Y,X are_equipotent & Card (X \/ Y) = Card X
-proof
-  assume not X is finite & (X,Y are_equipotent or Y,X are_equipotent);
-  then not Card X is finite & Card X = Card Y & X c= X \/ Y
-  by CARD_1:21,XBOOLE_1:7;
-  then Card X c= Card (X \/ Y) & Card (X \/ Y) c= Card X +` Card Y &
-  Card X +` Card Y = Card X by Th33,CARD_1:27,CARD_2:47;
-  then Card X = Card (X \/ Y) by XBOOLE_0:def 10;
-  hence thesis by CARD_1:21;
-end;
-
-theorem
-  not X is finite & Y is finite implies
-  X \/ Y,X are_equipotent & Card (X \/ Y) = Card X
-proof
-  assume
-A1: not X is finite & Y is finite;
-  then Card Y in Card X & X c= X \/ Y by Th13,XBOOLE_1:7;
-  then Card X +` Card Y = Card X & Card (X \/ Y) c= Card X +` Card Y &
-  Card X c= Card (X \/ Y) by A1,Th34,CARD_1:27,CARD_2:47;
-  then Card X = Card (X \/ Y) by XBOOLE_0:def 10;
-  hence thesis by CARD_1:21;
-end;
-
-theorem
-  not X is finite & (Card Y in Card X or Card Y c= Card X) implies
-  X \/ Y,X are_equipotent & Card (X \/ Y) = Card X
-proof
-  assume
-B1: not X is finite & (Card Y in Card X or Card Y c= Card X);
-  X c= X \/ Y by XBOOLE_1:7;
-  then Card X +` Card Y = Card X & Card (X \/ Y) c= Card X +` Card Y &
-  Card X c= Card (X \/ Y) by B1,Th34,CARD_1:27,CARD_2:47;
-  then Card X = Card (X \/ Y) by XBOOLE_0:def 10;
-  hence thesis by CARD_1:21;
-end;
-
-theorem
-  for M,N being finite Cardinal holds M+`N is finite
-proof
-  let M,N be finite Cardinal;
-  Card M = Card card M & Card N = Card card N & Card M = M & Card N = N
-  by CARD_1:def 5;
-  then M+`N = Card (card M + card N) by CARD_2:51;
-  hence M+`N is finite;
-end;
-
-theorem
-  not M is finite implies not M+`N is finite & not N+`M is finite
-proof
-  assume
-A1: not M is finite;
-  M c= N or N c= M;
-  then M c= N & not N is finite or M+`N = M & N+`M = M by A1,Th34;
-  hence thesis by A1,Th34;
-end;
-
-theorem
-  for M,N being finite Cardinal holds M*`N is finite
-proof
-  let M,N be finite Cardinal;
-  Card M = Card card M & Card N = Card card N & Card M = M & Card N = N
-  by CARD_1:def 5;
-  then M*`N = Card (card M * card N) by CARD_2:52;
-  hence M*`N is finite;
-end;
-
-theorem Th41:
-  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
-  implies K+`M c= L+`N & M+`K c= L+`N
-proof
-  assume
-  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c=
-  N;
-  then K c= L & M c= N & K = K & L = L & M = M & N = N by CARD_1:13;
-  then
-A1: K+`M = Card ( K +^ M) & L+`N = Card ( L +^ N) &
-  K +^ M c= L +^ N by CARD_2:def 1,ORDINAL3:21;
-  hence K+`M c= L+`N by CARD_1:27;
-  thus thesis by A1,CARD_1:27;
-end;
-
-theorem
-  M in N or M c= N implies K+`M c= K+`N & K+`M c= N+`K &
-  M+`K c= K+`N & M+`K c= N+`K by Th41;
-
-definition
-  let X;
-  attr X is countable means
-  : Def1:
-  Card X c= omega;
-  attr X is denumerable means
-  Card X = omega;
-end;
-
-registration
- cluster denumerable -> countable infinite set;
- coherence
-  proof let X be set;
-   assume
-Z:  Card X = omega;
-   hence Card X c= omega;
-   thus thesis by Z;
-  end;
- cluster countable infinite -> denumerable set;
- coherence
-  proof let X be set;
-   assume
-Z:  Card X c= omega;
-   assume X is infinite;
-    then omega c= Card X by Th8;
-   hence Card X = omega by Z,XBOOLE_0:def 10;
-  end;
-end;
-
-registration
-  cluster finite -> countable set;
-  coherence
-proof let X be set;
-  assume X is finite;
-  then consider n being Nat such that
-A1: X,n are_equipotent by CARD_1:74;
-  Card n = Card X & Card n c= Card omega by A1,CARD_1:21;
-  hence Card X c= omega;
-end;
-end;
+canceled 42;
 
 theorem
   X is finite implies X is countable;
 
-registration
-  cluster omega -> denumerable;
-  coherence
-   proof
-    thus Card omega = omega by CARD_1:84;
-   end;
-end;
-
-registration
- cluster denumerable set;
- existence
-  proof
-   take omega;
-   thus thesis;
-  end;
-end;
-
 theorem
   omega is countable;
 
-theorem Th45:
-  X is countable iff ex f st dom f = NAT & X c= rng f
-proof
-  thus X is countable implies ex f st dom f = NAT & X c= rng f
-  proof
-    assume Card X c= omega;
-    hence thesis by CARD_1:28,84;
-  end;
-  assume ex f st dom f = NAT & X c= rng f;
-  hence Card X c= omega by CARD_1:28,84;
-end;
-
-registration let X be countable set;
- cluster -> countable Subset of X;
- coherence
-proof let Y be Subset of X;
-A1: Card Y c= Card X by CARD_1:27;
-   Card X c= omega by Def1;
-  hence Card Y c= omega by A1,XBOOLE_1:1;
-end;
-end;
-
-Th46:
-  Y c= X & X is countable implies Y is countable;
-
-canceled;
-
-theorem Th47:
-  X is countable & Y is countable implies X \/ Y is countable
-proof
-  assume Card X c= omega & Card Y c= omega;
-  then Card (X \/ Y) c= Card X +` Card Y & omega +` omega = omega &
-  Card X +` Card Y c= omega +` omega by Th33,Th41,CARD_2:47;
-  hence Card (X \/ Y) c= omega by XBOOLE_1:1;
-end;
-
-theorem
-  X is countable implies X /\ Y is countable
-  by Th46,XBOOLE_1:17;
-
-theorem
-  X is countable implies X \ Y is countable;
-
-theorem
-  X is countable & Y is countable implies X \+\ Y is countable
-proof
-  assume X is countable & Y is countable;
-  then X \ Y is countable & Y \ X is countable;
-  hence X \+\ Y is countable by Th47;
-end;
+canceled 6;
 
 reserve r for Real;
 
@@ -638,7 +110,7 @@ A1: x in [:NAT,NAT:];
 end;
 
 theorem Th53:
-  [:NAT,NAT:],NAT are_equipotent & Card NAT = Card [:NAT,NAT:]
+  [:NAT,NAT:],NAT are_equipotent & card NAT = card [:NAT,NAT:]
 proof
   deffunc f(Element of NAT,Element of NAT) = (2|^$1)*(2*$2+1);
   consider f being Function of [:NAT,NAT:],NAT such that
@@ -662,11 +134,11 @@ A5: f.x = f.y;
     hence thesis by A3,A4;
   end;
   then
-A6: Card [:NAT,NAT:] c= Card NAT by A2,CARD_1:26;
+A6: card [:NAT,NAT:] c= card NAT by A2,CARD_1:26;
   [:NAT,{0}:] c= [:NAT,NAT:] by ZFMISC_1:118;
-  then Card [:NAT,{0}:] c= Card [:NAT,NAT:] by CARD_1:27;
-  then Card NAT c= Card [:NAT,NAT:] by CARD_2:13;
-  then Card NAT = Card [:NAT,NAT:] by A6,XBOOLE_0:def 10;
+  then card [:NAT,{0}:] c= card [:NAT,NAT:] by CARD_1:27;
+  then card NAT c= card [:NAT,NAT:] by CARD_2:13;
+  then card NAT = card [:NAT,NAT:] by A6,XBOOLE_0:def 10;
   hence thesis by CARD_1:21;
 end;
 
@@ -676,15 +148,15 @@ theorem Th54:
 theorem Th55:
   X is countable & Y is countable implies [:X,Y:] is countable
 proof
-  assume Card X c= omega & Card Y c= omega;
-  then [:Card X,Card Y:] c= [:omega,omega:] by ZFMISC_1:119;
-  then Card [:Card X,Card Y:] c= Card [:omega,omega:] by CARD_1:27;
-  then Card [:Card X,Card Y:] c= (omega)*`omega by CARD_2:def 2;
-  hence Card [:X,Y:] c= omega by Th54,CARD_2:14;
+  assume card X c= omega & card Y c= omega;
+  then [:card X,card Y:] c= [:omega,omega:] by ZFMISC_1:119;
+  then card [:card X,card Y:] c= card [:omega,omega:] by CARD_1:27;
+  then card [:card X,card Y:] c= (omega)*`omega by CARD_2:def 2;
+  hence card [:X,Y:] c= omega by Th54,CARD_2:14;
 end;
 
 theorem Th56:
-  1-tuples_on D,D are_equipotent & Card (1-tuples_on D) = Card D
+  1-tuples_on D,D are_equipotent & card (1-tuples_on D) = card D
 proof
   deffunc f(set) = <*$1*>;
   consider f such that
@@ -729,7 +201,7 @@ reserve p,q for FinSequence,
 
 theorem Th57:
   [:n-tuples_on D, m-tuples_on D:],(n+m)-tuples_on D are_equipotent &
-  Card [:n-tuples_on D, m-tuples_on D:] = Card ((n+m)-tuples_on D)
+  card [:n-tuples_on D, m-tuples_on D:] = card ((n+m)-tuples_on D)
 proof
   defpred P[set,set] means
   ex p be Element of n-tuples_on D,q be Element of m-tuples_on D st
@@ -811,10 +283,10 @@ end;
 theorem Th58:
   D is countable implies n-tuples_on D is countable
 proof
-  assume Card D c= omega;
-  then Card (1-tuples_on D) c= omega by Th56;
+  assume card D c= omega;
+  then card (1-tuples_on D) c= omega by Th56;
   then
-A1: 1-tuples_on D is countable by Def1;
+A1: 1-tuples_on D is countable by CARD_3:def 15;
   defpred P[Nat] means $1-tuples_on D is countable;
   { <*>D } is countable;
   then
@@ -826,74 +298,30 @@ X:  k in NAT by ORDINAL1:def 13;
     then [:k-tuples_on D, 1-tuples_on D:] is countable &
     [:k-tuples_on D, 1-tuples_on D:],(k+1)-tuples_on D are_equipotent
     by A1,Th55,Th57,X;
-    then Card [:k-tuples_on D, 1-tuples_on D:] c= omega &
-    Card [:k-tuples_on D, 1-tuples_on D:] = Card ((k+1)-tuples_on D)
-    by Def1,CARD_1:21;
-    hence thesis by Def1;
+    then card [:k-tuples_on D, 1-tuples_on D:] c= omega &
+    card [:k-tuples_on D, 1-tuples_on D:] = card ((k+1)-tuples_on D)
+    by CARD_3:def 15,CARD_1:21;
+    hence thesis by CARD_3:def 15;
   end;
   for k being Nat holds P[k] from NAT_1:sch 2(A2,A3);
   hence thesis;
 end;
 
-theorem Th59:
-  (Card dom f c= M & for x st x in dom f holds Card (f.x) c= N) implies
-  Card Union f c= M*`N
-proof
-  assume
-A1: Card dom f c= M & for x st x in dom f holds Card (f.x) c= N;
-A2: Card Union f c= Sum
-  Card f & dom Card f = dom f & dom(dom f --> N) = dom f
-  by CARD_3:54,def 2,FUNCOP_1:19;
-  now
-    let x;
-    assume x in dom Card f;
-    then (Card f).x = Card (f.x) & (dom f --> N).x = N & Card (f.x) c= N
-    by A1,A2,CARD_3:def 2,FUNCOP_1:13;
-    hence (Card f).x c= (dom f --> N).x;
-  end;
-  then Sum Card f c= Sum(dom f --> N) by A2,CARD_3:43;
-  then
-A3: Card Union f c= Sum(dom f --> N) & [:Card dom f,N:] c= [:M,N:]
-  by A1,A2,XBOOLE_1:1,ZFMISC_1:118;
-  Sum(dom f --> N) = Card [:N,dom f:] by CARD_3:36
-    .= Card [:N,Card dom f:] by CARD_2:14
-    .= Card [:Card dom f,N:] by CARD_2:11;
-  then Sum(dom f --> N) c= Card [:M,N:] & Card [:M,N:] = M*`N
-  by A3,CARD_1:27,CARD_2:def 2;
-  hence thesis by A3,XBOOLE_1:1;
-end;
-
-theorem Th60:
-  (Card X c= M & for Y st Y in X holds Card Y c= N) implies Card union X c=
-  M*`N
-proof
-  assume
-A1: Card X c= M & for Y st Y in X holds Card Y c= N;
-A2: dom id X = X by RELAT_1:71;
-  now
-    let x;
-    assume x in dom id X;
-    then (id X).x in X by A2,FUNCT_1:35;
-    hence Card ((id X).x) c= N by A1;
-  end;
-  then Card Union id X c= M*`N & Union id X = union rng id X & rng id X = X
-  by A1,A2,Th59,RELAT_1:71;
-  hence thesis;
-end;
+canceled 2;
 
 theorem Th61:
   for f st dom f is countable &
   for x st x in dom f holds f.x is countable holds Union f is countable
 proof
   let f such that
-A1: Card dom f c= omega & for x st x in dom f holds f.x is countable;
+A1: card dom f c= omega & for x st x in dom f holds f.x is countable;
   now
     let x;
     assume x in dom f;
     then f.x is countable by A1;
-    hence Card (f.x) c= omega by Def1;
+    hence card (f.x) c= omega by CARD_3:def 15;
   end;
-  hence Card Union f c= omega by A1,Th54,Th59;
+  hence card Union f c= omega by A1,Th54,CARD_3:132;
 end;
 
 theorem
@@ -901,44 +329,17 @@ theorem
   union X is countable
 proof
   assume
-A1: Card X c= omega & for Y st Y in X holds Y is countable;
+A1: card X c= omega & for Y st Y in X holds Y is countable;
   now
     let Y;
     assume Y in X;
     then Y is countable by A1;
-    hence Card Y c= omega by Def1;
+    hence card Y c= omega by CARD_3:def 15;
   end;
-  hence Card union X c= omega by A1,Th54,Th60;
+  hence card union X c= omega by A1,Th54,CARD_3:133;
 end;
 
-theorem Th63:
-  for f st dom f is finite &
-  for x st x in dom f holds f.x is finite holds Union f is finite
-proof
-  let f;
-  assume
-A1: dom f is finite & for x st x in dom f holds f.x is finite;
-  then reconsider df = dom f as finite set;
-  now
-    assume dom f <> {};
-    then
-A2: df <> {};
-    defpred P[set,set] means Card (f.$2) c= Card (f.$1);
-A3: for x,y holds P[x,y] or P[y,x];
-A4: for x,y,z being set st P[x,y] & P[y,z] holds P[x,z] by XBOOLE_1:1;
-    consider x such that
-A5: x in df & for y st y in df holds P[x,y] from CARD_3:sch 3(A2,A3,A4);
-    reconsider fx = f.x as finite set by A1,A5;
-    Card Union f c= (Card card df) *` (Card (f.x)) &
-    Card (f.x) = Card card fx by A5,Th59;
-    then Card Union f c= Card ((card df) * (card fx)) &
-    Card ((card df) * (card fx)) is finite by CARD_2:52;
-    hence thesis;
-  end;
-  hence thesis by RELAT_1:65,ZFMISC_1:2;
-end;
-
-canceled;
+canceled 2;
 
 theorem
   D is countable implies D* is countable
@@ -993,7 +394,7 @@ A10: X = n-tuples_on D by A9;
 end;
 
 theorem
-  omega c= Card (D*)
+  omega c= card (D*)
 proof
   defpred P[set,set] means ex p st $1 = p & $2 = len p;
 A2: for x st x in D* ex y st P[x,y]
@@ -1053,7 +454,7 @@ A2: x = f(n) & P[n];
     f.n = x by A1,A2;
     hence thesis by A1,FUNCT_1:def 5;
   end;
-  hence thesis by A1,Th45;
+  hence thesis by A1,CARD_3:127;
 end;
 
 scheme FraenCoun2 { f(set,set)->set, P[set,set] } :
@@ -1075,7 +476,7 @@ A4: y in dom N & [n1,n2] = N.y by A1,FUNCT_1:def 5;
     then x = f.y by A1,A2,A3,A4;
     hence thesis by A1,A2,A4,FUNCT_1:def 5;
   end;
-  hence thesis by A2,Th45;
+  hence thesis by A2,CARD_3:127;
 end;
 
 scheme FraenCoun3 { f(set,set,set)->set, P[set,set,set] } :
@@ -1106,216 +507,10 @@ A4: y in dom N & [n1,n2,n3] = N.y by A1,FUNCT_1:def 5;
     then x = f.y by A1,A2,A3,A4;
     hence thesis by A1,A2,A4,FUNCT_1:def 5;
   end;
-  hence thesis by A2,Th45;
+  hence thesis by A2,CARD_3:127;
 end;
 
-theorem Th67:
-  (omega)*`(Card n) c= omega & (Card n)*`(omega) c= omega
-proof
-  defpred P[Nat] means (omega)*`(Card $1) c= omega;
-  (omega)*`(Card(0 qua set)) = 0 & {} c= omega by CARD_2:32;
-  then
-A1: P[0];
-A2: for k being Nat holds P[k] implies P[k+1]
-  proof let k be Nat;
-    assume
-A3: P[k];
-    Card (k+1) = (k+1) by CARD_1:def 5
-      .= succ k by NAT_1:39;
-    then Card (k+1) = Card succ k;
-    then (omega)*`(Card (k+1)) =
-    Card (succ k *^ omega) by CARD_1:84,CARD_2:25
-      .= Card ( k *^ omega +^ omega) by ORDINAL2:53
-      .= Card ( k *^ omega) +` omega by CARD_1:84,CARD_2:24
-      .= (omega)*`(Card k) +` omega by CARD_1:84,CARD_2:25
-      .= omega by A3,Th34;
-    hence thesis;
-  end;
-A5: for k being Nat holds P[k] from NAT_1:sch 2(A1,A2);
-  hence (omega)*`(Card n) c= omega;
-  thus thesis by A5;
-end;
-
-theorem Th68:
-  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
-  implies K*`M c= L*`N & M*`K c= L*`N
-proof
-  assume
-  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c=
-  N;
-  then K c= L & M c= N by CARD_1:13;
-  then
-A1: K*`M = Card [:K,M:] & L*`N = Card [:L,N:] & [:K,M:] c= [:L,N:]
-  by CARD_2:def 2,ZFMISC_1:119;
-  hence K*`M c= L*`N by CARD_1:27;
-  thus thesis by A1,CARD_1:27;
-end;
-
-theorem
-  M in N or M c= N implies
-  K*`M c= K*`N & K*`M c= N*`K & M*`K c= K*`N & M*`K c= N*`K by Th68;
-
-theorem Th70:
-  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
-  implies K = 0 or exp(K,M) c= exp(L,N)
-proof
-  assume
-A1: K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c=
-  N;
-  then
-A2: K c= L & M c= N by CARD_1:13;
-  now
-    assume L <> {};
-    then Funcs(N\M,L) <> {} by FUNCT_2:11;
-    then Card Funcs(N\M,L) <> 0 & 0 c= Card Funcs(N\M,L);
-    then 0 in Card Funcs(N\M,L) & 0 = Card(0 qua set) by CARD_1:13;
-    then nextcard Card(0 qua set) c= Card Funcs(N\M,L) & 0+1 = 1
-    by CARD_1:def 6;
-    then
-A3: 1 c= Card Funcs(N\M,L) & Card Funcs(M,L) c= Card Funcs(M,L)
-    by Lm1,NAT_1:43;
-A4: M misses (N\M) by XBOOLE_1:79;
-    then exp(K,M) = Card Funcs(M,K) & exp(L,N) = Card Funcs(N,L) &
-    N = M \/ (N\M) & {} = M /\ (N\M) & Funcs(M,K) c= Funcs(M,L)
-    by A2,CARD_2:def 3,FUNCT_5:63,XBOOLE_0:def 7,XBOOLE_1:45;
-    then
-A5: exp(K,M) c= Card Funcs(M,L) &
-    exp(L,N) = Card [:Funcs(M,L),Funcs(N\M,L):] &
-    Card [:Funcs(M,L),Funcs(N\M,L):] =
-    Card [:Card Funcs(M,L),Card Funcs(N\M,L):] &
-    Card Funcs(M,L) *` Card Funcs(N\M,L) =
-    Card [:Card Funcs(M,L),Card Funcs(N\M,L):]
-    by A4,CARD_1:27,CARD_2:14,def 2,FUNCT_5:69;
-    then 1 *` Card Funcs(M,L) c= exp(L,N) by A3,Th68;
-    then Card Funcs(M,L) c= exp(L,N) by CARD_2:33;
-    hence thesis by A5,XBOOLE_1:1;
-  end;
-  hence thesis by A1;
-end;
-
-theorem
-  M in N or M c= N implies K = 0 or
-  exp(K,M) c= exp(K,N) & exp(M,K) c= exp(N,K)
-proof
-  assume that
-A1: M in N or M c= N and
-A2: K <> 0;
-  thus exp(K,M) c= exp(K,N) by A1,A2,Th70;
-  M = 0 implies exp(M,K) = 0 by A2,CARD_2:39;
-  hence thesis by A1,Th70;
-end;
-
-theorem Th72:
-  M c= M+`N & N c= M+`N
-proof
-  M c= M +^ N & N c= M +^ N & M = M & N = N &
-  Card N = N & Card M = M by CARD_1:def 5,ORDINAL3:27;
-  then M c= Card ( M +^ N) & N c= Card ( M +^ N) by CARD_1:27;
-  hence thesis by CARD_2:def 1;
-end;
-
-theorem
-  N <> 0 implies M c= M*`N & M c= N*`M
-proof
-  assume
-A1: N <> 0;
-  N = N & M = M & Card M = M & Card N = N by CARD_1:def 5;
-  then M*`N = Card ( M *^ N) & N*`M = Card ( N *^ M) &
-  M c= M *^ N & M c= N *^ M & Card M = M by A1,CARD_2:25,ORDINAL3:39;
-  hence thesis by CARD_1:27;
-end;
-
-theorem Th74:
-  K in L & M in N implies K+`M in L+`N & M+`K in L+`N
-proof
-A1: for K,L,M,N st K in L & M in N & L c= N holds K+`M in L+`N
-  proof
-    let K,L,M,N such that
-A2: K in L & M in N & L c= N;
-A3: now
-      assume
-A4:   N is finite;
-      then reconsider N as finite Cardinal;
-      reconsider L,M,K as finite Cardinal by A2,A4,Th26;
-      Card K = Card card K & Card K = K & Card L = L & Card M = M &
-      Card N = N by CARD_1:def 5;
-      then
-A5:   K+`M = Card (card K + card M) & L+`N = Card (card L + card N) &
-      card K < card L & card M < card N by A2,CARD_2:51,NAT_1:42;
-      then card K + card M < card L + card N by XREAL_1:10;
-      hence thesis by A5,NAT_1:42;
-    end;
-    now
-      assume
-A6:   not N is finite;
-      then
-A7:   L+`N = N & omega c= N by A2,Th8,Th34;
-      K c= M & (M is finite or not M is finite) or
-      M c= K & (K is finite or not K is finite);
-      then
-A8:   K is finite & M is finite or K+`M = M or K+`M = K & K in N by A2,Th34;
-      now
-        assume K is finite & M is finite;
-        then reconsider K,M as finite Cardinal;
-        Card K = Card card K & Card M = Card card M &
-        Card K = K & Card M = M by CARD_1:def 5;
-        then K+`M = Card (card K + card M) by CARD_2:51
-          .= (card K + card M) by CARD_1:def 5;
-        hence thesis by A7,TARSKI:def 3;
-      end;
-      hence thesis by A2,A6,A8,Th34;
-    end;
-    hence K+`M in L+`N by A3;
-  end;
-  K+`M = M+`K & L+`N = N+`L & (L c= N or N c= L);
-  hence thesis by A1;
-end;
-
-theorem
-  K+`M in K+`N implies M in N
-proof
-  assume
-A1: K+`M in K+`N & not M in N;
-  then N c= M & K c= K by CARD_1:14;
-  then K+`N c= K+`M by Th41;
-  hence thesis by A1,CARD_1:14;
-end;
-
-theorem Th76:
-  Card X +` Card Y = Card X & Card Y in Card X implies Card (X \ Y) = Card X
-proof
-  assume
-A1: Card X +` Card Y = Card X & Card Y in Card X;
-  X c= X \/ Y by XBOOLE_1:7;
-  then Card X c= Card (X \/ Y) & Card (X \/ Y) c= Card X
-  by A1,CARD_1:27,CARD_2:47;
-  then
-A2: Card (X \/ Y) = Card X by XBOOLE_0:def 10;
-  (X \ Y) misses Y & (X \ Y) \/ Y = X \/ Y by XBOOLE_1:39,79;
-  then
-A3: Card X = Card (X \ Y) +` Card Y by A2,CARD_2:48;
-  then
-A4: Card (X \ Y) c= Card X by Th72;
-A5: now
-    assume not Card X is finite;
-    then
-A6: Card X +` Card X = Card X by Th33;
-    assume not thesis;
-    then Card (X \ Y) in Card X by A4,CARD_1:13;
-    then Card X in Card X by A1,A3,A6,Th74;
-    hence contradiction;
-  end;
-  now
-    assume Card X is finite;
-    then reconsider X,Y as finite set by A1,Th26;
-    Card X = Card card X & Card Y = Card card Y;
-    then Card (card X + card Y) = Card card X by A1,CARD_2:51;
-    then card X + card Y = card X + 0 by CARD_1:71;
-    then Y = {};
-    hence thesis;
-  end;
-  hence Card (X \ Y) = Card X by A5;
-end;
+canceled 10;
 
 reserve f,f1,f2 for Function,
   X1,X2 for set;
@@ -1494,26 +689,26 @@ A37: f = Y & f is one-to-one & dom f = [:rng f,rng f:] by A2,A36;
   then
 A38: ex f st Y = f & dom f c= [:M,M:] & rng f c= M by PARTFUN1:def 5;
   then
-A39: dom f c= [:M,M:] & rng f c= M & Card M = M by A37,CARD_1:def 5;
+A39: dom f c= [:M,M:] & rng f c= M & card M = M by A37,CARD_1:def 5;
   set A = rng f;
-  set N = Card A;
+  set N = card A;
 B60:
   now
     assume
 A40: A is finite;
     then
-A41: N in omega & omega c= omega & N = Card Card A by CARD_1:84,CARD_3:58;
+A41: N in omega & omega c= omega & N = card card A by CARD_1:84,CARD_3:58;
     then
 A42: omega c= omega +` N & not omega is finite &
-    omega +` N c= omega +` omega by Th41,Th72;
-    omega +` omega = omega by Th33;
+    omega +` N c= omega +` omega by CARD_3:125,140;
+    omega +` omega = omega by CARD_3:117;
     then
-A43: omega = omega +` N & Card omega = omega &
+A43: omega = omega +` N & card omega = omega &
     omega c= omega \/ A by A42,CARD_1:def 5,XBOOLE_0:def 10,XBOOLE_1:7;
     then
-A44: omega = Card (omega \ A) & Card (omega \/ A) c= omega &
-    omega c= Card (omega \/ A)
-     by A40,Th76,CARD_1:27,CARD_2:47,CARD_3:58;
+A44: omega = card (omega \ A) & card (omega \/ A) c= omega &
+    omega c= card (omega \/ A)
+     by A40,CARD_3:144,CARD_1:27,CARD_2:47,CARD_3:58;
     (omega \ A) misses A & A misses (omega \ A) by XBOOLE_1:79;
     then
 A45: (omega \ A) /\ A = {} & A /\ (omega \ A) = {} by XBOOLE_0:def 7;
@@ -1534,25 +729,25 @@ A47: [:omega \ A,omega \ A:] misses [:omega \ A,A:] &
     then ([:omega \ A,omega \ A:] \/ [:omega \ A,A:]) misses
     [:A,omega \ A:] by XBOOLE_0:def 7;
     then
-A48: Card ([:omega \ A,omega \ A:] \/
-    [:omega \ A,A:] \/ [:A,omega \ A:]) = Card ([:omega \ A,omega \ A:] \/
-    [:omega \ A,A:]) +` Card [:A,omega \ A:] by CARD_2:48
+A48: card ([:omega \ A,omega \ A:] \/
+    [:omega \ A,A:] \/ [:A,omega \ A:]) = card ([:omega \ A,omega \ A:] \/
+    [:omega \ A,A:]) +` card [:A,omega \ A:] by CARD_2:48
       .=
-    Card [:omega \ A,omega \ A:] +`
-    Card [:omega \ A,A:] +` Card [:A,omega \ A:] by A47,CARD_2:48
+    card [:omega \ A,omega \ A:] +`
+    card [:omega \ A,A:] +` card [:A,omega \ A:] by A47,CARD_2:48
       .=
-    Card [:omega \ A,omega \ A:] +`
-    Card [:omega,N:] +` Card [:A,omega \ A:] by A44,CARD_2:14
+    card [:omega \ A,omega \ A:] +`
+    card [:omega,N:] +` card [:A,omega \ A:] by A44,CARD_2:14
       .=
-    Card [:omega,omega:] +`
-    Card [:omega,N:] +` Card [:A,omega \ A:] by A44,CARD_2:14
+    card [:omega,omega:] +`
+    card [:omega,N:] +` card [:A,omega \ A:] by A44,CARD_2:14
       .=
-    omega +` Card [:omega,N:] +` Card [:N,omega:]
+    omega +` card [:omega,N:] +` card [:N,omega:]
     by A44,Th53,CARD_2:14
-      .= omega +` (omega)*`N +` Card [:N,omega:] by CARD_2:def 2
+      .= omega +` (omega)*`N +` card [:N,omega:] by CARD_2:def 2
       .= omega +` (omega)*`N +` N*`(omega) by CARD_2:def 2;
-    (omega)*`N c= omega by A41,Th67;
-    then omega +` (omega)*`N = omega & N*`(omega) c= omega by Th34;
+    (omega)*`N c= omega by A41,CARD_3:135;
+    then omega +` (omega)*`N = omega & N*`(omega) c= omega by CARD_3:118;
     then [:omega \ A,omega \ A:] \/ [:omega \ A,A:] \/
     [:A,omega \ A:],omega \ A are_equipotent by A44,A48,CARD_1:21;
     then consider g being Function such that
@@ -1620,28 +815,28 @@ A59: omega \ A <> {} by A40,A43,CARD_2:4,CARD_3:58;
 A60: not N is finite & N c= M by A39,CARD_1:27;
 A61: now
     assume N <> M;
-    then N in M & M+`N = M by A1,A60,Th34,CARD_1:13;
-    then Card (M \ A) = M by A39,Th76;
+    then N in M & M+`N = M by A1,A60,CARD_3:118,CARD_1:13;
+    then card (M \ A) = M by A39,CARD_3:144;
     then consider h being Function such that
 A62: h is one-to-one & dom h = A & rng h c= M \ A by A60,CARD_1:26;
     set B = rng h;
     A,B are_equipotent by A62,WELLORD2:def 4;
     then
-A63: N = Card B by CARD_1:21;
-    N*`N = Card [:N,N:] by CARD_2:def 2;
+A63: N = card B by CARD_1:21;
+    N*`N = card [:N,N:] by CARD_2:def 2;
     then [:A,A:],A are_equipotent &
-    N*`N = Card [:A,A:] by A37,CARD_2:14,WELLORD2:def 4;
+    N*`N = card [:A,A:] by A37,CARD_2:14,WELLORD2:def 4;
     then
-A64: N*`N = N & N+`N = N by B60,Th33,CARD_1:21;
+A64: N*`N = N & N+`N = N by B60,CARD_3:117,CARD_1:21;
 A65: A misses (M \ A) by XBOOLE_1:79;
     A /\ B c= A /\ (M \ A) by A62,XBOOLE_1:26;
     then A /\ B c= {} by A65,XBOOLE_0:def 7;
     then A /\ B = {} & A /\ B = B /\ A;
     then
 A66: A misses B & A /\ B = B /\ A by XBOOLE_0:def 7;
-    then Card (A \/ B) = N by A63,A64,CARD_2:48;
+    then card (A \/ B) = N by A63,A64,CARD_2:48;
     then
-A67: Card [:A \/ B,A \/ B:] = Card [:N,N:] by CARD_2:14
+A67: card [:A \/ B,A \/ B:] = card [:N,N:] by CARD_2:14
       .= N
     by A64,CARD_2:def 2;
 A68: (A \/ B) \ A = B \ A by XBOOLE_1:40
@@ -1651,14 +846,14 @@ A69: B c= A \/ B & A c= A \/ B & B c= (A \/ B) \ A by XBOOLE_1:7;
     [:(A \/ B) \ A,A \/ B:] c= [:(A \/ B) \ A,A \/ B:] \/ [:A \/ B,(A \/
     B) \ A:] &
     [:B,B:] c= [:(A \/ B) \ A,A \/ B:] & [:A \/ B,A \/ B:] \ [:A,A:] =
-    [:(A \/ B) \ A,A \/ B:] \/ [:A \/ B,(A \/ B) \ A:] & N = Card [:N,N:]
+    [:(A \/ B) \ A,A \/ B:] \/ [:A \/ B,(A \/ B) \ A:] & N = card [:N,N:]
     by A64,A68,CARD_2:def 2,XBOOLE_1:7,ZFMISC_1:119,126;
-    then [:B,B:] c= [:A \/ B,A \/ B:] \ [:A,A:] & N = Card [:B,B:] &
+    then [:B,B:] c= [:A \/ B,A \/ B:] \ [:A,A:] & N = card [:B,B:] &
     [:A \/ B,A \/ B:] \ [:A,A:] c= [:A \/ B,A \/ B:]
     by A63,CARD_2:14,XBOOLE_1:1;
-    then N c= Card ([:A \/ B,A \/ B:] \ [:A,A:]) &
-    Card ([:A \/ B,A \/ B:] \ [:A,A:]) c= N by A67,CARD_1:27;
-    then Card ([:A \/ B,A \/ B:] \ [:A,A:]) = N by XBOOLE_0:def 10;
+    then N c= card ([:A \/ B,A \/ B:] \ [:A,A:]) &
+    card ([:A \/ B,A \/ B:] \ [:A,A:]) c= N by A67,CARD_1:27;
+    then card ([:A \/ B,A \/ B:] \ [:A,A:]) = N by XBOOLE_0:def 10;
     then [:A \/ B,A \/ B:] \ [:A,A:],B are_equipotent by A63,CARD_1:21;
     then consider g such that
 A70: g is one-to-one & dom g = [:A \/ B,A \/ B:] \ [:A,A:] & rng g = B
@@ -1710,8 +905,8 @@ A81: B <> {} by B60,A63;
     hence contradiction by A36,A80;
   end;
   then
-A82: M*`M = Card [:N,N:] by CARD_2:def 2
-    .= Card [:A,A:] by CARD_2:14;
+A82: M*`M = card [:N,N:] by CARD_2:def 2
+    .= card [:A,A:] by CARD_2:14;
   [:A,A:],A are_equipotent by A37,WELLORD2:def 4;
   hence thesis by A61,A82,CARD_1:21;
 end;
@@ -1725,9 +920,9 @@ A1: M*`M = M by Th77;
   assume
 A2: 0 in N;
   assume N c= M or N in M;
-  then N c= M & 1 c= N & M c= M by A2,Th24,CARD_1:13;
+  then N c= M & 1 c= N & M c= M by A2,CARD_3:109,CARD_1:13;
   then 1*`M c= N*`M & N*`M c= M*`M & 1*`M = M & N*`M = M*`N
-  by Th68,CARD_2:33;
+  by CARD_3:136,CARD_2:33;
   hence thesis by A1,XBOOLE_0:def 10;
 end;
 
@@ -1742,25 +937,25 @@ proof
 end;
 
 theorem
-  not X is finite implies [:X,X:],X are_equipotent & Card [:X,X:] = Card X
+  not X is finite implies [:X,X:],X are_equipotent & card [:X,X:] = card X
 proof
   assume not X is finite;
-  then (Card X)*`(Card X) = Card X by Th77;
-  then Card [:Card X,Card X:] = Card X by CARD_2:def 2;
-  then Card [:X,X:] = Card X by CARD_2:14;
+  then (card X)*`(card X) = card X by Th77;
+  then card [:card X,card X:] = card X by CARD_2:def 2;
+  then card [:X,X:] = card X by CARD_2:14;
   hence thesis by CARD_1:21;
 end;
 
 theorem
   not X is finite & Y is finite & Y <> {} implies
-  [:X,Y:],X are_equipotent & Card [:X,Y:] = Card X
+  [:X,Y:],X are_equipotent & card [:X,Y:] = card X
 proof
   assume
 Z:  not X is finite & Y is finite & Y <> {};
-  Card Y c= Card X & 0 in Card Y by Z,ORDINAL3:10;
-  then (Card X)*`(Card Y) = Card X by Z,Th78;
-  then Card [:Card X,Card Y:] = Card X by CARD_2:def 2;
-  then Card [:X,Y:] = Card X by CARD_2:14;
+  card Y c= card X & 0 in card Y by Z,ORDINAL3:10;
+  then (card X)*`(card Y) = card X by Z,Th78;
+  then card [:card X,card Y:] = card X by CARD_2:def 2;
+  then card [:X,Y:] = card X by CARD_2:14;
   hence thesis by CARD_1:21;
 end;
 
@@ -1778,11 +973,11 @@ A4: now
       assume
 A5:   N is finite;
       then reconsider N as finite Cardinal;
-      reconsider L,M,K as finite Cardinal by A2,A5,Th26;
-      Card K = Card card K & Card K = K & Card L = L & Card M = M &
-      Card N = N by CARD_1:def 5;
+      reconsider L,M,K as finite Cardinal by A2,A5,CARD_3:111;
+      card K = card card K & card K = K & card L = L & card M = M &
+      card N = N by CARD_1:def 5;
       then
-A6:   K*`M = Card (card K * card M) & L*`N = Card (card L * card N) &
+A6:   K*`M = card (card K * card M) & L*`N = card (card L * card N) &
       card K < card L & card M < card N & 0 <= card K & 0 <= card M
       by A2,CARD_2:52,NAT_1:42;
       then card K * card M <= card K * card N &
@@ -1793,7 +988,7 @@ A6:   K*`M = Card (card K * card M) & L*`N = Card (card L * card N) &
     now
       assume not N is finite;
       then
-A7:   L*`N = N & omega c= N by A2,A3,Th8,Th78;
+A7:   L*`N = N & omega c= N by A2,A3,CARD_3:102,Th78;
       K c= M & (M is finite or not M is finite) or
       M c= K & (K is finite or not K is finite);
       then
@@ -1802,9 +997,9 @@ A8:   K is finite & M is finite or K*`M c= M or K*`M c= K & K in N
       now
         assume K is finite & M is finite;
         then reconsider K,M as finite Cardinal;
-        Card K = Card card K & Card M = Card card M &
-        Card K = K & Card M = M by CARD_1:def 5;
-        then K*`M = Card (card K * card M) by CARD_2:52
+        card K = card card K & card M = card card M &
+        card K = K & card M = M by CARD_1:def 5;
+        then K*`M = card (card K * card M) by CARD_2:52
           .= (card K * card M) by CARD_1:def 5;
         hence thesis by A7,TARSKI:def 3;
       end;
@@ -1816,63 +1011,55 @@ A8:   K is finite & M is finite or K*`M c= M or K*`M c= K & K in N
   hence thesis by A1;
 end;
 
-theorem
-  K*`M in K*`N implies M in N
-proof
-  assume
-A1: K*`M in K*`N & not M in N;
-  then N c= M & K c= K by CARD_1:14;
-  then K*`N c= K*`M by Th68;
-  hence thesis by A1,CARD_1:14;
-end;
+canceled;
 
 theorem Th84:
-  not X is finite implies Card X = (omega)*`Card X
+  not X is finite implies card X = (omega)*`card X
 proof
   assume
 Z:  not X is finite;
-  then 0 in omega & omega c= Card X by Th8;
+  then 0 in omega & omega c= card X by CARD_3:102;
   hence thesis by Th78,Z;
 end;
 
 theorem
-  X <> {} & X is finite & not Y is finite implies Card Y *` Card X = Card Y
+  X <> {} & X is finite & not Y is finite implies card Y *` card X = card Y
 proof
   assume
 A1: X <> {} & X is finite & not Y is finite;
-  then Card X in Card Y & 0 in Card X by Th13,ORDINAL3:10;
+  then card X in card Y & 0 in card X by CARD_3:103,ORDINAL3:10;
   hence thesis by A1,Th78;
 end;
 
 theorem Th86:
   not D is finite & n <> 0 implies n-tuples_on D,D are_equipotent &
-  Card (n-tuples_on D) = Card D
+  card (n-tuples_on D) = card D
 proof
   assume
 A1: not D is finite & n <> 0;
-  defpred P[Nat] means $1 <> 0 implies Card ($1-tuples_on D) = Card D;
+  defpred P[Nat] means $1 <> 0 implies card ($1-tuples_on D) = card D;
 A3: P[0];
 A4: for k being Nat holds P[k] implies P[k+1]
   proof let k be Nat;
 X:  k in NAT by ORDINAL1:def 13;
     assume that
 A5: P[k];
-A6: Card ((k+1)-tuples_on D) = Card [:(k-tuples_on D),1-tuples_on D:] by Th57,X
-      .= Card [:Card (k-tuples_on D),Card (1-tuples_on D):] by CARD_2:14
-      .= Card [:Card (k-tuples_on D),Card D:] by Th56
-      .= Card (k-tuples_on D) *` Card D by CARD_2:def 2;
+A6: card ((k+1)-tuples_on D) = card [:(k-tuples_on D),1-tuples_on D:] by Th57,X
+      .= card [:card (k-tuples_on D),card (1-tuples_on D):] by CARD_2:14
+      .= card [:card (k-tuples_on D),card D:] by Th56
+      .= card (k-tuples_on D) *` card D by CARD_2:def 2;
 A7: 0-tuples_on D = { <*>D } by FINSEQ_2:112;
-    0 in Card (0-tuples_on D) & Card (0-tuples_on D) c= Card D
+    0 in card (0-tuples_on D) & card (0-tuples_on D) c= card D
     by A1,A7,ORDINAL3:10;
     hence thesis by A1,A5,A6,Th78;
   end;
    for k being Nat holds P[k] from NAT_1:sch 2(A3,A4);
-  then Card (n-tuples_on D) = Card D by A1;
+  then card (n-tuples_on D) = card D by A1;
   hence thesis by CARD_1:21;
 end;
 
 theorem
-  not D is finite implies Card D = Card (D*)
+  not D is finite implies card D = card (D*)
 proof
   assume
 A1: not D is finite;
@@ -1880,114 +1067,26 @@ A1: not D is finite;
   defpred P[set] means not contradiction;
   {f(k): P[k]} is countable from FraenCoun1;
   then
-A2: Card {k-tuples_on D: not contradiction} c= omega by Def1;
-  for X st X in {k-tuples_on D: not contradiction} holds Card X c= Card D
+A2: card {k-tuples_on D: not contradiction} c= omega by CARD_3:def 15;
+  for X st X in {k-tuples_on D: not contradiction} holds card X c= card D
   proof
     let X;
     assume X in {k-tuples_on D: not contradiction};
     then consider k such that
 A3: X = k-tuples_on D;
     0-tuples_on D = { <*>D } by FINSEQ_2:112;
-    then Card (0-tuples_on D) c= Card D & k = 0 or k <> 0 by A1;
-    hence Card X c= Card D by A1,A3,Th86;
+    then card (0-tuples_on D) c= card D & k = 0 or k <> 0 by A1;
+    hence card X c= card D by A1,A3,Th86;
   end;
   then
-A4: Card union {k-tuples_on D: not contradiction} c= omega *` Card D
-  by A2,Th60;
+A4: card union {k-tuples_on D: not contradiction} c= omega *` card D
+  by A2,CARD_3:133;
 A5: D* = union {k-tuples_on D: not contradiction} by FINSEQ_2:128;
   then
-A6: Card (D*) c= Card D by A1,A4,Th84;
+A6: card (D*) c= card D by A1,A4,Th84;
   1-tuples_on D in {k-tuples_on D: not contradiction};
-  then Card (1-tuples_on D) c= Card (D*) by A5,CARD_1:27,ZFMISC_1:92;
-  then Card D c= Card (D*) by Th56;
+  then card (1-tuples_on D) c= card (D*) by A5,CARD_1:27,ZFMISC_1:92;
+  then card D c= card (D*) by Th56;
   hence thesis by A6,XBOOLE_0:def 10;
 end;
 
-begin :: Addenda
-
-:: from SF_MASTR, 2007.07.25, A.T.
-
-registration
-  let A be finite set, B be set, f be Function of A, Fin B;
-  cluster Union f -> finite;
-  coherence
-  proof
-    now
-      let x be set;
-      assume
-A1:   x in dom f;
-      then reconsider A as non empty set;
-      reconsider x' = x as Element of A by A1;
-      reconsider f' = f as Function of A, Fin B;
-      f'.x' is finite;
-      hence f.x is finite;
-    end;
-    hence Union f is finite by Th63;
-  end;
-end;
-
-registration
- cluster non empty finite set;  :: refreshment
- existence
-  proof
-   consider X being non empty finite set;
-   take X;
-   thus thesis;
-  end;
-end;
-
-:: from WAYBEL12 (proof form SUPINF_2), 2008.07.07, A.T.
-
-theorem
-  for A being non empty countable set
-  ex f being Function of NAT, A st rng f = A
-    proof let A be non empty countable set;
-      consider f being Function such that
-A3:   dom f = NAT and
-A4:   A c= rng f by Th45;
-      consider x being set such that
-A5:   x in A by XBOOLE_0:def 1;
-      set F = f|(f"A) +* (NAT \ f"A --> x);
-A6:   rng F = A & dom F = NAT
-      proof
-A7:     f"A c= NAT by A3,RELAT_1:167;
-A8:     dom(f|(f"A)) = NAT /\ (f"A) by A3,RELAT_1:90;
-        per cases;
-        suppose
-A9:       NAT = f"A;
-          then
-A10:      NAT \ f"A = {} by XBOOLE_1:37;
-          then dom(f|(f"A)) /\ dom(NAT \ f"A --> x) = {};
-          then dom(f|(f"A)) misses dom(NAT \ f"A --> x) by XBOOLE_0:def 7;
-          then F = (f|(f"A)) \/ (NAT \ f"A --> x) by FUNCT_4:32;
-          hence rng F = rng(f|(f"A)) \/ rng(NAT \ f"A --> x) by RELAT_1:26
-            .= rng(f|(f"A)) \/ {} by A10,FUNCOP_1:16
-            .= f.:(f"A) by RELAT_1:148
-            .= A by A4,FUNCT_1:147;
-          thus dom F = dom(f|(f"A)) \/ dom(NAT \ f"A --> x) by FUNCT_4:def 1
-            .= dom(f|(f"A)) \/ {} by A10
-            .= NAT by A8,A9;
-        end;
-        suppose
-A11:      NAT <> f"A;
-A12:      now
-            assume NAT \ f"A is empty;
-            then NAT c= f"A by XBOOLE_1:37;
-            hence contradiction by A7,A11,XBOOLE_0:def 10;
-          end;
-          dom(NAT \ f"A --> x) = NAT \ f"A by FUNCOP_1:19;
-          then F = (f|(f"A)) \/ (NAT \ f"A --> x) by A8,FUNCT_4:32,XBOOLE_1:89;
-          hence rng F = rng(f|(f"A)) \/ rng(NAT \ f"A --> x) by RELAT_1:26
-            .= rng(f|(f"A)) \/ {x} by A12,FUNCOP_1:14
-            .= f.:(f"A) \/ {x} by RELAT_1:148
-            .= A \/ {x} by A4,FUNCT_1:147
-            .= A by A5,ZFMISC_1:46;
-          thus dom F = dom(f|(f"A)) \/ dom(NAT \ f"A --> x) by FUNCT_4:def 1
-            .= NAT /\ (f"A) \/ (NAT \ f"A) by A8,FUNCOP_1:19
-            .= NAT by XBOOLE_1:51;
-        end;
-      end;
-      then reconsider F as Function of NAT, A by FUNCT_2:def 1,RELSET_1:11;
-      take F;
-      thus A = rng F by A6;
-    end;

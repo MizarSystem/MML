@@ -13,14 +13,14 @@ environ
       CARD_2, FUNCT_1, RELSET_1, FINSEQ_1, FINSET_1, NAT_1, FUNCT_2, FUNCOP_1,
       FUNCT_4, ORDINAL2, FINSEQ_4, NUMBERS, XXREAL_0;
  constructors DOMAIN_1, FUNCT_4, XXREAL_0, NAT_1, NAT_D, BINOP_2, CARD_2,
-      FINSEQ_4, PBOOLE, ORDINAL3, WELLORD2;
+      FINSEQ_4, PBOOLE, ORDINAL3, WELLORD2, PARTFUN1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
-      FINSET_1, XREAL_0, NAT_1, CARD_1, FINSEQ_1, FINSEQ_4;
+      FINSET_1, XREAL_0, NAT_1, CARD_1, FINSEQ_1, FINSEQ_4, FUNCT_2, PARTFUN1;
  requirements ARITHM, BOOLE, NUMERALS, REAL, SUBSET;
  definitions FUNCOP_1;
  theorems CARD_1, CARD_2, FUNCOP_1, ENUMSET1, FINSEQ_1, FINSET_1, FUNCT_1,
       FUNCT_2, FUNCT_4, NAT_1, PBOOLE, RELAT_1, FINSEQ_4, TARSKI, XBOOLE_0,
-      XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1;
+      XBOOLE_1, ZFMISC_1, XREAL_1, XXREAL_0, ORDINAL1, RELSET_1;
  schemes NAT_1, SUBSET_1;
 
 begin :: Definitions
@@ -90,7 +90,7 @@ registration
   existence
   proof
     set V = {1}, E = {};
-    reconsider S = {} as Function of E,V by FUNCT_2:55,RELAT_1:60;
+    reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = <*V,E,S,S*>;
     len G=4 & G.VertexSelector = V & G.EdgeSelector = E &
     G.SourceSelector = S & G.TargetSelector = S by FINSEQ_4:91;
@@ -292,7 +292,7 @@ definition
   (the_Source_of G).e = (the_Target_of G).e;
   attr G is trivial means
   :Def21: ::dGTRIVIAL
-  Card the_Vertices_of G = 1;
+  card the_Vertices_of G = 1;
   attr G is non-multi means
   :Def22: ::dGNONMULTI
   for e1,e2,v1,v2 being set holds
@@ -357,7 +357,7 @@ A1: G is non-multi;
     let G be _Graph;
     assume
 A2: G is trivial & G is loopless;
-    then Card the_Vertices_of G = 1 by Def21;
+    then card the_Vertices_of G = 1 by Def21;
     then consider v being set such that
 A3: the_Vertices_of G = {v} by CARD_2:60;
     now per cases;
@@ -382,7 +382,7 @@ TARSKI:def 1;
     let G be _Graph;
     assume
 A5: G is trivial & G is non-Dmulti;
-    then Card the_Vertices_of G = 1 by Def21;
+    then card the_Vertices_of G = 1 by Def21;
     then consider v being set such that
 A6: the_Vertices_of G = {v} by CARD_2:60;
     now
@@ -422,7 +422,7 @@ registration
   existence
   proof
     set V = {1}, E = {};
-    reconsider S = {} as Function of E,V by FUNCT_2:55,RELAT_1:60;
+    reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = createGraph(V,E,S,S);
     take G;
 A1: the_Vertices_of G = {1} & the_Edges_of G = {} by FINSEQ_4:91;
@@ -430,7 +430,7 @@ A1: the_Vertices_of G = {1} & the_Edges_of G = {} by FINSEQ_4:91;
     (the_Source_of G).e = (the_Target_of G).e by FINSEQ_4:91;
     then
 A2: G is loopless by Def20;
-    Card the_Vertices_of G = 1 by A1,CARD_1:50;
+    card the_Vertices_of G = 1 by A1,CARD_1:50;
     hence G is trivial by Def21;
     for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
     holds e1 = e2 by A1,Def15;
@@ -441,7 +441,7 @@ A2: G is loopless by Def20;
   existence
   proof
     set V = {1,2}, E = {};
-    reconsider S = {} as Function of E,V by FUNCT_2:55,RELAT_1:60;
+    reconsider S = {} as Function of E,V by RELSET_1:25;
     set G = createGraph(V,E,S,S);
     take G;
 A3: the_Vertices_of G = {1,2} & the_Edges_of G = {} by FINSEQ_4:91;
@@ -450,7 +450,7 @@ A3: the_Vertices_of G = {1,2} & the_Edges_of G = {} by FINSEQ_4:91;
     (the_Source_of G).e = (the_Target_of G).e by FINSEQ_4:91;
     then
 A4: G is loopless by Def20;
-    Card the_Vertices_of G <> 1 by A3,CARD_2:76;
+    card the_Vertices_of G <> 1 by A3,CARD_2:76;
     hence G is non trivial by Def21;
     for e1,e2,v1,v2 being set st e1 Joins v1,v2,G & e2 Joins v1,v2,G
     holds e1 = e2 by A3,Def15;
@@ -472,7 +472,7 @@ registration
   cluster the_Vertices_of G -> finite;
   coherence
   proof
-    Card the_Vertices_of G = 1 by Def21;
+    card the_Vertices_of G = 1 by Def21;
     then consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     thus the_Vertices_of G is finite by A1;
@@ -515,7 +515,7 @@ registration
   proof
     set G = createGraph({v},E,S,T);
     the_Vertices_of G = {v} by FINSEQ_4:91;
-    then Card the_Vertices_of G = 1 by CARD_1:50;
+    then card the_Vertices_of G = 1 by CARD_1:50;
     hence thesis by Def21;
   end;
 end;
@@ -523,7 +523,7 @@ end;
 definition
   let G be _Graph;
   func G.order() -> Cardinal equals  ::dGORDER
-  Card the_Vertices_of G;
+  card the_Vertices_of G;
   coherence;
 end;
 
@@ -540,7 +540,7 @@ end;
 definition
   let G be _Graph;
   func G.size() -> Cardinal equals  ::dGSIZE
-  Card the_Edges_of G;
+  card the_Edges_of G;
   coherence;
 end;
 
@@ -765,7 +765,7 @@ registration
   proof
     consider v being Element of the_Vertices_of G;
     set V = {v}, E = {};
-    reconsider S = {} as Function of E,V by FUNCT_2:55,RELAT_1:60;
+    reconsider S = {} as Function of E,V by RELSET_1:25;
     set IT = createGraph(V,E,S,S);
     the_Vertices_of IT = {v} & the_Edges_of IT = {} by FINSEQ_4:91;
     then
@@ -838,11 +838,11 @@ registration
   coherence
   proof
     let G2 be Subgraph of G;
-    Card the_Vertices_of G = 1 by Def21;
+    card the_Vertices_of G = 1 by Def21;
     then consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
     the_Vertices_of G2 = {v} by A1,ZFMISC_1:39;
-    then Card the_Vertices_of G2 = 1 by CARD_1:50;
+    then card the_Vertices_of G2 = 1 by CARD_1:50;
     hence G2 is trivial by Def21;
   end;
 end;
@@ -992,7 +992,7 @@ registration
   proof
     let IT be inducedSubgraph of G,{v},E;
     the_Vertices_of IT = {v} by Def39;
-    then Card the_Vertices_of IT = 1 by CARD_1:50;
+    then card the_Vertices_of IT = 1 by CARD_1:50;
     hence IT is trivial by Def21;
   end;
 end;
@@ -1180,10 +1180,10 @@ end;
 definition
   let G be _Graph, v be Vertex of G;
   func v.inDegree() -> Cardinal equals  ::dVINDEG
-  Card v.edgesIn();
+  card v.edgesIn();
   coherence;
   func v.outDegree() -> Cardinal equals  ::dVOUTDEG
-  Card v.edgesOut();
+  card v.edgesOut();
   coherence;
 end;
 
@@ -1216,8 +1216,8 @@ definition
   v.inDegree() + v.outDegree();
   correctness
   proof
-    v.degree() = Card (v.inDegree() +^ v.outDegree()) by CARD_2:def 1
-      .= Card (v.inDegree() + v.outDegree()) by CARD_2:49
+    v.degree() = card (v.inDegree() +^ v.outDegree()) by CARD_2:def 1
+      .= card (v.inDegree() + v.outDegree()) by CARD_2:49
       .= v.inDegree() + v.outDegree() by CARD_1:def 5;
     hence thesis;
   end;
@@ -1932,7 +1932,7 @@ proof
     assume VG \ {v} = {};
     then VG c= {v} by XBOOLE_1:37;
     then VG = {v} by ZFMISC_1:39;
-    then Card VG = 1 by CARD_1:50;
+    then card VG = 1 by CARD_1:50;
     hence contradiction by Def21;
   end;
   hence thesis;
@@ -1948,12 +1948,12 @@ proof
   now
     assume
 A1: VG2 = {};
-    Card (VG2 \/ {v1}) = Card VG2 +` Card {v1} by CARD_2:48,XBOOLE_1:79
+    card (VG2 \/ {v1}) = card VG2 +` card {v1} by CARD_2:48,XBOOLE_1:79
       .= 0 +` 1 by A1,CARD_1:47,50
-      .= Card (0 +^ 1) by CARD_2:def 1
-      .= Card (0+1) by CARD_2:49
+      .= card (0 +^ 1) by CARD_2:def 1
+      .= card (0+1) by CARD_2:49
       .= 1 by CARD_1:def 5;
-    then Card VG = 1 by XBOOLE_1:45;
+    then card VG = 1 by XBOOLE_1:45;
     hence contradiction by Def21;
   end;
   then reconsider VG2 as non empty set;
@@ -1969,7 +1969,7 @@ theorem Th25: ::tGTRIVIAL03
   ex v being Vertex of G st the_Vertices_of G = {v}
 proof
   let G be trivial _Graph;
-  Card (the_Vertices_of G) = 1 by Def21;
+  card (the_Vertices_of G) = 1 by Def21;
   then consider v being set such that
 A1: the_Vertices_of G = {v} by CARD_2:60;
   reconsider v as Vertex of G by A1,TARSKI:def 1;
@@ -2441,7 +2441,7 @@ proof
     assume V is empty;
     then VG c= {v} by XBOOLE_1:37;
     then VG = {v} by ZFMISC_1:39;
-    then Card VG = 1 by CARD_1:50;
+    then card VG = 1 by CARD_1:50;
     hence contradiction by Def21;
   end;
   then reconsider V as non empty Subset of VG;
@@ -3405,7 +3405,7 @@ A3: now
   hence G1 is loopless implies G2 is loopless;
   hereby
     assume G1 is trivial;
-    then Card the_Vertices_of G2 = 1 by A2,Def21;
+    then card the_Vertices_of G2 = 1 by A2,Def21;
     hence G2 is trivial by Def21;
   end;
 A4: now

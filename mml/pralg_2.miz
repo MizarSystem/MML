@@ -17,10 +17,10 @@ environ
  registrations XBOOLE_0, RELAT_1, FUNCT_1, FUNCOP_1, FRAENKEL, CARD_3, PBOOLE,
       STRUCT_0, MSUALG_1;
  requirements BOOLE, SUBSET;
- definitions TARSKI, PBOOLE, FUNCOP_1, XBOOLE_0, BINOP_1, FUNCT_6;
+ definitions TARSKI, PBOOLE, FUNCOP_1, XBOOLE_0, BINOP_1, FUNCT_6, FUNCT_2;
  theorems TARSKI, FUNCT_1, FINSEQ_1, PBOOLE, MSUALG_1, ZFMISC_1, CARD_3,
       FUNCT_2, MCART_1, FUNCOP_1, FUNCT_6, FUNCT_5, RELAT_1, PRALG_1, RELSET_1,
-      XBOOLE_0, XBOOLE_1, STRUCT_0;
+      XBOOLE_0, XBOOLE_1;
  schemes FUNCT_1, FUNCT_2, CLASSES1, TARSKI, PBOOLE;
 
 begin
@@ -172,9 +172,7 @@ A1: dom Frege f = product doms f by FUNCT_6:def 7;
       let x be set;
       assume
 A2:   x in dom Frege f;
-      then ex g being Function st x = g & dom g = dom doms f &
-      for x st x in dom doms f holds g.x in (doms f).x by A1,CARD_3:def 5;
-      then reconsider g = x as Function;
+      then reconsider g = x as Function by A1;
       ex h being Function st (Frege f).g = h & dom h = f"SubFuncs rng f &
       for x st x in dom h holds h.x = (uncurry f).(x,g.x)
       by A1,A2,FUNCT_6:def 7;
@@ -266,16 +264,14 @@ registration
       let i;
       assume
 A1:   i in I;
-      then
-A2:   [|A,B|].i = [:A.i,B.i:] by PBOOLE:def 21;
-      A.i is non empty & B.i is non empty by A1;
-      hence [|A,B|].i is non empty by A2,ZFMISC_1:113;
+      then [|A,B|].i = [:A.i,B.i:] by PBOOLE:def 21;
+      hence [|A,B|].i is non empty by A1,ZFMISC_1:113;
     end;
     hence thesis by PBOOLE:def 16;
   end;
 end;
 
-theorem Th9:
+theorem
   for I be non empty set, J be set, A,B be ManySortedSet of I,
   f be Function of J,I holds [|A,B|]*f = [|A*f,B*f|]
 proof
@@ -299,30 +295,19 @@ A3: dom ([|A,B|]*f) = J & dom (A*f) = J & dom (B*f) = J by PBOOLE:def 3;
 end;
 
 definition
-  let I be non empty set,J;
-  let A,B be non-empty ManySortedSet of I, p be Function of J,I*,
-  r be Function of J,I, j be set, f be Function of (A# * p).j,(A*r).j,
-  g be Function of (B# * p).j,(B*r).j;
-  assume
-A1: j in J;
+  let I be non empty set;
+  let A,B be non-empty ManySortedSet of I,
+  pj being Element of I*, rj being Element of I,
+  f be Function of A#.pj,A.rj,
+  g be Function of B#.pj,B.rj;
   canceled;
-  func [[:f,g:]] -> Function of ([|A,B|]# * p).j,([|A,B|]*r).j means
-  for h be Function st h in ([|A,B|]#*p).j holds it.h = [f.(pr1 h),g.(pr2 h)];
+  func [[:f,g:]] -> Function of [|A,B|]#.pj,[|A,B|].rj means
+  for h be Function st h in [|A,B|]#.pj holds it.h = [f.(pr1 h),g.(pr2 h)];
   existence
   proof
-    set Y = ([|A,B|]*r).j, X = ([|A,B|]# * p).j;
+    set Y = [|A,B|].rj, X = [|A,B|]#.pj;
     defpred P[set,set] means
     for h be Function st h = $1 holds $2 = [f.(pr1 h),g.(pr2 h)];
-A2: dom r = J & rng r c= I & dom p = J & rng p c= I*
-    by FUNCT_2:def 1,RELSET_1:12;
-    then
-A3: r.j in rng r & p.j in rng p by A1,FUNCT_1:def 5;
-    then reconsider rj = r.j as Element of I by A2;
-    reconsider pj = p.j as Element of I* by A2,A3;
-    dom ([|A,B|]#*p)= J & dom ([|A,B|]*r) = J by PBOOLE:def 3;
-    then ([|A,B|]#*p).j = [|A,B|]#.pj & ([|A,B|]*r).j = ([|A,B|]).rj
-    by A1,FUNCT_1:22;
-    then
 A4: X = product ([|A,B|]*pj) by PBOOLE:def 19;
 A5: for x be set st x in X ex y be set st y in Y & P[x,y]
     proof
@@ -333,15 +318,8 @@ A6:   h1 = x & dom h1 = dom ([|A,B|]*pj) &
       for z be set st z in dom ([|A,B|]*pj) holds
       h1.z in ([|A,B|]*pj).z by A4,CARD_3:def 5;
       take y = [f.(pr1 h1),g.(pr2 h1)];
-      dom (A#*p) = J & dom (A*r) = J & dom (B#*p) = J &
-      dom (B*r) = J by PBOOLE:def 3;
-      then
-A7:   (A#*p).j = A#.pj & (A*r).j = A.rj & (B#*p).j = B#.pj &
-      (B*r).j = B.rj by A1,FUNCT_1:22;
-      then
-A8:   (A#*p).j = product (A*pj) & (B#*p).j = product (B*pj) by PBOOLE:def 19;
-A9:   dom f = (A#*p).j & rng f c= (A*r).j &
-      dom g = (B#*p).j & rng g c= (B*r).j by A7,FUNCT_2:def 1,RELSET_1:12;
+A9:   dom f = A#.pj & rng f c= A.rj &
+      dom g = B#.pj & rng g c= B.rj by FUNCT_2:def 1,RELSET_1:12;
 A10:  dom [|A,B|] = I & dom A = I & dom B = I by PBOOLE:def 3;
 A11:  rng pj c= I by FINSEQ_1:def 4;
       then
@@ -370,8 +348,10 @@ A18:    a in A.(pj.z) & b in B.(pj.z) & h1.z = [a,b] by ZFMISC_1:def 2;
         hence thesis by A15,A18,FUNCT_1:22;
       end;
       then pr1 h1 in product (A*pj) by A14,CARD_3:18;
+      then pr1 h1 in A#.pj by PBOOLE:def 19;
+      then pr1 h1 in dom f by FUNCT_2:def 1;
       then
-A19:  f.(pr1 h1) in rng f by A8,A9,FUNCT_1:def 5;
+A19:  f.(pr1 h1) in rng f by FUNCT_1:12;
       dom (pr2 h1) = dom pj by A12,MCART_1:def 13;
       then
 A20:  dom (pr2 h1) = dom (B*pj) by A10,A11,RELAT_1:46;
@@ -394,11 +374,14 @@ A24:    a in A.(pj.z) & b in B.(pj.z) & h1.z = [a,b] by ZFMISC_1:def 2;
         hence thesis by A21,A24,FUNCT_1:22;
       end;
       then pr2 h1 in product (B*pj) by A20,CARD_3:18;
-      then g.(pr2 h1) in rng g by A8,A9,FUNCT_1:def 5;
-      then [f.(pr1 h1),g.(pr2 h1)] in [:(A*r).j,(B*r).j:]
-      by A9,A19,ZFMISC_1:106;
-      then [f.(pr1 h1),g.(pr2 h1)] in [|A*r,B*r|].j by A1,PBOOLE:def 21;
-      hence y in Y by Th9;
+      then pr2 h1 in B#.pj by PBOOLE:def 19;
+      then pr2 h1 in dom g by FUNCT_2:def 1;
+      then g.(pr2 h1) in rng g by FUNCT_1:12;
+      then
+X:     [f.(pr1 h1),g.(pr2 h1)] in [:rng f,rng g:] by A19,ZFMISC_1:106;
+      [:rng f,rng g:] c= [:A.rj,B.rj:] by A9,ZFMISC_1:119;
+      then [f.(pr1 h1),g.(pr2 h1)] in [:A.rj,B.rj:] by X;
+      hence y in Y by PBOOLE:def 21;
       let h be Function;
       assume x = h;
       hence thesis by A6;
@@ -410,37 +393,21 @@ A25: for x be set st x in X holds P[x,F.x] from FUNCT_2:sch 1(A5);
   end;
   uniqueness
   proof
-    let x,y be Function of (([|A,B|])#*p).j,([|A,B|]*r).j such that
-A26: for h be Function st h in ([|A,B|]#*p).j
+    let x,y be Function of [|A,B|]#.pj,[|A,B|].rj such that
+A26: for h be Function st h in [|A,B|]#.pj
     holds x.h = [f.(pr1 h),g.(pr2 h)] and
-A27: for h be Function st h in ([|A,B|]#*p).j
+A27: for h be Function st h in [|A,B|]#.pj
     holds y.h = [f.(pr1 h),g.(pr2 h)];
-A28: dom r = J & rng r c= I & dom p = J & rng p c= I*
-    by FUNCT_2:def 1,RELSET_1:12;
-    then
-A29: r.j in rng r & p.j in rng p by A1,FUNCT_1:def 5;
-    then reconsider rj = r.j as Element of I by A28;
-    reconsider pj = p.j as Element of I* by A28,A29;
-    dom ([|A,B|]#*p) = J & dom ([|A,B|]*r)=J by PBOOLE:def 3;
-    then
-A30: ([|A,B|]#*p).j = [|A,B|]#.pj & ([|A,B|]*r).j = ([|A,B|]).rj
-    by A1,FUNCT_1:22;
-    then
-A31: (dom x = ([|A,B|]#*p).j) & dom y = ([|A,B|]#*p).j by FUNCT_2:def 1;
-    now
-      let h be set;
-      assume
-A32:  h in ([|A,B|]#*p).j;
-      then h in product ([|A,B|]*pj) by A30,PBOOLE:def 19;
+    let h be Element of [|A,B|]#.pj;
+      h in [|A,B|]#.pj;
+      then h in product ([|A,B|]*pj) by PBOOLE:def 19;
       then consider h1 be Function such that
 A33:  h1 = h and dom h1 = dom ([|A,B|]*pj) &
       for z be set st z in dom ([|A,B|]*pj) holds
       h1.z in ([|A,B|]*pj).z by CARD_3:def 5;
       x.h1 = [f.(pr1 h1),g.(pr2 h1)] &
-      y.h1 = [f.(pr1 h1),g.(pr2 h1)] by A26,A27,A32,A33;
+      y.h1 = [f.(pr1 h1),g.(pr2 h1)] by A26,A27,A33;
       hence x.h = y.h by A33;
-    end;
-    hence thesis by A31,FUNCT_1:9;
   end;
 end;
 
@@ -450,22 +417,34 @@ definition
   r be Function of J,I, F be ManySortedFunction of A#*p,A*r,
   G be ManySortedFunction of B#*p,B*r;
   func [[:F,G:]] -> ManySortedFunction of [|A,B|]#*p,[|A,B|]*r means
-  for j st j in J for f be Function of (A#*p).j,(A*r).j,
-  g be Function of (B#*p).j,(B*r).j
+  for j st j in J
+  for pj being Element of I*, rj being Element of I
+    st pj = p.j & rj = r.j
+  for f be Function of A#.pj,A.rj, g be Function of B#.pj,B.rj
   st f = F.j & g = G.j holds it.j = [[:f,g:]];
   existence
   proof
-    defpred P[set,set] means for f be Function of (A#*p).$1,(A*r).$1,
-    g be Function of (B#*p).$1,(B*r).$1
+    defpred P[set,set] means
+     for pj being Element of I*, rj being Element of I
+       st pj = p.$1 & rj = r.$1
+     for f be Function of A#.pj,A.rj,
+    g be Function of B#.pj,B.rj
     st f = F.$1 & g = G.$1 holds $2 = [[:f,g:]];
 A1: for j st j in J ex i st P[j,i]
     proof
       let j;
       assume
 A2:   j in J;
-      then reconsider f = F.j as Function of (A#*p).j,(A*r).j
-      by PBOOLE:def 18;
-      reconsider g = G.j as Function of (B#*p).j,(B*r).j by A2,PBOOLE:def 18;
+      then
+X:    j in dom p & j in dom r by FUNCT_2:def 1;
+      reconsider pj = p.j as Element of I* by FUNCT_2:7,A2;
+      reconsider rj = r.j as Element of I by FUNCT_2:7,A2;
+      A#.(p.j) = (A#*p).j & A.(r.j) = (A*r).j by X,FUNCT_1:23;
+      then reconsider f = F.j as Function of A#.pj,A.rj
+      by A2,PBOOLE:def 18;
+      B#.(p.j) = (B#*p).j & B.(r.j) = (B*r).j by X,FUNCT_1:23;
+      then reconsider g = G.j as Function of B#.pj,B.rj
+       by A2,PBOOLE:def 18;
       take [[:f,g:]];
       thus thesis;
     end;
@@ -477,9 +456,15 @@ A3: dom h = J & for j st j in J holds P[j,h.j] from CLASSES1:sch 1(A1);
       let j;
       assume
 A4:   j in dom h;
-      then reconsider f = F.j as Function of (A#*p).j,(A*r).j
-      by A3,PBOOLE:def 18;
-      reconsider g = G.j as Function of (B#*p).j,(B*r).j
+      then
+X:    j in dom p & j in dom r by FUNCT_2:def 1,A3;
+      reconsider pj = p.j as Element of I* by FUNCT_2:7,A4,A3;
+      reconsider rj = r.j as Element of I by FUNCT_2:7,A4,A3;
+      A#.(p.j) = (A#*p).j & A.(r.j) = (A*r).j by X,FUNCT_1:23;
+      then reconsider f = F.j as Function of A#.pj,A.rj
+      by A3,A4,PBOOLE:def 18;
+      B#.(p.j) = (B#*p).j & B.(r.j) = (B*r).j by X,FUNCT_1:23;
+      then reconsider g = G.j as Function of B#.pj,B.rj
       by A3,A4,PBOOLE:def 18;
       h.j = [[:f,g:]] by A3,A4;
       hence thesis;
@@ -490,11 +475,21 @@ A4:   j in dom h;
       let j;
       assume
 A5:   j in J;
-      then reconsider f = F.j as Function of (A#*p).j,(A*r).j
-      by PBOOLE:def 18;
-      reconsider g = G.j as Function of (B#*p).j,(B*r).j by A5,PBOOLE:def 18;
+      then
+X:    j in dom p & j in dom r by FUNCT_2:def 1;
+      reconsider pj = p.j as Element of I* by FUNCT_2:7,A5;
+      reconsider rj = r.j as Element of I by FUNCT_2:7,A5;
+      A#.(p.j) = (A#*p).j & A.(r.j) = (A*r).j by X,FUNCT_1:23;
+      then reconsider f = F.j as Function of A#.pj,A.rj
+      by A5,PBOOLE:def 18;
+      B#.(p.j) = (B#*p).j & B.(r.j) = (B*r).j by X,FUNCT_1:23;
+      then reconsider g = G.j as Function of B#.pj,B.rj
+       by A5,PBOOLE:def 18;
+W:    ([|A,B|]#*p).j = [|A,B|]#.(p.j) & ([|A,B|]*r).j = [|A,B|].(r.j)
+              by X,FUNCT_1:23;
+
       h.j = [[:f,g:]] by A3,A5;
-      hence thesis;
+      hence thesis by W;
     end;
     then reconsider h as ManySortedFunction of [|A,B|]#*p,[|A,B|]*r
     by PBOOLE:def 18;
@@ -505,18 +500,31 @@ A5:   j in J;
   proof
     let x,y be ManySortedFunction of [|A,B|]#*p,[|A,B|]*r;
     assume that
-A6: for j st j in J for f be Function of (A#*p).j,(A*r).j, g be Function of
-    (B#*p).j,(B*r).j st f = F.j & g = G.j holds x.j = [[:f,g:]] and
-A7: for j st j in J for f be Function of (A#*p).j,(A*r).j, g be Function of
-    (B#*p).j,(B*r).j st f = F.j & g = G.j holds y.j = [[:f,g:]];
+A6: for j st j in J
+  for pj being Element of I*, rj being Element of I
+    st pj = p.j & rj = r.j
+ for f be Function of A#.pj,A.rj, g be Function of
+    B#.pj,B.rj st f = F.j & g = G.j holds x.j = [[:f,g:]] and
+A7: for j st j in J
+  for pj being Element of I*, rj being Element of I
+    st pj = p.j & rj = r.j
+ for f be Function of A#.pj,A.rj, g be Function of
+    B#.pj,B.rj st f = F.j & g = G.j holds y.j = [[:f,g:]];
     for j be set st j in J holds x.j = y.j
     proof
       let j;
       assume
 A8:   j in J;
-      then reconsider f = F.j as Function of (A#*p).j,(A*r).j
-      by PBOOLE:def 18;
-      reconsider g = G.j as Function of (B#*p).j,(B*r).j by A8,PBOOLE:def 18;
+      then
+X:    j in dom p & j in dom r by FUNCT_2:def 1;
+      reconsider pj = p.j as Element of I* by FUNCT_2:7,A8;
+      reconsider rj = r.j as Element of I by FUNCT_2:7,A8;
+      A#.(p.j) = (A#*p).j & A.(r.j) = (A*r).j by X,FUNCT_1:23;
+      then reconsider f = F.j as Function of A#.pj,A.rj
+      by PBOOLE:def 18,A8;
+      B#.(p.j) = (B#*p).j & B.(r.j) = (B*r).j by X,FUNCT_1:23;
+      then reconsider g = G.j as Function of B#.pj,B.rj
+       by A8,PBOOLE:def 18;
       x.j = [[:f,g:]] & y.j = [[:f,g:]] by A6,A7,A8;
       hence thesis;
     end;
@@ -737,7 +745,6 @@ A1: x in I;
     then consider U0 being MSAlgebra over S such that
 A2: U0 = A.x & Carrier (A,s).x = (the Sorts of U0).s by Def16;
     U0 is non-empty MSAlgebra over S by A1,A2,Def12;
-    then the Sorts of U0 is non-empty;
     hence Carrier (A,s).x is non empty by A2;
   end;
 end;
@@ -1311,7 +1318,6 @@ A30:      the_arity_of o <> {};
 A31:      f.x = IFEQ(the_arity_of o,{},commute(A?.o),
           Commute Frege (A?.o))by A2
             .= Commute Frege (A?.o) by A30,FUNCOP_1:def 8;
-A32:      dom ar <> {} by A30;
 A33:      dom C = AS.o
           proof
             thus dom C c= AS.o
@@ -1326,7 +1332,7 @@ A35:          dom g = I' & (for i be Element of I' holds
               then
 A36:          g in Funcs(I,Funcs(dom ar,|.A'.|)) by FUNCT_2:def 2;
               then commute g in Funcs(dom ar,Funcs(I,|.A'.|))
-              by A32,FUNCT_6:85;
+              by A30,FUNCT_6:85;
               then
 A37:          ex h be Function st h = commute g & dom h = dom ar
               & rng h c= Funcs(I,|.A'.|) by FUNCT_2:def 2;
@@ -1425,7 +1431,7 @@ A58:            h.i in |.A'.i.| by A56,TARSKI:def 4;
             end;
             then
 A59:        g in Funcs(dom ar,Funcs(I,|.A'.|)) by A10,A49,FUNCT_2:def 2;
-            then commute g in Funcs(I,Funcs(dom ar,|.A'.|)) by A32,FUNCT_6:85;
+            then commute g in Funcs(I,Funcs(dom ar,|.A'.|)) by A30,FUNCT_6:85;
             then
 A60:        ex h be Function st h = commute g & dom h = I &
             rng h c= Funcs(dom ar,|.A'.|) by FUNCT_2:def 2;
@@ -1472,8 +1478,7 @@ A72:            ex U0 being MSAlgebra over S st U0 = A'.ii &
             end;
             then
 A73:        commute g in dom F by A60,A61,A62,CARD_3:18;
-            dom ar <> {} by A30;
-            then commute (commute g) = g by A59,FUNCT_6:87;
+            commute (commute g) = g by A59,FUNCT_6:87,A30;
             hence i in dom C by A49,A73,Def6;
           end;
           set rs = the_result_sort_of o, CA = Carrier(A,rs);
@@ -1490,8 +1495,7 @@ A75:        f in dom Frege(A?.o) & g = commute f by A74,Def6;
             rng f c= Funcs(dom(the_arity_of o),|.A'.|) by A75,Th17;
             then
 A76:        f in Funcs(I,Funcs(dom(the_arity_of o),|.A'.|)) by FUNCT_2:def 2;
-            dom (the_arity_of o) <> {} by A30;
-            then commute g = f by A75,A76,FUNCT_6:87;
+            commute g = f by A75,A76,FUNCT_6:87,A30;
             then
 A77:        x = F.f & F.f in rng F by A74,A75,Def6,FUNCT_1:def 5;
             then reconsider h = x as Function;

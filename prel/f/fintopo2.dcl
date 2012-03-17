@@ -17,6 +17,8 @@
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XBOOLEAN"/>
 <ArticleID name="MARGREL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ORDERS_1"/>
@@ -29,7 +31,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="59"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 <RCluster aid="FINTOPO2" nr="2">
@@ -38,8 +40,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26" value="false"/>
-<Adjective nr="59"/>
+<Adjective nr="31" value="false"/>
+<Adjective nr="64"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -151,8 +151,8 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="251"/>
-<Adjective nr="254"/>
+<Adjective nr="253"/>
+<Adjective nr="256"/>
 </Cluster>
 </RCluster>
 <FCluster aid="YELLOW16" nr="1">
@@ -173,7 +173,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="254"/>
+<Adjective nr="256"/>
 </Cluster>
 </FCluster>
 <FCluster aid="YELLOW16" nr="2">
@@ -185,8 +185,8 @@
 </Typ>
 <Typ kind="M" nr="11">
 <Cluster>
-<Adjective nr="251"/>
-<Adjective nr="254"/>
+<Adjective nr="253"/>
+<Adjective nr="256"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -246,7 +246,7 @@
 <Typ kind="M" nr="11">
 <Cluster>
 <Adjective nr="244"/>
-<Adjective nr="251"/>
+<Adjective nr="253"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -305,7 +305,7 @@
 <ArgTypes/>
 <Cluster>
 <Adjective nr="1"/>
-<Adjective nr="254"/>
+<Adjective nr="256"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -313,7 +313,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="244"/>
-<Adjective nr="252"/>
+<Adjective nr="254"/>
 </Cluster>
 </CCluster>
 </Registrations>

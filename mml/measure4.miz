@@ -7,9 +7,10 @@
 environ
 
  vocabularies SUPINF_1, MEASURE1, RLVECT_1, ARYTM_1, SETFAM_1, FUNCT_1, BOOLE,
-      TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4, ARYTM;
+      TARSKI, RELAT_1, SUPINF_2, PROB_1, MEASURE3, MEASURE4, ARYTM,
+      REALSET1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, FUNCT_1,
-      RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0,
+      RELSET_1, PARTFUN1, FUNCT_2, XXREAL_0, VALUED_0,
       REAL_1, NAT_1, SETFAM_1, PROB_1, SUPINF_1,
       SUPINF_2, MEASURE1, MEASURE3;
  constructors ENUMSET1, PARTFUN1, REAL_1, NAT_1, PROB_2, MEASURE3, SUPINF_1;
@@ -19,7 +20,7 @@ environ
  definitions TARSKI, MEASURE3, XBOOLE_0;
  theorems TARSKI, ENUMSET1, FUNCT_1, FUNCT_2, ZFMISC_1, NAT_1, SUPINF_2,
       MEASURE1, MEASURE2, MEASURE3, XBOOLE_0, XBOOLE_1, XXREAL_0, PROB_1,
-      ORDINAL1;
+      ORDINAL1, VALUED_0;
  schemes NAT_1, FUNCT_2, XBOOLE_0;
 
 begin :: Some theorems about R_eal numbers
@@ -330,12 +331,17 @@ A1: for A being Subset of X holds
   thus thesis by A1;
 end;
 
-canceled 2;
+canceled 3;
 
-theorem Th11:
-  ex M being Function of bool X,ExtREAL st M is nonnegative & M.{} = 0. &
-  for A,B being Subset of X st A c= B holds M.A <= M.B &
-  for F being Function of NAT,bool X holds M.(union rng F) <= SUM(M*F)
+definition
+  let X be set;
+  canceled;
+  mode C_Measure of X -> Function of bool X,ExtREAL means
+    :Def2:
+    it is nonnegative zeroed &
+    for A,B being Subset of X st A c= B holds it.A <= it.B &
+    for F being Function of NAT,bool X holds it.(union rng F) <= SUM(it*F);
+  existence
 proof
   consider M being Function of bool X,ExtREAL such that
 A1: for A being Subset of X holds M.A = 0.by Th8;
@@ -361,24 +367,17 @@ A9: SUM(M*F) = Ser(M*F).0 by A7,SUPINF_2:67;
     hence thesis by A6,A8,A9;
   end;
   take M;
+   M.{} = 0. by A1,A4;
+   then
+X: M is zeroed by VALUED_0:def 19;
   for A,B being Subset of X holds M.A <= M.B
   proof
     let A,B be Subset of X;
     M.A = 0. & M.B = 0. by A1;
     hence thesis;
   end;
-  hence thesis by A1,A2,A4,A5,MEASURE1:def 4;
+  hence thesis by A2,A5,MEASURE1:def 4,X;
 end;
-
-definition
-  let X be set;
-  canceled;
-  mode C_Measure of X -> Function of bool X,ExtREAL means
-    :Def2:
-    it is nonnegative & it.{} = 0. &
-    for A,B being Subset of X st A c= B holds it.A <= it.B &
-    for F being Function of NAT,bool X holds it.(union rng F) <= SUM(it*F);
-  existence by Th11;
 end;
 
 reserve C for C_Measure of X;
@@ -410,10 +409,11 @@ A2: for A being set holds (A in D iff A in bool X &
     reconsider A = {} as Subset of X by XBOOLE_1:2;
     now
       let W,Z be Subset of X;
+X:    C is zeroed by Def2;
       assume W c= A & Z c= X \ A;
       then
 A3:   W = {};
-      then C.W = 0. by Def2;
+      then C.W = 0 by X, VALUED_0:def 19;
       hence C.W + C.Z <= C.(W \/ Z) by A3,SUPINF_2:18;
     end;
     then D <> {} & for A being set holds A in D implies A in bool X by A2;
@@ -492,11 +492,12 @@ A7: C*F is nonnegative by MEASURE1:54;
 A8: for r being Element of NAT st 2 <= r holds (C*F).r = 0.
   proof
     let r be Element of NAT;
+X:    C is zeroed by Def2;
     assume 2 <= r;
     then 1 + 1 <= r;
     then 1 < r by NAT_1:13;
     then F.r = {} by A1;
-    then C.(F.r) = 0. by Def2;
+    then C.(F.r) = 0. by X, VALUED_0:def 19;
     hence thesis by FUNCT_2:21;
   end;
   F.0 = W & F.1 = Z & F.2 = P by A1;
@@ -505,8 +506,9 @@ A9: (C*F).2 = C.P & (C*F).1 = C.Z & (C*F).0 = C.W by FUNCT_2:21;
   set G = C*F;
   consider y1,y2 being R_eal such that
 A10: y1 = Ser(G).1 & y2 = Ser(G).0;
+X:    C is zeroed by Def2;
   Ser(G).2 = y1 + G.(1 + 1) by A10,SUPINF_2:63
-    .= Ser(G).1 + 0. by A9,A10,Def2
+    .= Ser(G).1 + 0. by A9,A10,X, VALUED_0:def 19
     .= Ser(G).1 by SUPINF_2:18
     .= y2 + G.(0 + 1) by A10,SUPINF_2:63
     .= C.W + C.Z by A9,A10,SUPINF_2:63;
@@ -884,10 +886,8 @@ A55:    for x being set st x in NAT ex y being set st y in ExtREAL & P[x,y]
           x <> 0 implies ex y being set st y in ExtREAL & P[x,y];
           hence thesis;
         end;
-        ex R being Function of NAT,ExtREAL st
-        for x being set st x in NAT holds P[x,R.x] from FUNCT_2:sch 1(A55);
-        then consider R being Function of NAT,ExtREAL such that
-A56:    for x being set st x in NAT holds P[x,R.x];
+        consider R being Function of NAT,ExtREAL such that
+A56:    for x being set st x in NAT holds P[x,R.x] from FUNCT_2:sch 1(A55);
         for n being Element of NAT holds 0. <= R.n
         proof
           let n be Element of NAT;
@@ -1031,11 +1031,12 @@ A2: (sigma_Meas(C)).A' = C.A' by Def4;
     C is nonnegative by Def2;
     hence 0.<= (sigma_Meas(C)).A by A2,MEASURE1:def 4;
   end;
+X:    C is zeroed by Def2;
   {} in sigma_Field(C) by PROB_1:10;
   then (sigma_Meas(C)).{} = C.{} by Def4;
   then
 A3: sigma_Meas(C) is nonnegative & (sigma_Meas(C)).{} = 0.
-  by A1,Def2,MEASURE1:def 4;
+  by A1,X,MEASURE1:def 4, VALUED_0:def 19;
   now
     let A,B be Element of sigma_Field(C);
     assume
@@ -1046,7 +1047,7 @@ A5: (sigma_Meas(C)).A' = C.A' & (sigma_Meas(C)).B' = C.B' by Def4;
     hence (sigma_Meas(C)).(A \/ B) = (sigma_Meas(C)).A + (sigma_Meas(C)).B
     by A5,Def4;
   end;
-  hence thesis by A3,MEASURE1:def 5;
+  hence thesis by A3,MEASURE1:def 5,VALUED_0:def 19;
 end;
 
 theorem Th23:

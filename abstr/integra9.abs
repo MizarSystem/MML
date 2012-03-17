@@ -1,0 +1,551 @@
+:: Several Integrability Formulas of Some Functions, Orthogonal Polynomials
+:: and Norm Functions
+::  by Bo Li , Yanping Zhuang , Bing Xie and Pan Wang
+::
+:: Received October 14, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies INTEGRA9, ARYTM, PRE_TOPC, RELAT_1, FUNCT_1, ARYTM_1, JGRAPH_2,
+      PARTFUN1, SEQ_1, SIN_COS, INTEGRA1, FDIFF_1, REALSET1, BOOLE, SQUARE_1,
+      ARYTM_3, ORDINAL2, RCOMP_1, PREPOWER, LATTICES, FINSEQ_1, TAYLOR_1,
+      SIN_COS4, SUBSET_1;
+ notations SEQ_1, SIN_COS, TARSKI, XBOOLE_0, SUBSET_1, NUMBERS, VALUED_1,
+      REAL_1, RELSET_1, PARTFUN1, RFUNCT_1, RCOMP_1, PSCOMP_1, INTEGRA1,
+      FCONT_1, SINCOS10, FDIFF_9, SQUARE_1, INTEGRA5, XXREAL_0, PARTFUN2,
+      PREPOWER, TAYLOR_1, FDIFF_1, JORDAN16, SEQ_2;
+ constructors SIN_COS, TAYLOR_1, SEQ_1, REAL_1, FDIFF_1, FCONT_1, PSCOMP_1,
+      NAT_1, BINOP_2, SQUARE_1, PREPOWER, INTEGRA5, PARTFUN2, LIMFUNC1,
+      JORDAN16, SEQ_4, RFUNCT_1, FDIFF_9, SINCOS10;
+ registrations VALUED_1, NAT_1, XBOOLE_0, NUMBERS, MEMBERED, VALUED_0,
+      INTEGRA1, RCOMP_1, INT_1, RELAT_1, ORDINAL1, FUNCT_2, FDIFF_1, COMPLEX1,
+      RFUNCT_1, XREAL_0, RELSET_1, FINSEQ_2, ORDINAL2, NEWTON, SEQM_3,
+      XXREAL_0, FINSEQ_1, SIN_COS, SQUARE_1, XREAL_1, FUNCOP_1, PARTFUN1,
+      TAYLOR_1, JORDAN16, FCONT_3;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
+
+
+begin
+
+ reserve r,p,x for Real;
+ reserve C for non empty set;
+ reserve n for Element of NAT;
+ reserve A for closed-interval Subset of REAL;
+ reserve f,g,h,f1,f2 for PartFunc of REAL,REAL;
+ reserve Z for open Subset of REAL;
+
+:: f.x = -exp_R.(-x)
+theorem :: INTEGRA9:1
+  -(exp_R*(AffineMap(-1,0))) is_differentiable_on REAL
+  & for x holds ((-(exp_R*(AffineMap(-1,0))))`|REAL).x = exp_R(-x);
+
+::  f.x = exp_R.(-x)
+theorem :: INTEGRA9:2
+ integral(exp_R*(AffineMap(-1,0)),A) = (-(exp_R*(AffineMap(-1,0)))).(sup A)
+        -(-(exp_R*(AffineMap(-1,0)))).(inf A);
+
+:: f.x = (1/2)*exp_R.(2*x)
+theorem :: INTEGRA9:3
+  (1/2)(#)(exp_R*(AffineMap(2,0))) is_differentiable_on REAL
+  & for x holds (((1/2)(#)(exp_R*(AffineMap(2,0))))`|REAL).x
+         = (exp_R*(AffineMap(2,0))).x;
+
+::  f.x = exp_R.(2*x)
+theorem :: INTEGRA9:4
+   integral(exp_R*(AffineMap(2,0)),A)
+   = ((1/2)(#)(exp_R*(AffineMap(2,0)))).(sup A)
+    -((1/2)(#)(exp_R*(AffineMap(2,0)))).(inf A);
+
+:: f.x = (1/r)*exp_R.(r*x)
+theorem :: INTEGRA9:5
+  r<>0 implies (1/r)(#)(exp_R*(AffineMap(r,0)))
+  is_differentiable_on REAL & for x holds
+ (((1/r)(#)(exp_R*(AffineMap(r,0))))`|REAL).x=(exp_R*(AffineMap(r,0))).x;
+
+::  f.x = exp_R.(r*x)
+theorem :: INTEGRA9:6
+  r<>0 implies integral(exp_R*(AffineMap(r,0)),A)
+   = ((1/r)(#)(exp_R*(AffineMap(r,0)))).(sup A)
+    -((1/r)(#)(exp_R*(AffineMap(r,0)))).(inf A);
+
+::  f.x=sin(2*x)
+theorem :: INTEGRA9:7
+   integral(sin*(AffineMap(2,0)),A)
+ = ((-1/2)(#)(cos*(AffineMap(2,0)))).(sup A)
+  -((-1/2)(#)(cos*(AffineMap(2,0)))).(inf A);
+
+::  f.x=(-1/n)*cos(n*x)
+theorem :: INTEGRA9:8
+  n<>0 implies (-1/n)(#)(cos*(AffineMap(n,0))) is_differentiable_on REAL &
+  for x holds (((-1/n)(#)(cos*(AffineMap(n,0))))`|REAL).x =sin(n*x);
+
+::  f.x=sin(n*x)
+theorem :: INTEGRA9:9
+  n<>0 implies integral(sin*(AffineMap(n,0)),A)
+ = ((-1/n)(#)(cos*(AffineMap(n,0)))).(sup A)
+  -((-1/n)(#)(cos*(AffineMap(n,0)))).(inf A);
+
+::  f.x=(1/2)*sin(2*x)
+theorem :: INTEGRA9:10
+  (1/2)(#)(sin*(AffineMap(2,0))) is_differentiable_on REAL &
+  for x holds (((1/2)(#)(sin*(AffineMap(2,0))))`|REAL).x =cos(2*x);
+
+::  f.x=cos(2*x)
+theorem :: INTEGRA9:11
+   integral(cos*(AffineMap(2,0)),A)
+ = ((1/2)(#)(sin*(AffineMap(2,0)))).(sup A)
+  -((1/2)(#)(sin*(AffineMap(2,0)))).(inf A);
+
+::  f.x=(1/n)*sin(n*x)
+theorem :: INTEGRA9:12
+  n<>0 implies (1/n)(#)(sin*(AffineMap(n,0)))
+  is_differentiable_on REAL & for x holds
+  (((1/n)(#)(sin*(AffineMap(n,0))))`|REAL).x = cos(n*x);
+
+::  f.x=cos(n*x)
+theorem :: INTEGRA9:13
+  n<>0 implies integral(cos*(AffineMap(n,0)),A)
+  = ((1/n)(#)(sin*(AffineMap(n,0)))).(sup A)
+    -((1/n)(#)(sin*(AffineMap(n,0)))).(inf A);
+
+::  f.x=x*sin.x
+theorem :: INTEGRA9:14
+  A c= Z implies integral((id Z)(#)sin,A)
+ = ((-id Z)(#)cos+sin).(sup A)-((-id Z)(#)cos+sin).(inf A);
+
+::  f.x=x*cos.x
+theorem :: INTEGRA9:15
+  A c= Z implies integral((id Z)(#)cos,A)
+  = ((id Z)(#)sin+cos).(sup A)-((id Z)(#)sin+cos).(inf A);
+
+:: f.x=x*cos.x
+theorem :: INTEGRA9:16
+  (id Z)(#)cos is_differentiable_on Z &
+  for x st x in Z holds (((id Z)(#)cos)`|Z).x =cos.x-x*sin.x;
+
+:: f.x = -sin.x+x*cos.x
+theorem :: INTEGRA9:17
+  -sin+(id Z)(#)cos is_differentiable_on Z
+  & for x st x in Z holds ((-sin+(id Z)(#)cos)`|Z).x =-x*sin.x;
+
+::  f.x=-x*sin.x
+theorem :: INTEGRA9:18
+  A c= Z implies integral((-id Z)(#)sin,A)
+   = (-sin+(id Z)(#)cos).(sup A)-(-sin+(id Z)(#)cos).(inf A);
+
+:: f.x = -cos.x-x*sin.x
+theorem :: INTEGRA9:19
+  -cos-(id Z)(#)sin is_differentiable_on Z
+  & for x st x in Z holds ((-cos-(id Z)(#)sin)`|Z).x =-x*cos.x;
+
+:: f.x = -x*cos.x
+theorem :: INTEGRA9:20
+  A c= Z implies integral((-id Z)(#)cos,A)
+  = (-cos-(id Z)(#)sin).(sup A)-(-cos-(id Z)(#)sin).(inf A);
+
+:: f.x=sin.x+x*cos.x
+theorem :: INTEGRA9:21
+  A c= Z implies integral(sin+(id Z)(#)cos,A)
+  = ((id Z)(#)sin).(sup A)-((id Z)(#)sin).(inf A);
+
+:: f.x=-cos.x+x*sin.x
+theorem :: INTEGRA9:22
+  A c= Z implies integral(-cos+(id Z)(#)sin,A)
+  = ((-id Z)(#)cos).(sup A)-((-id Z)(#)cos).(inf A);
+
+:: f.x = x*(exp_R.x)
+theorem :: INTEGRA9:23
+   integral((AffineMap(1,0))(#)exp_R,A)
+ = (exp_R(#)(AffineMap(1,-1))).(sup A)
+  -(exp_R(#)(AffineMap(1,-1))).(inf A);
+
+:: f.x = (1/(n+1))*x^(n+1)
+theorem :: INTEGRA9:24
+  (1/(n+1))(#)( #Z (n+1)) is_differentiable_on REAL
+  & for x holds (((1/(n+1))(#)( #Z (n+1)))`|REAL).x = x #Z n;
+
+::  f.x = x^n
+theorem :: INTEGRA9:25
+  integral(( #Z n),A)
+  = ((1/(n+1))(#)( #Z (n+1))).(sup A)
+   -((1/(n+1))(#)( #Z (n+1))).(inf A);
+
+begin
+
+theorem :: INTEGRA9:26
+for f,g being PartFunc of REAL,REAL,
+C being non empty Subset of REAL
+holds (f-g)||C = f||C - g||C;
+
+theorem :: INTEGRA9:27
+for f1,f2,g being PartFunc of REAL,REAL,
+C being non empty Subset of REAL
+holds ((f1+f2)||C)(#)(g||C)=(f1(#)g+f2(#)g)||C;
+
+theorem :: INTEGRA9:28
+for f1,f2,g being PartFunc of REAL,REAL,
+C being non empty Subset of REAL
+holds ((f1-f2)||C)(#)(g||C)=(f1(#)g-f2(#)g)||C;
+
+theorem :: INTEGRA9:29
+for f1,f2,g being PartFunc of REAL,REAL,
+C being non empty Subset of REAL
+holds ((f1(#)f2)||C)(#)(g||C)=(f1||C)(#)((f2(#)g)||C);
+
+definition
+  let A be closed-interval Subset of REAL;
+  let f,g be PartFunc of REAL,REAL;
+  func |||(f,g,A)||| -> Real equals
+:: INTEGRA9:def 1
+  integral((f(#)g),A);
+end;
+
+theorem :: INTEGRA9:30
+  for f,g being PartFunc of REAL,REAL,
+      A being closed-interval Subset of REAL holds
+    |||(f,g,A)||| = |||(g,f,A)|||;
+
+theorem :: INTEGRA9:31
+for f1,f2,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f1(#)g)||A is total &
+(f2(#)g)||A is total & (f1(#)g)||A|A is bounded &
+(f1(#)g)||A is integrable & (f2(#)g)||A|A is bounded &
+(f2(#)g)||A is integrable
+holds |||(f1+f2,g,A)||| = |||(f1,g,A)||| + |||(f2,g,A)|||;
+
+theorem :: INTEGRA9:32
+for f1,f2,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f1(#)g)||A is total &
+(f2(#)g)||A is total & (f1(#)g)||A|A is bounded &
+(f1(#)g)||A is integrable & (f2(#)g)||A|A is bounded &
+(f2(#)g)||A is integrable
+holds |||(f1-f2,g,A)||| = |||(f1,g,A)||| - |||(f2,g,A)|||;
+
+theorem :: INTEGRA9:33
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL
+st (f(#)g)|A is bounded & f(#)g is_integrable_on A
+& A c= dom(f(#)g)
+holds |||(-f,g,A)||| = - |||(f,g,A)|||;
+
+theorem :: INTEGRA9:34
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL
+st (f(#)g)|A is bounded & f(#)g is_integrable_on A
+& A c= dom(f(#)g)
+ holds |||((r(#)f),g,A)||| = r*|||(f,g,A)|||;
+
+theorem :: INTEGRA9:35
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL
+st (f(#)g)|A is bounded & f(#)g is_integrable_on A & A c= dom(f(#)g)
+holds |||((r(#)f),(p(#)g),A)||| = r*p*|||(f,g,A)|||;
+
+theorem :: INTEGRA9:36
+for f,g,h being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL
+holds |||((f(#)g),h,A)||| = |||(f,(g(#)h),A)|||;
+
+theorem :: INTEGRA9:37
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f(#)f)||A is total &
+(f(#)g)||A is total & (g(#)g)||A is total & (f(#)f)||A|A is bounded &
+(f(#)g)||A|A is bounded & (g(#)g)||A|A is bounded
+& (f(#)f) is_integrable_on A & (f(#)g) is_integrable_on A
+& (g(#)g) is_integrable_on A holds
+  |||(f+g,f+g,A)||| = |||(f,f,A)||| + 2*|||(f,g,A)||| + |||(g,g,A)|||;
+
+begin :: Orthogonal polynomials
+
+definition
+  let A be closed-interval Subset of REAL;
+  let f,g be PartFunc of REAL,REAL;
+  pred f is_orthogonal_with g,A means
+:: INTEGRA9:def 2
+    |||(f,g,A)||| = 0;
+end;
+
+theorem :: INTEGRA9:38
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f(#)f)||A is total &
+(f(#)g)||A is total & (g(#)g)||A is total & (f(#)f)||A|A is bounded &
+(f(#)g)||A|A is bounded & (g(#)g)||A|A is bounded
+& (f(#)f) is_integrable_on A & (f(#)g) is_integrable_on A
+& (g(#)g) is_integrable_on A & f is_orthogonal_with g,A
+  holds |||(f+g,f+g,A)||| = |||(f,f,A)||| + |||(g,g,A)|||;
+
+theorem :: INTEGRA9:39
+for f being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f(#)f)||A is total
+& (f(#)f)||A|A is bounded & (f(#)f)||A is integrable
+& (for x st x in A holds (f(#)f)||A.x >= 0)
+holds |||(f,f,A)||| >= 0;
+
+theorem :: INTEGRA9:40
+A = [.0,PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:41
+A = [.0,PI*2.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:42
+A = [.2*n*PI,(2*n+1)*PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:43
+A = [.x+2*n*PI,x+(2*n+1)*PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:44
+A = [.-PI,PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:45
+A = [.-PI/2,PI/2.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:46
+A = [.-2*PI,2*PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:47
+A = [.-2*n*PI,2*n*PI.] implies sin is_orthogonal_with cos,A;
+
+theorem :: INTEGRA9:48
+A = [.x-2*n*PI,x+2*n*PI.] implies sin is_orthogonal_with cos,A;
+
+begin :: Definition and properties of norm function
+
+definition
+  let A be closed-interval Subset of REAL;
+  let f be PartFunc of REAL,REAL;
+  func ||..f,A..|| -> Real equals
+:: INTEGRA9:def 3
+    sqrt (|||(f,f,A)|||);
+end;
+
+theorem :: INTEGRA9:49
+for f being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st
+(f(#)f)||A is total & (f(#)f)||A|A is bounded &
+(f(#)f)||A is integrable &
+(for x st x in A holds (f(#)f)||A.x >= 0) holds 0 <= ||..f,A..||;
+
+theorem :: INTEGRA9:50
+for f being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL holds
+||..(1(#)f),A..|| = ||..f,A..||;
+
+theorem :: INTEGRA9:51
+for f,g being PartFunc of REAL,REAL,
+A being closed-interval Subset of REAL st (f(#)f)||A is total &
+(f(#)g)||A is total & (g(#)g)||A is total & (f(#)f)||A|A is bounded
+& (f(#)g)||A|A is bounded & (g(#)g)||A|A is bounded
+& (f(#)f) is_integrable_on A & (f(#)g) is_integrable_on A
+& (g(#)g) is_integrable_on A & f is_orthogonal_with g,A
+& (for x st x in A holds (f(#)f)||A.x >= 0)
+& (for x st x in A holds (g(#)g)||A.x >= 0)
+holds ||..(f+g),A..||^2 = ||..f,A..||^2 + ||..g,A..||^2;
+
+begin :: To be revised
+
+ reserve r,a,b,p,x,r,s for Real;
+ reserve y for set;
+ reserve C for non empty set;
+ reserve n for Element of NAT;
+ reserve A for closed-interval Subset of REAL;
+ reserve f,g,h,f1,f2 for PartFunc of REAL,REAL;
+ reserve Z for open Subset of REAL;
+
+theorem :: INTEGRA9:52 :: f.x = 1/(a+x)
+  not -a in A implies (AffineMap (1,a))^|A is continuous;
+
+::  f.x=-1/(a+x)^2
+theorem :: INTEGRA9:53
+  A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & Z = dom f
+  & dom f = dom f2 & (for x st x in Z holds f2.x = -1/(a+x)^2 ) &
+  f2|A is continuous implies
+  integral(f2,A) = f^.(sup A)-f^.(inf A);
+
+::  f.x=1/(a+x)^2
+theorem :: INTEGRA9:54
+  A c= Z & (for x st x in Z holds f.x = a+x & f.x<>0) & dom((-1)(#)(f^))=Z
+  & dom((-1)(#)(f^))=dom f2 & (for x st x in Z holds f2.x = 1/(a+x)^2 ) &
+  f2|A is continuous implies
+  integral(f2,A) = ((-1)(#)(f^)).(sup A)-((-1)(#)(f^)).(inf A);
+
+:: f.x=1/(a-x)^2
+theorem :: INTEGRA9:55
+  A c= Z & (for x st x in Z holds f.x = a-x & f.x<>0) & dom f = Z
+  & dom f = dom f2 & (for x st x in Z holds f2.x = 1/(a-x)^2 ) &
+  f2|A is continuous implies
+  integral(f2,A) = f^.(sup A)-f^.(inf A);
+
+::  f.x=1/(a+x)
+theorem :: INTEGRA9:56
+  A c= Z & (for x st x in Z holds f.x = a+x & f.x > 0) & dom (ln*f) = Z
+  & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/(a+x) ) &
+  f2|A is continuous implies
+  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A);
+
+:: f.x=1/(x-a)
+theorem :: INTEGRA9:57
+  A c= Z & (for x st x in Z holds f.x = x-a & f.x > 0) & dom (ln*f) = Z
+  & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/(x-a) ) &
+  f2|A is continuous implies
+  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A);
+
+:: f.x=1/(a-x)
+theorem :: INTEGRA9:58
+  A c= Z & (for x st x in Z holds f.x = a-x & f.x > 0) & dom (-(ln*f)) = Z
+  & dom (-(ln*f)) = dom f2 & (for x st x in Z holds f2.x = 1/(a-x) ) &
+  f2|A is continuous implies
+  integral(f2,A) = (-(ln*f)).(sup A)-(-(ln*f)).(inf A);
+
+::  f.x= x/(a+x)
+theorem :: INTEGRA9:59
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=a+x & f1.x>0) & dom (id Z - a(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = x/(a+x) ) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z - a(#)f).(sup A)-(id Z - a(#)f).(inf A);
+
+::  f.x= (a-x)/(a+x)
+theorem :: INTEGRA9:60
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=a+x & f1.x>0) & dom ((2*a)(#)f - id Z) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (a-x)/(a+x)) &
+  f2|A is continuous implies
+  integral(f2,A) = ((2*a)(#)f - id Z).(sup A)-((2*a)(#)f - id Z).(inf A);
+
+::  f.x= (x-a)/(x+a)
+theorem :: INTEGRA9:61
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x+a & f1.x>0) & dom (id Z -(2*a)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x+a)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z -(2*a)(#)f).(sup A)-(id Z -(2*a)(#)f).(inf A);
+
+::  f.x= (x+a)/(x-a)
+theorem :: INTEGRA9:62
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x-a & f1.x>0) & dom (id Z + (2*a)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x-a)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z + (2*a)(#)f).(sup A)-(id Z + (2*a)(#)f).(inf A);
+
+::  f.x= (x+a)/(x+b)
+theorem :: INTEGRA9:63
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x+b & f1.x>0) & dom (id Z + (a-b)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x+b)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z + (a-b)(#)f).(sup A)-(id Z + (a-b)(#)f).(inf A);
+
+::  f.x= (x+a)/(x-b)
+theorem :: INTEGRA9:64
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x-b & f1.x>0) & dom (id Z + (a+b)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x+a)/(x-b)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z + (a+b)(#)f).(sup A)-(id Z + (a+b)(#)f).(inf A);
+
+::  f.x= (x-a)/(x+b)
+theorem :: INTEGRA9:65
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x+b & f1.x>0) & dom (id Z - (a+b)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x+b)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z - (a+b)(#)f).(sup A)-(id Z - (a+b)(#)f).(inf A);
+
+::  f.x= (x-a)/(x-b)
+theorem :: INTEGRA9:66
+  A c= Z & f = ln*f1 &
+  (for x st x in Z holds f1.x=x-b & f1.x>0) & dom (id Z + (b-a)(#)f) = Z
+  & Z = dom f2 & (for x st x in Z holds f2.x = (x-a)/(x-b)) &
+  f2|A is continuous implies
+  integral(f2,A) = (id Z + (b-a)(#)f).(sup A)-(id Z + (b-a)(#)f).(inf A);
+
+:: f.x=1/x
+theorem :: INTEGRA9:67
+  A c= Z & (for x st x in Z holds f.x = x & f.x > 0) & dom (ln*f) = Z
+  & dom (ln*f) = dom f2 & (for x st x in Z holds f2.x = 1/x) &
+  f2|A is continuous implies
+  integral(f2,A) = (ln*f).(sup A)-(ln*f).(inf A);
+
+:: f.x=n/x
+theorem :: INTEGRA9:68
+  A c= Z & (for x st x in Z holds x > 0) & dom (ln*( #Z n)) = Z
+  & dom (ln*( #Z n)) = dom f2 & (for x st x in Z holds f2.x = n/x ) &
+  f2|A is continuous implies
+  integral(f2,A) = (ln*( #Z n)).(sup A)-(ln*( #Z n)).(inf A);
+
+:: f.x=-1/x
+theorem :: INTEGRA9:69
+  A c= Z & (for x st x in Z holds f.x = x) & dom (ln*(f^)) = Z
+  & dom (ln*(f^)) = dom f2 & (for x st x in Z holds f2.x = -1/x) &
+  f2|A is continuous implies
+  integral(f2,A) = (ln*(f^)).(sup A)-(ln*(f^)).(inf A);
+
+:: irrational function
+:: f.x = (a+x) #R (1/2)
+theorem :: INTEGRA9:70
+  A c= Z & (for x st x in Z holds f.x=a+x & f.x>0)
+  & dom ((2/3)(#)(( #R (3/2))*f)) = Z
+  & dom ((2/3)(#)(( #R (3/2))*f)) = dom f2
+  & (for x st x in Z holds f2.x = (a+x) #R (1/2)) &
+  f2|A is continuous implies
+  integral(f2,A) = ((2/3)(#)(( #R (3/2))*f)).(sup A)
+            -((2/3)(#)(( #R (3/2))*f)).(inf A);
+
+:: f.x = (a-x) #R (1/2)
+theorem :: INTEGRA9:71
+  A c= Z & (for x st x in Z holds f.x=a-x & f.x>0)
+  & dom ((-2/3)(#)(( #R (3/2))*f)) = Z
+  & dom ((-2/3)(#)(( #R (3/2))*f)) = dom f2
+  & (for x st x in Z holds f2.x = (a-x) #R (1/2)) &
+  f2|A is continuous implies
+  integral(f2,A) = ((-2/3)(#)(( #R (3/2))*f)).(sup A)
+            -((-2/3)(#)(( #R (3/2))*f)).(inf A);
+
+:: f.x = (a+x) #R (-1/2)
+theorem :: INTEGRA9:72
+  A c= Z & (for x st x in Z holds f.x=a+x & f.x>0)
+  & dom (2(#)(( #R (1/2))*f)) = Z
+  & dom (2(#)(( #R (1/2))*f)) = dom f2
+  & (for x st x in Z holds f2.x = (a+x) #R (-1/2)) &
+  f2|A is continuous implies
+  integral(f2,A) = (2(#)(( #R (1/2))*f)).(sup A)
+            -(2(#)(( #R (1/2))*f)).(inf A);
+
+:: f.x = (a-x) #R (-1/2)
+theorem :: INTEGRA9:73
+  A c= Z & (for x st x in Z holds f.x=a-x & f.x>0)
+  & dom ((-2)(#)(( #R (1/2))*f)) = Z
+  & dom ((-2)(#)(( #R (1/2))*f)) = dom f2
+  & (for x st x in Z holds f2.x = (a-x) #R (-1/2)) &
+  f2|A is continuous implies
+  integral(f2,A) = ((-2)(#)(( #R (1/2))*f)).(sup A)
+            -((-2)(#)(( #R (1/2))*f)).(inf A);
+
+::  f.x=-x*cos.x+sin.x
+theorem :: INTEGRA9:74
+  A c= Z & dom ((-id Z)(#)cos+sin) = Z
+  & (for x st x in Z holds f.x =x*sin.x) & Z = dom f &
+  f|A is continuous implies
+  integral(f,A) = ((-id Z)(#)cos+sin).(sup A)-((-id Z)(#)cos+sin).(inf A);
+
+::  f.x=sin.x/(cos.x)^2
+theorem :: INTEGRA9:75
+  A c= Z & dom sec = Z
+  & (for x st x in Z holds f.x =sin.x/(cos.x)^2) & Z = dom f &
+  f|A is continuous implies
+  integral(f,A) = sec.(sup A)-sec.(inf A);
+
+:: f.x = (-cosec).x
+theorem :: INTEGRA9:76
+  Z c= dom (-cosec) implies -cosec is_differentiable_on Z &
+  for x st x in Z holds ( (-cosec)`|Z).x = cos.x/(sin.x)^2;
+
+:: f.x=cos.x/(sin.x)^2
+theorem :: INTEGRA9:77
+  A c= Z & dom (-cosec) = Z
+  & (for x st x in Z holds f.x =cos.x/(sin.x)^2) & Z = dom f &
+  f|A is continuous implies
+  integral(f,A) = (-cosec).(sup A)-(-cosec).(inf A);
+

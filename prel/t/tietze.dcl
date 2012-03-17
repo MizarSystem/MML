@@ -15,6 +15,8 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="NAT_1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="XREAL_0"/>
 <ArticleID name="POWER"/>
 <ArticleID name="SERIES_1"/>
@@ -50,74 +52,27 @@
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="22"/>
-<Adjective nr="69">
+<Adjective nr="27"/>
+<Adjective nr="74">
 <Func kind="K" nr="47"/>
 <Func kind="K" nr="43"/>
 </Adjective>
-<Adjective nr="79"/>
-<Adjective nr="80"/>
-<Adjective nr="81"/>
-<Adjective nr="93"/>
+<Adjective nr="84"/>
+<Adjective nr="85"/>
+<Adjective nr="86"/>
+<Adjective nr="99"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TIETZE" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
-<Cluster/>
-</Typ>
-<Typ kind="G" nr="6">
-<Cluster/>
-</Typ>
-<Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="7"/>
-</Cluster>
-<Func kind="K" nr="24">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-</Func>
-</Typ>
-<Typ kind="M" nr="5">
-<Cluster>
-<Adjective nr="4"/>
-<Adjective nr="18">
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-</Adjective>
-</Cluster>
-<Func kind="U" nr="1">
-<LocusVar nr="1"/>
-</Func>
-<Func kind="U" nr="1">
-<LocusVar nr="2"/>
-</Func>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="7">
-<LocusVar nr="4"/>
-<LocusVar nr="3"/>
-</Func>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="7"/>
-</Cluster>
-</FCluster>
-<FCluster aid="TIETZE" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="38"/>
+<Adjective nr="43"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
 <Cluster>
-<Adjective nr="40">
+<Adjective nr="45">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -128,13 +83,13 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="123">
+<Func kind="K" nr="131">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="37"/>
-<Adjective nr="76">
+<Adjective nr="42"/>
+<Adjective nr="81">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

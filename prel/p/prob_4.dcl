@@ -51,7 +51,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="37"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="PROB_4" nr="2">
@@ -62,10 +62,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="36">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -97,7 +97,7 @@
 <LocusVar nr="1"/>
 </Func>
 </Adjective>
-<Adjective nr="37"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 </Registrations>

@@ -14,6 +14,8 @@
 <ArticleID name="ARYTM_3"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="TOPS_1"/>
@@ -28,8 +30,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Not>
@@ -52,7 +54,7 @@
 <And>
 <Not>
 <And>
-<Pred kind="V" nr="39">
+<Pred kind="V" nr="44">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -69,7 +71,7 @@
 <Var nr="2"/>
 </Pred>
 <Not>
-<Pred kind="V" nr="39">
+<Pred kind="V" nr="44">
 <Var nr="1"/>
 <Var nr="2"/>
 </Pred>
@@ -172,8 +174,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Not>
@@ -194,7 +196,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="109">
+<Func kind="K" nr="117">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>
@@ -300,8 +302,8 @@
 <For>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </Typ>
 <Not>
@@ -322,7 +324,7 @@
 </Func>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="110">
+<Func kind="K" nr="118">
 <Var nr="1"/>
 <Var nr="2"/>
 </Func>

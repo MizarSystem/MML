@@ -60,7 +60,7 @@
 <Adjective nr="33" value="false"/>
 <Adjective nr="45"/>
 <Adjective nr="46"/>
-<Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 </RCluster>
 <FCluster aid="TOPREALA" nr="1">
@@ -489,7 +489,7 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="46"/>
-<Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -499,7 +499,7 @@
 <LocusVar nr="1"/>
 </Typ>
 <Cluster>
-<Adjective nr="148"/>
+<Adjective nr="149"/>
 </Cluster>
 </CCluster>
 <CCluster aid="TOPREALA" nr="2">

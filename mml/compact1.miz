@@ -19,7 +19,7 @@ environ
       COMPTS_1;
  registrations XBOOLE_0, SUBSET_1, FINSET_1, STRUCT_0, FINSUB_1, RELAT_1,
       TOPS_1, BORSUK_2, FUNCT_1, PRE_TOPC, TEX_1, YELLOW13, BORSUK_6,
-      BORSUK_1;
+      BORSUK_1, COMPTS_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, XBOOLE_0, ORDINAL1, STRUCT_0, PRE_TOPC, SUBSET_1, TOPS_1,
       TOPS_2, COMPTS_1, WAYBEL_3, YELLOW13, SETFAM_1;
@@ -47,21 +47,13 @@ end;
 
 registration
   let X be TopSpace;
-  cluster {}X -> relatively-compact;
+  cluster empty -> relatively-compact Subset of X;
   coherence
-  proof
-    Cl {}X = {}X by PRE_TOPC:52;
-    hence thesis by Def2;
-  end;
-end;
-
-registration
-  let X be TopSpace;
-  cluster relatively-compact Subset of X;
-  existence
-  proof
-    take {}X;
-    thus thesis;
+  proof let S be Subset of X;
+    assume
+Z:   S is empty;
+     then Cl S = S by PRE_TOPC:52;
+    hence thesis by Def2,Z;
   end;
 end;
 
@@ -249,11 +241,10 @@ A1: X is locally-relatively-compact;
     let x be Point of X;
     consider U being a_neighborhood of x such that
 A2: U is relatively-compact by A1,Def4;
-A3: Cl U is compact by A2;
 A4: Int U c= Int Cl U by PRE_TOPC:48,TOPS_1:48;
     x in Int U by CONNSP_2:def 1;
     then Cl U is a_neighborhood of x by A4,CONNSP_2:def 1;
-    hence thesis by A3;
+    hence thesis by A2;
   end;
 end;
 
@@ -282,11 +273,10 @@ A1: X is locally-relatively-compact;
     let x be Point of X;
     consider Y being a_neighborhood of x such that
 A2: Y is relatively-compact by A1,Def4;
-A3: Cl Y is compact by A2;
 A4: Int Y c= Int Cl Y by PRE_TOPC:48,TOPS_1:48;
     x in Int Y by CONNSP_2:def 1;
     then Cl Y is a_neighborhood of x by A4,CONNSP_2:def 1;
-    hence thesis by A3;
+    hence thesis by A2;
   end;
 end;
 
@@ -300,8 +290,7 @@ A1: X is locally-compact;
     let x be Point of X;
     consider U being a_neighborhood of x such that
 A2: U is compact by A1,Def6;
-    U is closed by A2,COMPTS_1:16;
-    then Cl U = U by PRE_TOPC:52;
+    Cl U = U by PRE_TOPC:52,A2;
     then U is relatively-compact by A2,Def2;
     hence thesis;
   end;
@@ -313,13 +302,12 @@ registration
   proof
     let X be non empty TopSpace;
     set Y = [#]X;
-    assume X is compact;
-    then
-A1: Y is compact;
+    assume
+Z:   X is compact;
     let x be Point of X;
     Int Y = Y by TOPS_1:55;
     then Y is a_neighborhood of x by CONNSP_2:def 1;
-    hence thesis by A1;
+    hence thesis by Z;
   end;
 end;
 
@@ -436,7 +424,6 @@ A6: G in the topology of X and
 A7: Int K = G /\ E by A2,PRE_TOPC:def 9;
 A8: G is open by A6,PRE_TOPC:def 5;
 A9: Int K c= G by A7,XBOOLE_1:17;
-A10: G /\ E c= K by A7,TOPS_1:44;
     E is dense by A1,A2,TEX_3:def 1;
     then
 A11: Cl(G /\ E) = Cl G by A8,TOPS_1:81;
@@ -445,7 +432,7 @@ A12: K c= [#](X|E);
     for P being Subset of X|E st P=KK holds P is compact by A4;
     then KK is compact by A12,COMPTS_1:11;
     then
-A13: Cl(G /\ E) c= KK by A10,COMPTS_1:16,TOPS_1:31;
+A13: Cl(G /\ E) c= KK by A7,TOPS_1:44,TOPS_1:31;
     G c= Cl G by PRE_TOPC:48;
     then G c= K by A11,A13,XBOOLE_1:1;
     then G c= E by A2,XBOOLE_1:1;
@@ -469,7 +456,7 @@ end;
 definition
   let X,Y be TopSpace, f be Function of X,Y;
   attr f is embedding means
-  ex h being Function of X, Y | (rng f) st h = f & h is_homeomorphism;
+  ex h being Function of X, Y | (rng f) st h = f & h is being_homeomorphism;
 end;
 
 theorem Th3:
@@ -631,8 +618,6 @@ A6:     ua c= the topology of X
         union ua in the topology of X by A6,PRE_TOPC:def 1;
         then
 A7:     union ua is open by PRE_TOPC:def 5;
-        then
-A8:     (union ua)` is closed;
 A9:     union ua = (union a) \ {[#]X}
         proof
           thus union ua c= (union a) \ {[#]X}
@@ -709,7 +694,7 @@ A29:      now
             .= U by A29,ZFMISC_1:65;
           then U c= union ua by A9,A26,XBOOLE_1:33,ZFMISC_1:92;
           then
-A30:      (union ua)` is compact by A8,A28,COMPTS_1:18,XBOOLE_1:34;
+A30:      (union ua)` is compact by A7,A28,COMPTS_1:18,XBOOLE_1:34;
           (union ua) \/ {[#]X} = (union a) \/ {[#]X} by A9,XBOOLE_1:39
             .= (union a) by A24,ZFMISC_1:46;
           then union a in D by A7,A30;
@@ -896,10 +881,9 @@ A10: Fx is open
 A11:    x in the carrier of X;
         then x in succ [#]X by XBOOLE_0:def 3;
         then x in [#]One-Point_Compactification(X) by Def9;
-        then x in union F by A4;
         then consider B being set such that
 A12:    x in B and
-A13:    B in F by TARSKI:def 4;
+A13:    B in F by TARSKI:def 4,A4;
         reconsider B as Subset of One-Point_Compactification(X) by A13;
         B is open by A2,A13,TOPS_2:def 1;
         then B in the topology of One-Point_Compactification(X)
@@ -1114,9 +1098,7 @@ A11:  P is compact by A5,Def6;
       then reconsider W = Int P as Subset of One-Point_Compactification(X)
       by XBOOLE_1:1;
 A12:  P`` = P;
-      P is closed by A4,A11,COMPTS_1:16;
-      then P` is open;
-      then P` \/ {[#]X} in D by A11,A12;
+      P` \/ {[#]X} in D by A11,A12,A4;
       then
 A13:  P` \/ {[#]X} in the topology of One-Point_Compactification(X)
       by A1,XBOOLE_0:def 3;
@@ -1148,9 +1130,7 @@ A17:  Q is compact by A5,Def6;
       then reconsider W = Int Q as Subset of One-Point_Compactification(X)
       by XBOOLE_1:1;
 A18:  Q`` = Q;
-      Q is closed by A4,A17,COMPTS_1:16;
-      then Q` is open;
-      then Q` \/ {[#]X} in D by A17,A18;
+      Q` \/ {[#]X} in D by A17,A18,A4;
       then
 A19:  Q` \/ {[#]X} in the topology of One-Point_Compactification(X)
       by A1,XBOOLE_0:def 3;
@@ -1180,7 +1160,7 @@ A20:  Int Q misses {[#]X} by ZFMISC_1:56;
   assume
 A21: One-Point_Compactification(X) is Hausdorff;
 A22: X is SubSpace of One-Point_Compactification(X) by Th5;
-  hence X is Hausdorff by A21,TOPMETR:3;
+  hence X is Hausdorff by A21;
   let x be Point of X;
   x in [#]X;
   then reconsider p = x as Point of One-Point_Compactification(X) by A3;
@@ -1232,9 +1212,7 @@ A38: now
   then reconsider Vx = V as open Subset of X by PRE_TOPC:def 5;
   set K = Cl Vx;
 A39: U` /\ [#]X = W` by A36,XBOOLE_1:28;
-  U` is closed by A24;
-  then
-A40: W` is closed by A22,A39,PRE_TOPC:43;
+A40: W` is closed by A22,A39,PRE_TOPC:43,A24;
 A41: x in Int Vx by A25,TOPS_1:55;
   Int Vx c= Int K by PRE_TOPC:48,TOPS_1:48;
   then reconsider K as a_neighborhood of x by A41,CONNSP_2:def 1;
@@ -1313,7 +1291,6 @@ A15: {[#]X} in the topology of One-Point_Compactification(X)
   by A1,XBOOLE_0:def 3;
   then reconsider X1 = {[#]X} as Subset of One-Point_Compactification(X);
   X1 is open by A15,PRE_TOPC:def 5;
-  then X1` is closed;
   then
 A16: (Cl X1`) = X1` by PRE_TOPC:52;
 A17: not [#]X in [#]X;

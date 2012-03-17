@@ -7,11 +7,11 @@
 environ
 
  vocabularies FUNCT_1, TARSKI, SETFAM_1, BOOLE, CARD_1, ORDINAL1, ORDINAL2,
-      RELAT_1, MCART_1, CLASSES1, ARYTM;
+      RELAT_1, MCART_1, CLASSES1, ARYTM, RFINSEQ, FUNCT_2;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1,
-      CARD_1, NUMBERS, NAT_1, ORDINAL1, MCART_1, ORDINAL2;
- constructors SETFAM_1, MCART_1, WELLORD2, ORDINAL2, NAT_1, CARD_1;
- registrations XBOOLE_0, SUBSET_1, ORDINAL1;
+      FUNCT_2, CARD_1, NUMBERS, NAT_1, ORDINAL1, MCART_1, ORDINAL2;
+ constructors SETFAM_1, MCART_1, WELLORD2, ORDINAL2, NAT_1, CARD_1, FUNCT_2;
+ registrations XBOOLE_0, SUBSET_1, ORDINAL1, FUNCT_1, FUNCT_2, RELSET_1;
  requirements NUMERALS, SUBSET, BOOLE;
 
 
@@ -66,7 +66,7 @@ canceled;
 theorem :: CLASSES1:2
   W is Tarski iff W is subset-closed &
   (for X st X in W holds bool X in W) &
-  (for X st X c= W & Card X in Card W holds X in W);
+  (for X st X c= W & card X in card W holds X in W);
 
 canceled 2;
 
@@ -84,7 +84,7 @@ theorem :: CLASSES1:8
   Y,Tarski-Class X are_equipotent or Y in Tarski-Class X;
 
 theorem :: CLASSES1:9
-  Y c= Tarski-Class X & Card Y in Card Tarski-Class X implies
+  Y c= Tarski-Class X & card Y in card Tarski-Class X implies
   Y in Tarski-Class X;
 
 reserve u,v for Element of Tarski-Class(X),
@@ -176,7 +176,7 @@ theorem :: CLASSES1:27
   X is epsilon-transitive implies Tarski-Class X is epsilon-transitive;
 
 theorem :: CLASSES1:28
-  Y in Tarski-Class X implies Card Y in Card Tarski-Class X;
+  Y in Tarski-Class X implies card Y in card Tarski-Class X;
 
 theorem :: CLASSES1:29
   Y in Tarski-Class X implies not Y,Tarski-Class X are_equipotent;
@@ -215,11 +215,11 @@ theorem :: CLASSES1:35
 theorem :: CLASSES1:36
   X c= Rank A iff X in Rank succ A;
 
-theorem :: CLASSES1:37
-  Rank A is epsilon-transitive;
+registration let A;
+ cluster Rank A -> epsilon-transitive;
+end;
 
-theorem :: CLASSES1:38
-  X in Rank A implies X c= Rank A;
+canceled 2;
 
 theorem :: CLASSES1:39
   Rank A c= Rank succ A;
@@ -241,7 +241,7 @@ theorem :: CLASSES1:44
 
 theorem :: CLASSES1:45
   for A,X st X in Rank A holds
-  not X,Rank A are_equipotent & Card X in Card Rank A;
+  not X,Rank A are_equipotent & card X in card Rank A;
 
 theorem :: CLASSES1:46
   X c= Rank A iff bool X c= Rank succ A;
@@ -391,4 +391,46 @@ scheme :: CLASSES1:sch 1
   ex f being Function st dom f = X() & for e st e in X() holds P[e,f.e]
 provided
  for e st e in X() ex u st P[e,u];
+
+:: from RFINSEQ, 2008.10.10, A.T.
+
+definition
+  let F,G be Relation;
+  pred F,G are_fiberwise_equipotent means
+:: CLASSES1:def 9
+
+  for x be set holds card Coim(F,x) = card Coim(G,x);
+  reflexivity;
+  symmetry;
+end;
+
+theorem :: CLASSES1:83
+  for F,G be Function st F,G are_fiberwise_equipotent holds rng F = rng G;
+
+theorem :: CLASSES1:84
+  for F,G,H be Function
+  st F,G are_fiberwise_equipotent & F,H are_fiberwise_equipotent holds
+  G,H are_fiberwise_equipotent;
+
+theorem :: CLASSES1:85
+  for F,G be Function holds F,G are_fiberwise_equipotent iff
+  ex H be Function st dom H = dom F & rng H = dom G & H is one-to-one & F = G*H
+;
+
+theorem :: CLASSES1:86
+  for F,G be Function holds
+  F,G are_fiberwise_equipotent iff for X be set holds card (F"X) = card (G"X);
+
+theorem :: CLASSES1:87
+  for D be non empty set, F,G be Function st rng F c= D & rng G c= D &
+    for d be Element of D holds card Coim(F,d) = card Coim(G,d)
+   holds F,G are_fiberwise_equipotent;
+
+theorem :: CLASSES1:88
+  for F,G be Function st dom F = dom G holds
+  F,G are_fiberwise_equipotent iff ex P be Permutation of dom F st F = G*P;
+
+theorem :: CLASSES1:89
+  for F,G be Function
+  st F,G are_fiberwise_equipotent holds card dom F = card dom G;
 

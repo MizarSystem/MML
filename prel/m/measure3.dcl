@@ -23,7 +23,6 @@
 <ArticleID name="PROB_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="MEMBERED"/>
-<ArticleID name="CARD_4"/>
 <ArticleID name="VALUED_0"/>
 <ArticleID name="XXREAL_2"/>
 <ArticleID name="XXREAL_3"/>
@@ -41,10 +40,10 @@
 <Typ kind="M" nr="2">
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="36">
+<Adjective nr="38">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -54,10 +53,22 @@
 </Func>
 </Func>
 </Typ>
-<Typ kind="M" nr="19">
-<Cluster/>
+<Typ kind="M" nr="4">
+<Cluster>
+<Adjective nr="4"/>
+<Adjective nr="18">
+<LocusVar nr="2"/>
+<Func kind="K" nr="60"/>
+</Adjective>
+<Adjective nr="60"/>
+<Adjective nr="72"/>
+<Adjective nr="77">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
+</Adjective>
+</Cluster>
+<LocusVar nr="2"/>
+<Func kind="K" nr="60"/>
 </Typ>
 </ArgTypes>
 <Func kind="K" nr="190">
@@ -67,10 +78,10 @@
 </Func>
 <Cluster>
 <Adjective nr="7" value="false"/>
-<Adjective nr="33">
+<Adjective nr="35">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="74">
+<Adjective nr="76">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

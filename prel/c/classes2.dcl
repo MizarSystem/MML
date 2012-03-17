@@ -139,21 +139,6 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="54">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="13"/>
-</Cluster>
-</FCluster>
-<FCluster aid="CLASSES2" nr="8">
-<ArgTypes>
-<Typ kind="M" nr="1">
-<Cluster>
-<Adjective nr="15"/>
-</Cluster>
-</Typ>
-</ArgTypes>
 <Func kind="K" nr="111">
 <LocusVar nr="1"/>
 </Func>

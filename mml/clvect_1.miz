@@ -11,16 +11,18 @@ environ
       CFUNCT_1, RLSUB_1, NORMSP_1, PRE_TOPC, SEQ_2, XCMPLX_0, FUNCOP_1,
       REALSET1, STRUCT_0, ALGSTR_0, MIDSP_1, VECTSP_2, FUNCT_3;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0,
-      XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, REAL_1, RELAT_1, FUNCT_1, FUNCT_2,
+      XCMPLX_0, XXREAL_0, XREAL_0, DOMAIN_1, COMPLEX1, REAL_1, RELAT_1,
+      FUNCT_1, FUNCT_2,
       FUNCOP_1, BINOP_1, REALSET1, FINSEQ_1, NAT_1, FUNCT_3, FUNCT_5, STRUCT_0,
-      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2, COMPLEX1,
+      ALGSTR_0, PRE_TOPC, RLVECT_1, SQUARE_1, PARTFUN1, SEQ_1, SEQ_2,
       NORMSP_1, CFUNCT_1;
  constructors PARTFUN1, BINOP_1, FUNCOP_1, ARYTM_0, REAL_1, SQUARE_1, NAT_1,
       COMPLEX1, SEQ_2, REALSET1, NORMSP_1, SEQ_1, FUNCT_3, FUNCT_5, VALUED_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, MEMBERED, REALSET1, STRUCT_0, ALGSTR_0, FINSEQ_1;
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
- definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0;
+ definitions STRUCT_0, RLVECT_1, TARSKI, XBOOLE_0, BINOP_1, REALSET1, ALGSTR_0,
+      SQUARE_1, COMPLEX1;
  theorems STRUCT_0, TARSKI, RLVECT_1, COMPLEX1, XCMPLX_0, SQUARE_1, FINSEQ_1,
       NAT_1, FUNCT_1, XBOOLE_0, FUNCT_2, RELAT_1, XBOOLE_1, ZFMISC_1, RELSET_1,
       ABSVALUE, SEQ_2, XREAL_0, FUNCOP_1, XREAL_1, XXREAL_0, NORMSP_1,
@@ -177,7 +179,7 @@ proof
 A1: z * v = 0.V and
 A2: z <> 0;
   thus v = 1r * v by Def2
-    .= (z" * z) * v by A2,COMPLEX1:def 7,XCMPLX_0:def 7
+    .= (z" * z) * v by A2,XCMPLX_0:def 7
     .= z" * 0.V by A1,Def2
     .= 0.V by Th2;
 end;
@@ -198,19 +200,12 @@ theorem Th5:
   v = - v implies v = 0.V
 proof
   assume v = - v;
-  then
-A1: 0.V = v - (- v) by RLVECT_1:28
+  then 0.V = v - (- v) by RLVECT_1:28
     .= v + v by RLVECT_1:30
     .= 1r * v + v by Def2
     .= 1r * v + 1r * v by Def2
     .= (1r + 1r) * v by Def2;
-A2: Re(1r + 1r) = 1 + Re(1r) by COMPLEX1:15,19
-    .= 2 by COMPLEX1:15;
-  Im(1r + 1r) = 0 + Im(1r) by COMPLEX1:15,19
-    .= 0 by COMPLEX1:15;
-  then (Re(1r + 1r))^2 + (Im(1r + 1r))^2 > 0 by A2,SQUARE_1:60,74;
-  then 1r + 1r <> 0c by COMPLEX1:13;
-  hence thesis by A1,Th3;
+  hence thesis by Th3;
 end;
 
 theorem
@@ -226,13 +221,13 @@ theorem Th7:
 proof
   thus z * (- v) = z * ((- 1r) * v) by Th4
     .= (z *(- 1r)) * v by Def2
-    .= (- z) * v by COMPLEX1:def 7;
+    .= (- z) * v;
 end;
 
 theorem Th8:
   z * (- v) = - (z * v)
 proof
-  thus z * (- v) = (- (1r * z)) * v by Th7,COMPLEX1:def 7
+  thus z * (- v) = (- (1r * z)) * v by Th7
     .= ((- 1r) * z) * v
     .= (- 1r) * (z * v) by Def2
     .= - (z * v) by Th4;
@@ -402,48 +397,40 @@ proof
     .= z * u + z * v1 + z * v2 by Def2;
 end;
 
-Lm3: 1r + 1r = [* 2,0 *]
-proof
-  1r + 1r= 1+1+(0+0)*<i> by COMPLEX1:15,def 9
-    .= [* 1+1,0+0 *] by COMPLEX1:27;
-  hence thesis;
-end;
-
 theorem Th18:
-  Sum<* v,v *> = [* 2, 0*] * v
+  Sum<* v,v *> = (1r+1r) * v
 proof
   thus Sum<* v,v *> = v + v by RLVECT_1:62
     .= 1r * v + v by Def2
     .= 1r * v + 1r * v by Def2
-    .= [* 2,0 *] * v by Def2,Lm3;
+    .= (1r+1r) * v by Def2;
 end;
 
 theorem
-  Sum<* - v,- v *> = [* -2,0 *] * v
+  Sum<* - v,- v *> = (-(1r+1r)) * v
 proof
   reconsider 2r = 2+0*<i>, m2 = -2+0*<i>
   as Element of COMPLEX by XCMPLX_0:def 2;
   thus Sum<* - v,- v *> = - (v + v) by RLVECT_1:78
     .= - Sum<* v,v *> by RLVECT_1:62
-    .= - ([* 2,0 *] * v) by Th18
-    .= - 2r * v by COMPLEX1:27
+    .= - ((1r+1r) * v) by Th18
+    .= - 2r * v
     .= (- 1r) * (2r * v) by Th4
     .= ((- 1r) * 2r) * v by Def2
-    .= m2 * v by COMPLEX1:def 7
-    .= [* -2,0 *] * v by COMPLEX1:27;
+    .= (-(1r+1r)) * v;
 end;
 
 theorem
-  Sum<* v,v,v *> = [* 3,0 *] * v
+  Sum<* v,v,v *> = (1r+1r+1r) * v
 proof
   reconsider 2r = 2+0*<i> as Element of COMPLEX by XCMPLX_0:def 2;
-A1: 2r + 1r = 3+0*<i> by COMPLEX1:def 7;
+A1: 2r + 1r = 3+0*<i>;
   thus Sum<* v,v,v *> = Sum<* v,v *> + v by RLVECT_1:84
-    .= [* 2,0 *] * v + v by Th18
-    .= [* 2,0 *] * v + 1r * v by Def2
-    .= ([* 2,0 *] + 1r) * v by Def2
-    .= (2r + 1r) * v by COMPLEX1:27
-    .= [* 3,0 *] * v by A1,COMPLEX1:27;
+    .= (1r+1r) * v + v by Th18
+    .= (1r+1r) * v + 1r * v by Def2
+    .= ((1r+1r) + 1r) * v by Def2
+    .= (2r + 1r) * v
+    .= (1r+1r+1r) * v;
 end;
 
 begin :: Subspace and Cosets of Subspaces in Complex Linear Space
@@ -1524,7 +1511,7 @@ A1: z <> 0 and
 A2: (z * v) + W = the carrier of W;
   assume not v in W;
   then not 1r * v in W by Def2;
-  then not (z" * z) * v in W by A1,COMPLEX1:def 7,XCMPLX_0:def 7;
+  then not (z" * z) * v in W by A1,XCMPLX_0:def 7;
   then not z" * (z * v) in W by Def2;
   then
 A3: not z * v in W by Th41;
@@ -1537,7 +1524,7 @@ theorem Th71:
   v in W iff - v + W = the carrier of W
 proof
   (v in W iff ((- 1r) * v) + W = the carrier of W) & (- 1r) * v = - v
-  by Th4,Th69,Th70,COMPLEX1:def 7;
+  by Th4,Th69,Th70;
   hence thesis;
 end;
 
@@ -1649,12 +1636,11 @@ A2: u in W;
       .= (v + v) - u by RLVECT_1:30
       .= (1r * v + v) - u by Def2
       .= (1r * v + 1r * v) - u by Def2
-      .= [* 2,0 *] * v - u by Def2,Lm3;
-    then [* 2,0 *]" * ([* 2,0 *] * v) = [* 2,0 *]" * u by RLVECT_1:35;
+      .= (1r+1r) * v - u by Def2;
+    then (1r+1r)" * ((1r+1r) * v) = (1r+1r)" * u by RLVECT_1:35;
     then
-A3: ([* 2,0 *]" * [* 2,0 *]) * v = [* 2,0 *]" * u by Def2;
-    [* 2,0 *] = 2+0*<i> by COMPLEX1:27;
-    then v = [* 2,0 *]" * u by A3,Def2,COMPLEX1:def 7;
+A3: ((1r+1r)" * (1r+1r)) * v = (1r+1r)" * u by Def2;
+     v = (1r+1r)" * u by A3,Def2;
     hence thesis by A2,Th41;
   end;
   assume v in W;
@@ -1730,7 +1716,7 @@ A4: u in W by A2;
     .= z * v - 1r * v by Def2
     .= (z - 1r) * v by Th11;
   then (z - 1r)" * u = ((z - 1r)" * (z - 1r)) * v & z - 1r <> 0 by A1,Def2;
-  then 1r * v = (z - 1r)" * u by COMPLEX1:def 7,XCMPLX_0:def 7;
+  then 1r * v = (z - 1r)" * u by XCMPLX_0:def 7;
   then v = (z - 1r)" * u by Def2;
   hence thesis by A4,Th41;
 end;
@@ -1751,9 +1737,8 @@ theorem
   - v in v + W iff v in W
 proof
 A1: (v in W implies (- 1r) * v in v + W) & (- 1r) * v = - v by Th4,Th79;
-A2: Re(-1r) = -(Re(1r)) & Im(-1r) = -(Im(1r)) by COMPLEX1:34;
   (-1r <> 1r & (- 1r) * v in v + W implies v in W) by Th78;
-  hence thesis by A1,A2,COMPLEX1:15;
+  hence thesis by A1;
 end;
 
 theorem Th81:

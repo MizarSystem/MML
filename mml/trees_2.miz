@@ -18,8 +18,8 @@ environ
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
  definitions RELAT_1, TARSKI, FUNCT_1, TREES_1, ORDINAL1, XBOOLE_0, BINOP_1;
  theorems FUNCT_1, NAT_1, FINSEQ_1, TREES_1, TARSKI, ORDERS_1, ZFMISC_1,
-      FINSET_1, CARD_1, CARD_2, WELLORD2, CARD_4, FUNCOP_1, FUNCT_2, RELAT_1,
-      FINSEQ_2, ORDINAL1, XBOOLE_0, XBOOLE_1, RELSET_1, XREAL_1, XXREAL_0;
+      FINSET_1, CARD_1, CARD_2, WELLORD2, FUNCOP_1, FUNCT_2, RELAT_1, FINSEQ_2,
+      ORDINAL1, XBOOLE_0, XBOOLE_1, RELSET_1, XREAL_1, XXREAL_0;
  schemes FUNCT_1, FRAENKEL, NAT_1, CARD_3, CLASSES1, DOMAIN_1, XBOOLE_0;
 
 begin
@@ -123,7 +123,7 @@ and
 A2: for t being Element of T(), n st P[t] & t^<*n*> in T() holds P[t^<*n*>]
 proof
   defpred X[set] means for t being Element of T() st len t = $1 holds P[t];
-   Card x = 0 implies x = {};
+   card x = 0 implies x = {};
    then
 A3: X[0] by A1;
 A4: X[k] implies X[k+1]
@@ -504,7 +504,7 @@ A1: L = { w: len w = n} by Def4;
 end;
 
 scheme FraenkelCard { A() ->non empty set, X() -> set, F(set) -> set }:
-  Card { F(w) where w is Element of A(): w in X() } c= Card X()
+  card { F(w) where w is Element of A(): w in X() } c= card X()
 proof
   consider f such that
 A1: dom f = X() & for x st x in X() holds f.x = F(x) from FUNCT_1:sch 3;
@@ -525,7 +525,7 @@ scheme FraenkelFinCard { A() ->non empty set,
 provided
 A1: Y() = { F(w) where w is Element of A(): w in X() }
 proof
-  Card { F(w) where w is Element of A(): w in X() } c= Card X()
+  card { F(w) where w is Element of A(): w in X() } c= card X()
   from FraenkelCard;
   hence thesis by A1,NAT_1:40;
 end;
@@ -821,7 +821,7 @@ A9: p in C & len p >= k by A5,A6,A7,XXREAL_0:2;
 A10: len q = k by A9,FINSEQ_1:21;
     then
 A11: ProperPrefixes q is finite & card ProperPrefixes q = k by TREES_1:68;
-    then Card ProperPrefixes q in Card C by A8,NAT_1:45;
+    then card ProperPrefixes q in card C by A8,NAT_1:45;
     then
 A12: C \ ProperPrefixes q <> {} by CARD_2:4;
     consider x being Element of C \ ProperPrefixes q;
@@ -829,7 +829,7 @@ A13: x in C & not x in ProperPrefixes q by A12,XBOOLE_0:def 5;
     then reconsider x as Element of W;
     card (ProperPrefixes q \/ {x}) = k+1 & ProperPrefixes q \/ {x} is finite
     by A11,A13,CARD_2:54;
-    then Card (ProperPrefixes q \/ {x}) in Card C by A6,NAT_1:45;
+    then card (ProperPrefixes q \/ {x}) in card C by A6,NAT_1:45;
     then
 A14: C \ (ProperPrefixes q \/ {x}) <> {} by CARD_2:4;
     consider y being Element of C \ (ProperPrefixes q \/ {x});
@@ -1060,16 +1060,6 @@ A1: for x st x in X() ex n st P[x,n]
 proof
   defpred Q[set,set] means
   ex n st $2 = n & P[$1,n] & for m st P[$1,m] holds n <= m;
-A2: for x,y,z st x in X() & Q[x,y] & Q[x,z] holds y = z
-  proof
-    let x,y,z such that x in X();
-    given k such that
-A3: y = k & P[x,k] & for m st P[x,m] holds k <= m;
-    given l such that
-A4: z = l & P[x,l] & for m st P[x,m] holds l <= m;
-    k <= l & l <= k by A3,A4;
-    hence thesis by A3,A4,XXREAL_0:1;
-  end;
 A5: for x st x in X() ex y st Q[x,y]
   proof
     let x;
@@ -1086,7 +1076,7 @@ A8: n in NAT by ORDINAL1:def 13;
     hence thesis by A7,A8;
   end;
   thus ex f st dom f = X() & for x st x in X() holds Q[x,f.x]
-  from FUNCT_1:sch 2(A2,A5);
+  from CLASSES1:sch 1(A5);
 end;
 
 Lm1: X is finite implies ex n st for k st k in X holds k <= n
@@ -1744,7 +1734,6 @@ A2: D is c=-linear;
   for x holds x in D implies x is Function by A1;
   then reconsider T = union D as Function by A2,Th36;
   defpred X[set,set] means ex T1 st $1 = T1 & dom T1 = $2;
-A3: for x,y,z st x in D & X[x,y] & X[x,z] holds y = z;
 A4: for x st x in D ex y st X[x,y]
   proof
     let x;
@@ -1754,7 +1743,7 @@ A4: for x st x in D ex y st X[x,y]
     hence thesis;
   end;
   consider f such that
-A5: dom f = D & for x st x in D holds X[x,f.x] from FUNCT_1:sch 2(A3,A4);
+A5: dom f = D & for x st x in D holds X[x,f.x] from CLASSES1:sch 1(A4);
   reconsider E = rng f as non empty set by A5,RELAT_1:65;
   now
     let x;
@@ -2441,16 +2430,6 @@ A6: t^<*n*> = p^(t2^<*n*>) by A2,FINSEQ_1:45;
     hence thesis by A1,A6,TREES_1:def 12;
   end;
   defpred P[set,set] means for n st $1 = t^<*n*> holds $2 = t2^<*n*>;
-A7: for x,y1,y2 st x in succ t & P[x,y1] & P[x,y2] holds y1 = y2
-  proof
-    let x,y1,y2;
-    assume
-A8: x in succ t & P[x,y1] & P[x,y2];
-    then consider n such that
-A9: x = t^<*n*> & t^<*n*> in T;
-    y1 = t2^<*n*> by A8,A9;
-    hence thesis by A8,A9;
-  end;
 A10: for x st x in succ t ex y st P[x,y]
   proof
     let x;
@@ -2464,7 +2443,7 @@ A11: x = t^<*n*> & t^<*n*> in T;
   end;
   consider f being Function such that
 A12: dom f = succ t & for x st x in
-  succ t holds P[x,f.x] from FUNCT_1:sch 2(A7,A10);
+  succ t holds P[x,f.x] from CLASSES1:sch 1(A10);
 A13: rng f = succ t2
   proof
     now

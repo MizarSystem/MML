@@ -1,0 +1,4654 @@
+:: Collective Operations on Number-Membered Sets
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 19, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies MEMBERED, XCMPLX_0, ARYTM, INT_1, ORDINAL2, COMPLEX1, RAT_1,
+      MEMBER_1, ARYTM_1, RELAT_1, MSUALG_3, FUZZY_2, ARYTM_3, BOOLE, SUPINF_1,
+      ASYMPT_0, ZF_LANG, XREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, NUMBERS, XCMPLX_0, XREAL_0,
+      RAT_1, INT_1, ORDINAL1, MEMBERED, BINOP_2, XXREAL_3, XXREAL_0, SUPINF_2,
+      EXTREAL1;
+ constructors XCMPLX_0, RAT_1, MEMBERED, ENUMSET1, BINOP_2, XXREAL_3, SUPINF_2,
+      EXTREAL1, SUPINF_1;
+ registrations XREAL_0, INT_1, RAT_1, ORDINAL1, MEMBERED, XCMPLX_0, NAT_1,
+      XXREAL_3, XBOOLE_0, XXREAL_0;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+ definitions TARSKI, XBOOLE_0, XCMPLX_0, MEMBERED, XXREAL_3, SUPINF_2;
+ theorems XCMPLX_0, TARSKI, XBOOLE_0, ENUMSET1, XCMPLX_1, XXREAL_0, XXREAL_3,
+      XBOOLE_1, EXTREAL1, EXTREAL2, SUPINF_2;
+
+begin
+
+reserve w, w1, w2 for Element of ExtREAL;
+reserve c, c1, c2 for Element of COMPLEX;
+reserve A, B, C, D for complex-membered set;
+reserve F, G, H, I for ext-real-membered set;
+reserve a, b, s, t, z for complex number;
+reserve f, g, h, i, j for ext-real number;
+reserve r for real number;
+reserve e for set;
+
+registration
+  cluster -infty" -> zero;
+  coherence by XXREAL_3:def 4;
+  cluster +infty" -> zero;
+  coherence by XXREAL_3:def 4;
+end;
+
+registration
+  let a, b, c, d be complex number;
+  cluster {a,b,c,d} -> complex-membered;
+  coherence
+  proof
+    let e;
+    thus thesis by ENUMSET1:def 2;
+  end;
+end;
+
+registration
+  let a, b, c, d be ext-real number;
+  cluster {a,b,c,d} -> ext-real-membered;
+  coherence
+  proof
+    let e;
+    thus thesis by ENUMSET1:def 2;
+  end;
+end;
+
+registration :: for ext-real numbers
+  let r be real number;
+  cluster -r -> real;
+  coherence;
+  cluster r" -> real;
+  coherence;
+  let s be real number;
+  cluster r+s -> real;
+  coherence;
+  cluster r-s -> real;
+  coherence;
+  cluster r*s -> real;
+  coherence;
+  cluster r/s -> real;
+  coherence;
+end;
+
+Lm1:
+  -(f+g) = -f-g
+  proof
+    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    hence thesis by EXTREAL2:14;
+  end;
+
+theorem Th1:
+  (-f)" = -f"
+  proof
+    per cases by XXREAL_0:14;
+    suppose
+A1:   f in REAL;
+      then reconsider g = f as real number;
+      consider a being complex number such that
+A2:   f = a and
+A3:   f" = a" by A1,XXREAL_3:def 4;
+A4:   (-a)" = -a" by XCMPLX_1:224;
+A5:   -f = -g;
+      ex m being complex number st -f = m & -f" = m"
+      proof
+        take -a;
+        thus -f = -a by A2,A5;
+        thus -(f") = (-a)" by A3,A5,A4,XXREAL_3:def 3;
+      end;
+      hence thesis by A5,XXREAL_3:def 4;
+    end;
+    suppose
+A6:   f = +infty;
+      hence (-f)" = (-infty)" by XXREAL_3:def 3
+      .= -0
+      .= -f" by A6;
+    end;
+    suppose
+A7:   f = -infty;
+      hence (-f)" = (+infty)" by XXREAL_3:def 3
+      .= -0
+      .= -f" by A7;
+    end;
+  end;
+
+theorem Th2:
+  (f*g)" = f"*g"
+  proof
+    per cases by XXREAL_0:14;
+    suppose f in REAL & g in REAL;
+      then reconsider f1 = f, g1 = g as real number;
+      consider a being complex number such that
+A1:   f1 = a & f" = a" by XXREAL_3:def 4;
+      consider b being complex number such that
+A2:   g1 = b & g" = b" by XXREAL_3:def 4;
+      ex a,b being complex number st f" = a & g" = b & f"*g" = a * b
+      by A1,A2,XXREAL_3:def 2;
+      then f"*g" = (f1*g1)" by A1,A2,XCMPLX_1:205;
+      hence thesis;
+    end;
+    suppose
+A3:   f = +infty;
+      g is positive or g is negative or g = 0;
+      then (f*g)" = +infty" or (f*g)" = -infty" or (f*g)" = 0"
+      by A3,XXREAL_3:def 2;
+      hence (f*g)" = +infty"*0
+      .= f"*g" by A3,XXREAL_3:1;
+    end;
+    suppose
+A4:   f = -infty;
+      g is positive or g is negative or g = 0;
+      then (f*g)" = +infty" or (f*g)" = -infty" or (f*g)" = 0"
+      by A4,XXREAL_3:def 2;
+      hence (f*g)" = -infty"*0
+      .= f"*g" by A4,XXREAL_3:1;
+    end;
+    suppose
+A5:   g = +infty;
+      f is positive or f is negative or f = 0;
+      then (f*g)" = +infty" or (f*g)" = -infty" or (f*g)" = 0"
+      by A5,XXREAL_3:def 2;
+      hence (f*g)" = 0*+infty"
+      .= f"*g" by A5,XXREAL_3:1;
+    end;
+    suppose
+A6:   g = -infty;
+      f is positive or f is negative or f = 0;
+      then (f*g)" = +infty" or (f*g)" = -infty" or (f*g)" = 0"
+      by A6,XXREAL_3:def 2;
+      hence (f*g)" = 0*-infty"
+      .= f"*g" by A6,XXREAL_3:1;
+    end;
+  end;
+
+theorem Th3:
+  -f = -g implies f = g
+  proof
+    assume
+A1: -f = -g;
+    per cases by XXREAL_0:14;
+    suppose
+A2:   f in REAL;
+      then
+A3:   ex a being complex number st f = a & -f = -a
+      by XXREAL_3:def 3;
+      now
+        assume not g in REAL;
+        then g = +infty or g = -infty by XXREAL_0:14;
+        hence contradiction by A1,A2,XXREAL_3:def 3;
+      end;
+      then ex a being complex number st g = a & -g = -a
+      by XXREAL_3:def 3;
+      hence thesis by A1,A3;
+    end;
+    suppose f = +infty;
+      hence thesis by A1,SUPINF_2:4;
+    end;
+    suppose f = -infty;
+      then - -g = -infty by A1;
+      hence thesis by A1;
+    end;
+  end;
+
+theorem Th4:
+  r+f = r+g implies f = g
+  proof
+    assume
+A1: r+f = r+g;
+A2: f in ExtREAL & g in ExtREAL & r in ExtREAL by XXREAL_0:def 1;
+    per cases by XXREAL_0:14;
+    suppose
+A3:   f in REAL;
+      then consider a, b being complex number such that
+A4:   r = a & f = b and
+A5:   r+f = a+b by XXREAL_3:def 1;
+      now
+        assume not g in REAL;
+        then g = +infty or g = -infty by XXREAL_0:14;
+        hence contradiction by A1,A3,XXREAL_3:def 1;
+      end;
+      then ex c, d being complex number st r = c & g = d & r+g = c+d
+      by XXREAL_3:def 1;
+      hence thesis by A1,A4,A5;
+    end;
+    suppose
+A6:   f = +infty;
+      then r+f = +infty by XXREAL_3:def 1;
+      hence thesis by A1,A6,A2,SUPINF_2:8;
+    end;
+    suppose
+A7:   f = -infty;
+      then r+f = -infty by XXREAL_3:def 1;
+      hence thesis by A1,A7,A2,SUPINF_2:9;
+    end;
+  end;
+
+theorem Th5:
+  r-f = r-g implies f = g
+  proof
+    assume r-f = r-g;
+    then -f = -g by Th4;
+    hence thesis by Th3;
+  end;
+
+theorem Th6:
+  r <> 0 & r*f = r*g implies f = g
+  proof
+    assume that
+A1: r <> 0 and
+A2: r*f = r*g;
+A3: r is positive or r is negative by A1;
+    per cases by XXREAL_0:14;
+    suppose
+A4:   f in REAL;
+      then consider a, b being complex number such that
+A5:   r = a & f = b and
+A6:   r*f = a*b by XXREAL_3:def 2;
+      now
+        assume not g in REAL;
+        then g = +infty or g = -infty by XXREAL_0:14;
+        hence contradiction by A3,A2,A4,XXREAL_3:def 2;
+      end;
+      then ex c, d being complex number st r = c & g = d & r*g = c*d
+      by XXREAL_3:def 2;
+      hence thesis by A1,A2,A5,A6,XCMPLX_1:5;
+    end;
+    suppose
+A7:   f = +infty;
+      then
+A8:   r*f = +infty or r*f = -infty by A3,XXREAL_3:def 2;
+      assume f <> g;
+      then g in REAL or g = -infty by A7,XXREAL_0:14;
+      hence thesis by A3,A2,A7,A8,XXREAL_3:def 2;
+    end;
+    suppose
+A9:   f = -infty;
+      then
+A10:   r*f = +infty or r*f = -infty by A3,XXREAL_3:def 2;
+      assume f <> g;
+      then g in REAL or g = +infty by A9,XXREAL_0:14;
+      hence thesis by A3,A2,A9,A10,XXREAL_3:def 2;
+    end;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  func --F -> ext-real-membered set equals
+  {-w: w in F};
+  coherence
+  proof
+    {-w: w in F} is ext-real-membered
+    proof
+      let e;
+      assume e in {-w: w in F};
+      then ex w st e = -w & w in F;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  involutiveness
+  proof
+    let A, B be ext-real-membered set;
+    assume
+A1: A = {-w: w in B};
+    thus B c= {-w: w in A}
+    proof
+      let z be ext-real number;
+      assume
+A2:   z in B;
+A3:   z in ExtREAL by XXREAL_0:def 1;
+A4:   -z in ExtREAL by XXREAL_0:def 1;
+A5:   z = - -z;
+      -z in A by A1,A2,A3;
+      hence thesis by A5,A4;
+    end;
+    let e;
+    assume e in {-w: w in A};
+    then consider w1 such that
+A6: -w1 = e and
+A7: w1 in A;
+    ex w st -w = w1 & w in B by A1,A7;
+    hence thesis by A6;
+  end;
+end;
+
+theorem Th7:
+  f in F iff -f in --F
+  proof
+    f in ExtREAL by XXREAL_0:def 1;
+    hence f in F implies -f in --F;
+    assume -f in --F;
+    then
+A1: ex w st -w = -f & w in F;
+    - -f = f;
+    hence thesis by A1;
+  end;
+
+theorem Th8:
+  -f in F iff f in --F
+  proof
+    - -f = f;
+    hence thesis by Th7;
+  end;
+
+registration
+  let F be empty set;
+  cluster --F -> empty;
+  coherence
+  proof
+    assume --F is non empty;
+    then the Element of --F in --F;
+    then ex w st the Element of --F = -w & w in F;
+    hence thesis;
+  end;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  cluster --F -> non empty;
+  coherence
+  proof
+    -the Element of F in --F by Th7;
+    hence thesis;
+  end;
+end;
+
+Lm2:
+  F c= G implies --F c= --G
+  proof
+    assume
+A1: F c= G;
+    let j;
+    assume j in --F;
+    then -j in F by Th8;
+    hence thesis by A1,Th8;
+  end;
+
+theorem Th9:
+  F c= G iff --F c= --G
+  proof
+    ----F = F & ----G = G;
+    hence thesis by Lm2;
+  end;
+
+theorem
+  --F = --G implies F = G
+  proof
+    assume --F = --G;
+    then F c= G & G c= F by Th9;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th11:
+  -- (F \/ G) = (--F) \/ (--G)
+  proof
+    let i;
+    hereby
+      assume i in --(F\/G);
+      then -i in F \/ G by Th8;
+      then -i in F or -i in G by XBOOLE_0:def 3;
+      then i in --F or i in --G by Th8;
+      hence i in --F \/ --G by XBOOLE_0:def 3;
+    end;
+    assume i in --F \/ --G;
+    then i in --F or i in --G by XBOOLE_0:def 3;
+    then -i in F or -i in G by Th8;
+    then -i in F \/ G by XBOOLE_0:def 3;
+    hence thesis by Th8;
+  end;
+
+theorem Th12:
+  -- (F /\ G) = (--F) /\ (--G)
+  proof
+    let i;
+    hereby
+      assume i in --(F/\G);
+      then -i in F /\ G by Th8;
+      then -i in F & -i in G by XBOOLE_0:def 4;
+      then i in --F & i in --G by Th8;
+      hence i in (--F) /\ --G by XBOOLE_0:def 4;
+    end;
+    assume i in (--F) /\ --G;
+    then i in --F & i in --G by XBOOLE_0:def 4;
+    then -i in F & -i in G by Th8;
+    then -i in F /\ G by XBOOLE_0:def 4;
+    hence thesis by Th8;
+  end;
+
+theorem Th13:
+  -- (F \ G) = (--F) \ (--G)
+  proof
+    let i;
+    hereby
+      assume i in --(F\G);
+      then -i in F \ G by Th8;
+      then -i in F & not -i in G by XBOOLE_0:def 5;
+      then i in --F & not i in --G by Th8;
+      hence i in (--F) \ --G by XBOOLE_0:def 5;
+    end;
+    assume i in (--F) \ --G;
+    then i in --F & not i in --G by XBOOLE_0:def 5;
+    then -i in F & not -i in G by Th8;
+    then -i in F \ G by XBOOLE_0:def 5;
+    hence thesis by Th8;
+  end;
+
+theorem Th14:
+  -- (F \+\ G) = (--F) \+\ (--G)
+  proof
+    thus -- (F \+\ G) = --(F\G) \/ --(G\F) by Th11
+    .= --F \ --G \/ --(G\F) by Th13
+    .= (--F) \+\ --G by Th13;
+  end;
+
+theorem Th15:
+  --{f} = {-f}
+  proof
+    let i;
+    hereby
+      assume i in --{f};
+      then consider w such that
+A1:   i = -w and
+A2:   w in {f};
+      w = f by A2,TARSKI:def 1;
+      hence i in {-f} by A1,TARSKI:def 1;
+    end;
+    assume i in {-f};
+    then
+A3: i = -f by TARSKI:def 1;
+A4: f in ExtREAL by XXREAL_0:def 1;
+    f in {f} by TARSKI:def 1;
+    hence thesis by A3,A4;
+  end;
+
+theorem Th16:
+  --{f,g} = {-f,-g}
+  proof
+    thus --{f,g} = --({f}\/{g}) by ENUMSET1:41
+    .= --{f} \/ --{g} by Th11
+    .= {-f} \/ --{g} by Th15
+    .= {-f} \/ {-g} by Th15
+    .= {-f,-g} by ENUMSET1:41;
+  end;
+
+definition
+  let A be complex-membered set;
+  func --A -> complex-membered set equals
+  {-c: c in A};
+  coherence
+  proof
+    {-c: c in A} is complex-membered
+    proof
+      let e;
+      assume e in {-c: c in A};
+      then ex c st e = -c & c in A;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  involutiveness
+  proof
+    let A, B;
+    assume
+A1: A = {-c: c in B};
+    thus B c= {-c: c in A}
+    proof
+      let z;
+      assume
+A2:   z in B;
+A3:   z in COMPLEX by XCMPLX_0:def 2;
+A4:   -z in COMPLEX by XCMPLX_0:def 2;
+A5:   z = - -z;
+      -z in A by A1,A2,A3;
+      hence thesis by A5,A4;
+    end;
+    let e;
+    assume e in {-c: c in A};
+    then consider r0 being Element of COMPLEX such that
+A6: -r0 = e and
+A7: r0 in A;
+    ex c st -c = r0 & c in B by A1,A7;
+    hence thesis by A6;
+  end;
+end;
+
+theorem Th17:
+  a in A iff -a in --A
+  proof
+    a in COMPLEX by XCMPLX_0:def 2;
+    hence a in A implies -a in --A;
+    assume -a in --A;
+    then ex c st -c = -a & c in A;
+    hence thesis;
+  end;
+
+theorem Th18:
+  -a in A iff a in --A
+  proof
+    - -a = a;
+    hence thesis by Th17;
+  end;
+
+registration
+  let A be empty set;
+  cluster --A -> empty;
+  coherence
+  proof
+    assume --A is non empty;
+    then the Element of --A in --A;
+    then ex c st the Element of --A = -c & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  cluster --A -> non empty;
+  coherence
+  proof
+    -the Element of A in --A by Th17;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be real-membered set;
+  cluster --A -> real-membered;
+  coherence
+  proof
+    let e;
+    assume e in --A;
+    then ex c st e = -c & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be rational-membered set;
+  cluster --A -> rational-membered;
+  coherence
+  proof
+    let e;
+    assume e in --A;
+    then ex c st e = -c & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be integer-membered set;
+  cluster --A -> integer-membered;
+  coherence
+  proof
+    let e;
+    assume e in --A;
+    then ex c st e = -c & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  identify --A with --F when A = F;
+  compatibility
+  proof
+    assume
+A1: A = F;
+    let a be ext-real number;
+    hereby
+      assume
+A2:   a in --A;
+      then reconsider b = a as real number;
+      -b in A by A2,Th18;
+      hence a in --F by A1,Th8;
+    end;
+    assume a in --F;
+    then consider w such that
+A3: a = -w and
+A4: w in F;
+    reconsider b = w as real number by A1,A4;
+    -b in COMPLEX by XCMPLX_0:def 2;
+    then -a in COMPLEX by A3,XCMPLX_0:def 2;
+    then -b in --A by A1,A3,A4;
+    hence a in --A by A3;
+  end;
+end;
+
+Lm3:
+  A c= B implies --A c= --B
+  proof
+    assume
+A1: A c= B;
+    let a;
+    assume a in --A;
+    then -a in A by Th18;
+    hence thesis by A1,Th18;
+  end;
+
+theorem Th19:
+  A c= B iff --A c= --B
+  proof
+    ----A = A & ----B = B;
+    hence thesis by Lm3;
+  end;
+
+theorem
+  --A = --B implies A = B
+  proof
+    assume --A = --B;
+    then A c= B & B c= A by Th19;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th21:
+  -- (A \/ B) = (--A) \/ (--B)
+  proof
+    let z;
+    hereby
+      assume z in --(A\/B);
+      then -z in A \/ B by Th18;
+      then -z in A or -z in B by XBOOLE_0:def 3;
+      then z in --A or z in --B by Th18;
+      hence z in --A \/ --B by XBOOLE_0:def 3;
+    end;
+    assume z in --A \/ --B;
+    then z in --A or z in --B by XBOOLE_0:def 3;
+    then -z in A or -z in B by Th18;
+    then -z in A \/ B by XBOOLE_0:def 3;
+    hence thesis by Th18;
+  end;
+
+theorem Th22:
+  -- (A /\ B) = (--A) /\ (--B)
+  proof
+    let z;
+    hereby
+      assume z in --(A/\B);
+      then -z in A /\ B by Th18;
+      then -z in A & -z in B by XBOOLE_0:def 4;
+      then z in --A & z in --B by Th18;
+      hence z in (--A) /\ --B by XBOOLE_0:def 4;
+    end;
+    assume z in (--A) /\ --B;
+    then z in --A & z in --B by XBOOLE_0:def 4;
+    then -z in A & -z in B by Th18;
+    then -z in A /\ B by XBOOLE_0:def 4;
+    hence thesis by Th18;
+  end;
+
+theorem Th23:
+  -- (A \ B) = (--A) \ (--B)
+  proof
+    let z;
+    hereby
+      assume z in --(A\B);
+      then -z in A \ B by Th18;
+      then -z in A & not -z in B by XBOOLE_0:def 5;
+      then z in --A & not z in --B by Th18;
+      hence z in (--A) \ --B by XBOOLE_0:def 5;
+    end;
+    assume z in (--A) \ --B;
+    then z in --A & not z in --B by XBOOLE_0:def 5;
+    then -z in A & not -z in B by Th18;
+    then -z in A \ B by XBOOLE_0:def 5;
+    hence thesis by Th18;
+  end;
+
+theorem Th24:
+  -- (A \+\ B) = (--A) \+\ (--B)
+  proof
+    thus -- (A \+\ B) = --(A\B) \/ --(B\A) by Th21
+    .= --A \ --B \/ --(B\A) by Th23
+    .= (--A) \+\ --B by Th23;
+  end;
+
+theorem Th25:
+  --{a} = {-a}
+  proof
+    let z;
+    hereby
+      assume z in --{a};
+      then consider c such that
+A1:   z = -c and
+A2:   c in {a};
+      c = a by A2,TARSKI:def 1;
+      hence z in {-a} by A1,TARSKI:def 1;
+    end;
+    assume z in {-a};
+    then
+A3: z = -a by TARSKI:def 1;
+A4: a in COMPLEX by XCMPLX_0:def 2;
+    a in {a} by TARSKI:def 1;
+    hence thesis by A3,A4;
+  end;
+
+theorem Th26:
+  --{a,b} = {-a,-b}
+  proof
+    thus --{a,b} = --({a}\/{b}) by ENUMSET1:41
+    .= --{a} \/ --{b} by Th21
+    .= {-a} \/ --{b} by Th25
+    .= {-a} \/ {-b} by Th25
+    .= {-a,-b} by ENUMSET1:41;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  func F"" -> ext-real-membered set equals
+  {w": w in F};
+  coherence
+  proof
+    {w": w in F} is ext-real-membered
+    proof
+      let e;
+      assume e in {w": w in F};
+      then ex w st e = w" & w in F;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th27:
+  f in F implies f" in F""
+  proof
+    f in ExtREAL by XXREAL_0:def 1;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  cluster F"" -> empty;
+  coherence
+  proof
+    assume F"" is non empty;
+    then the Element of F"" in F"";
+    then ex w st the Element of F"" = w" & w in F;
+    hence thesis;
+  end;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  cluster F"" -> non empty;
+  coherence
+  proof
+    (the Element of F)" in F"" by Th27;
+    hence thesis;
+  end;
+end;
+
+theorem
+  F c= G implies F"" c= G""
+  proof
+    assume
+A1: F c= G;
+    let i;
+    assume i in F"";
+    then ex w st i = w" & w in F;
+    hence thesis by A1;
+  end;
+
+theorem Th29:
+  (F \/ G)"" = (F"") \/ (G"")
+  proof
+    let i;
+    hereby
+      assume i in (F\/G)"";
+      then consider w such that
+A1:   i = w" and
+A2:   w in F \/ G;
+      w in F or w in G by A2,XBOOLE_0:def 3;
+      then w" in F"" or w" in G"";
+      hence i in F"" \/ G"" by A1,XBOOLE_0:def 3;
+    end;
+    assume
+A3: i in F"" \/ G"";
+    per cases by A3,XBOOLE_0:def 3;
+    suppose i in F"";
+      then consider w such that
+A4:   i = w" and
+A5:   w in F;
+      w in F\/G by A5,XBOOLE_0:def 3;
+      hence thesis by A4;
+    end;
+    suppose i in G"";
+      then consider w such that
+A6:   i = w" and
+A7:   w in G;
+      w in F\/G by A7,XBOOLE_0:def 3;
+      hence thesis by A6;
+    end;
+  end;
+
+theorem Th30:
+  (F /\ G)"" c= (F"") /\ (G"")
+  proof
+    let i;
+    assume i in (F/\G)"";
+    then consider w such that
+A1: i = w" and
+A2: w in F /\ G;
+    w in F & w in G by A2,XBOOLE_0:def 4;
+    then w" in F"" & w" in G"";
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+
+theorem
+  --(F"") = (--F)""
+  proof
+    let i;
+    hereby
+      assume i in --F"";
+      then -i in F"" by Th8;
+      then consider w such that
+A1:   -i = w" and
+A2:   w in F;
+A3:   (-w)" = -w" by Th1;
+      -w in --F by A2;
+      hence i in (--F)"" by A1,A3;
+    end;
+    assume i in (--F)"";
+    then consider w such that
+A4: i = w" and
+A5: w in --F;
+A6: (-w)" = -w" by Th1;
+    -w in F by A5,Th8;
+    then -i in F"" by A4,A6;
+    hence thesis by Th8;
+  end;
+
+theorem Th32:
+  {f}"" = {f"}
+  proof
+    let i;
+    hereby
+      assume i in {f}"";
+      then consider w such that
+A1:   i = w" and
+A2:   w in {f};
+      w = f by A2,TARSKI:def 1;
+      hence i in {f"} by A1,TARSKI:def 1;
+    end;
+    assume i in {f"};
+    then
+A3: i = f" by TARSKI:def 1;
+A4: f in ExtREAL by XXREAL_0:def 1;
+    f in {f} by TARSKI:def 1;
+    hence thesis by A3,A4;
+  end;
+
+theorem Th33:
+  {f,g}"" = {f",g"}
+  proof
+    thus {f,g}"" = ({f}\/{g})"" by ENUMSET1:41
+    .= ({f}"") \/ ({g}"") by Th29
+    .= {f"} \/ ({g}"") by Th32
+    .= ({f"}) \/ {g"} by Th32
+    .= {f",g"} by ENUMSET1:41;
+  end;
+
+definition
+  let A be complex-membered set;
+  func A"" -> complex-membered set equals
+  {c": c in A};
+  coherence
+  proof
+    {c": c in A} is complex-membered
+    proof
+      let e;
+      assume e in {c": c in A};
+      then ex c st e = c" & c in A;
+      hence thesis;
+    end;
+    hence thesis;
+  end;
+  involutiveness
+  proof
+    let A, B;
+    assume
+A1: A = {c": c in B};
+    thus B c= {c": c in A}
+    proof
+      let z;
+      assume
+A2:   z in B;
+A3:   z in COMPLEX by XCMPLX_0:def 2;
+A4:   z" in COMPLEX by XCMPLX_0:def 2;
+A5:   z = z" ";
+      z" in A by A1,A2,A3;
+      hence thesis by A5,A4;
+    end;
+    let e;
+    assume e in {c": c in A};
+    then consider r0 being Element of COMPLEX such that
+A6: r0" = e and
+A7: r0 in A;
+    ex c st c" = r0 & c in B by A1,A7;
+    hence thesis by A6;
+  end;
+end;
+
+theorem Th34:
+  a in A iff a" in A""
+  proof
+    a in COMPLEX by XCMPLX_0:def 2;
+    hence a in A implies a" in A"";
+    assume a" in A"";
+    then ex c st c" = a" & c in A;
+    hence thesis by XCMPLX_1:202;
+end;
+
+theorem Th35:
+  a" in A iff a in A""
+  proof
+    a" " = a;
+    hence thesis by Th34;
+  end;
+
+registration
+  let A be empty set;
+  cluster A"" -> empty;
+  coherence
+  proof
+    assume A"" is non empty;
+    then the Element of A"" in A"";
+    then ex c st the Element of A"" = c" & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  cluster A"" -> non empty;
+  coherence
+  proof
+    (the Element of A)" in A"" by Th34;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be real-membered set;
+  cluster A"" -> real-membered;
+  coherence
+  proof
+    let e;
+    assume e in A"";
+    then ex c st e = c" & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be rational-membered set;
+  cluster A"" -> rational-membered;
+  coherence
+  proof
+    let e;
+    assume e in A"";
+    then ex c st e = c" & c in A;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  identify A"" with F"" when A = F;
+  compatibility
+  proof
+    assume
+A1: A = F;
+    let a be ext-real number;
+    hereby
+      assume a in A"";
+      then consider c such that
+A2:   a = c" and
+A3:   c in A;
+      reconsider w = c as Element of ExtREAL by A3,XXREAL_0:def 1;
+      ex m being complex number st w = m & w" = m" by A3,XXREAL_3:def 4;
+      hence a in F"" by A2,A1,A3;
+    end;
+    assume a in F"";
+    then consider w such that
+A4: a = w" and
+A5: w in F;
+    reconsider c = w as Element of COMPLEX by A1,A5,XCMPLX_0:def 2;
+    w" = c" by A1,A5,XXREAL_3:def 4;
+    hence thesis by A1,A4,A5;
+  end;
+end;
+
+Lm4:
+  A c= B implies A"" c= B""
+  proof
+    assume
+A1: A c= B;
+    let a;
+    assume a in A"";
+    then a" in A by Th35;
+    hence thesis by A1,Th35;
+  end;
+
+theorem Th36:
+  A c= B iff A"" c= B""
+  proof
+    A"""" = A & B"""" = B;
+    hence thesis by Lm4;
+  end;
+
+theorem
+  A"" = B"" implies A = B
+  proof
+    assume A"" = B"";
+    then A c= B & B c= A by Th36;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th38:
+  (A \/ B)"" = (A"") \/ (B"")
+  proof
+    let a;
+    hereby
+      assume a in (A\/B)"";
+      then a" in A\/B by Th35;
+      then a" in A or a" in B by XBOOLE_0:def 3;
+      then a in A"" or a in B"" by Th35;
+      hence a in A"" \/ B"" by XBOOLE_0:def 3;
+    end;
+    assume a in A"" \/ B"";
+    then a in A"" or a in B"" by XBOOLE_0:def 3;
+    then a" in A or a" in B by Th35;
+    then a" in A\/B by XBOOLE_0:def 3;
+    hence thesis by Th35;
+  end;
+
+theorem Th39:
+  (A /\ B)"" = (A"") /\ (B"")
+  proof
+    let a;
+    hereby
+      assume a in (A/\B)"";
+      then a" in A/\B by Th35;
+      then a" in A & a" in B by XBOOLE_0:def 4;
+      then a in A"" & a in B"" by Th35;
+      hence a in (A"") /\ (B"") by XBOOLE_0:def 4;
+    end;
+    assume a in (A"") /\ (B"");
+    then a in A"" & a in B"" by XBOOLE_0:def 4;
+    then a" in A & a" in B by Th35;
+    then a" in A/\B by XBOOLE_0:def 4;
+    hence thesis by Th35;
+  end;
+
+theorem Th40:
+  (A \ B)"" = (A"") \ (B"")
+  proof
+    let a;
+    hereby
+      assume a in (A\B)"";
+      then a" in A\B by Th35;
+      then a" in A & not a" in B by XBOOLE_0:def 5;
+      then a in A"" & not a in B"" by Th35;
+      hence a in (A"") \ (B"") by XBOOLE_0:def 5;
+    end;
+    assume a in (A"") \ (B"");
+    then a in A"" & not a in B"" by XBOOLE_0:def 5;
+    then a" in A & not a" in B by Th35;
+    then a" in A\B by XBOOLE_0:def 5;
+    hence thesis by Th35;
+  end;
+
+theorem Th41:
+  (A \+\ B)"" = (A"") \+\ (B"")
+  proof
+    thus (A \+\ B)"" = ((A\B)"") \/ ((B\A)"") by Th38
+    .= ((A"")\(B"")) \/ ((B\A)"") by Th40
+    .= (A"") \+\ (B"") by Th40;
+  end;
+
+theorem Th42:
+  --(A"") = (--A)""
+  proof
+    let a;
+A1: (-a)" = -a" by XCMPLX_1:224;
+    hereby
+      assume a in --A"";
+      then -a in A"" by Th18;
+      then (-a)" in A by Th35;
+      then a" in --A by A1,Th18;
+      hence a in (--A)"" by Th35;
+    end;
+    assume a in (--A)"";
+    then a" in --A by Th35;
+    then -a" in A by Th18;
+    then -a in A"" by A1,Th35;
+    hence thesis by Th18;
+  end;
+
+theorem Th43:
+  {a}"" = {a"}
+  proof
+    let z;
+    hereby
+      assume z in {a}"";
+      then consider c such that
+A1:   z = c" and
+A2:   c in {a};
+      c = a by A2,TARSKI:def 1;
+      hence z in {a"} by A1,TARSKI:def 1;
+    end;
+    assume z in {a"};
+    then
+A3: z = a" by TARSKI:def 1;
+A4: a in COMPLEX by XCMPLX_0:def 2;
+    a in {a} by TARSKI:def 1;
+    hence thesis by A3,A4;
+  end;
+
+theorem Th44:
+  {a,b}"" = {a",b"}
+  proof
+    let z;
+    hereby
+      assume z in {a,b}"";
+      then consider c such that
+A1:   z = c" and
+A2:   c in {a,b};
+      c = a or c = b by A2,TARSKI:def 2;
+      hence z in {a",b"} by A1,TARSKI:def 2;
+    end;
+    assume z in {a",b"};
+    then
+A3: z = a" or z = b" by TARSKI:def 2;
+A4: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    a in {a,b} & b in {a,b} by TARSKI:def 2;
+    hence thesis by A3,A4;
+  end;
+
+definition
+  let F, G be ext-real-membered set;
+  func F++G equals
+  {w1+w2: w1 in F & w2 in G};
+  coherence;
+  commutativity
+  proof
+    let X be set;
+    let F, G;
+    assume
+A1: X = {w1+w2: w1 in F & w2 in G};
+    thus X c= {w1+w2: w1 in G & w2 in F}
+    proof
+      let e;
+      assume e in X;
+      then ex w1,w2 st e = w1+w2 & w1 in F & w2 in G by A1;
+      hence thesis;
+    end;
+    let e;
+    assume e in {w1+w2: w1 in G & w2 in F};
+    then ex w1,w2 st e = w1+w2 & w1 in G & w2 in F;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th45:
+  f in F & g in G implies f+g in F++G
+  proof
+    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F++G -> empty;
+  coherence
+  proof
+    assume F++G is non empty;
+    then the Element of (F++G) in F++G;
+    then ex w1,w2 st the Element of (F++G) = w1+w2 & w1 in F & w2 in G;
+    hence thesis;
+  end;
+  cluster G++F -> empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F++G -> non empty;
+  coherence
+  proof
+    (the Element of F)+the Element of G in F++G by Th45;
+    hence thesis;
+  end;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F++G -> ext-real-membered;
+  coherence
+  proof
+    let e;
+    assume e in F++G;
+    then ex w1,w2 st e = w1+w2 & w1 in F & w2 in G;
+    hence thesis;
+  end;
+end;
+
+theorem
+  F c= G & H c= I implies F++H c= G++I
+  proof
+    assume
+A1: F c= G & H c= I;
+    let i;
+    assume i in F++H;
+    then ex w,w1 st i = w+w1 & w in F & w1 in H;
+    hence thesis by A1;
+  end;
+
+theorem Th47:
+  F ++ (G \/ H) = (F++G) \/ (F++H)
+  proof
+    let j;
+    hereby
+      assume j in F++(G\/H);
+      then consider w,w1 such that
+A1:   j = w+w1 and
+A2:   w in F and
+A3:   w1 in G\/H;
+      w1 in G or w1 in H by A3,XBOOLE_0:def 3;
+      then w+w1 in F++G or w+w1 in F++H by A2;
+      hence j in (F++G)\/(F++H) by A1,XBOOLE_0:def 3;
+    end;
+    assume
+A4: j in (F++G)\/(F++H);
+    per cases by A4,XBOOLE_0:def 3;
+    suppose j in F++G;
+      then consider w,w1 such that
+A5:   j = w+w1 and
+A6:   w in F and
+A7:   w1 in G;
+      w1 in G\/H by A7,XBOOLE_0:def 3;
+      hence thesis by A5,A6;
+    end;
+    suppose j in F++H;
+      then consider w,w1 such that
+A8:   j = w+w1 and
+A9:   w in F and
+A10:   w1 in H;
+      w1 in G\/H by A10,XBOOLE_0:def 3;
+      hence thesis by A8,A9;
+    end;
+  end;
+
+theorem Th48:
+  F ++ (G /\ H) c= (F++G) /\ (F++H)
+  proof
+    let j;
+    assume j in F++(G/\H);
+    then consider w,w1 such that
+A1: j = w+w1 and
+A2: w in F and
+A3: w1 in G/\H;
+    w1 in G & w1 in H by A3,XBOOLE_0:def 4;
+    then w+w1 in F++G & w+w1 in F++H by A2;
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+
+theorem Th49:
+  {f}++{g} = {f+g}
+  proof
+    let j;
+    hereby
+      assume j in {f}++{g};
+      then consider w1,w2 such that
+A1:   j = w1+w2 and
+A2:   w1 in {f} and
+A3:   w2 in {g};
+      w1 = f & w2 = g by A2,A3,TARSKI:def 1;
+      hence j in {f+g} by A1,TARSKI:def 1;
+    end;
+    assume j in {f+g};
+    then
+A4: j = f+g by TARSKI:def 1;
+A5: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    f in {f} & g in {g} by TARSKI:def 1;
+    hence thesis by A4,A5;
+  end;
+
+theorem Th50:
+  {f}++{g,h} = {f+g,f+h}
+  proof
+    thus {f}++{g,h} = {f}++({g}\/{h}) by ENUMSET1:41
+    .= ({f}++{g}) \/ ({f}++{h}) by Th47
+    .= {f+g} \/ ({f}++{h}) by Th49
+    .= {f+g} \/ {f+h} by Th49
+    .= {f+g,f+h} by ENUMSET1:41;
+  end;
+
+theorem Th51:
+  {f,g}++{h,i} = {f+h,f+i,g+h,g+i}
+  proof
+    thus {f,g}++{h,i} = ({f}\/{g})++{h,i} by ENUMSET1:41
+    .= ({f}++{h,i}) \/ ({g}++{h,i}) by Th47
+    .= {f+h,f+i} \/ ({g}++{h,i}) by Th50
+    .= {f+h,f+i} \/ {g+h,g+i} by Th50
+    .= {f+h,f+i,g+h,g+i} by ENUMSET1:45;
+  end;
+
+definition
+  let A, B be complex-membered set;
+  func A++B equals
+  {c1+c2: c1 in A & c2 in B};
+  coherence;
+  commutativity
+  proof
+    let X be set;
+    let A, B;
+    assume
+A1: X = {c1+c2: c1 in A & c2 in B};
+    thus X c= {c1+c2: c1 in B & c2 in A}
+    proof
+      let e;
+      assume e in X;
+      then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B by A1;
+      hence thesis;
+    end;
+    let e;
+    assume e in {c1+c2: c1 in B & c2 in A};
+    then ex c1,c2 st e = c1+c2 & c1 in B & c2 in A;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th52:
+  a in A & b in B implies a+b in A++B
+  proof
+    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A++B -> empty;
+  coherence
+  proof
+    assume A++B is non empty;
+    then the Element of (A++B) in A++B;
+    then ex c1,c2 st the Element of (A++B) = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+  cluster B++A -> empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A++B -> non empty;
+  coherence
+  proof
+    (the Element of A)+the Element of B in A++B by Th52;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A++B -> complex-membered;
+  coherence
+  proof
+    let e;
+    assume e in A++B;
+    then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A++B -> real-membered;
+  coherence
+  proof
+    let e;
+    assume e in A++B;
+    then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A++B -> rational-membered;
+  coherence
+  proof
+    let e;
+    assume e in A++B;
+    then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A++B -> integer-membered;
+  coherence
+  proof
+    let e;
+    assume e in A++B;
+    then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be natural-membered set;
+  cluster A++B -> natural-membered;
+  coherence
+  proof
+    let e;
+    assume e in A++B;
+    then ex c1,c2 st e = c1+c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A++B with F++G when A = F, B = G;
+  compatibility
+  proof
+    assume
+A1: A = F & B = G;
+    let a be ext-real number;
+    hereby
+      assume a in A++B;
+      then consider c,c1 such that
+A2:   a = c+c1 and
+A3:   c in A and
+A4:   c1 in B;
+      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,A4,XXREAL_0:def 1;
+      a = d1+d2 by A2,A3,A4,XXREAL_3:def 1;
+      hence a in F++G by A1,A3,A4;
+    end;
+    assume a in F++G;
+    then consider w,w1 such that
+A5: a = w+w1 and
+A6: w in F and
+A7: w1 in G;
+    reconsider d1 = w, d2 = w1 as Element of COMPLEX
+    by A1,A6,A7,XCMPLX_0:def 2;
+    a = d1+d2 by A1,A7,A5,A6,XXREAL_3:def 1;
+    hence a in A++B by A1,A6,A7;
+  end;
+end;
+
+theorem Th53:
+  A c= B & C c= D implies A++C c= B++D
+  proof
+    assume
+A1: A c= B & C c= D;
+    let a;
+    assume a in A++C;
+    then ex c,c1 st a = c+c1 & c in A & c1 in C;
+    hence thesis by A1;
+  end;
+
+theorem Th54:
+  A ++ (B \/ C) = (A++B) \/ (A++C)
+  proof
+    let a;
+    hereby
+      assume a in A++(B\/C);
+      then consider c,c1 such that
+A1:   a = c+c1 and
+A2:   c in A and
+A3:   c1 in B\/C;
+      c1 in B or c1 in C by A3,XBOOLE_0:def 3;
+      then c+c1 in A++B or c+c1 in A++C by A2;
+      hence a in (A++B)\/(A++C) by A1,XBOOLE_0:def 3;
+    end;
+    assume
+A4: a in (A++B)\/(A++C);
+    per cases by A4,XBOOLE_0:def 3;
+    suppose a in A++B;
+      then consider c,c1 such that
+A5:   a = c+c1 and
+A6:   c in A and
+A7:   c1 in B;
+      c1 in B\/C by A7,XBOOLE_0:def 3;
+      hence thesis by A5,A6;
+    end;
+    suppose a in A++C;
+      then consider c,c1 such that
+A8:   a = c+c1 and
+A9:   c in A and
+A10:   c1 in C;
+      c1 in B\/C by A10,XBOOLE_0:def 3;
+      hence thesis by A8,A9;
+    end;
+  end;
+
+theorem Th55:
+  A ++ (B /\ C) c= (A++B) /\ (A++C)
+  proof
+    let a;
+    assume a in A++(B/\C);
+    then consider c,c1 such that
+A1: a = c+c1 and
+A2: c in A and
+A3: c1 in B/\C;
+    c1 in B & c1 in C by A3,XBOOLE_0:def 4;
+    then c+c1 in A++B & c+c1 in A++C by A2;
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+
+theorem Th56:
+  (A++B)++C = A++(B++C)
+  proof
+    let a;
+    hereby
+      assume a in A++B++C;
+      then consider c,c1 such that
+A1:   a = c+c1 and
+A2:   c in A++B and
+A3:   c1 in C;
+      consider c2,c3 being Element of COMPLEX such that
+A4:   c = c2+c3 and
+A5:   c2 in A and
+A6:   c3 in B by A2;
+A7:   a = c2+(c3+c1) by A1,A4;
+      c3+c1 in B++C by A6,A3;
+      hence a in A++(B++C) by A5,A7;
+    end;
+    assume a in A++(B++C);
+    then consider c,c1 such that
+A8: a = c+c1 and
+A9: c in A and
+A10: c1 in B++C;
+    consider c2,c3 being Element of COMPLEX such that
+A11: c1 = c2+c3 and
+A12: c2 in B and
+A13: c3 in C by A10;
+A14: a = c+c2+c3 by A8,A11;
+    c+c2 in A++B by A9,A12;
+    hence thesis by A13,A14;
+  end;
+
+theorem Th57:
+  {a}++{b} = {a+b}
+  proof
+    let z;
+    hereby
+      assume z in {a}++{b};
+      then consider c1,c2 such that
+A1:   z = c1+c2 and
+A2:   c1 in {a} and
+A3:   c2 in {b};
+      c1 = a & c2 = b by A2,A3,TARSKI:def 1;
+      hence z in {a+b} by A1,TARSKI:def 1;
+    end;
+    assume z in {a+b};
+    then
+A4: z = a+b by TARSKI:def 1;
+A5: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    a in {a} & b in {b} by TARSKI:def 1;
+    hence thesis by A4,A5;
+  end;
+
+theorem Th58:
+  {a}++{s,t} = {a+s,a+t}
+  proof
+    thus {a}++{s,t} = {a}++({s}\/{t}) by ENUMSET1:41
+    .= ({a}++{s}) \/ ({a}++{t}) by Th54
+    .= {a+s} \/ ({a}++{t}) by Th57
+    .= {a+s} \/ {a+t} by Th57
+    .= {a+s,a+t} by ENUMSET1:41;
+  end;
+
+theorem Th59:
+  {a,b}++{s,t} = {a+s,a+t,b+s,b+t}
+  proof
+    thus {a,b}++{s,t} = ({a}\/{b})++{s,t} by ENUMSET1:41
+    .= ({a}++{s,t}) \/ ({b}++{s,t}) by Th54
+    .= {a+s,a+t} \/ ({b}++{s,t}) by Th58
+    .= {a+s,a+t} \/ {b+s,b+t} by Th58
+    .= {a+s,a+t,b+s,b+t} by ENUMSET1:45;
+  end;
+
+definition
+  let F, G be ext-real-membered set;
+  func F--G equals
+  F ++ --G;
+  coherence;
+end;
+
+theorem Th60:
+  F--G = {w1-w2: w1 in F & w2 in G}
+  proof
+    thus F--G c= {w1-w2: w1 in F & w2 in G}
+    proof
+      let e;
+      assume e in F--G;
+      then consider w1,w2 such that
+A1:   e = w1+w2 and
+A2:   w1 in F and
+A3:   w2 in --G;
+A4:   e = w1- -w2 by A1;
+      -w2 in G by A3,Th8;
+      hence thesis by A4,A2;
+    end;
+    let e;
+    assume e in {w1-w2: w1 in F & w2 in G};
+    then consider w1,w2 such that
+A5: e = w1-w2 and
+A6: w1 in F and
+A7: w2 in G;
+    -w2 in --G by A7;
+    hence thesis by A5,A6;
+  end;
+
+theorem Th61:
+  f in F & g in G implies f-g in F--G
+  proof
+A1: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    F--G = {w1-w2: w1 in F & w2 in G} by Th60;
+    hence thesis by A1;
+  end;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F--G -> empty;
+  coherence;
+  cluster G--F -> empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F--G -> non empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F--G -> ext-real-membered;
+  coherence;
+end;
+
+theorem
+  F c= G & H c= I implies F--H c= G--I
+  proof
+A1: F--H = {w1-w2: w1 in F & w2 in H} by Th60;
+    assume
+A2: F c= G & H c= I;
+    let i;
+    assume i in F--H;
+    then ex w,w1 st i = w-w1 & w in F & w1 in H by A1;
+    hence thesis by A2,Th61;
+  end;
+
+theorem
+  F -- (G \/ H) = (F--G) \/ (F--H)
+  proof
+    thus F -- (G \/ H) = F++(--G\/--H) by Th11
+    .= (F--G) \/ (F--H) by Th47;
+end;
+
+theorem
+  F -- (G /\ H) c= (F--G) /\ (F--H)
+  proof
+    F -- (G /\ H) = F++((--G)/\--H) by Th12;
+    hence thesis by Th48;
+  end;
+
+Lm5:
+--(F++G) = (--F) ++ --G
+proof
+  let j;
+  hereby
+    assume j in --(F++G);
+    then consider w such that
+A1: j = -w and
+A2: w in F++G;
+    consider w1,w2 such that
+A3: w = w1+w2 and
+A4: w1 in F & w2 in G by A2;
+A5: -(w1+w2) = -w1-w2 by Lm1;
+    -w1 in --F & -w2 in --G by A4;
+    hence j in (--F) ++ --G by A1,A3,A5;
+  end;
+  assume j in (--F) ++ --G;
+  then consider w1,w2 such that
+A6: j = w1+w2 and
+A7: w1 in --F & w2 in --G;
+A8: -(w1+w2) = -w1-w2 by Lm1;
+  -w1 in F & -w2 in G by A7,Th8;
+  then -w1+-w2 in F++G;
+  hence thesis by A6,A8,Th8;
+end;
+
+theorem
+  --(F++G) = (--F) -- G by Lm5;
+
+theorem Th66:
+  --(F--G) = (--F) ++ G
+  proof
+    thus --(F--G) = (--F)----G by Lm5
+    .= (--F) ++ G;
+  end;
+
+theorem
+  {f}--{g} = {f-g}
+  proof
+    thus {f}--{g} = {f}++{-g} by Th15
+    .= {f-g} by Th49;
+  end;
+
+theorem
+  {f}--{h,i} = {f-h,f-i}
+  proof
+    thus {f}--{h,i} = {f}++{-h,-i} by Th16
+    .= {f-h,f-i} by Th50;
+  end;
+
+theorem
+  {f,g}--{h} = {f-h,g-h}
+  proof
+    thus {f,g}--{h} = {f,g}++{-h} by Th15
+    .= {f-h,g-h} by Th50;
+  end;
+
+theorem
+  {f,g}--{h,i} = {f-h,f-i,g-h,g-i}
+  proof
+    thus {f,g}--{h,i} = {f,g}++{-h,-i} by Th16
+    .= {f-h,f-i,g-h,g-i} by Th51;
+  end;
+
+definition
+  let A, B be complex-membered set;
+  func A--B equals
+  A ++ --B;
+  coherence;
+end;
+
+theorem Th71:
+  A--B = {c1-c2: c1 in A & c2 in B}
+  proof
+    thus A--B c= {c1-c2: c1 in A & c2 in B}
+    proof
+      let e;
+      assume e in A--B;
+      then consider c1,c2 such that
+A1:   e = c1+c2 and
+A2:   c1 in A and
+A3:   c2 in --B;
+A4:   e = c1- -c2 by A1;
+      -c2 in B by A3,Th18;
+      hence thesis by A4,A2;
+    end;
+    let e;
+    assume e in {c1-c2: c1 in A & c2 in B};
+    then consider c1,c2 such that
+A5: e = c1-c2 and
+A6: c1 in A and
+A7: c2 in B;
+    -c2 in --B by A7;
+    hence thesis by A5,A6;
+  end;
+
+theorem Th72:
+  a in A & b in B implies a-b in A--B
+  proof
+A1: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    A--B = {c1-c2: c1 in A & c2 in B} by Th71;
+    hence thesis by A1;
+  end;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A--B -> empty;
+  coherence;
+  cluster B--A -> empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A--B -> non empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A--B -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A--B -> real-membered;
+  coherence;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A--B -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A--B -> integer-membered;
+  coherence;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A--B with F--G when A = F, B = G;
+  compatibility;
+end;
+
+theorem Th73:
+  A c= B & C c= D implies A--C c= B--D
+  proof
+    assume
+A1: A c= B & C c= D;
+A2: A--C = {c1-c2: c1 in A & c2 in C} by Th71;
+    let z;
+    assume z in A--C;
+    then ex c,c1 st z = c-c1 & c in A & c1 in C by A2;
+    hence thesis by A1,Th72;
+  end;
+
+Lm6:
+--(A++B) = (--A) ++ --B
+proof
+  let a;
+  hereby
+    assume a in --(A++B);
+    then consider c such that
+A1: a = -c and
+A2: c in A++B;
+    consider c1,c2 such that
+A3: c = c1+c2 and
+A4: c1 in A & c2 in B by A2;
+A5: a = -c1+-c2 by A1,A3;
+    -c1 in --A & -c2 in --B by A4;
+    hence a in (--A) ++ --B by A5;
+  end;
+  assume a in (--A) ++ --B;
+  then consider c1,c2 such that
+A6: a = c1+c2 and
+A7: c1 in --A & c2 in --B;
+  -c1 in A & -c2 in B by A7,Th18;
+  then -c1+-c2 in A++B;
+  then -a in A++B by A6;
+  hence thesis by Th18;
+end;
+
+theorem
+  A -- (B \/ C) = (A--B) \/ (A--C)
+  proof
+    thus A -- (B \/ C) = A++(--B\/--C) by Th21
+    .= (A--B) \/ (A--C) by Th54;
+end;
+
+theorem
+  A -- (B /\ C) c= (A--B) /\ (A--C)
+  proof
+    A -- (B /\ C) = A++((--B)/\--C) by Th22;
+    hence thesis by Th55;
+  end;
+
+theorem
+  --(A++B) = (--A) -- B by Lm6;
+
+theorem Th77:
+  --(A--B) = (--A) ++ B
+  proof
+    thus --(A--B) = (--A)----B by Lm6
+    .= (--A) ++ B;
+  end;
+
+theorem
+  A++(B--C) = A++B--C by Th56;
+
+theorem
+  A--(B++C) = A--B--C
+  proof
+    thus A--(B++C) = A++(--B--C) by Lm6
+    .= A--B--C by Th56;
+  end;
+
+theorem
+  A--(B--C) = A--B++C
+  proof
+    thus A--(B--C) = A++((--B)++C) by Th77
+    .= A--B++C by Th56;
+  end;
+
+theorem Th81:
+  {a}--{b} = {a-b}
+  proof
+    thus {a}--{b} = {a}++{-b} by Th25
+    .= {a-b} by Th57;
+  end;
+
+theorem
+  {a}--{s,t} = {a-s,a-t}
+  proof
+    thus {a}--{s,t} = {a}++{-s,-t} by Th26
+    .= {a-s,a-t} by Th58;
+  end;
+
+theorem
+  {a,b}--{s} = {a-s,b-s}
+  proof
+    thus {a,b}--{s} = {a,b}++{-s} by Th25
+    .= {a-s,b-s} by Th58;
+  end;
+
+theorem
+  {a,b}--{s,t} = {a-s,a-t,b-s,b-t}
+  proof
+    thus {a,b}--{s,t} = {a,b}++{-s,-t} by Th26
+    .= {a-s,a-t,b-s,b-t} by Th59;
+  end;
+
+definition
+  let F, G be ext-real-membered set;
+  func F**G equals
+  {w1*w2: w1 in F & w2 in G};
+  coherence;
+  commutativity
+  proof
+    let X be set;
+    let F, G;
+    assume
+A1: X = {w1*w2: w1 in F & w2 in G};
+    thus X c= {w1*w2: w1 in G & w2 in F}
+    proof
+      let e;
+      assume e in X;
+      then ex w1,w2 st e = w1*w2 & w1 in F & w2 in G by A1;
+      hence thesis;
+    end;
+    let e;
+    assume e in {w1*w2: w1 in G & w2 in F};
+    then ex w1,w2 st e = w1*w2 & w1 in G & w2 in F;
+    hence thesis by A1;
+  end;
+end;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F**G -> empty;
+  coherence
+  proof
+    assume F**G is non empty;
+    then the Element of (F**G) in F**G;
+    then ex w1,w2 st the Element of (F**G) = w1*w2 & w1 in F & w2 in G;
+    hence thesis;
+  end;
+  cluster G**F -> empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F**G -> ext-real-membered;
+  coherence
+  proof
+    let e;
+    assume e in F**G;
+    then ex w1,w2 st e = w1*w2 & w1 in F & w2 in G;
+    hence thesis;
+  end;
+end;
+
+theorem Th85:
+  f in F & g in G implies f*g in F**G
+  proof
+    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    hence thesis;
+  end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F**G -> non empty;
+  coherence
+  proof
+    (the Element of F)*the Element of G in F**G by Th85;
+    hence thesis;
+  end;
+end;
+
+theorem Th86:
+  (F**G)**H = F**(G**H)
+  proof
+    let i;
+    hereby
+      assume i in F**G**H;
+      then consider w,w1 such that
+A1:   i = w*w1 and
+A2:   w in F**G and
+A3:   w1 in H;
+      consider w2,w3 being Element of ExtREAL such that
+A4:   w = w2*w3 and
+A5:   w2 in F and
+A6:   w3 in G by A2;
+A7:   i = w2*(w3*w1) by A1,A4,EXTREAL1:23;
+      w3*w1 in G**H by A6,A3;
+      hence i in F**(G**H) by A5,A7;
+    end;
+    assume i in F**(G**H);
+    then consider w,w1 such that
+A8: i = w*w1 and
+A9: w in F and
+A10: w1 in G**H;
+    consider w2,w3 being Element of ExtREAL such that
+A11: w1 = w2*w3 and
+A12: w2 in G and
+A13: w3 in H by A10;
+A14: i = w*w2*w3 by A8,A11,EXTREAL1:23;
+    w*w2 in F**G by A9,A12;
+    hence thesis by A13,A14;
+  end;
+
+theorem Th87:
+  F c= G & H c= I implies F**H c= G**I
+  proof
+    assume
+A1: F c= G & H c= I;
+    let i;
+    assume i in F**H;
+    then ex w,w1 st i = w*w1 & w in F & w1 in H;
+    hence thesis by A1;
+  end;
+
+theorem Th88:
+  F ** (G \/ H) = (F**G) \/ (F**H)
+  proof
+    let j;
+    hereby
+      assume j in F**(G\/H);
+      then consider w,w1 such that
+A1:   j = w*w1 and
+A2:   w in F and
+A3:   w1 in G\/H;
+      w1 in G or w1 in H by A3,XBOOLE_0:def 3;
+      then w*w1 in F**G or w*w1 in F**H by A2;
+      hence j in (F**G)\/(F**H) by A1,XBOOLE_0:def 3;
+    end;
+    assume
+A4: j in (F**G)\/(F**H);
+    per cases by A4,XBOOLE_0:def 3;
+    suppose j in F**G;
+      then consider w,w1 such that
+A5:   j = w*w1 and
+A6:   w in F and
+A7:   w1 in G;
+      w1 in G\/H by A7,XBOOLE_0:def 3;
+      hence thesis by A5,A6;
+    end;
+    suppose j in F**H;
+      then consider w,w1 such that
+A8:   j = w*w1 and
+A9:   w in F and
+A10:   w1 in H;
+      w1 in G\/H by A10,XBOOLE_0:def 3;
+      hence thesis by A8,A9;
+    end;
+  end;
+
+theorem Th89:
+  F ** (G /\ H) c= (F**G) /\ (F**H)
+  proof
+    let j;
+    assume j in F**(G/\H);
+    then consider w,w1 such that
+A1: j = w*w1 and
+A2: w in F and
+A3: w1 in G/\H;
+    w1 in G & w1 in H by A3,XBOOLE_0:def 4;
+    then w*w1 in F**G & w*w1 in F**H by A2;
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+
+theorem
+  F**--G = --(F**G)
+  proof
+    let i;
+    hereby
+      assume i in F**--G;
+      then consider w,w1 such that
+A1:   i = w*w1 and
+A2:   w in F and
+A3:   w1 in --G;
+      w*-w1 = -(w*w1) by EXTREAL1:26;
+      then
+A4:   i = -(w*-w1) by A1;
+      -w1 in G by A3,Th8;
+      then w*-w1 in F**G by A2;
+      hence i in --(F**G) by A4;
+    end;
+    assume i in --(F**G);
+    then -i in F**G by Th8;
+    then consider w,w1 such that
+A5: -i = w*w1 and
+A6: w in F and
+A7: w1 in G;
+A8: w*-w1 = -(w*w1) by EXTREAL1:26;
+    -w1 in --G by A7;
+    hence thesis by A5,A6,A8;
+  end;
+
+theorem Th91:
+  (F**G)"" = (F"") ** (G"")
+  proof
+    let i;
+    hereby
+      assume i in (F**G)"";
+      then consider w such that
+A1:   i = w" and
+A2:   w in F**G;
+      consider w1,w2 such that
+A3:   w = w1*w2 and
+A4:   w1 in F and
+A5:   w2 in G by A2;
+A6:   i = w1"*w2" by A1,A3,Th2;
+      w1" in F"" & w2" in G"" by A4,A5;
+      hence i in (F"")**(G"") by A6,Th85;
+    end;
+    assume i in (F"")**(G"");
+    then consider w,w1 such that
+A7: i = w*w1 and
+A8: w in F"" and
+A9: w1 in G"";
+    consider w2 such that
+A10: w = w2" and
+A11: w2 in F by A8;
+    consider w3 being Element of ExtREAL such that
+A12: w1 = w3" and
+A13: w3 in G by A9;
+A14: w2*w3 in F**G by A11,A13;
+    i = (w2*w3)" by A7,A10,A12,Th2;
+    hence thesis by A14;
+  end;
+
+theorem Th92:
+  {f}**{g} = {f*g}
+  proof
+    let i;
+    hereby
+      assume i in {f}**{g};
+      then consider w1,w2 such that
+A1:   i = w1*w2 and
+A2:   w1 in {f} and
+A3:   w2 in {g};
+      w1 = f & w2 = g by A2,A3,TARSKI:def 1;
+      hence i in {f*g} by A1,TARSKI:def 1;
+    end;
+    assume i in {f*g};
+    then
+A4: i = f*g by TARSKI:def 1;
+A5: f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    f in {f} & g in {g} by TARSKI:def 1;
+    hence thesis by A4,A5;
+  end;
+
+theorem Th93:
+  {f}**{h,i} = {f*h,f*i}
+  proof
+    thus {f}**{h,i} = {f}**({h}\/{i}) by ENUMSET1:41
+    .= ({f}**{h}) \/ ({f}**{i}) by Th88
+    .= {f*h} \/ ({f}**{i}) by Th92
+    .= {f*h} \/ {f*i} by Th92
+    .= {f*h,f*i} by ENUMSET1:41;
+  end;
+
+theorem Th94:
+  {f,g}**{h,i} = {f*h,f*i,g*h,g*i}
+  proof
+    thus {f,g}**{h,i} = ({f}\/{g})**{h,i} by ENUMSET1:41
+    .= ({f}**{h,i}) \/ ({g}**{h,i}) by Th88
+    .= {f*h,f*i} \/ ({g}**{h,i}) by Th93
+    .= {f*h,f*i} \/ {g*h,g*i} by Th93
+    .= {f*h,f*i,g*h,g*i} by ENUMSET1:45;
+  end;
+
+definition
+  let A, B be complex-membered set;
+  func A**B equals
+  {c1*c2: c1 in A & c2 in B};
+  coherence;
+  commutativity
+  proof
+    let X be set;
+    let A, B;
+    assume
+A1: X = {c1*c2: c1 in A & c2 in B};
+    thus X c= {c1*c2: c1 in B & c2 in A}
+    proof
+      let e;
+      assume e in X;
+      then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B by A1;
+      hence thesis;
+    end;
+    let e;
+    assume e in {c1*c2: c1 in B & c2 in A};
+    then ex c1,c2 st e = c1*c2 & c1 in B & c2 in A;
+    hence thesis by A1;
+  end;
+end;
+
+theorem Th95:
+  a in A & b in B implies a*b in A**B
+  proof
+    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A**B -> empty;
+  coherence
+  proof
+    assume A**B is non empty;
+    then the Element of (A**B) in A**B;
+    then ex c1,c2 st the Element of (A**B) = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+  cluster B**A -> empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A**B -> non empty;
+  coherence
+  proof
+    (the Element of A)*the Element of B in A**B by Th95;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A**B -> complex-membered;
+  coherence
+  proof
+    let e;
+    assume e in A**B;
+    then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A**B -> real-membered;
+  coherence
+  proof
+    let e;
+    assume e in A**B;
+    then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A**B -> rational-membered;
+  coherence
+  proof
+    let e;
+    assume e in A**B;
+    then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A**B -> integer-membered;
+  coherence
+  proof
+    let e;
+    assume e in A**B;
+    then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be natural-membered set;
+  cluster A**B -> natural-membered;
+  coherence
+  proof
+    let e;
+    assume e in A**B;
+    then ex c1,c2 st e = c1*c2 & c1 in A & c2 in B;
+    hence thesis;
+  end;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A**B with F**G when A = F, B = G;
+  compatibility
+  proof
+    assume
+A1: A = F & B = G;
+    let a be ext-real number;
+    hereby
+      assume a in A**B;
+      then consider c,c1 such that
+A2:   a = c*c1 and
+A3:   c in A and
+A4:   c1 in B;
+      reconsider d1 = c, d2 = c1 as Element of ExtREAL by A3,A4,XXREAL_0:def 1;
+      a = d1*d2 by A2,A3,A4,XXREAL_3:def 2;
+      hence a in F**G by A1,A3,A4;
+    end;
+    assume a in F**G;
+    then consider w,w1 such that
+A5: a = w*w1 and
+A6: w in F and
+A7: w1 in G;
+    reconsider d1 = w, d2 = w1 as Element of COMPLEX
+    by A1,A6,A7,XCMPLX_0:def 2;
+    a = d1*d2 by A1,A7,A5,A6,XXREAL_3:def 2;
+    hence a in A**B by A1,A6,A7;
+  end;
+end;
+
+theorem Th96:
+  (A**B)**C = A**(B**C)
+  proof
+    let a;
+    hereby
+      assume a in A**B**C;
+      then consider c,c1 such that
+A1:   a = c*c1 and
+A2:   c in A**B and
+A3:   c1 in C;
+      consider c2,c3 being Element of COMPLEX such that
+A4:   c = c2*c3 and
+A5:   c2 in A and
+A6:   c3 in B by A2;
+A7:   a = c2*(c3*c1) by A1,A4;
+      c3*c1 in B**C by A6,A3;
+      hence a in A**(B**C) by A5,A7;
+    end;
+    assume a in A**(B**C);
+    then consider c,c1 such that
+A8: a = c*c1 and
+A9: c in A and
+A10: c1 in B**C;
+    consider c2,c3 being Element of COMPLEX such that
+A11: c1 = c2*c3 and
+A12: c2 in B and
+A13: c3 in C by A10;
+A14: a = c*c2*c3 by A8,A11;
+    c*c2 in A**B by A9,A12;
+    hence thesis by A13,A14;
+  end;
+
+theorem
+  A c= B & C c= D implies A**C c= B**D
+  proof
+    assume
+A1: A c= B & C c= D;
+    let a;
+    assume a in A**C;
+    then ex c,c1 st a = c*c1 & c in A & c1 in C;
+    hence thesis by A1;
+  end;
+
+theorem Th98:
+  A ** (B \/ C) = (A**B) \/ (A**C)
+  proof
+    let a;
+    hereby
+      assume a in A**(B\/C);
+      then consider c,c1 such that
+A1:   a = c*c1 and
+A2:   c in A and
+A3:   c1 in B\/C;
+      c1 in B or c1 in C by A3,XBOOLE_0:def 3;
+      then c*c1 in A**B or c*c1 in A**C by A2;
+      hence a in (A**B)\/(A**C) by A1,XBOOLE_0:def 3;
+    end;
+    assume
+A4: a in (A**B)\/(A**C);
+    per cases by A4,XBOOLE_0:def 3;
+    suppose a in A**B;
+      then consider c,c1 such that
+A5:   a = c*c1 and
+A6:   c in A and
+A7:   c1 in B;
+      c1 in B\/C by A7,XBOOLE_0:def 3;
+      hence thesis by A5,A6;
+    end;
+    suppose a in A**C;
+      then consider c,c1 such that
+A8:   a = c*c1 and
+A9:   c in A and
+A10:   c1 in C;
+      c1 in B\/C by A10,XBOOLE_0:def 3;
+      hence thesis by A8,A9;
+    end;
+  end;
+
+theorem Th99:
+  A ** (B /\ C) c= (A**B) /\ (A**C)
+  proof
+    let a;
+    assume a in A**(B/\C);
+    then consider c,c1 such that
+A1: a = c*c1 and
+A2: c in A and
+A3: c1 in B/\C;
+    c1 in B & c1 in C by A3,XBOOLE_0:def 4;
+    then c*c1 in A**B & c*c1 in A**C by A2;
+    hence thesis by A1,XBOOLE_0:def 4;
+  end;
+
+theorem Th100:
+  A**--B = --(A**B)
+  proof
+    let a;
+    hereby
+      assume a in A**--B;
+      then consider c,c1 such that
+A1:   a = c*c1 and
+A2:   c in A and
+A3:   c1 in --B;
+A4:   a = -(c*-c1) by A1;
+      -c1 in B by A3,Th18;
+      then c*-c1 in A**B by A2;
+      hence a in --(A**B) by A4;
+    end;
+    assume a in --(A**B);
+    then -a in A**B by Th18;
+    then consider c,c1 such that
+A5: -a = c*c1 and
+A6: c in A and
+A7: c1 in B;
+A8: a = c*-c1 by A5;
+    -c1 in --B by A7;
+    hence thesis by A6,A8;
+  end;
+
+theorem Th101:
+  A**(B++C) c= A**B ++ A**C
+  proof
+    let a;
+    assume a in A**(B++C);
+    then consider c,c1 such that
+A1: a = c*c1 and
+A2: c in A and
+A3: c1 in B++C;
+    consider c2,c3 being Element of COMPLEX such that
+A4: c1 = c2+c3 and
+A5: c2 in B and
+A6: c3 in C by A3;
+A7: a = c*c2+c*c3 by A1,A4;
+    c*c2 in A**B & c*c3 in A**C by A2,A5,A6;
+    hence a in A**B++A**C by A7;
+  end;
+
+theorem Th102:
+  A**(B--C) c= A**B -- A**C
+  proof
+    A**(B++--C) c= A**B++A**--C by Th101;
+    hence thesis by Th100;
+  end;
+
+theorem Th103:
+  (A**B)"" = (A"") ** (B"")
+  proof
+    let a;
+    hereby
+      assume a in (A**B)"";
+      then consider c such that
+A1:   a = c" and
+A2:   c in A**B;
+      consider c1,c2 such that
+A3:   c = c1*c2 and
+A4:   c1 in A and
+A5:   c2 in B by A2;
+A6:   a = c1"*c2" by A1,A3,XCMPLX_1:205;
+      c1" in A"" & c2" in B"" by A4,A5;
+      hence a in (A"")**(B"") by A6;
+    end;
+    assume a in (A"")**(B"");
+    then consider c,c1 such that
+A7: a = c*c1 and
+A8: c in A"" and
+A9: c1 in B"";
+    consider c2 such that
+A10: c = c2" and
+A11: c2 in A by A8;
+    consider c3 being Element of COMPLEX such that
+A12: c1 = c3" and
+A13: c3 in B by A9;
+A14: c2*c3 in A**B by A11,A13;
+    a = (c2*c3)" by A7,A10,A12,XCMPLX_1:205;
+    hence thesis by A14;
+  end;
+
+theorem Th104:
+  {a}**{b} = {a*b}
+  proof
+    let z;
+    hereby
+      assume z in {a}**{b};
+      then consider c1,c2 such that
+A1:   z = c1*c2 and
+A2:   c1 in {a} and
+A3:   c2 in {b};
+      c1 = a & c2 = b by A2,A3,TARSKI:def 1;
+      hence z in {a*b} by A1,TARSKI:def 1;
+    end;
+    assume z in {a*b};
+    then
+A4: z = a*b by TARSKI:def 1;
+A5: a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    a in {a} & b in {b} by TARSKI:def 1;
+    hence thesis by A4,A5;
+  end;
+
+theorem Th105:
+  {a}**{s,t} = {a*s,a*t}
+  proof
+    thus {a}**{s,t} = {a}**({s}\/{t}) by ENUMSET1:41
+    .= ({a}**{s}) \/ ({a}**{t}) by Th98
+    .= {a*s} \/ ({a}**{t}) by Th104
+    .= {a*s} \/ {a*t} by Th104
+    .= {a*s,a*t} by ENUMSET1:41;
+  end;
+
+theorem Th106:
+  {a,b}**{s,t} = {a*s,a*t,b*s,b*t}
+  proof
+    thus {a,b}**{s,t} = ({a}\/{b})**{s,t} by ENUMSET1:41
+    .= ({a}**{s,t}) \/ ({b}**{s,t}) by Th98
+    .= {a*s,a*t} \/ ({b}**{s,t}) by Th105
+    .= {a*s,a*t} \/ {b*s,b*t} by Th105
+    .= {a*s,a*t,b*s,b*t} by ENUMSET1:45;
+  end;
+
+definition
+  let F, G be ext-real-membered set;
+  func F///G equals
+  F**(G"");
+  coherence;
+end;
+
+theorem Th107:
+  F///G = {w1/w2: w1 in F & w2 in G}
+  proof
+    thus F///G c= {w1/w2: w1 in F & w2 in G}
+    proof
+      let e;
+      assume e in F///G;
+      then consider w1,w2 such that
+A1:   e = w1*w2 and
+A2:   w1 in F and
+A3:   w2 in G"";
+      consider w such that
+A4:   w2 = w" and
+A5:   w in G by A3;
+      e = w1/w by A1,A4;
+      hence thesis by A2,A5;
+    end;
+    let e;
+    assume e in {w1/w2: w1 in F & w2 in G};
+    then consider w1,w2 such that
+A6: e = w1/w2 and
+A7: w1 in F and
+A8: w2 in G;
+    w2" in G"" by A8;
+    hence thesis by A6,A7,Th85;
+  end;
+
+theorem Th108:
+  f in F & g in G implies f/g in F///G
+  proof
+A1: F///G = {w1/w2: w1 in F & w2 in G} by Th107;
+    f in ExtREAL & g in ExtREAL by XXREAL_0:def 1;
+    hence thesis by A1;
+  end;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F///G -> empty;
+  coherence;
+  cluster G///F -> empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F///G -> non empty;
+  coherence;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F///G -> ext-real-membered;
+  coherence;
+end;
+
+theorem
+  F c= G & H c= I implies F///H c= G///I
+  proof
+    assume
+A1: F c= G & H c= I;
+A2: F///H = {w1/w2: w1 in F & w2 in H} by Th107;
+    let i;
+    assume i in F///H;
+    then ex w,w1 st i = w/w1 & w in F & w1 in H by A2;
+    hence thesis by A1,Th108;
+  end;
+
+theorem
+  (F \/ G) /// H = (F///H) \/ (G///H) by Th88;
+
+theorem
+  (F /\ G) /// H c= (F///H) /\ (G///H) by Th89;
+
+theorem
+  F /// (G \/ H) = (F///G) \/ (F///H)
+  proof
+    thus F /// (G \/ H) = F**((G"")\/(H"")) by Th29
+    .= (F///G) \/ (F///H) by Th88;
+  end;
+
+theorem
+  F /// (G /\ H) c= (F///G) /\ (F///H)
+  proof
+    (G /\ H)"" c= (G"")/\(H"") by Th30;
+    then
+A1: F**((G /\ H)"") c= F**((G"")/\(H"")) by Th87;
+    F**((G"")/\(H"")) c= (F**(G""))/\(F**(H"")) by Th89;
+    hence thesis by A1,XBOOLE_1:1;
+  end;
+
+theorem
+  (F**G)///H = F**(G///H) by Th86;
+
+theorem
+  (F///G)**H = (F**H)///G by Th86;
+
+theorem
+  (F///G)///H = F///(G**H)
+  proof
+    thus (F///G)///H = F**((G"")**(H"")) by Th86
+    .= F///(G**H) by Th91;
+  end;
+
+theorem
+  {f}///{g} = {f/g}
+  proof
+    thus {f}///{g} = {f}**{g"} by Th32
+    .= {f/g} by Th92;
+  end;
+
+theorem
+  {f}///{h,i} = {f/h,f/i}
+  proof
+    thus {f}///{h,i} = {f}**{h",i"} by Th33
+    .= {f/h,f/i} by Th93;
+  end;
+
+theorem
+  {f,g}///{h} = {f/h,g/h}
+  proof
+    thus {f,g}///{h} = {f,g}**{h"} by Th32
+    .= {f/h,g/h} by Th93;
+  end;
+
+theorem
+  {f,g}///{h,i} = {f/h,f/i,g/h,g/i}
+  proof
+    thus {f,g}///{h,i} = {f,g}**{h",i"} by Th33
+    .= {f/h,f/i,g/h,g/i} by Th94;
+  end;
+
+definition
+  let A, B be complex-membered set;
+  func A///B equals
+  A**(B"");
+  coherence;
+end;
+
+theorem Th121:
+  A///B = {c1/c2: c1 in A & c2 in B}
+  proof
+    thus A///B c= {c1/c2: c1 in A & c2 in B}
+    proof
+      let e;
+      assume e in A///B;
+      then consider c1,c2 such that
+A1:   e = c1*c2 and
+A2:   c1 in A and
+A3:   c2 in B"";
+A4:   e = c1/(c2") by A1;
+      c2" in B by A3,Th35;
+      hence thesis by A4,A2;
+    end;
+    let e;
+    assume e in {c1/c2: c1 in A & c2 in B};
+    then consider c1,c2 such that
+A5: e = c1/c2 and
+A6: c1 in A and
+A7: c2 in B;
+    c2" in B"" by A7;
+    hence thesis by A5,A6;
+  end;
+
+theorem Th122:
+  a in A & b in B implies a/b in A///B
+  proof
+A1: A///B = {c1/c2: c1 in A & c2 in B} by Th121;
+    a in COMPLEX & b in COMPLEX by XCMPLX_0:def 2;
+    hence thesis by A1;
+  end;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A///B -> empty;
+  coherence;
+  cluster B///A -> empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A///B -> non empty;
+  coherence;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A///B -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A///B -> real-membered;
+  coherence;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A///B -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A///B with F///G when A = F, B = G;
+  compatibility;
+end;
+
+theorem
+  A c= B & C c= D implies A///C c= B///D
+  proof
+    assume
+A1: A c= B & C c= D;
+A2: A///C = {c1/c2: c1 in A & c2 in C} by Th121;
+    let z;
+    assume z in A///C;
+    then ex c,c1 st z = c/c1 & c in A & c1 in C by A2;
+    hence thesis by A1,Th122;
+  end;
+
+theorem
+  A /// (B \/ C) = (A///B) \/ (A///C)
+  proof
+    thus A /// (B \/ C) = A**((B"")\/(C"")) by Th38
+    .= (A///B) \/ (A///C) by Th98;
+  end;
+
+theorem
+  A /// (B /\ C) c= (A///B) /\ (A///C)
+  proof
+    A /// (B /\ C) = A**((B"")/\(C"")) by Th39;
+    hence thesis by Th99;
+  end;
+
+theorem
+  A///--B = --(A///B)
+  proof
+    thus A///--B = A**--(B"") by Th42
+    .= --(A///B) by Th100;
+  end;
+
+theorem
+  (--A)///B = --(A///B) by Th100;
+
+theorem
+  (A++B)///C c= A///C ++ B///C by Th101;
+
+theorem
+  (A--B)///C c= A///C -- B///C
+  proof
+    (A++--B)///C c= A///C++(--B)///C by Th101;
+    hence thesis by Th100;
+  end;
+
+theorem
+  (A**B)///C = A**(B///C) by Th96;
+
+theorem
+  (A///B)**C = (A**C)///B by Th96;
+
+theorem
+  (A///B)///C = A///(B**C)
+  proof
+    thus (A///B)///C = A**((B"")**(C"")) by Th96
+    .= A///(B**C) by Th103;
+  end;
+
+theorem
+  A///(B///C) = (A**C)///B
+  proof
+    thus A///(B///C) = A**((B"")**(C"""")) by Th103
+    .= (A**C)///B by Th96;
+  end;
+
+theorem
+  {a}///{b} = {a/b}
+  proof
+    thus {a}///{b} = {a}**{b"} by Th43
+    .= {a/b} by Th104;
+  end;
+
+theorem
+  {a}///{s,t} = {a/s,a/t}
+  proof
+    thus {a}///{s,t} = {a}**{s",t"} by Th44
+    .= {a/s,a/t} by Th105;
+  end;
+
+theorem
+  {a,b}///{s} = {a/s,b/s}
+  proof
+    thus {a,b}///{s} = {a,b}**{s"} by Th43
+    .= {a/s,b/s} by Th105;
+  end;
+
+theorem
+  {a,b}///{s,t} = {a/s,a/t,b/s,b/t}
+  proof
+    thus {a,b}///{s,t} = {a,b}**{s",t"} by Th44
+    .= {a/s,a/t,b/s,b/t} by Th106;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f++F equals
+  {f}++F;
+  coherence;
+end;
+
+theorem Th138:
+  g in G implies f+g in f++G
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th45;
+  end;
+
+theorem Th139:
+  f++F = {f+w: w in F}
+  proof
+    thus f++F c= {f+w: w in F}
+    proof
+      let e;
+      assume e in f++F;
+      then consider w1,w2 such that
+A1:   e = w1+w2 and
+A2:   w1 in {f} and
+A3:   w2 in F;
+      w1 = f by A2,TARSKI:def 1;
+      hence thesis by A1,A3;
+    end;
+    let e;
+    assume e in {f+w: w in F};
+    then ex w st e = f+w & w in F;
+    hence thesis by Th138;
+  end;
+
+theorem Th140:
+  e in f++F implies ex w st e = f+w & w in F
+  proof
+    f++F = {f+w: w in F} by Th139;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f++F -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f++F -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f++F -> ext-real-membered;
+  coherence;
+end;
+
+theorem Th141:
+  r++F c= r++G implies F c= G
+  proof
+    assume
+A1: r++F c= r++G;
+    let i;
+    assume i in F;
+    then r+i in r++F by Th138;
+    then ex w st r+i = r+w & w in G by A1,Th140;
+    hence thesis by Th4;
+  end;
+
+theorem
+  r++F = r++G implies F = G
+  proof
+    assume r++F = r++G;
+    then F c= G & G c= F by Th141;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th143:
+  r ++ (F /\ G) = (r++F) /\ (r++G)
+  proof
+A1: r ++ (F /\ G) c= (r++F) /\ (r++G) by Th48;
+    (r++F) /\ (r++G) c= r ++ (F /\ G)
+    proof
+      let j;
+      assume
+A2:   j in (r++F) /\ (r++G);
+      then j in r++F by XBOOLE_0:def 4;
+      then consider w such that
+A3:   j = r+w and
+A4:   w in F by Th140;
+      j in r++G by A2,XBOOLE_0:def 4;
+      then consider w1 such that
+A5:   j = r+w1 and
+A6:   w1 in G by Th140;
+      w = w1 by A3,A5,Th4;
+      then w in F /\ G by A4,A6,XBOOLE_0:def 4;
+      hence thesis by A3,Th138;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem Th144:
+  (f++F) \ (f++G) c= f ++ (F \ G)
+  proof
+    let i;
+    assume
+A1: i in (f++F) \ (f++G);
+    then consider w such that
+A2: i = f+w and
+A3: w in F by Th140;
+    now
+      assume not w in F\G;
+      then w in G by A3,XBOOLE_0:def 5;
+      then f+w in f++G by Th138;
+      hence contradiction by A1,A2,XBOOLE_0:def 5;
+    end;
+    hence thesis by A2,Th138;
+  end;
+
+theorem Th145:
+  r ++ (F \ G) = (r++F) \ (r++G)
+  proof
+A1: r ++ (F \ G) c= (r++F) \ (r++G)
+    proof
+      let i;
+      assume i in r ++ (F \ G);
+      then consider w such that
+A2:   i = r+w and
+A3:   w in F\G by Th140;
+A4:   r+w in r++F by A3,Th138;
+      now
+        assume r+w in r++G;
+        then consider w1 such that
+A5:     r+w = r+w1 and
+A6:     w1 in G by Th140;
+        w = w1 by A5,Th4;
+        hence contradiction by A3,A6,XBOOLE_0:def 5;
+      end;
+      hence i in (r++F) \ (r++G) by A2,A4,XBOOLE_0:def 5;
+    end;
+    (r++F) \ (r++G) c= r ++ (F \ G) by Th144;
+    hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem Th146:
+  r ++ (F \+\ G) = (r++F) \+\ (r++G)
+  proof
+    thus r ++ (F \+\ G) = (r++(F\G)) \/ (r++(G\F)) by Th47
+    .= ((r++F)\(r++G)) \/ (r++(G\F)) by Th145
+    .= (r++F) \+\ (r++G) by Th145;
+  end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a++A equals
+  {a}++A;
+  coherence;
+end;
+
+theorem Th147:
+  b in A implies a+b in a++A
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th52;
+  end;
+
+theorem Th148:
+  a++A = {a+c: c in A}
+  proof
+    thus a++A c= {a+c: c in A}
+    proof
+      let e;
+      assume e in a++A;
+      then consider c1,c2 such that
+A1:   e = c1+c2 and
+A2:   c1 in {a} and
+A3:   c2 in A;
+      c1 = a by A2,TARSKI:def 1;
+      hence thesis by A1,A3;
+    end;
+    let e;
+    assume e in {a+c: c in A};
+    then ex c st e = a+c & c in A;
+    hence thesis by Th147;
+  end;
+
+theorem Th149:
+  e in a++A implies ex c st e = a+c & c in A
+  proof
+    a++A = {a+c: c in A} by Th148;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a++A -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a++A -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a++A -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a++A -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a++A -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a++A -> integer-membered;
+  coherence;
+end;
+
+registration
+  let A be natural-membered set;
+  let a be natural number;
+  cluster a++A -> natural-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a++A with f++F when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th150:
+  A c= B iff a++A c= a++B
+  proof
+    thus A c= B implies a++A c= a++B by Th53;
+    assume
+A1: a++A c= a++B;
+    let z;
+    assume z in A;
+    then a+z in a++A by Th147;
+    then ex c st a+z = a+c & c in B by A1,Th149;
+    hence thesis;
+  end;
+
+theorem
+  a++A = a++B implies A = B
+  proof
+    assume a++A = a++B;
+    then A c= B & B c= A by Th150;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+  0++A = A
+  proof
+    let a;
+    hereby
+      assume a in 0++A;
+      then consider c1,c2 such that
+A1:   a = c1+c2 and
+A2:   c1 in {0} and
+A3:   c2 in A;
+      c1 = 0 by A2,TARSKI:def 1;
+      hence a in A by A1,A3;
+    end;
+    assume
+A4: a in A;
+    a in COMPLEX by XCMPLX_0:def 2;
+    then 0+a in {0+c: c in A} by A4;
+    hence thesis by Th148;
+  end;
+
+theorem
+  (a+b)++A = a++(b++A)
+  proof
+    thus (a+b)++A = {a}++{b}++A by Th57
+    .= a++(b++A) by Th56;
+  end;
+
+theorem
+  a++(A++B) = (a++A)++B by Th56;
+
+theorem Th155:
+  a ++ (A /\ B) = (a++A) /\ (a++B)
+  proof
+A1: a ++ (A /\ B) c= (a++A) /\ (a++B) by Th55;
+    (a++A) /\ (a++B) c= a ++ (A /\ B)
+    proof
+      let z;
+      assume
+A2:   z in (a++A) /\ (a++B);
+      then z in a++A by XBOOLE_0:def 4;
+      then consider c such that
+A3:   z = a+c and
+A4:   c in A by Th149;
+      z in a++B by A2,XBOOLE_0:def 4;
+      then ex c1 st z = a+c1 & c1 in B by Th149;
+      then c in A/\B by A3,A4,XBOOLE_0:def 4;
+      hence thesis by A3,Th147;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem Th156:
+  a ++ (A \ B) = (a++A) \ (a++B)
+  proof
+    let z;
+    hereby
+      assume z in a ++ (A \ B);
+      then consider c such that
+A1:   z = a+c and
+A2:   c in A\B by Th149;
+A3:   a+c in a++A by A2,Th147;
+      now
+        assume a+c in a++B;
+        then ex c1 st a+c = a+c1 & c1 in B by Th149;
+        hence contradiction by A2,XBOOLE_0:def 5;
+      end;
+      hence z in (a++A) \ (a++B) by A1,A3,XBOOLE_0:def 5;
+    end;
+    assume
+A4: z in (a++A) \ (a++B);
+    then consider c such that
+A5: z = a+c and
+A6: c in A by Th149;
+    now
+      assume not c in A\B;
+      then c in B by A6,XBOOLE_0:def 5;
+      then a+c in a++B by Th147;
+      hence contradiction by A4,A5,XBOOLE_0:def 5;
+    end;
+    hence thesis by A5,Th147;
+  end;
+
+theorem Th157:
+  a ++ (A \+\ B) = (a++A) \+\ (a++B)
+  proof
+    thus a ++ (A \+\ B) = (a++(A\B)) \/ (a++(B\A)) by Th54
+    .= ((a++A)\(a++B)) \/ (a++(B\A)) by Th156
+    .= (a++A) \+\ (a++B) by Th156;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f--F equals
+  {f}--F;
+  coherence;
+end;
+
+theorem Th158:
+  g in G implies f-g in f--G
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th61;
+  end;
+
+theorem Th159:
+  f--F = {f-w: w in F}
+  proof
+    thus f--F c= {f-w: w in F}
+    proof
+      let e;
+      assume e in f--F;
+      then consider w1,w2 such that
+A1:   e = w1+w2 and
+A2:   w1 in {f} and
+A3:   w2 in --F;
+A4:   w1- -w2 = w1+w2;
+A5:   -w2 in F by A3,Th8;
+      w1 = f by A2,TARSKI:def 1;
+      hence thesis by A1,A4,A5;
+    end;
+    let e;
+    assume e in {f-w: w in F};
+    then ex w st e = f-w & w in F;
+    hence thesis by Th158;
+  end;
+
+theorem Th160:
+  e in f--F implies ex w st e = f-w & w in F
+  proof
+    f--F = {f-w: w in F} by Th159;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f--F -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f--F -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f--F -> ext-real-membered;
+  coherence;
+end;
+
+theorem Th161:
+  r--F c= r--G implies F c= G
+  proof
+    assume
+A1: r--F c= r--G;
+    let i;
+    assume i in F;
+    then r-i in r--F by Th158;
+    then ex w st r-i = r-w & w in G by A1,Th160;
+    hence thesis by Th5;
+  end;
+
+theorem
+  r--F = r--G implies F = G
+  proof
+    assume r--F = r--G;
+    then F c= G & G c= F by Th161;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th163:
+  r -- (F/\G) = (r--F) /\ (r--G)
+  proof
+    thus r -- (F/\G) = r ++ ((--F)/\(--G)) by Th12
+    .= (r++--F) /\ (r++--G) by Th143
+    .= (r--F) /\ (r--G);
+  end;
+
+theorem Th164:
+  r -- (F\G) = (r--F) \ (r--G)
+  proof
+    thus r -- (F\G) = r ++ ((--F)\(--G)) by Th13
+    .= (r++--F) \ (r++--G) by Th145
+    .= (r--F) \ (r--G);
+  end;
+
+theorem Th165:
+  r -- (F\+\G) = (r--F) \+\ (r--G)
+  proof
+    thus r -- (F\+\G) = r ++ ((--F)\+\(--G)) by Th14
+    .= (r++--F) \+\ (r++--G) by Th146
+    .= (r--F) \+\ (r--G);
+  end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a--A equals
+  {a}--A;
+  coherence;
+end;
+
+theorem Th166:
+  b in A implies a-b in a--A
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th72;
+  end;
+
+theorem Th167:
+  a--A = {a-c: c in A}
+  proof
+A1: a--A = {c1-c2: c1 in {a} & c2 in A} by Th71;
+    thus a--A c= {a-c: c in A}
+    proof
+      let e;
+      assume e in a--A;
+      then consider c1,c2 such that
+A2:   e = c1-c2 and
+A3:   c1 in {a} and
+A4:   c2 in A by A1;
+      c1 = a by A3,TARSKI:def 1;
+      hence thesis by A2,A4;
+    end;
+    let e;
+    assume e in {a-c: c in A};
+    then ex c st e = a-c & c in A;
+    hence thesis by Th166;
+  end;
+
+theorem Th168:
+  e in a--A implies ex c st e = a-c & c in A
+  proof
+    a--A = {a-c: c in A} by Th167;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a--A -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a--A -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a--A -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a--A -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a--A -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a--A -> integer-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a--A with f--F when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th169:
+  A c= B iff a--A c= a--B
+  proof
+    thus A c= B implies a--A c= a--B by Th73;
+    assume
+A1: a--A c= a--B;
+    let z;
+    assume z in A;
+    then a-z in a--A by Th166;
+    then ex c st a-z = a-c & c in B by A1,Th168;
+    hence thesis;
+  end;
+
+theorem
+  a--A = a--B implies A = B
+  proof
+    assume a--A = a--B;
+    then A c= B & B c= A by Th169;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th171:
+  a -- (A/\B) = (a--A) /\ (a--B)
+  proof
+    thus a -- (A/\B) = a ++ ((--A)/\(--B)) by Th22
+    .= (a++--A) /\ (a++--B) by Th155
+    .= (a--A) /\ (a--B);
+  end;
+
+theorem Th172:
+  a -- (A\B) = (a--A) \ (a--B)
+  proof
+    thus a -- (A\B) = a ++ ((--A)\(--B)) by Th23
+    .= (a++--A) \ (a++--B) by Th156
+    .= (a--A) \ (a--B);
+  end;
+
+theorem Th173:
+  a -- (A\+\B) = (a--A) \+\ (a--B)
+  proof
+    thus a -- (A\+\B) = a ++ ((--A)\+\(--B)) by Th24
+    .= (a++--A) \+\ (a++--B) by Th157
+    .= (a--A) \+\ (a--B);
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func F--f equals
+  F--{f};
+  coherence;
+end;
+
+theorem Th174:
+  g in G implies g-f in G--f
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th61;
+  end;
+
+theorem Th175:
+  F--f = {w-f: w in F}
+  proof
+    thus F--f c= {w-f: w in F}
+    proof
+      let e;
+      assume e in F--f;
+      then consider w1,w2 such that
+A1:   e = w1+w2 and
+A2:   w1 in F and
+A3:   w2 in --{f};
+A4:   w1- -w2 = w1+w2;
+      -w2 in {f} by A3,Th8;
+      then -w2 = f by TARSKI:def 1;
+      hence thesis by A1,A2,A4;
+    end;
+    let e;
+    assume e in {w-f: w in F};
+    then ex w st e = w-f & w in F;
+    hence thesis by Th174;
+  end;
+
+theorem
+  e in F--f implies ex w st e = w-f & w in F
+  proof
+    F--f = {w-f: w in F} by Th175;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster F--f -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster F--f -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster F--f -> ext-real-membered;
+  coherence;
+end;
+
+theorem
+  F -- f = -- (f -- F) by Th66;
+
+theorem
+  f -- F = -- (F -- f) by Th66;
+
+theorem
+  (F/\G) -- r = (F--r) /\ (G--r)
+  proof
+    thus (F/\G) -- r = --(r--(F/\G)) by Th66
+    .= --((r--F) /\ (r--G)) by Th163
+    .= (--(r--F)) /\ (--(r--G)) by Th12
+    .= (--(r--F)) /\ (G--r) by Th66
+    .= (F--r) /\ (G--r) by Th66;
+  end;
+
+theorem
+  (F\G) -- r = (F--r) \ (G--r)
+  proof
+    thus (F\G) -- r = --(r--(F\G)) by Th66
+    .= --((r--F) \ (r--G)) by Th164
+    .= (--(r--F)) \ (--(r--G)) by Th13
+    .= (--(r--F)) \ (G--r) by Th66
+    .= (F--r) \ (G--r) by Th66;
+  end;
+
+theorem
+  (F\+\G) -- r = (F--r) \+\ (G--r)
+  proof
+    thus (F\+\G) -- r = --(r--(F\+\G)) by Th66
+    .= --((r--F) \+\ (r--G)) by Th165
+    .= (--(r--F)) \+\ (--(r--G)) by Th14
+    .= (--(r--F)) \+\ (G--r) by Th66
+    .= (F--r) \+\ (G--r) by Th66;
+  end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func A--a equals
+  A--{a};
+  coherence;
+end;
+
+theorem Th182:
+  b in A implies b-a in A--a
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th72;
+  end;
+
+theorem Th183:
+  A--a = {c-a: c in A}
+  proof
+A1: A--a = {c1-c2: c1 in A & c2 in {a}} by Th71;
+    thus A--a c= {c-a: c in A}
+    proof
+      let e;
+      assume e in A--a;
+      then consider c1,c2 such that
+A2:   e = c1-c2 and
+A3:   c1 in A and
+A4:   c2 in {a} by A1;
+      c2 = a by A4,TARSKI:def 1;
+      hence thesis by A2,A3;
+    end;
+    let e;
+    assume e in {c-a: c in A};
+    then ex c st e = c-a & c in A;
+    hence thesis by Th182;
+  end;
+
+theorem Th184:
+  e in A--a implies ex c st e = c-a & c in A
+  proof
+    A--a = {c-a: c in A} by Th183;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster A--a -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster A--a -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster A--a -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster A--a -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster A--a -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster A--a -> integer-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify A--a with F--f when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th185:
+  A c= B iff A--a c= B--a
+  proof
+    thus A c= B implies A--a c= B--a by Th73;
+    assume
+A1: A--a c= B--a;
+    let z;
+    assume z in A;
+    then z-a in A--a by Th182;
+    then ex c st z-a = c-a & c in B by A1,Th184;
+    hence thesis;
+  end;
+
+theorem
+  A--a = B--a implies A = B
+  proof
+    assume A--a = B--a;
+    then A c= B & B c= A by Th185;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+  A -- a = -- (a -- A) by Th77;
+
+theorem
+  a -- A = -- (A -- a) by Th77;
+
+theorem
+  (A/\B) -- a = (A--a) /\ (B--a)
+  proof
+    thus (A/\B) -- a = --(a--(A/\B)) by Th77
+    .= --((a--A) /\ (a--B)) by Th171
+    .= (--(a--A)) /\ (--(a--B)) by Th22
+    .= (--(a--A)) /\ (B--a) by Th77
+    .= (A--a) /\ (B--a) by Th77;
+  end;
+
+theorem
+  (A\B) -- a = (A--a) \ (B--a)
+  proof
+    thus (A\B) -- a = --(a--(A\B)) by Th77
+    .= --((a--A) \ (a--B)) by Th172
+    .= (--(a--A)) \ (--(a--B)) by Th23
+    .= (--(a--A)) \ (B--a) by Th77
+    .= (A--a) \ (B--a) by Th77;
+  end;
+
+theorem
+  (A\+\B) -- a = (A--a) \+\ (B--a)
+  proof
+    thus (A\+\B) -- a = --(a--(A\+\B)) by Th77
+    .= --((a--A) \+\ (a--B)) by Th173
+    .= (--(a--A)) \+\ (--(a--B)) by Th24
+    .= (--(a--A)) \+\ (B--a) by Th77
+    .= (A--a) \+\ (B--a) by Th77;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f**F equals
+  {f}**F;
+  coherence;
+end;
+
+theorem Th192:
+  g in G implies f*g in f**G
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th85;
+  end;
+
+theorem Th193:
+  f**F = {f*w: w in F}
+  proof
+    thus f**F c= {f*w: w in F}
+    proof
+      let e;
+      assume e in f**F;
+      then consider w1,w2 such that
+A1:   e = w1*w2 and
+A2:   w1 in {f} and
+A3:   w2 in F;
+      w1 = f by A2,TARSKI:def 1;
+      hence thesis by A1,A3;
+    end;
+    let e;
+    assume e in {f*w: w in F};
+    then ex w st e = f*w & w in F;
+    hence thesis by Th192;
+  end;
+
+theorem Th194:
+  e in f**F implies ex w st e = f*w & w in F
+  proof
+    f**F = {f*w: w in F} by Th193;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f**F -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f**F -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f**F -> ext-real-membered;
+  coherence;
+end;
+
+theorem
+  r <> 0 implies r ** (F/\G) = (r**F) /\ (r**G)
+  proof
+    assume
+A1: r <> 0;
+A2: r ** (F /\ G) c= (r**F) /\ (r**G) by Th89;
+    (r**F) /\ (r**G) c= r ** (F /\ G)
+    proof
+      let j;
+      assume
+A3:   j in (r**F) /\ (r**G);
+      then j in r**F by XBOOLE_0:def 4;
+      then consider w such that
+A4:   j = r*w and
+A5:   w in F by Th194;
+      j in r**G by A3,XBOOLE_0:def 4;
+      then consider w1 such that
+A6:   j = r*w1 and
+A7:   w1 in G by Th194;
+      w = w1 by A1,A4,A6,Th6;
+      then w in F /\ G by A5,A7,XBOOLE_0:def 4;
+      hence thesis by A4,Th192;
+    end;
+    hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem Th196:
+  (f**F) \ (f**G) c= f ** (F \ G)
+  proof
+    let i;
+    assume
+A1: i in (f**F) \ (f**G);
+    then consider w such that
+A2: i = f*w and
+A3: w in F by Th194;
+    now
+      assume not w in F\G;
+      then w in G by A3,XBOOLE_0:def 5;
+      then f*w in f**G by Th192;
+      hence contradiction by A1,A2,XBOOLE_0:def 5;
+    end;
+    hence thesis by A2,Th192;
+  end;
+
+theorem Th197:
+  r <> 0 implies r ** (F\G) = (r**F) \ (r**G)
+  proof
+    assume
+A1: r <> 0;
+A2: r ** (F \ G) c= (r**F) \ (r**G)
+    proof
+      let i;
+      assume i in r ** (F \ G);
+      then consider w such that
+A3:   i = r*w and
+A4:   w in F\G by Th194;
+A5:   r*w in r**F by A4,Th192;
+      now
+        assume r*w in r**G;
+        then consider w1 such that
+A6:     r*w = r*w1 and
+A7:     w1 in G by Th194;
+        w = w1 by A1,A6,Th6;
+        hence contradiction by A4,A7,XBOOLE_0:def 5;
+      end;
+      hence i in (r**F) \ (r**G) by A3,A5,XBOOLE_0:def 5;
+    end;
+    (r**F) \ (r**G) c= r ** (F \ G) by Th196;
+    hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem
+  r <> 0 implies r ** (F\+\G) = (r**F) \+\ (r**G)
+  proof
+    assume
+A1: r <> 0;
+    thus r ** (F \+\ G) = (r**(F\G)) \/ (r**(G\F)) by Th88
+    .= ((r**F)\(r**G)) \/ (r**(G\F)) by A1,Th197
+    .= (r**F) \+\ (r**G) by A1,Th197;
+  end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a**A equals
+  {a}**A;
+  coherence;
+end;
+
+theorem Th199:
+  b in A implies a*b in a**A
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th95;
+  end;
+
+theorem Th200:
+  a**A = {a*c: c in A}
+  proof
+    thus a**A c= {a*c: c in A}
+    proof
+      let e;
+      assume e in a**A;
+      then consider c1,c2 such that
+A1:   e = c1*c2 and
+A2:   c1 in {a} and
+A3:   c2 in A;
+      c1 = a by A2,TARSKI:def 1;
+      hence thesis by A1,A3;
+    end;
+    let e;
+    assume e in {a*c: c in A};
+    then ex c st e = a*c & c in A;
+    hence thesis by Th199;
+  end;
+
+theorem Th201:
+  e in a**A implies ex c st e = a*c & c in A
+  proof
+    a**A = {a*c: c in A} by Th200;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a**A -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a**A -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a**A -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a**A -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a**A -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a**A -> integer-membered;
+  coherence;
+end;
+
+registration
+  let A be natural-membered set;
+  let a be natural number;
+  cluster a**A -> natural-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a**A with f**F when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th202:
+  a <> 0 & a**A c= a**B implies A c= B
+  proof
+    assume that
+A1: a <> 0 and
+A2: a**A c= a**B;
+    let z;
+    assume z in A;
+    then a*z in a**A by Th199;
+    then ex c st a*z = a*c & c in B by A2,Th201;
+    hence thesis by A1,XCMPLX_1:5;
+  end;
+
+theorem
+  a <> 0 & a**A = a**B implies A = B
+  proof
+    assume a <> 0 & a**A = a**B;
+    then A c= B & B c= A by Th202;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem Th204:
+  a <> 0 implies a ** (A/\B) = (a**A) /\ (a**B)
+  proof
+    assume
+A1: a <> 0;
+A2: a ** (A /\ B) c= (a**A) /\ (a**B) by Th99;
+    (a**A) /\ (a**B) c= a ** (A /\ B)
+    proof
+      let z;
+      assume
+A3:   z in (a**A) /\ (a**B);
+      then z in a**A by XBOOLE_0:def 4;
+      then consider c such that
+A4:   z = a*c and
+A5:   c in A by Th201;
+      z in a**B by A3,XBOOLE_0:def 4;
+      then consider c1 such that
+A6:   z = a*c1 and
+A7:   c1 in B by Th201;
+      c = c1 by A1,A4,A6,XCMPLX_1:5;
+      then c in A /\ B by A5,A7,XBOOLE_0:def 4;
+      hence thesis by A4,Th199;
+    end;
+    hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem Th205:
+  a <> 0 implies a ** (A\B) = (a**A) \ (a**B)
+  proof
+    assume
+A1: a <> 0;
+    let z;
+    hereby
+      assume z in a ** (A \ B);
+      then consider c such that
+A2:   z = a*c and
+A3:   c in A\B by Th201;
+A4:   a*c in a**A by A3,Th199;
+      now
+        assume a*c in a**B;
+        then consider c1 such that
+A5:     a*c = a*c1 and
+A6:     c1 in B by Th201;
+        c = c1 by A1,A5,XCMPLX_1:5;
+        hence contradiction by A3,A6,XBOOLE_0:def 5;
+      end;
+      hence z in (a**A) \ (a**B) by A2,A4,XBOOLE_0:def 5;
+    end;
+    assume
+A7: z in (a**A) \ (a**B);
+    then consider c such that
+A8: z = a*c and
+A9: c in A by Th201;
+    now
+      assume not c in A\B;
+      then c in B by A9,XBOOLE_0:def 5;
+      then a*c in a**B by Th199;
+      hence contradiction by A7,A8,XBOOLE_0:def 5;
+    end;
+    hence thesis by A8,Th199;
+  end;
+
+theorem Th206:
+  a <> 0 implies a ** (A\+\B) = (a**A) \+\ (a**B)
+  proof
+    assume
+A1: a <> 0;
+    thus a ** (A \+\ B) = (a**(A\B)) \/ (a**(B\A)) by Th98
+    .= ((a**A)\(a**B)) \/ (a**(B\A)) by A1,Th205
+    .= (a**A) \+\ (a**B) by A1,Th205;
+  end;
+
+theorem Th207:
+  0**A c= {0}
+  proof
+    let a;
+    assume a in 0**A;
+    then consider c1,c2 such that
+A1: a = c1*c2 and
+A2: c1 in {0} and c2 in A;
+    c1 = 0 by A2,TARSKI:def 1;
+    hence a in {0} by A1,TARSKI:def 1;
+  end;
+
+theorem
+  A <> {} implies 0**A = {0}
+  proof
+    assume
+A1: A <> {};
+A2: 0**A c= {0} by Th207;
+    {0} c= 0**A
+    proof
+      let a be natural number;
+      assume
+A3:   a in {0};
+      set x = the Element of A;
+A4:   0**A = {0*c: c in A} by Th200;
+      x in COMPLEX by XCMPLX_0:def 2;
+      then 0*x in {0*c: c in A} by A1;
+      hence thesis by A4,A3,TARSKI:def 1;
+    end;
+    hence thesis by A2,XBOOLE_0:def 10;
+  end;
+
+theorem
+  1**A = A
+  proof
+    let a;
+    hereby
+      assume a in 1**A;
+      then consider c1,c2 such that
+A1:   a = c1*c2 and
+A2:   c1 in {1} and
+A3:   c2 in A;
+      c1 = 1 by A2,TARSKI:def 1;
+      hence a in A by A1,A3;
+    end;
+    assume
+A4: a in A;
+    a in COMPLEX by XCMPLX_0:def 2;
+    then 1*a in {1*c: c in A} by A4;
+    hence thesis by Th200;
+  end;
+
+theorem
+  (a*b)**A = a**(b**A)
+  proof
+    thus (a*b)**A = {a}**{b}**A by Th104
+    .= a**(b**A) by Th96;
+  end;
+
+theorem
+  a**(A**B) = (a**A)**B by Th96;
+
+theorem
+  (a+b)**A c= a**A ++ b**A
+  proof
+    {a}++{b} = {a+b} by Th57;
+    hence thesis by Th101;
+  end;
+
+theorem
+  (a-b)**A c= a**A -- b**A
+  proof
+    {a}--{b} = {a-b} by Th81;
+    hence thesis by Th102;
+  end;
+
+theorem Th214:
+  a**(B++C) = a**B++a**C
+  proof
+A1: a**(B++C) c= a**B++a**C by Th101;
+    a**B++a**C c= a**(B++C)
+    proof
+      let z;
+      assume z in a**B++a**C;
+      then consider c,c1 such that
+A2:   z = c+c1 and
+A3:   c in a**B and
+A4:   c1 in a**C;
+      consider c2 such that
+A5:   c = a*c2 and
+A6:   c2 in B by A3,Th201;
+      consider c3 being Element of COMPLEX such that
+A7:   c1 = a*c3 and
+A8:   c3 in C by A4,Th201;
+A9:   z = a*(c2+c3) by A2,A5,A7;
+      c2+c3 in B++C by A6,A8;
+      hence thesis by A9,Th199;
+    end;
+    hence thesis by A1,XBOOLE_0:def 10;
+  end;
+
+theorem
+  a**(B--C) = a**B--a**C
+  proof
+    thus a**(B--C) = a**B++a**--C by Th214
+    .= a**B--a**C by Th100;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f///F equals
+  {f}///F;
+  coherence;
+end;
+
+theorem Th216:
+  g in G implies f/g in f///G
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th108;
+  end;
+
+theorem Th217:
+  f///F = {f/w: w in F}
+  proof
+    thus f///F c= {f/w: w in F}
+    proof
+      let e;
+      assume e in f///F;
+      then consider w1,w2 such that
+A1:   e = w1*w2 and
+A2:   w1 in {f} and
+A3:   w2 in F"";
+      consider w3 being Element of ExtREAL such that
+A4:   w2 = w3" and
+A5:   w3 in F by A3;
+A6:   w1*w3" = w1/w3;
+      w1 = f by A2,TARSKI:def 1;
+      hence thesis by A1,A4,A5,A6;
+    end;
+    let e;
+    assume e in {f/w: w in F};
+    then ex w st e = f/w & w in F;
+    hence thesis by Th216;
+  end;
+
+theorem
+  e in f///F implies ex w st e = f/w & w in F
+  proof
+    f///F = {f/w: w in F} by Th217;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f///F -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f///F -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f///F -> ext-real-membered;
+  coherence;
+end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a///A equals
+  {a}///A;
+  coherence;
+end;
+
+theorem Th219:
+  b in A implies a/b in a///A
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th122;
+  end;
+
+theorem Th220:
+  a///A = {a/c: c in A}
+  proof
+    thus a///A c= {a/c: c in A}
+    proof
+      let e;
+      assume e in a///A;
+      then consider c1,c2 such that
+A1:   e = c1*c2 and
+A2:   c1 in {a} and
+A3:   c2 in A"";
+A4:   c2" in A by A3,Th35;
+A5:   c1*c2 = c1/(c2");
+      c1 = a by A2,TARSKI:def 1;
+      hence thesis by A1,A4,A5;
+    end;
+    let e;
+    assume e in {a/c: c in A};
+    then ex c st e = a/c & c in A;
+    hence thesis by Th219;
+  end;
+
+theorem Th221:
+  e in a///A implies ex c st e = a/c & c in A
+  proof
+    a///A = {a/c: c in A} by Th220;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a///A -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a///A -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a///A -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a///A -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a///A -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a///A with f///F when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th222:
+  a <> 0 & a///A c= a///B implies A c= B
+  proof
+    assume that
+A1: a <> 0 and
+A2: a///A c= a///B;
+    let z;
+    assume z in A;
+    then a/z in a///A by Th219;
+    then consider c such that
+A3: a/z = a/c and
+A4: c in B by A2,Th221;
+    z" = c" by A1,A3,XCMPLX_1:5;
+    hence thesis by A4,XCMPLX_1:202;
+  end;
+
+theorem
+  a <> 0 & a///A = a///B implies A = B
+  proof
+    assume a <> 0 & a///A = a///B;
+    then A c= B & B c= A by Th222;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+  a <> 0 implies a /// (A/\B) = (a///A) /\ (a///B)
+  proof
+    assume
+A1: a <> 0;
+    thus a /// (A/\B) = a ** ((A"")/\(B"")) by Th39
+    .= (a**(A"")) /\ (a**(B"")) by A1,Th204
+    .= (a///A) /\ (a///B);
+  end;
+
+theorem
+  a <> 0 implies a /// (A\B) = (a///A) \ (a///B)
+  proof
+    assume
+A1: a <> 0;
+    thus a /// (A\B) = a ** ((A"")\(B"")) by Th40
+    .= (a**(A"")) \ (a**(B"")) by A1,Th205
+    .= (a///A) \ (a///B);
+  end;
+
+theorem
+  a <> 0 implies a /// (A\+\B) = (a///A) \+\ (a///B)
+  proof
+    assume
+A1: a <> 0;
+    thus a /// (A\+\B) = a ** ((A"")\+\(B"")) by Th41
+    .= (a**(A"")) \+\ (a**(B"")) by A1,Th206
+    .= (a///A) \+\ (a///B);
+  end;
+
+theorem
+  (a+b)///A c= a///A ++ b///A
+  proof
+    {a}++{b} = {a+b} by Th57;
+    hence thesis by Th101;
+  end;
+
+theorem
+  (a-b)///A c= a///A -- b///A
+  proof
+    {a}--{b} = {a-b} by Th81;
+    hence thesis by Th102;
+  end;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func F///f equals
+  F///{f};
+  coherence;
+end;
+
+theorem Th229:
+  g in G implies g/f in G///f
+  proof
+    f in {f} by TARSKI:def 1;
+    hence thesis by Th108;
+  end;
+
+theorem Th230:
+  F///f = {w/f: w in F}
+  proof
+    thus F///f c= {w/f: w in F}
+    proof
+      let e;
+      assume e in F///f;
+      then consider w1,w2 such that
+A1:   e = w1*w2 and
+A2:   w1 in F and
+A3:   w2 in {f}"";
+      consider w3 being Element of ExtREAL such that
+A4:   w2 = w3" and
+A5:   w3 in {f} by A3;
+A6:   w1*w3" = w1/w3;
+      w3 = f by A5,TARSKI:def 1;
+      hence thesis by A1,A2,A4,A6;
+    end;
+    let e;
+    assume e in {w/f: w in F};
+    then ex w st e = w/f & w in F;
+    hence thesis by Th229;
+  end;
+
+theorem
+  e in F///f implies ex w st e = w/f & w in F
+  proof
+    F///f = {w/f: w in F} by Th230;
+    hence thesis;
+  end;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster F///f -> empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster F///f -> non empty;
+  coherence;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster F///f -> ext-real-membered;
+  coherence;
+end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func A///a equals
+  A///{a};
+  coherence;
+end;
+
+theorem Th232:
+  b in A implies b/a in A///a
+  proof
+    a in {a} by TARSKI:def 1;
+    hence thesis by Th122;
+  end;
+
+theorem Th233:
+  A///a = {c/a: c in A}
+  proof
+    thus A///a c= {c/a: c in A}
+    proof
+      let e;
+      assume e in A///a;
+      then consider c1,c2 such that
+A1:   e = c1*c2 and
+A2:   c1 in A and
+A3:   c2 in {a}"";
+A4:   c1*c2 = c1/(c2");
+      {a}"" = {a"} by Th43;
+      then c2 = a" by A3,TARSKI:def 1;
+      hence thesis by A1,A2,A4;
+    end;
+    let e;
+    assume e in {c/a: c in A};
+    then ex c st e = c/a & c in A;
+    hence thesis by Th232;
+  end;
+
+theorem Th234:
+  e in A///a implies ex c st e = c/a & c in A
+  proof
+    A///a = {c/a: c in A} by Th233;
+    hence thesis;
+  end;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster A///a -> empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster A///a -> non empty;
+  coherence;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster A///a -> complex-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster A///a -> real-membered;
+  coherence;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster A///a -> rational-membered;
+  coherence;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify A///a with F///f when a = f, A = F;
+  compatibility;
+end;
+
+theorem Th235:
+  a <> 0 & A///a c= B///a implies A c= B
+  proof
+    assume that
+A1: a <> 0 and
+A2: A///a c= B///a;
+    let z;
+    assume z in A;
+    then z/a in A///a by Th232;
+    then ex c st z/a = c/a & c in B by A2,Th234;
+    hence thesis by A1,XCMPLX_1:5;
+  end;
+
+theorem
+  a <> 0 & A///a = B///a implies A = B
+  proof
+    assume a <> 0 & A///a = B///a;
+    then A c= B & B c= A by Th235;
+    hence thesis by XBOOLE_0:def 10;
+  end;
+
+theorem
+  a <> 0 implies (A/\B) /// a = (A///a) /\ (B///a)
+  proof
+    assume
+A1: a <> 0;
+A2: {a}"" = {a"} by Th43;
+    thus (A/\B)///a = a"**(A/\B) by Th43
+    .= (a"**A)/\(a"**B) by A1,Th204
+    .= (A///a) /\ (B///a) by A2;
+  end;
+
+theorem
+  a <> 0 implies (A\B) /// a = (A///a) \ (B///a)
+  proof
+    assume
+A1: a <> 0;
+A2: {a}"" = {a"} by Th43;
+    thus (A\B)///a = a"**(A\B) by Th43
+    .= (a"**A)\(a"**B) by A1,Th205
+    .= (A///a) \ (B///a) by A2;
+  end;
+
+theorem
+  a <> 0 implies (A\+\B) /// a = (A///a) \+\ (B///a)
+  proof
+    assume
+A1: a <> 0;
+A2: {a}"" = {a"} by Th43;
+    thus (A\+\B)///a = a"**(A\+\B) by Th43
+    .= (a"**A)\+\(a"**B) by A1,Th206
+    .= (A///a) \+\ (B///a) by A2;
+  end;
+
+theorem Th240:
+  (A++B)///a = A///a ++ B///a
+  proof
+    thus (A++B)///a = a"**(A++B) by Th43
+    .= a"**A++a"**B by Th214
+    .= A///a++a"**B by Th43
+    .= A///a ++ B///a by Th43;
+  end;
+
+theorem
+  (A--B)///a = A///a -- B///a
+  proof
+    thus (A--B)///a = A///a ++ (--B)///a by Th240
+    .= A///a -- B///a by Th100;
+  end;

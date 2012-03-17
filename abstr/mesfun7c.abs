@@ -1,0 +1,449 @@
+:: The Measurability of Complex-Valued Functional Sequences
+::  by Keiko Narita , Noboru Endou and Yasunari Shidama
+:: 
+:: Received December 16, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies PARTFUN1, SUPINF_1, MEASURE1, RELAT_1, FUNCT_1, ORDINAL2,
+      COMPLEX1, SEQ_1, MEASURE6, BOOLE, ARYTM, ARYTM_1, MESFUNC1, TARSKI,
+      ARYTM_3, PROB_1, INTEGRA1, MESFUNC2, SETFAM_1, MESFUNC5, SUPINF_2,
+      FINSEQ_1, FINSEQ_4, POWER, SEQ_2, SEQM_3, COMSEQ_1, LATTICES, SEQFUNC,
+      TDGROUP, RINFSUP1, MESFUNC8, XXREAL_2, MESFUNC3, XCMPLX_0, NAT_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
+      COMPLEX1, XXREAL_0, XREAL_0, XXREAL_2, REAL_1, NAT_1, NAT_D, PROB_1,
+      RELAT_1, FUNCT_1, RELSET_1, PARTFUN1, FINSEQ_1, RFUNCT_3, VALUED_1,
+      FUNCT_2, BINOP_2, SETFAM_1, SUPINF_1, SUPINF_2, SEQ_1, SEQ_2, SEQFUNC,
+      COMSEQ_1, COMSEQ_2, RINFSUP1, RINFSUP2, MEASURE1, MEASURE6, EXTREAL1,
+      MESFUNC1, MESFUNC2, MESFUNC3, MESFUNC5, MESFUNC6, MESFUN6C, COMSEQ_3,
+      MESFUNC8, COMPLSP1, COMPLSP2;
+ constructors REAL_1, NAT_1, SQUARE_1, MEASURE6, EXTREAL1, MESFUNC2, MESFUNC3,
+      MESFUNC5, SEQ_1, MESFUNC6, MESFUN6C, BINOP_2, RINFSUP1, MESFUNC8,
+      COMSEQ_2, COMSEQ_3, SUPINF_1, RINFSUP2, SEQFUNC, SEQ_2, MESFUNC1,
+      FINSEQ_1, COMPLSP1, COMPLSP2, MATRIX_5, NAT_D;
+ registrations XBOOLE_0, NAT_1, MESFUNC8, SUBSET_1, ORDINAL1, NUMBERS,
+      XXREAL_0, XREAL_0, MEMBERED, VALUED_0, XCMPLX_0, PARTFUN1, FUNCT_2,
+      RELAT_1, SEQ_2, COMSEQ_3;
+ requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
+
+
+begin :: Real-valued Functional Sequences
+
+reserve X for non empty set,
+  Y for set,
+  S for SigmaField of X,
+  M for sigma_Measure of S,
+  f,g for PartFunc of X,COMPLEX,
+  r for Real,
+  k for real number,
+  n for natural number,
+  E for Element of S;
+
+definition
+  let X be non empty set;
+  let f be Functional_Sequence of X,REAL;
+  func R_EAL f -> Functional_Sequence of X,ExtREAL equals
+:: MESFUN7C:def 1
+f;
+end;
+
+theorem :: MESFUN7C:1
+for X be non empty set, f be Functional_Sequence of X,REAL,
+ x be Element of X holds f#x = (R_EAL f)#x;
+
+registration
+  let X be non empty set, f be Function of X,REAL;
+  cluster R_EAL f -> total;
+end;
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func inf f -> PartFunc of X,ExtREAL equals
+:: MESFUN7C:def 2
+  inf R_EAL f;
+end;
+
+theorem :: MESFUN7C:2
+for X being non empty set, f being Functional_Sequence of X,REAL holds
+ for x be Element of X st x in dom inf f holds (inf f).x = inf rng R_EAL(f#x);
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func sup f -> PartFunc of X,ExtREAL equals
+:: MESFUN7C:def 3
+  sup R_EAL f;
+end;
+
+theorem :: MESFUN7C:3
+for X being non empty set, f being Functional_Sequence of X,REAL holds
+ for x be Element of X st x in dom sup f holds (sup f).x = sup rng R_EAL(f#x);
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func inferior_realsequence f
+       -> with_the_same_dom Functional_Sequence of X,ExtREAL equals
+:: MESFUN7C:def 4
+  inferior_realsequence R_EAL f;
+end;
+
+theorem :: MESFUN7C:4
+for X be non empty set, f being Functional_Sequence of X,REAL,
+ n being natural number holds
+  dom((inferior_realsequence f).n) = dom(f.0) &
+  for x be Element of X st x in dom((inferior_realsequence f).n) holds
+   ((inferior_realsequence f).n).x=(inferior_realsequence R_EAL(f#x)).n;
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func superior_realsequence f
+       -> with_the_same_dom Functional_Sequence of X,ExtREAL equals
+:: MESFUN7C:def 5
+  superior_realsequence R_EAL f;
+end;
+
+theorem :: MESFUN7C:5
+for X be non empty set, f being Functional_Sequence of X,REAL,
+ n being natural number holds
+  dom((superior_realsequence f).n) = dom(f.0) &
+  for x be Element of X st x in dom((superior_realsequence f).n) holds
+   ((superior_realsequence f).n).x=(superior_realsequence R_EAL(f#x)).n;
+
+theorem :: MESFUN7C:6
+for f be Functional_Sequence of X,REAL, x be Element of X st
+ x in dom(f.0) holds
+  (inferior_realsequence f)#x = inferior_realsequence R_EAL(f#x);
+
+registration
+  let X be non empty set,
+     f be with_the_same_dom Functional_Sequence of X,REAL;
+  cluster R_EAL f -> with_the_same_dom;
+end;
+
+theorem :: MESFUN7C:7
+for X be non empty set,
+    f be with_the_same_dom Functional_Sequence of X,REAL
+ for S be SigmaField of X, E be Element of S, n be natural number st
+   f.n is_measurable_on E holds (R_EAL f).n is_measurable_on E;
+
+theorem :: MESFUN7C:8
+for X be non empty set,
+    f being Functional_Sequence of X,REAL,
+    n being natural number holds
+ (R_EAL f)^\n = R_EAL(f^\n);
+
+theorem :: MESFUN7C:9
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+  n be natural number holds (inferior_realsequence f).n = inf(f^\n);
+
+theorem :: MESFUN7C:10
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+  n be natural number holds (superior_realsequence f).n = sup(f^\n);
+
+theorem :: MESFUN7C:11
+for f be Functional_Sequence of X,REAL, x be Element of X st
+ x in dom(f.0) holds
+  (superior_realsequence f)#x = superior_realsequence R_EAL(f#x);
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func lim_inf f -> PartFunc of X,ExtREAL equals
+:: MESFUN7C:def 6
+  lim_inf R_EAL f;
+end;
+
+theorem :: MESFUN7C:12
+for X be non empty set, f be Functional_Sequence of X,REAL holds
+ for x be Element of X st x in dom lim_inf f holds
+  (lim_inf f).x = lim_inf R_EAL(f#x);
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func lim_sup f -> PartFunc of X,ExtREAL equals
+:: MESFUN7C:def 7
+  lim_sup R_EAL f;
+end;
+
+theorem :: MESFUN7C:13
+for X be non empty set, f be Functional_Sequence of X,REAL holds
+ for x be Element of X st x in dom lim_sup f holds
+  (lim_sup f).x = lim_sup R_EAL(f#x);
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,REAL;
+  func lim f -> PartFunc of X,ExtREAL equals
+:: MESFUN7C:def 8
+  lim R_EAL f;
+end;
+
+theorem :: MESFUN7C:14
+for X be non empty set, f be Functional_Sequence of X,REAL holds
+ for x be Element of X st x in dom lim f holds (lim f).x=lim R_EAL(f#x);
+
+theorem :: MESFUN7C:15
+for f be Functional_Sequence of X,REAL, x be Element of X st
+  x in dom lim f & f#x is convergent holds
+   (lim f).x= (lim_sup f).x & (lim f).x = (lim_inf f).x;
+
+theorem :: MESFUN7C:16
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+  F be SetSequence of S, r be real number st
+  (for n be natural number holds F.n = dom(f.0) /\ great_dom(f.n,r))
+  holds union rng F = dom(f.0) /\ great_dom(sup f,r);
+
+theorem :: MESFUN7C:17
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+  F be SetSequence of S, r be real number st
+  (for n be natural number holds F.n = dom(f.0) /\ great_eq_dom(f.n,r))
+  holds meet rng F = dom(f.0) /\ great_eq_dom(inf f,r);
+
+theorem :: MESFUN7C:18
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+    E be Element of S st
+ dom (f.0) = E & (for n be natural number holds f.n is_measurable_on E)
+holds lim_sup f is_measurable_on E;
+
+theorem :: MESFUN7C:19
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+    E be Element of S st
+ dom(f.0) = E & (for n be natural number holds f.n is_measurable_on E)
+holds lim_inf f is_measurable_on E;
+
+theorem :: MESFUN7C:20
+for f be Functional_Sequence of X,REAL, x be Element of X st
+ x in dom (f.0) & f#x is convergent
+  holds (superior_realsequence f)#x is bounded_below;
+
+theorem :: MESFUN7C:21
+for f be with_the_same_dom Functional_Sequence of X,REAL, E be Element of S st
+  dom(f.0) = E &
+  (for n be natural number holds f.n is_measurable_on E) &
+  (for x be Element of X st x in E holds f#x is convergent)
+ holds lim f is_measurable_on E;
+
+theorem :: MESFUN7C:22
+for f be with_the_same_dom Functional_Sequence of X,REAL,
+  g be PartFunc of X,ExtREAL, E be Element of S st dom(f.0) = E &
+  (for n be natural number holds f.n is_measurable_on E) & dom g = E &
+for x be Element of X st x in E holds f#x is convergent & g.x = lim(f#x) holds
+  g is_measurable_on E;
+
+begin :: The Measurability of Complex-valued Functional Sequences
+
+definition
+  let X be non empty set, H be Functional_Sequence of X,COMPLEX,
+  x be Element of X;
+  func H#x -> Complex_Sequence means
+:: MESFUN7C:def 9
+  for n be natural number holds it.n = (H.n).x;
+end;
+
+definition
+  let X be non empty set, f be Functional_Sequence of X,COMPLEX;
+  func lim f -> PartFunc of X,COMPLEX means
+:: MESFUN7C:def 10
+  dom it = dom (f.0) &
+  for x be Element of X st x in dom it holds it.x=lim(f#x);
+end;
+
+definition
+  let X be non empty set;
+  let f be Functional_Sequence of X,COMPLEX;
+  func Re f -> Functional_Sequence of X,REAL means
+:: MESFUN7C:def 11
+  for n be natural number holds dom(it.n) = dom(f.n) &
+  for x be Element of X st x in dom(it.n) holds
+  (it.n).x = (Re(f#x)).n;
+end;
+
+definition
+  let X be non empty set;
+  let f be with_the_same_dom Functional_Sequence of X,COMPLEX;
+  redefine func Re f -> with_the_same_dom Functional_Sequence of X,REAL;
+end;
+
+definition
+  let X be non empty set;
+  let f be Functional_Sequence of X,COMPLEX;
+func Im f -> Functional_Sequence of X,REAL means
+:: MESFUN7C:def 12
+  for n be natural number holds dom(it.n) = dom(f.n) &
+  for x be Element of X st x in dom(it.n) holds (it.n).x = (Im(f#x)).n;
+end;
+
+definition
+  let X be non empty set;
+  let f be with_the_same_dom Functional_Sequence of X,COMPLEX;
+  redefine func Im f -> with_the_same_dom Functional_Sequence of X,REAL;
+end;
+
+theorem :: MESFUN7C:23
+for f be with_the_same_dom Functional_Sequence of X,COMPLEX,
+  x be Element of X st x in dom (f.0) holds
+   (Re f)#x = Re(f#x) & (Im f)#x = Im(f#x);
+
+theorem :: MESFUN7C:24
+for f be Functional_Sequence of X,COMPLEX, n be natural number holds
+ (Re f).n = Re(f.n) & (Im f).n = Im(f.n);
+
+theorem :: MESFUN7C:25
+for f be with_the_same_dom Functional_Sequence of X,COMPLEX st
+  (for x be Element of X st x in dom(f.0) holds f#x is convergent) holds
+  lim Re f = Re lim f & lim Im f = Im lim f;
+
+theorem :: MESFUN7C:26
+for f be with_the_same_dom Functional_Sequence of X,COMPLEX,
+  E be Element of S st dom(f.0) = E &
+  (for n be natural number holds f.n is_measurable_on E) &
+  (for x be Element of X st x in E holds f#x is convergent) holds
+  lim f is_measurable_on E;
+
+theorem :: MESFUN7C:27
+for f be with_the_same_dom Functional_Sequence of X,COMPLEX,
+  g be PartFunc of X,COMPLEX, E be Element of S st dom(f.0) = E &
+  (for n be natural number holds f.n is_measurable_on E) & dom g = E &
+for x be Element of X st x in E holds f#x is convergent & g.x = lim(f#x) holds
+  g is_measurable_on E;
+
+begin :: Selected Properties of Complex-valued Measurable Functions
+
+theorem :: MESFUN7C:28
+(r(#)f)|Y = r(#)(f|Y);
+
+theorem :: MESFUN7C:29
+0 <= k & E c= dom f & f is_measurable_on E implies
+  |.f.| to_power k is_measurable_on E;
+
+theorem :: MESFUN7C:30
+  for f,g be PartFunc of X,REAL holds
+  (R_EAL f)(#)(R_EAL g) = R_EAL(f(#)g);
+
+theorem :: MESFUN7C:31
+  for f,g be PartFunc of X,REAL st
+  dom f /\ dom g = E & f is_measurable_on E & g is_measurable_on E holds
+   f(#)g is_measurable_on E;
+
+theorem :: MESFUN7C:32
+  Re(f(#)g) = Re(f)(#)Re(g) - Im(f)(#)Im(g) &
+  Im(f(#)g) = Im(f)(#)Re(g) + Re(f)(#)Im(g);
+
+theorem :: MESFUN7C:33
+  dom f /\ dom g = E &
+  f is_measurable_on E & g is_measurable_on E implies f(#)g is_measurable_on E;
+
+theorem :: MESFUN7C:34
+for f,g be PartFunc of X,REAL st
+ (ex E be Element of S st E = dom f & E= dom g &
+  f is_measurable_on E & g is_measurable_on E) &
+ f is nonnegative & g is nonnegative &
+ (for x be Element of X st x in dom g holds g.x <= f.x) holds
+  Integral(M,g) <= Integral(M,f);
+
+theorem :: MESFUN7C:35  :: MESFUN6C:31
+for X be non empty set, S be SigmaField of X, M be sigma_Measure of S,
+  f be PartFunc of X,COMPLEX st f is_integrable_on M holds
+   (ex A be Element of S st A = dom f & f is_measurable_on A) &
+   |.f.| is_integrable_on M;
+
+theorem :: MESFUN7C:36
+f is_integrable_on M implies
+  ex F be Function of NAT,S st
+   (for n be Nat holds F.n = dom f /\ great_eq_dom(|.f.|, R_EAL(1/(n+1)))) &
+   dom f \ eq_dom(|.f.|,0) = union rng F &
+   for n be Nat holds F.n in S & M.(F.n) <+infty;
+
+reserve x,A for set;
+
+theorem :: MESFUN7C:37
+(|.f.|)|A = |. f|A .|;
+
+theorem :: MESFUN7C:38
+dom(|.f.|+|.g.|) = dom f /\ dom g & dom |.f+g.| c= dom |.f.|;
+
+theorem :: MESFUN7C:39
+(|.f.|)|(dom |.f+g.|) + (|.g.|)|(dom |.f+g.|) = (|.f.|+|.g.|)|(dom |.f+g.|);
+
+theorem :: MESFUN7C:40
+x in dom |.f+g.| implies (|.f+g.|).x <= (|.f.|+|.g.|).x;
+
+theorem :: MESFUN7C:41
+for f,g be PartFunc of X,REAL st
+ (for x be set st x in dom f holds f.x <= g.x)
+   holds g-f is nonnegative;
+
+theorem :: MESFUN7C:42
+f is_integrable_on M & g is_integrable_on M implies
+ ex E be Element of S st
+   E = dom(f+g) &
+   Integral(M,(|.f+g.|)|E) <= Integral(M,(|.f.|)|E) + Integral(M,(|.g.|)|E);
+
+begin :: Properties of Complex-valued Simple Functions
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let f be PartFunc of X,COMPLEX;
+  pred f is_simple_func_in S means
+:: MESFUN7C:def 13
+  ex F being Finite_Sep_Sequence of S st
+   dom f = union rng F &
+   for n being Nat,x,y being Element of X st
+     n in dom F & x in F.n & y in F.n holds f.x = f.y;
+end;
+
+definition
+  let X be non empty set;
+  let S be SigmaField of X;
+  let f be PartFunc of X,REAL;
+  let F be Finite_Sep_Sequence of S;
+  let a be FinSequence of REAL;
+  pred F,a are_Re-presentation_of f means
+:: MESFUN7C:def 14
+  dom f = union rng F & dom F = dom a & for n be Nat st n in dom F
+  for x be set st x in F.n holds f.x=a.n;
+end;
+
+definition
+  let X,S,f;
+  let F be Finite_Sep_Sequence of S;
+  let a be FinSequence of COMPLEX;
+  pred F,a are_Re-presentation_of f means
+:: MESFUN7C:def 15
+  dom f = union rng F & dom F = dom a & for n be Nat st n in dom F
+  for x be set st x in F.n holds f.x=a.n;
+end;
+
+theorem :: MESFUN7C:43
+  f is_simple_func_in S iff
+  Re f is_simple_func_in S & Im f is_simple_func_in S;
+
+theorem :: MESFUN7C:44
+f is_simple_func_in S implies
+ ex F be Finite_Sep_Sequence of S, a be FinSequence of COMPLEX st
+  dom f = union rng F & dom F= dom a & (for n be Nat st n in dom F
+  for x be set st x in F.n holds f.x = a.n);
+
+theorem :: MESFUN7C:45
+  f is_simple_func_in S iff ex F be Finite_Sep_Sequence of S,
+  a be FinSequence of COMPLEX st F,a are_Re-presentation_of f;
+
+reserve c for FinSequence of COMPLEX;
+
+theorem :: MESFUN7C:46
+for n be Nat st n in dom Re c holds (Re c).n = Re(c.n);
+
+theorem :: MESFUN7C:47
+ for n be Nat st n in dom Im c holds (Im c).n = Im(c.n);
+
+theorem :: MESFUN7C:48
+for F be Finite_Sep_Sequence of S, a be FinSequence of COMPLEX holds
+  F,a are_Re-presentation_of f iff
+  F,Re a are_Re-presentation_of Re f & F,Im a are_Re-presentation_of Im f;
+
+theorem :: MESFUN7C:49
+f is_simple_func_in S iff
+ex F be Finite_Sep_Sequence of S, c be FinSequence of COMPLEX st
+dom f = union rng F & dom F = dom c &
+(for n be Nat st n in dom F for x be set st x in F.n holds (Re f).x = Re c.n)
+&
+(for n be Nat st n in dom F for x be set st x in F.n holds (Im f).x = Im c.n);

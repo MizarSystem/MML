@@ -10,24 +10,24 @@ environ
  vocabularies COMPLEX1, ARYTM_3, ARYTM_1, POLYEQ_1, SQUARE_1, FUNCT_3,
       POLYEQ_3, RELAT_1, POWER, GROUP_1, PREPOWER, FUNCT_1, SIN_COS, COMPTRIG,
       XCMPLX_0, ARYTM;
- notations SUBSET_1, NUMBERS, XBOOLE_0, ORDINAL1, XCMPLX_0, XXREAL_0, REAL_1,
+ notations SUBSET_1, NUMBERS, XBOOLE_0, ORDINAL1, XCMPLX_0, XXREAL_0,
+      XREAL_0, REAL_1,
       COMPLEX1, POLYEQ_1, SQUARE_1, NEWTON, ARYTM_0, QUIN_1, POWER, NAT_1,
       NAT_D, SIN_COS, PREPOWER, BINARITH, SEQ_1, COMPTRIG;
  constructors FUNCT_4, ARYTM_0, REAL_1, SQUARE_1, NAT_1, SEQ_1, QUIN_1,
       PREPOWER, POWER, POLYEQ_1, BINARITH, SIN_COS, COMPTRIG, VALUED_1,
-      BINOP_2, NAT_D;
+      BINOP_2, NAT_D, XREAL_0;
  registrations ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, SQUARE_1, NAT_1,
-      MEMBERED, NEWTON, POLYEQ_1, XBOOLE_0, VALUED_0, RELSET_1, POWER;
+      MEMBERED, NEWTON, POLYEQ_1, XBOOLE_0, VALUED_0, RELSET_1, POWER,
+      SIN_COS;
  requirements ARITHM, SUBSET, REAL, BOOLE, NUMERALS;
  definitions POLYEQ_1, SQUARE_1, XCMPLX_0, QUIN_1;
- theorems COMPLEX1, POLYEQ_1, REAL_2, SQUARE_1, NEWTON, COMPTRIG, NAT_1,
+ theorems COMPLEX1, POLYEQ_1, SQUARE_1, NEWTON, COMPTRIG, NAT_1,
       BINARITH, POWER, SIN_COS, SIN_COS2, PREPOWER, COMPLEX2, XCMPLX_0,
       XCMPLX_1, ARYTM_0, XREAL_1, XREAL_0;
  schemes NAT_1, COMPTRIG;
 
 begin
-
-Lm1: 0 = [*0,0*] by ARYTM_0:def 7;
 
 reserve a,b,c,d,a',b',c',d',x,y,x1,u,v for Real,
   s,t,h,z,z1,z2,z3,s1,s2,s3,p,q for Element of COMPLEX;
@@ -58,13 +58,7 @@ definition
   coherence by XCMPLX_0:def 2;
 end;
 
-theorem
-  (a+c*<i>)*(b+d*<i>)=a*b-c*d+(a*d+b*c)*<i>;
-
-theorem
-  (x+y*<i>)^2= x^2-y^2 + 2*x*y*<i>;
-
-canceled;
+canceled 3;
 
 theorem Th4:
   a <> 0 & delta(a,b,c) >=0 & Polynom(a,b,c,z) = 0 implies
@@ -79,34 +73,28 @@ A3: Polynom(a,b,c,z) = 0;
 A4: z = Re z + (Im z)*<i> by COMPLEX1:29;
   set x=Re z;
   set y=Im z;
-A5: [*x^2-y^2,2*x*y*] = x^2-y^2+(2*x*y)*<i> by COMPLEX1:27;
-  then (a+0*<i>)*([*x^2-y^2,2*(x*y)*])+b*z+c = 0 by A3,A4;
+  (a+0*<i>)*(x^2-y^2+2*(x*y)*<i>)+b*z+c = 0 by A3,A4;
   then 0 = Re a*Re (x^2-y^2+(2*x*y)*<i>) -Im a*Im (x^2-y^2+2*x*y*<i>)+
   (Re a*Im (x^2-y^2+2*x*y*<i>) +Re (x^2-y^2+2*x*y*<i>)*Im a)*<i>
-  +b*z+c by A5,COMPLEX1:def 10
-    .=[* Re a*Re (x^2-y^2+2*x*y*<i>)-Im a*
-  Im (x^2-y^2+2*x*y*<i>),Re a*Im (x^2-y^2+2*x*y*<i>)
-  +Re (x^2-y^2+2*x*y*<i>)*Im a *] +b*z+c by COMPLEX1:27
-    .=[*a*Re (x^2-y^2+2*x*y*<i>)-Im a*
-  Im (x^2-y^2+2*x*y*<i>),Re a*Im (x^2-y^2+2*x*y*<i>)
-  +Re (x^2-y^2+2*x*y*<i>)*Im a *] +b*z+c by A1,COMPLEX1:28
-    .=[*a*(x^2-y^2)-Im a* Im (x^2-y^2+2*x*y*<i>),Re a*Im (x^2-y^2+2*x*y*<i>)
-  +Re (x^2-y^2+2*x*y*<i>)*Im a *] +b*z+c by COMPLEX1:28
-    .=[*a*(x^2-y^2)-0*Im (x^2-y^2+2*x*y*<i>)
-  ,Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-  *Im a *] +b*z+c by A1,COMPLEX1:28
-    .=[*a*(x^2-y^2)-0,Re a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
-  *Im a *] +b*z+c by COMPLEX1:28
-    .=[*a*(x^2-y^2)-0,a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
-  *Im a *] +b*z+c by A1,COMPLEX1:28
-    .=[*a*(x^2-y^2)-0,a*(2*x*y)+(x^2-y^2)
-  *Im a *] +b*z+c by COMPLEX1:28
-    .=[*a*(x^2-y^2)-0,a*(2*x*y)+(x^2-y^2)*0*] +b*z+c by A1,COMPLEX1:28;
+  +b*z+c by COMPLEX1:def 10
+    .=(a*Re (x^2-y^2+2*x*y*<i>)-Im a*
+  Im (x^2-y^2+2*x*y*<i>))+(Re a*Im (x^2-y^2+2*x*y*<i>)
+  +Re (x^2-y^2+2*x*y*<i>)*Im a)*<i> +b*z+c by A1,COMPLEX1:28
+    .=(a*(x^2-y^2)-Im a* Im (x^2-y^2+2*x*y*<i>))+(Re a*Im (x^2-y^2+2*x*y*<i>)
+  +Re (x^2-y^2+2*x*y*<i>)*Im a)*<i> +b*z+c by COMPLEX1:28
+    .=(a*(x^2-y^2)-0*Im (x^2-y^2+2*x*y*<i>)
+  )+(Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
+  *Im a )*<i> +b*z+c by A1,COMPLEX1:28
+    .=(a*(x^2-y^2)-0)+(Re a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
+  *Im a )*<i> +b*z+c by COMPLEX1:28
+    .=(a*(x^2-y^2)-0)+(a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
+  *Im a )*<i> +b*z+c by A1,COMPLEX1:28
+    .=(a*(x^2-y^2)-0)+(a*(2*x*y)+(x^2-y^2)
+  *Im a )*<i> +b*z+c by COMPLEX1:28
+    .=(a*(x^2-y^2)-0)+(a*(2*x*y)+(x^2-y^2)*0)*<i> +b*z+c by A1,COMPLEX1:28;
   then
-A6: [*a*(x^2-y^2)-0*(2*x*y),0+a*(2*x*y)*]
+A6: (a*(x^2-y^2)-0*(2*x*y))+(0+a*(2*x*y))*<i>
   +(b+0*<i>)*(x+y*<i>)+c = 0 by COMPLEX1:29;
-  then (a*(x^2-y^2)+(a*(2*x*y))*<i>)
-  +(b*x+(b*y)*<i>)+(c+0*<i>) = 0 by COMPLEX1:27;
   then
 A7: a*(x^2-y^2)+b*x+c+(a*(2*x*y)+b*y)*<i> = 0;
   then
@@ -114,7 +102,7 @@ A8: a*(x^2-y^2)+b*x+c = 0 & (2*a*x+b)*y = 0 by COMPLEX1:12,28;
   per cases by A8;
   suppose
 A9: y = 0;
-    then Polynom(a,b,c,x)=0 by A6,COMPLEX1:27;
+    then Polynom(a,b,c,x)=0 by A6;
     then Re z=(-b+sqrt delta(a,b,c))/(2*a) & Im z = 0 or
     Re z= (-b-sqrt delta(a,b,c))/(2*a) & Im z = 0 by A2,A9,POLYEQ_1:5;
     then z=(-b+sqrt delta(a,b,c))/(2*a)+0*<i> or
@@ -123,9 +111,7 @@ A9: y = 0;
   end;
   suppose
 A10: 2*a*x+b = 0;
-    2/(1/a) <> 0 by A2;
-    then
-A11: x= (-b)/(2*a) by A10,XCMPLX_1:90;
+A11: x= (-b)/(2*a) by A10,XCMPLX_1:90,A2;
     then a*((b/(2*a))^2-y^2)+b*(-b/(2*a))+c = 0 by A7,COMPLEX1:12,28;
     then (b/(2*a))^2-y^2 = (-(b*(-b/(2*a))+c))/a-0 by A2,XCMPLX_1:90;
     then (b/(2*a))^2- (-(b*(-b/(2*a))+c))/a= y^2-0;
@@ -135,33 +121,28 @@ A12: y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
     by XCMPLX_1:77
       .=b^2/((2*a)^2)*((2*a)^2)+(c*a")*(2*a)^2
     -(b^2*(2*a)"*a")*(2*a)^2;
-A13: 2*a <> 0 by A2;
-    then
-A14: (2*a)^2 > 0 by SQUARE_1:74;
-    then
 A15: y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2
-    by A12,XCMPLX_1:88
+    by A12,XCMPLX_1:88,A2
       .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)*a)")*(2*a)^2
     by XCMPLX_1:205
       .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2;
     set t = (b^2*(2*(a*a))")*(2*a)^2;
     t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*(1/(2*a)^2));
-    then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A14,XCMPLX_1:107;
+    then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A2,XCMPLX_1:107;
     then t*((2*a)^2)"*2" = b^2*(2*a^2)"*2";
     then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2");
     then t*((2*a)^2)"*2" = b^2*((2*(a^2*2))") by XCMPLX_1:205;
     then (t*2")/(2*a)^2*(2*a)^2 = b^2/(2*a)^2*(2*a)^2;
-    then t*2" = b^2/(2*a)^2*(2*a)^2 by A14,XCMPLX_1:88;
+    then t*2" = b^2/(2*a)^2*(2*a)^2 by A2,XCMPLX_1:88;
     then
-A16: t/2 = b^2 by A14,XCMPLX_1:88;
+A16: t/2 = b^2 by A2,XCMPLX_1:88;
     set t=(c*a")*(2*a)^2;
     t=(c/a*a)*2*(2*a);
     then
 A17: t=c*2*(2*a) by A2,XCMPLX_1:88;
     -delta(a,b,c) <= 0 by A2;
     then (y *(2*a))^2 = 0 by A15,A16,A17,XREAL_1:65;
-    then y *(2*a) = 0;
-    then Re z=-b/(2*a) & Im z=0 by A11,A13;
+    then Re z=-b/(2*a) & Im z=0 by A11,A2;
     then z = -b/(2*a)+0*<i> by COMPLEX1:29;
     hence thesis;
   end;
@@ -172,7 +153,7 @@ theorem Th5:
   z= -b/(2*a)+(sqrt (-delta(a,b,c))/(2*a))*<i> or
   z= -b/(2*a)+(-sqrt (-delta(a,b,c))/(2*a))*<i>
 proof
-A1: [*a,0*]= a+0*<i> by COMPLEX1:27;
+A1: a= a+0*<i>;
   assume
 A2: a <> 0 & delta(a,b,c) < 0;
   now
@@ -182,32 +163,29 @@ A3: Polynom(a,b,c,z) = 0;
     set x=Re z;
     set y=Im z;
 A4: z = x + y*<i> by COMPLEX1:29;
-A5: [*x^2-y^2,2*x*y*] = x^2-y^2+(2*x*y)*<i> by COMPLEX1:27;
-    then (a+0*<i>)*([*x^2-y^2,2*(x*y)*])+b*z+c = 0 by A3,A4;
-    then Re a*Re (x^2-y^2+2*x*y*<i>)-Im a*Im [*x^2-y^2,2*x*y*]
+    (a+0*<i>)*(x^2-y^2+(2*x*y)*<i>)+b*z+c = 0 by A3,A4;
+    then Re a*Re (x^2-y^2+2*x*y*<i>)-Im a*Im (x^2-y^2+(2*x*y)*<i>)
     +(Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a)*<i>+b*z+c = 0 by A5,COMPLEX1:def 10;
-    then [*Re a*Re (x^2-y^2+2*x*y*<i>)-Im a*Im [*x^2-y^2,2*x*y*]
-    ,Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by COMPLEX1:27;
-    then [*a*Re (x^2-y^2+2*x*y*<i>)-Im a*Im (x^2-y^2+2*x*y*<i>)
-    ,Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by A1,A5,COMPLEX1:28;
-    then [*a*(x^2-y^2)-Im a*Im (x^2-y^2+2*x*y*<i>)
-    ,Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by COMPLEX1:28;
-    then [*a*(x^2-y^2)-0*Im (x^2-y^2+2*x*y*<i>)
-    ,Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by A1,COMPLEX1:28;
-    then [*a*(x^2-y^2)-0,Re a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by COMPLEX1:28;
-    then [*a*(x^2-y^2)-0,a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
-    *Im a*]+b*z+c = 0 by A1,COMPLEX1:28;
-    then [*a*(x^2-y^2)-0,a*(2*x*y)+(x^2-y^2) *Im a*]+b*z+c = 0 by COMPLEX1:28;
-    then [*a*(x^2-y^2)-0,a*(2*x*y)+(x^2-y^2) *0*]+b*z+c = 0 by A1,COMPLEX1:28;
-    then [*a*(x^2-y^2)-0*(2*x*y),(x^2-y^2)*0+a*(2*x*y)*]
+    *Im a)*<i>+b*z+c = 0 by COMPLEX1:def 10;
+    then (a*Re (x^2-y^2+2*x*y*<i>)-Im a*Im (x^2-y^2+2*x*y*<i>)
+    )+(Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
+    *Im a)*<i>+b*z+c = 0 by A1,COMPLEX1:28;
+    then (a*(x^2-y^2)-Im a*Im (x^2-y^2+2*x*y*<i>)
+    )+(Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
+    *Im a)*<i>+b*z+c = 0 by COMPLEX1:28;
+    then (a*(x^2-y^2)-0*Im (x^2-y^2+2*x*y*<i>)
+    )+(Re a*Im (x^2-y^2+2*x*y*<i>)+Re (x^2-y^2+2*x*y*<i>)
+    *Im a)*<i>+b*z+c = 0 by A1,COMPLEX1:28;
+    then (a*(x^2-y^2)-0)+(Re a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
+    *Im a)*<i>+b*z+c = 0 by COMPLEX1:28;
+    then (a*(x^2-y^2)-0)+(a*(2*x*y)+Re (x^2-y^2+2*x*y*<i>)
+    *Im a)*<i>+b*z+c = 0 by A1,COMPLEX1:28;
+    then (a*(x^2-y^2)-0)+(a*(2*x*y)+(x^2-y^2) *Im a)*<i>+b*z+c = 0
+     by COMPLEX1:28;
+    then (a*(x^2-y^2)-0)+(a*(2*x*y)+(x^2-y^2) *0)*<i>+b*z+c = 0
+    by A1,COMPLEX1:28;
+    then (a*(x^2-y^2)-0*(2*x*y))+((x^2-y^2)*0+a*(2*x*y))*<i>
     +(b+0*<i>)*(x+y*<i>)+c = 0 by COMPLEX1:29;
-    then a*(x^2-y^2)+(a*(2*x*y))*<i>+(b*x+b*y*<i>)+c = 0 by COMPLEX1:27;
     then
 A6: a*(x^2-y^2)+b*x+c+(a*(2*x*y)+b*y)*<i> = 0;
     then -a*y^2+((b*x+a*x^2)+c )+a*y^2= 0+a*y^2 by COMPLEX1:12,28;
@@ -216,7 +194,6 @@ A7: a*x^2*a+b*x*a+c*a = a*y^2*a by XCMPLX_1:9;
     set t1= (x*a+b/2)^2;
     set t2=(-b^2+c*a*4)/4;
     0-delta(a,b,c)>0 by A2;
-    then t2>0;
     then 0+0<t1+t2 by XREAL_1:10,65;
     then
 A8: y<>0 by A7;
@@ -236,40 +213,35 @@ A10: y^2 *((2*a)^2)=(b^2/(2*a)^2+c*a"-((b^2/(2*a))*a"))*((2*a)^2)
     by XCMPLX_1:77
       .=b^2/((2*a)^2)*((2*a)^2)+(c*a")*(2*a)^2
     -(b^2*(2*a)"*a")*(2*a)^2;
-A11: 2*a <> 0 by A2;
-    then
-A12: (2*a)^2 > 0 by SQUARE_1:74;
-    then
 A13: y^2 *((2*a)^2)=b^2+(c*a")*(2*a)^2-(b^2*((2*a)"*a"))*(2*a)^2
-    by A10,XCMPLX_1:88
+    by A10,XCMPLX_1:88,A2
       .=b^2+(c*a")*(2*a)^2-(b^2*((2*a)*a)")*(2*a)^2
     by XCMPLX_1:205
       .=b^2+(c*a")*(2*a)^2-(b^2*(2*(a*a))")*(2*a)^2;
     set t = (b^2*(2*(a*a))")*(2*a)^2;
     t*((2*a)^2)" = b^2*(2*(a*a))"*(((2*a)^2)*(1/(2*a)^2));
-    then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A12,XCMPLX_1:107;
+    then t*((2*a)^2)" = b^2*(2*(a*a))"*1 by A2,XCMPLX_1:107;
     then t*((2*a)^2)"*2" = b^2*(2*a^2)"*2";
     then t*((2*a)^2)"*2" = b^2*((2*a^2)"*2");
     then t*((2*a)^2)"*2" = b^2*((2*(a^2*2))") by XCMPLX_1:205;
     then (t*2")/(2*a)^2*(2*a)^2 = b^2/(2*a)^2*(2*a)^2;
-    then t*2" = b^2/(2*a)^2*(2*a)^2 by A12,XCMPLX_1:88;
+    then t*2" = b^2/(2*a)^2*(2*a)^2 by A2,XCMPLX_1:88;
     then
-A14: t/2 = b^2 by A12,XCMPLX_1:88;
+A14: t/2 = b^2 by A2,XCMPLX_1:88;
     set t=(c*a")*(2*a)^2;
     t=(c/a*a)*2*(2*a);
     then
 A15: t=c*2*(2*a) by A2,XCMPLX_1:88;
-    -delta(a,b,c) > 0 by A2;
-    then (y *(2*a))^2 =(sqrt (-delta(a,b,c)))^2 by A13,A14,A15,SQUARE_1:def 4;
+    (y *(2*a))^2 =(sqrt (-delta(a,b,c)))^2 by A13,A14,A15,SQUARE_1:def 4,A2;
     then ((y *(2*a))+(sqrt (-delta(a,b,c))))*
     ((y *(2*a))-(sqrt (-delta(a,b,c))))=0;
     then ((y *(2*a))+(sqrt (-delta(a,b,c))))=0 or
     ((y *(2*a))-(sqrt (-delta(a,b,c))))=0;
     then y =(-sqrt (-delta(a,b,c)))/(2*a) or
-    y *(2*a)/(2*a)=sqrt (-delta(a,b,c))/(2*a) by A11,XCMPLX_1:90;
+    y *(2*a)/(2*a)=sqrt (-delta(a,b,c))/(2*a) by A2,XCMPLX_1:90;
     then Re z=-b/(2*a) & Im z=sqrt (-delta(a,b,c))/(2*a)
     or Re z= -b/(2*a) & Im z= -sqrt (-delta(a,b,c))/(2*a)
-    by A9,A11,XCMPLX_1:90;
+    by A9,A2,XCMPLX_1:90;
     hence z= -b/(2*a)+(sqrt(-delta(a,b,c))/(2*a))*<i> or
     z= -b/(2*a)+(-sqrt (-delta(a,b,c))/(2*a))*<i> by COMPLEX1:29;
   end;
@@ -345,61 +317,50 @@ definition
   end;
 end;
 
-theorem
-  0^3 = 0;
-
-theorem
-  1^3 = 1;
-
-theorem
-  (-1)^3=-1;
+canceled 3;
 
 theorem Th11:
   Re z^3 = (Re z)|^3 - 3*Re z*(Im z)^2 & Im z^3 = -(Im z)|^ 3+3*(Re z)^2*Im z
 proof
-A1: [*Re z,Im z*] = Re z + (Im z)*<i> by COMPLEX1:27
-    .= z by COMPLEX1:29;
+A1: Re z + (Im z)*<i> = z by COMPLEX1:29;
   set x = Re z;
   set y = Im z;
-A2: [*x,y*] = x+y*<i> by COMPLEX1:27;
-A3: [*x|^ 3-3*x*y^2 ,-y|^ 3+3*x^2*y*] = x|^ 3-3*x*y^2 +(-y|^ 3+3*x^2*y)*<i>
-  by COMPLEX1:27;
   z^3 = Re(x^2-y^2+(2*(x*y))*<i>) *Re (x+y*<i>)-Im(x^2-y^2+(2*(x*y))*<i>)
   *Im (x+y*<i>)+(Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
-  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>))*<i> by A1,A2,COMPLEX1:def 10
-    .= [*Re(x^2-y^2+(2*(x*y))*<i>) *Re (x+y*<i>)-Im(x^2-y^2+(2*(x*y))*<i>)
-  *Im (x+y*<i>),Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
-  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>)*] by COMPLEX1:27
-    .= [*(x^2-y^2) *Re (x+y*<i>)-Im(x^2-y^2+(2*(x*y))*<i>)
-  *Im (x+y*<i>),Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
-  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>)*] by COMPLEX1:28
-    .= [*(x^2-y^2) *Re (x+y*<i>)-(2*(x*y))
-  *Im (x+y*<i>),Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
-  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>)*] by COMPLEX1:28
-    .= [*(x^2-y^2) *Re (x+y*<i>)-(2*(x*y))
-  *Im (x+y*<i>),(x^2-y^2) *Im (x+y*<i>)+
-  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>)*] by COMPLEX1:28
-    .= [*(x^2-y^2) *Re (x+y*<i>)-(2*(x*y))*Im (x+y*<i>)
-  ,(x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y))*] by COMPLEX1:28
-    .= [*(x^2-y^2) *x-(2*(x*y))*Im (x+y*<i>)
-  ,(x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y))*] by COMPLEX1:28
-    .= [*(x^2-y^2) *x-(2*(x*y))*y
-  ,(x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y))*] by COMPLEX1:28
-    .= [*(x^2-y^2) *x-(2*(x*y))*y
-  ,(x^2-y^2) *y+Re (x+y*<i>)*(2*(x*y))*] by COMPLEX1:28
-    .= [*(x^2*x-y^2*x+0*x)-2*(x*y)*y,(x^2-y^2+0)*y+x*(2*(x*y))*] by COMPLEX1:28
-    .= [*(x|^1*x*x-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y)+x*(2*(x*y))*] by NEWTON:10
-    .= [*(x|^ (1+1)*x-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y)+x*(2*(x*y))*]
+  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>))*<i> by A1,COMPLEX1:def 10
+    .= ((x^2-y^2) *Re (x+y*<i>)-Im(x^2-y^2+(2*(x*y))*<i>)
+  *Im (x+y*<i>))+(Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
+  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *Re (x+y*<i>)-(2*(x*y))
+  *Im (x+y*<i>))+(Re(x^2-y^2+(2*(x*y))*<i>) *Im (x+y*<i>)+
+  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *Re (x+y*<i>)-(2*(x*y))
+  *Im (x+y*<i>))+((x^2-y^2) *Im (x+y*<i>)+
+  Re (x+y*<i>)*Im (x^2-y^2+(2*(x*y))*<i>))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *Re (x+y*<i>)-(2*(x*y))*Im (x+y*<i>)
+  )+((x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y)))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *x-(2*(x*y))*Im (x+y*<i>)
+  )+((x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y)))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *x-(2*(x*y))*y
+  )+((x^2-y^2) *Im (x+y*<i>)+Re (x+y*<i>)*(2*(x*y)))*<i> by COMPLEX1:28
+    .= ((x^2-y^2) *x-(2*(x*y))*y
+  )+((x^2-y^2) *y+Re (x+y*<i>)*(2*(x*y)))*<i> by COMPLEX1:28
+    .= ((x^2*x-y^2*x+0*x)-2*(x*y)*y)+((x^2-y^2+0)*y+x*(2*(x*y)))*<i>
+    by COMPLEX1:28
+    .= ((x|^1*x*x-y^2*x)-2*(x*y)*y)+((x^2*y-y^2*y)+x*(2*(x*y)))*<i>
+    by NEWTON:10
+    .= ((x|^ (1+1)*x-y^2*x)-2*(x*y)*y)+((x^2*y-y^2*y)+x*(2*(x*y)))*<i>
   by NEWTON:11
-    .= [*(x|^(2+1)-y^2*x)-2*(x*y)*y,(x^2*y-y^2*y)+x*(2*(x*y))*]
+    .= ((x|^(2+1)-y^2*x)-2*(x*y)*y)+((x^2*y-y^2*y)+x*(2*(x*y)))*<i>
   by NEWTON:11
-    .= [*(x|^ 3-y^2*x)-2*(x*y)*y,(x^2*y-y|^ 1*y*y)+x*(2*(x*y))*]
+    .= ((x|^ 3-y^2*x)-2*(x*y)*y)+((x^2*y-y|^ 1*y*y)+x*(2*(x*y)))*<i>
   by NEWTON:10
-    .= [*(x|^ 3-y^2*x)-2*(x*y)*y,(x^2*y-y|^ (1+1)*y)+x*(2*(x*y))*]
+    .= ((x|^ 3-y^2*x)-2*(x*y)*y)+((x^2*y-y|^ (1+1)*y)+x*(2*(x*y)))*<i>
   by NEWTON:11
-    .= [*(x|^ 3-y^2*x)-2*(x*(y*y)),(x^2*y-y|^ (2+1))+x*(2*(x*y))*] by NEWTON:11
-    .= [*x|^ 3-3*x*y^2 ,-y|^ 3+3*x^2*y*];
-  hence thesis by A3,COMPLEX1:28;
+    .= ((x|^ 3-y^2*x)-2*(x*(y*y)))+((x^2*y-y|^ (2+1))+x*(2*(x*y)))*<i>
+     by NEWTON:11
+    .= (x|^ 3-3*x*y^2 )+(-y|^ 3+3*x^2*y)*<i>;
+  hence thesis by COMPLEX1:28;
 end;
 
 theorem
@@ -420,11 +381,7 @@ A5: Polynom(a,b,c,d,2) = Polynom(a',b',c',d',2) by A1;
   thus thesis by A2;
 end;
 
-theorem
-  (z+h)^3 = z^3+(3*h)*z^2+(3*h^2)*z+h^3;
-
-theorem
-  (z*h)^3 = z^3*h^3;
+canceled 2;
 
 theorem
   b<>0 & delta(b,c,d)>=0 & Polynom(0,b,c,d,z)=0 implies
@@ -494,9 +451,8 @@ A1: y^2 = a;
   then
 A2: Polynom(1,0,-a,y) =0;
 A3: a >= 0 by A1,XREAL_1:65;
-  delta(1,0,-a) >= 0 by A3;
-  then y=(-0+sqrt delta(1,0,-a))/(2*1) or
-  y=(-0-sqrt delta(1,0,-a))/(2*1) by A2,POLYEQ_1:5;
+  y=(-0+sqrt delta(1,0,-a))/(2*1) or
+  y=(-0-sqrt delta(1,0,-a))/(2*1) by A2,POLYEQ_1:5,A3;
   then y=(sqrt (4*a))/2 or y=(0-sqrt (4*a))/2;
   then y= sqrt a * 2 /2 or y=(-(2 * sqrt a))/2 by A3,SQUARE_1:85,97;
   hence y= sqrt a or y=-sqrt a;
@@ -521,59 +477,46 @@ A2: Im z = 0 & Polynom(a,0,c,d,z)=0;
 A3: Re z=u+v & 3*v*u+c/a=0;
   set x=Re z;
   set y=Im z;
-A4: [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  = x|^ 3 - 3*x*y^2+(-y|^ 3+3*x^2*y)*<i> by COMPLEX1:27;
 A5: a = a+0*<i>;
-A6: Re z+(Im z)*<i> = [*Re z,Im z*] by COMPLEX1:27;
 A7: z = Re z+(Im z)*<i> by COMPLEX1:29
     .= x by A2;
   0 = a*(Re z^3+(Im z^3)*<i>)+0*z^2+c*z+d by A2,COMPLEX1:29
-    .= a*([*Re z^3,Im z^3*])+0*z^2+c*z+d by COMPLEX1:27
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*] +0*z^2+c*z+d by Th11
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,-(Im z)|^ 3+3*(Re z)^2
-  *Im z*]+c*z+d by Th11
-    .= a*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
-  +c*(Re z+(Im z)*<i>)+d by COMPLEX1:29
-    .= (a+0*<i>)*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
-  +c*[*Re z,Im z*]+d by COMPLEX1:27
-    .=Re a *Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+(Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a)*<i>
-  +c*[*Re z,Im z*]+d by COMPLEX1:def 10
-    .=[*Re a *Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by COMPLEX1:27
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a*(-y|^ 3+3*x^2*y),Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a*(-y|^ 3+3*x^2*y),Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y),Re a*(-y|^ 3+3*x^2*y)+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y),Re a*(-y|^ 3+3*x^2*y)+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0*(-y|^ 3+3*x^2*y),
-  Re a*(-y|^ 3+3*x^2*y)+(x|^ 3 - 3*x*y^2)*Im a *]
-  +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0,a*(-y|^ 3+3*x^2*y) +(x|^ 3 - 3*x*y^2)*Im a *]
-  +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0,a*(-y|^ 3+3*x^2*y)
-  +(x|^ 3 - 3*x*y^2)*0 *]+c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .= a*(x|^ 3 - 3*x*0)+(a*(-0|^ 3+3*x^2*0))*<i> +c*x+d by A2,A6,COMPLEX1:27
-    .= a*(x|^ 3 - 3*x*0)+c*x+d+(a*(-0|^ 3+0) +0+0)*<i>
-    .= a*(x|^ 3 - 0)+c*x+d+(a*(-0))*<i> by NEWTON:16
-    .= [*a*x|^ 3 +c*x+d,0*] by COMPLEX1:27;
-  then a"*(a*x|^ 3+c*x+d) = a"*0 by ARYTM_0:def 7;
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(Im z^3)*<i>) +0*z^2+c*z+d by Th11
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(-(Im z)|^ 3+3*(Re z)^2
+  *Im z)*<i>)+c*z+d by Th11
+    .= (a+0*<i>)*((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  +c*(Re z+Im z*<i>)+d by COMPLEX1:29
+    .=Re a *Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)-Im a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a)*<i>
+  +c*(Re z+Im z*<i>)+d by COMPLEX1:def 10
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>))+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a*(-y|^ 3+3*x^2*y))+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a*(-y|^ 3+3*x^2*y))+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  (x|^ 3 - 3*x*y^2)*Im a )*<i> +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y))+(Re a*(-y|^ 3+3*x^2*y)+
+  (x|^ 3 - 3*x*y^2)*Im a )*<i> +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y))+(Re a*(-y|^ 3+3*x^2*y)+
+  (x|^ 3 - 3*x*y^2)*Im a )*<i> +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0*(-y|^ 3+3*x^2*y))+(
+  Re a*(-y|^ 3+3*x^2*y)+(x|^ 3 - 3*x*y^2)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0)+(a*(-y|^ 3+3*x^2*y) +(x|^ 3 - 3*x*y^2)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0)+(a*(-y|^ 3+3*x^2*y)
+  +(x|^ 3 - 3*x*y^2)*0 )*<i>+c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .= a*(x|^ 3 - 0)+c*x+d+(a*(-0))*<i> by NEWTON:16,A2
+    .= a*x|^ 3 +c*x+d;
+  then a"*(a*x|^ 3+c*x+d) = a"*0;
   then x|^ 3*(a/a)+a"*c*x+a"*d = 0;
   then
 A8: Polynom(1,0,c/a,d/a,x) = 0 by A1,XCMPLX_1:89;
@@ -617,55 +560,42 @@ A2: Im z <> 0 & Polynom(a,0,c,d,z)=0;
 A3: Re z=u+v & 3*v*u+c/(4*a)=0 & c/a>=0;
   set x=Re z;
   set y=Im z;
-A4: [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  = x|^ 3 - 3*x*y^2+(-y|^ 3+3*x^2*y)*<i> by COMPLEX1:27;
 A5: a = a+0*<i>;
-A6: Re z+(Im z)*<i> = [*Re z,Im z*] by COMPLEX1:27;
 A7: z = x+y*<i> by COMPLEX1:29;
 A8: 0 = a*(Re z^3+(Im z^3)*<i>)+0*z^2+c*z+d by A2,COMPLEX1:29
-    .= a*([*Re z^3,Im z^3*])+0*z^2+c*z+d by COMPLEX1:27
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*] +c*z+d by Th11
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,-(Im z)|^ 3+3*(Re z)^2
-  *Im z*]+c*z+d by Th11
-    .= a*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(Im z^3)*<i>) +c*z+d by Th11
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(-(Im z)|^ 3+3*(Re z)^2
+  *Im z)*<i>)+c*z+d by Th11
+    .= (a+0*<i>)*((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
   +c*(Re z+(Im z)*<i>)+d by COMPLEX1:29
-    .= (a+0*<i>)*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
-  +c*[*Re z,Im z*]+d by COMPLEX1:27
-    .=Re a *Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+(Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a)*<i>
-  +c*[*Re z,Im z*]+d by COMPLEX1:def 10
-    .=[*Re a *Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by COMPLEX1:27
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],Re a
-  *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a
-  *(-y|^ 3+3*x^2*y),Re a *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a
-  *(-y|^ 3+3*x^2*y),Re a *Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*Re a *(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y),Re a*(-y|^ 3+3*x^2*y)+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A4,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y),Re a*(-y|^ 3+3*x^2*y)+
-  (x|^ 3 - 3*x*y^2)*Im a *] +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0*(-y|^ 3+3*x^2*y),
-  Re a*(-y|^ 3+3*x^2*y)+(x|^ 3 - 3*x*y^2)*Im a *]
-  +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0,a*(-y|^ 3+3*x^2*y) +(x|^ 3 - 3*x*y^2)*Im a *]
-  +c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .=[*a*(x|^ 3 - 3*x*y^2)-0,a*(-y|^ 3+3*x^2*y)
-  +(x|^ 3 - 3*x*y^2)*0 *]+c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .= a*(x|^ 3 - 3*x*y^2)+(a*(-y|^ 3+3*x^2*y))*<i>
-  +(c*Re z-0*Im z+(c*Im z+Re z*0)*<i>)+d by A6,COMPLEX1:27
+    .=Re a *Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)-Im a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a)*<i>
+  +c*(Re z+Im z *<i>)+d by COMPLEX1:def 10
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>))+(Re a
+  *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a
+  *(-y|^ 3+3*x^2*y))+(Re a *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a
+  *(-y|^ 3+3*x^2*y))+(Re a *Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  (x|^ 3 - 3*x*y^2)*Im a )*<i> +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(Re a *(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y))+(Re a*(-y|^ 3+3*x^2*y)+
+  (x|^ 3 - 3*x*y^2)*Im a )*<i> +c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-Im a *(-y|^ 3+3*x^2*y))+(Re a*(-y|^ 3+3*x^2*y)+
+  (x|^ 3 - 3*x*y^2)*Im a)*<i> +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0*(-y|^ 3+3*x^2*y))+(
+  Re a*(-y|^ 3+3*x^2*y)+(x|^ 3 - 3*x*y^2)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0)+(a*(-y|^ 3+3*x^2*y) +(x|^ 3 - 3*x*y^2)*Im a )*<i>
+  +c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
+    .=(a*(x|^ 3 - 3*x*y^2)-0)+(a*(-y|^ 3+3*x^2*y)
+  +(x|^ 3 - 3*x*y^2)*0 )*<i>+c*(Re z+Im z *<i>)+d by A5,COMPLEX1:28
     .= a*(x|^ 3 - 3*x*y^2)+c*x+d+(a*(-y|^ 3+3*x^2*y) +c*y+0)*<i>;
   then
 A9: a*(-y|^ 3+3*x^2*y) +c*y+0 = 0 by COMPLEX1:12,28;
@@ -690,8 +620,7 @@ A11: y^2 = 3*x^2+c/a+0*a" by A1,XCMPLX_1:90;
   then (-1)*0=(8*a)*x|^3+(2*c)*x+(-d);
   then
 A12: 0=x|^3*((8*a)/(8*a))+(8*a)"*((2*c)*x)+(8*a)"*(-d);
-  8*a <> 0 by A1;
-  then 0=1*x|^3+0*x^2+((2*c)/(8*a))*x+((8*a)"*(-d)) by A12,XCMPLX_1:89;
+  0=1*x|^3+0*x^2+((2*c)/(8*a))*x+((8*a)"*(-d)) by A12,XCMPLX_1:89,A1;
   then 0=1*x|^3+0*x^2+((2/8*c)/a)*x+((-d)/(8*a)) by XCMPLX_1:84;
   then 0=1*x|^3+0*x^2+(1/a*(c/4))*x+((-d)/(8*a));
   then
@@ -765,59 +694,41 @@ A2: Polynom(a,b,c,d,z)=0 & Im z=0;
 A3: x1=Re z +b/(3*a) & Re z=u+v-b/(3*a) & 3*u*v+(3*a*c-b^2)/(3*a^2)=0;
   set x=Re z;
   set y=Im z;
-A4: [*Re z,Im z*] = x+y*<i> by COMPLEX1:27;
-A5: [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  = x|^ 3 - 3*x*y^2+(-y|^ 3+3*x^2*y)*<i> by COMPLEX1:27;
 A6: a = a+0*<i>;
 A7: z = x + y*<i> by COMPLEX1:29;
   0 = a*(Re z^3+(Im z^3)*<i>)+b*z^2+c*z+d by A2,COMPLEX1:29
-    .= a*([*Re z^3,Im z^3*])+b*z^2+c*z+d by COMPLEX1:27
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,Im z^3*] +b*z^2+c*z+d by Th11
-    .= a*[*(Re z)|^ 3 - 3*Re z*(Im z)^2,-(Im z)|^ 3+3*(Re z)^2
-  *Im z*]+b*z^2+c*z+d by Th11
-    .= a*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
-  +b*z^2+c*(Re z+(Im z)*<i>)+d by COMPLEX1:29
-    .= (a+0*<i>)*([*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*])
-  +b*z^2+c*[*Re z,Im z*]+d by COMPLEX1:27
-    .= Re a*Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  -Im a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]+
-  (Re a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  +Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a)*<i>
-  +b*z^2+c*[*Re z,Im z*]+d by COMPLEX1:def 10
-    .= [*Re a*Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  -Im a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],
-  Re a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  +Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +b*z^2+c*[*Re z,Im z*]+d by COMPLEX1:27
-    .= [*Re a*Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  -0*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*],
-  Re a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  +Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*Im a *]
-  +b*z^2+c*[*Re z,Im z*]+d by A6,COMPLEX1:28
-    .= [*Re a*Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  -0,Re a*Im [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  +Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]*0 *]
-  +b*z^2+c*[*Re z,Im z*]+d by A6,COMPLEX1:28
-    .= [*Re a*Re [*x|^ 3 - 3*x*y^2,-y|^ 3+3*x^2*y*]
-  -0,Re a*(-y|^ 3+3*x^2*y)+0 *] +b*z^2+c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .= [*Re a*(x|^ 3 - 3*x*y^2)-0,Re a*(-y|^ 3+3*x^2*y)*]
-  +b*z^2+c*[*Re z,Im z*]+d by A5,COMPLEX1:28
-    .= [*a*(x|^ 3 - 3*x*y^2)-0,Re a*(-y|^ 3+3*x^2*y)*]
-  +b*z^2+c*[*Re z,Im z*]+d by A6,COMPLEX1:28
-    .= [*a*(x|^ 3 - 3*x*y^2),a*(-y|^ 3+3*x^2*y)*]
-  +b*z^2+(c*Re z-0*Im z+(c*Im z+Re z*0)*<i>)+d by A4,A6,COMPLEX1:28
-    .= [*a*(x|^ 3 - 3*x*y^2),a*(-y|^ 3+3*x^2*y)*]
-  +b*(x^2-y^2+2*x*y*<i>)+[*c*x,c*y*]+d by A7,COMPLEX1:27
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(Im z^3)*<i>) +b*z^2+c*z+d by Th11
+    .= a*(((Re z)|^ 3 - 3*Re z*(Im z)^2)+(-(Im z)|^ 3+3*(Re z)^2
+  *Im z)*<i>)+b*z^2+c*z+d by Th11
+    .= (a+0*<i>)*((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  +b*z^2+c*(Re z+Im z *<i>)+d by COMPLEX1:29
+    .= Re a*Re ((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  -Im a*Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)+
+  (Re a*Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  +Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a)*<i>
+  +b*z^2+c*(Re z+Im z *<i>)+d by COMPLEX1:def 10
+    .= (Re a*Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  -0*Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>))+(
+  Re a*Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  +Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*Im a )*<i>
+  +b*z^2+c*(Re z+Im z *<i>)+d by A6,COMPLEX1:28
+    .= (Re a*Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  -0)+(Re a*Im((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  +Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)*0 )*<i>
+  +b*z^2+c*(Re z+Im z *<i>)+d by A6,COMPLEX1:28
+    .= (Re a*Re((x|^ 3 - 3*x*y^2)+(-y|^ 3+3*x^2*y)*<i>)
+  -0)+(Re a*(-y|^ 3+3*x^2*y)+0 )*<i> +b*z^2+c*(Re z+Im z *<i>)+d
+   by COMPLEX1:28
+    .= (Re a*(x|^ 3 - 3*x*y^2)-0)+(Re a*(-y|^ 3+3*x^2*y))*<i>
+  +b*z^2+c*(Re z+Im z *<i>)+d by COMPLEX1:28
+    .= (a*(x|^ 3 - 3*x*y^2)-0)+(Re a*(-y|^ 3+3*x^2*y))*<i>
+  +b*z^2+c*(Re z+Im z *<i>)+d by A6,COMPLEX1:28
     .= a*(x|^ 3 - 3*x*y^2)+(a*(-y|^ 3+3*x^2*y))*<i>
-  +b*(x^2-y^2+2*x*y*<i>)+[*c*x,c*y*]+d by COMPLEX1:27
-    .= a*(x|^ 3 - 3*x*y^2)+(a*(-y|^ 3+3*x^2*y))*<i>
-  +b*(x^2-y^2+(2*x*y)*<i>)+(c*x+(c*y)*<i>)+d by COMPLEX1:27;
+  +b*(x^2-y^2+(2*x*y)*<i>)+(c*x+(c*y)*<i>)+d by A7,A6,COMPLEX1:28;
   then 0 = a*(x|^ 3 - 3*x*0)+b*(x^2-0)+c*x+d +(a*(-0|^ 3+0)+b*0+0)*<i> by A2
-    .= [*a*(x|^ 3 - 3*x*0)+b*(x^2-0)+c*x+d
-  ,a*(-0|^ 3+0)+b*0+0*] by COMPLEX1:27
-    .= [*a*x|^ 3+b*x^2+c*x+d,a*0+0*] by NEWTON:16;
+    .= (a*x|^ 3+b*x^2+c*x+d)+(a*0+0)*<i> by NEWTON:16;
   then
-A8: Polynom(a,b,c,d,x) = 0 by ARYTM_0:def 7;
+A8: Polynom(a,b,c,d,x) = 0;
   set a'=b/a;
   set b'=c/a;
   set c'=d/a;
@@ -849,10 +760,9 @@ proof
   hence z = -(z2/z1);
 end;
 
-theorem
-  z2 <> 0 implies not ex z st Polynom(0,z2,z) = 0;
-
 begin
+
+canceled;
 
 theorem
   (for z holds Polynom(z1,z2,z3,z) = Polynom(s1,s2,s3,z)) implies
@@ -872,23 +782,24 @@ theorem
 proof
 A1: a^2>=0 & b^2>=0 & a^2>=a^2 by XREAL_1:65;
   then
-A2: a^2+b^2>=0+0 & a^2+b^2>=0+a^2 by XREAL_1:9;
+    a^2+b^2>=0+0 & a^2+b^2>=0+a^2 by XREAL_1:9;
   then
 A3: sqrt(a^2+b^2)>=sqrt(a^2) by A1,SQUARE_1:94;
-A4: sqrt (a^2+b^2)>=0 by A2,SQUARE_1:def 4;
+A4: sqrt (a^2+b^2)>=0 by A1,SQUARE_1:def 4;
   per cases;
-  suppose a>=0;
+  suppose
+B5: a>=0;
     then
-A5: sqrt(a^2+b^2)>=a & a+sqrt (a^2+b^2)>=0+0 by A3,A4,SQUARE_1:89;
+    sqrt(a^2+b^2)>=a & a+sqrt (a^2+b^2)>=0+0 by A3,A4,SQUARE_1:89;
     then sqrt(a^2+b^2)-a>=a-a by XREAL_1:11;
-    hence thesis by A5;
+    hence thesis by B5,A4;
   end;
   suppose
 A6: a<0;
-A7: sqrt(a^2+b^2) >= -a & -a+sqrt (a^2+b^2)>=0+0
+    sqrt(a^2+b^2) >= -a & -a+sqrt (a^2+b^2)>=0+0
     by A3,A4,A6,SQUARE_1:90;
     then sqrt(a^2+b^2)-(-a) >= -a-(-a) by XREAL_1:11;
-    hence thesis by A7;
+    hence thesis by A4,A6;
   end;
 end;
 
@@ -906,21 +817,17 @@ A2: Im s >=0;
   set b=Im s;
   set u=Re z;
   set v=Im z;
-A3: [*u,v*] = u+v*<i> & [*a,b*] = a+b*<i> by COMPLEX1:27;
   z = u+v*<i> by COMPLEX1:29;
-  then u^2-v^2+2*u*v*<i> =[*a,b*] by A1,A3,COMPLEX1:29;
   then
-A4: u^2-v^2=a & 2*u*v=b by A3,COMPLEX1:163;
+B4: u^2-v^2+2*u*v*<i> =a+b*<i> by A1,COMPLEX1:29;
+  then
+A4: u^2-v^2=a & 2*u*v=b by COMPLEX1:163;
   then
 A5: (u^2+v^2)^2=a^2+b^2;
   u^2>=0 & v^2>=0 by XREAL_1:65;
-  then u^2+v^2>=0+0;
   then
 A6: u^2+v^2=sqrt (a^2+b^2) by A5,SQUARE_1:89;
-  -2*(u*v)<=-0 by A2,A4;
-  then (-2)*(u*v)<=0;
-  then u*v>=0;
-  then u<=0 & v<=0 or u>=0 & v>=0;
+  u<=0 & v<=0 or u>=0 & v>=0 by A2,B4,COMPLEX1:163;
   then -u=sqrt ((a+sqrt (a^2+b^2))/2) & -v=sqrt ((-a+sqrt (a^2+b^2))/ 2) or
   u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
   by A4,A6,SQUARE_1:89,90;
@@ -937,20 +844,16 @@ A2: Im s =0 & Re s >0;
   then z=sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
   (sqrt ((-Re s+sqrt ((Re s)^2+0))/2))*<i> or
   z=-sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
-  (-sqrt ((-Re s+sqrt ((Re s)^2+0))/2))*<i> by A1,Th28,SQUARE_1:60;
-  then z=[*sqrt (( Re s+sqrt ((Re s)^2+0))/2),
-  sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] or
-  z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
-  -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by COMPLEX1:27;
-  then z=[*sqrt (( Re s+Re s)/2), sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] or
-  z=[*-sqrt (( Re s+sqrt ((Re s)^2+0))/2),
-  -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by A2,SQUARE_1:89;
-  then z=[*sqrt (( Re s+Re s)/2), sqrt ((-Re s+Re s)/2)*] or
-  z=[*-sqrt (( Re s+Re s)/2),
-  -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*] by A2,SQUARE_1:89;
-  then z=[*sqrt (Re s), sqrt ((0+(Re s-Re s))/2)*] or
-  z=[*-sqrt (Re s),-sqrt ((0+(Re s-Re s))/2)*] by A2,SQUARE_1:89;
-  hence thesis by ARYTM_0:def 7,SQUARE_1:82;
+  (-sqrt ((-Re s+sqrt ((Re s)^2+0^2))/2))*<i> by A1,Th28;
+  then z=sqrt (( Re s+Re s)/2)+ sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*<i> or
+  z=-sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
+  -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*<i> by A2,SQUARE_1:89;
+  then z=sqrt (( Re s+Re s)/2)+ sqrt ((-Re s+Re s)/2)*<i> or
+  z=-sqrt (( Re s+Re s)/2) +
+  -sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*<i> by A2,SQUARE_1:89;
+  then z=sqrt (Re s)+ sqrt ((0+(Re s-Re s))/2)*<i> or
+  z=-sqrt (Re s)+-sqrt ((0+(Re s-Re s))/2)*<i> by A2,SQUARE_1:89;
+  hence thesis by SQUARE_1:82;
 end;
 
 theorem
@@ -964,7 +867,7 @@ A2: Im s =0 & Re s < 0;
   then z=sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
   (sqrt ((-Re s+sqrt ((Re s)^2+0))/2))*<i> or
   z=-sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
-  (-sqrt ((-Re s+sqrt ((Re s)^2+0))/2))*<i> by A1,Th28,SQUARE_1:60;
+  (-sqrt ((-Re s+sqrt ((Re s)^2+0^2))/2))*<i> by A1,Th28;
   then z=sqrt (( Re s+-Re s)/2)+ sqrt ((-Re s+sqrt ((Re s)^2+0))/2)*<i> or
   z=-sqrt (( Re s+sqrt ((Re s)^2+0))/2)+
   (-sqrt ((-Re s+sqrt ((Re s)^2+0))/2))*<i> by A2,SQUARE_1:90;
@@ -990,21 +893,18 @@ A2: Im s<0;
   set b=Im s;
   set u=Re z;
   set v=Im z;
-A3: [*u,v*] = u+v*<i> & [*a,b*] = a+b*<i> by COMPLEX1:27;
-  then
-A4: z=[*u,v*] & s=[*a,b*] & b <0 by A2,COMPLEX1:29;
+A4: z=u+v*<i> & s=a+b*<i> & b <0 by A2,COMPLEX1:29;
   z = u + v*<i> by COMPLEX1:29;
   then
 A5: z^2 = u^2-v^2 + 2*u*v*<i>;
   then
-A6: u^2-v^2=a & 2*u*v=b by A1,A3,A4,COMPLEX1:163;
+A6: u^2-v^2=a & 2*u*v=b by A1,A4,COMPLEX1:163;
   then
 A7: sqrt (u^2+v^2)^2=sqrt (a^2+b^2);
   u^2>=0 & v^2>=0 by XREAL_1:65;
-  then u^2+v^2>=0+0;
   then
 A8: u^2+v^2=sqrt (a^2+b^2) by A7,SQUARE_1:89;
-  2*(u*v)<0 by A1,A3,A4,A5,COMPLEX1:163;
+  2*(u*v)<0 by A1,A4,A5,COMPLEX1:163;
   then u*v<0;
   then u<0 & v>0 or u>0 & v<0 by XREAL_1:135;
   then -u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2) or
@@ -1029,33 +929,27 @@ A1: z^2=s;
   set b=Im s;
   set u=Re z;
   set v=Im z;
-A2: [*u,v*] = u+v*<i> & [*a,b*] = a+b*<i> by COMPLEX1:27;
-  then
-A3: z=[*u,v*] & s=[*a,b*] by COMPLEX1:29;
+A3: z=u+v*<i> & s=a+b*<i> by COMPLEX1:29;
   z = u + v*<i> by COMPLEX1:29;
   then
 A4: z^2 = u^2-v^2 + 2*u*v*<i>;
   then
-A5: u^2-v^2=a & 2*u*v=b by A1,A2,A3,COMPLEX1:163;
+A5: u^2-v^2=a & 2*u*v=b by A1,A3,COMPLEX1:163;
   then
 A6: sqrt (u^2+v^2)^2=sqrt (a^2+b^2);
   u^2>=0 & v^2>=0 by XREAL_1:65;
-  then u^2+v^2>=0+0;
   then
 A7: u^2+v^2=sqrt (a^2+b^2) by A6,SQUARE_1:89;
   per cases;
   suppose b>=0;
-    then -2*(u*v)<=-0 by A5;
-    then (-2)*(u*v)<=0;
-    then u*v>=0;
-    then u<=0 & v<=0 or u>=0 & v>=0;
+    then u<=0 & v<=0 or u>=0 & v>=0 by A4,A1,A3,COMPLEX1:163;
     then -u=sqrt ((a+sqrt (a^2+b^2))/2) & -v=sqrt ((-a+sqrt (a^2+b^2))/ 2) or
     u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2)
     by A5,A7,SQUARE_1:89,90;
     hence thesis by COMPLEX1:29;
   end;
   suppose b<0;
-    then 2*(u*v)<0 by A1,A2,A3,A4,COMPLEX1:163;
+    then 2*(u*v)<0 by A1,A3,A4,COMPLEX1:163;
     then u*v<0;
     then u<0 & v>0 or u>0 & v<0 by XREAL_1:135;
     then -u=sqrt ((a+sqrt (a^2+b^2))/2) & v=sqrt ((-a+sqrt (a^2+b^2))/2) or
@@ -1065,11 +959,7 @@ A7: u^2+v^2=sqrt (a^2+b^2) by A6,SQUARE_1:89;
   end;
 end;
 
-theorem
-  Polynom(0,0,0,z) = 0;
-
-theorem
-  z1<>0 & Polynom(z1,0,0,z) = 0 implies z=0;
+canceled 2;
 
 theorem
   z1<>0 & Polynom(z1,z2,0,z)=0 implies z=-(z2/z1) or z=0
@@ -1153,8 +1043,7 @@ proof
 A1: z1<>0 & Polynom(z1,z2,0,0,z)=0;
   then 0 =(z1*z +z2)*z^2;
   then Polynom(z1,z2,z)=0 or 1*z^2+0*z+0=0;
-  then z=-(z2/z1) or Polynom(1r,0,0,z)=0 by A1,Th24;
-  hence z=-(z2/z1) or z=0 by COMPLEX1:def 7;
+  hence z=-(z2/z1) or z=0 by A1,Th24;
 end;
 
 theorem
@@ -1200,111 +1089,29 @@ A2: s=-(z3/z1) & h=(z2/(2*z1))^2-z3/z1 & t=z2/(2*z1);
   hence thesis by A1,A2,Th37;
 end;
 
-theorem
-  (s-(1/3)*z1)^2 =s^2+(-(2/3))*z1*s+(1/9)*z1^2;
+canceled 10;
 
-theorem
-  z=s-(1/3)*z1 implies z^3 =s^3-z1*s^2+(1/3)*z1^2*s-(1/27)*z1^3;
-
-canceled;
-
-theorem Th46:
-  for z being Element of COMPLEX holds [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
-  = [*|.z.|,0*]*[*cos Arg z,sin Arg z *]
+Th50:
+  for n be Nat st n>0 holds 0 |^ n = 0 
 proof
-  let z be Element of COMPLEX;
-A1: [*|.z.|,0*] = |.z.|+0*<i> &
-  [*cos Arg z,sin Arg z *] = cos Arg z+(sin Arg z)*<i> by COMPLEX1:27;
-  [* |.z.|*cos Arg z, |.z.|*sin Arg z *]
-  =|.z.|*cos Arg z-0*sin Arg z+(|.z.|*sin Arg z+(cos Arg z)*0)*<i>
-  by COMPLEX1:27
-    .= [*|.z.|,0*]*[*cos Arg z,sin Arg z *] by A1;
-  hence thesis;
-end;
-
-canceled 2;
-
-theorem
-  for z be complex number holds z|^2= z*z by Lm2;
-
-theorem Th50:
-  for n be Nat st n>0 holds 0 |^ n = 0
-proof
-  let n be Nat;
-  assume n>0;
-  then n >= 0+1 by NAT_1:13;
-  then
-A1: n-1 >= 0 by XREAL_1:21;
-  n=n-1+1
-    .= n-'1+1 by A1,XREAL_0:def 2;
-  hence 0 |^ n = (0 |^ (n-'1))*0 by NEWTON:11
-    .= 0;
-end;
-
-theorem Th51:
-  for x,y be Element of COMPLEX for n be Element of NAT holds
-  (x*y) |^ n = x |^ n * y |^ n
-proof
-  let x,y be Element of COMPLEX;
-  defpred P[Element of NAT] means (x*y) |^ $1 = x |^ $1 * y |^ $1;
-  (x*y) |^ 0 =1 by NEWTON:9
-    .=(x |^ 0)*1 by NEWTON:9
-    .=(x |^ 0)*(y |^ 0) by NEWTON:9;
-  then
-A1: P[0];
-A2: now
-    let n be Element of NAT;
-    assume P[n];
-    then (x*y)|^ (n+1)= x|^ n * y|^ n * (y*x) by NEWTON:11
-      .= x|^ n * (y|^ n * y*x)
-      .= x|^ n * (y|^ (n+1)*x) by NEWTON:11
-      .= x|^ n * x *(y|^ (n+1))
-      .= x|^ (n+1) * y|^ (n+1) by NEWTON:11;
-    hence P[n+1];
-  end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A1,A2);
-end;
-
-theorem Th52:
-  for x be Real st x > 0
-  for n be Element of NAT holds [*x,0*]|^ n = x to_power n
-proof
-  let x be Real;
-  assume
-A1: x > 0;
-  defpred P[Element of NAT] means [*x,0*]|^ $1 = x to_power $1;
-  [*x,0*]|^ 0 = 1+0*<i> by NEWTON:9
-    .= x to_power 0+0*<i> by POWER:29;
-  then
-A2: P[0];
-A3: now
-    let n be Element of NAT;
-A4: [*x to_power n,0*] = x to_power n+0*<i> &
-    [*x,0*] = x+0*<i> by COMPLEX1:27;
-    assume P[n];
-     [*x,0*]|^ (n+1) = (x to_power n)*x by A4,NEWTON:11
-      .= (x to_power n)*(x to_power 1) by POWER:30
-      .= x to_power (n+1) by A1,POWER:32;
-    hence P[n+1];
-  end;
-  thus for n be Element of NAT holds P[n] from NAT_1:sch 1(A2,A3);
+  let n be Nat; assume n>0; then
+  n >= 0+1 by NAT_1:13; 
+  hence thesis by NEWTON:16;
 end;
 
 theorem Th53:
-  for x being Real, n be Element of NAT holds
-  [*cos x,sin x*] |^ n = cos (n*x) + sin (n*x)*<i>
+  for x being real number, n be Element of NAT holds
+  (cos x + sin x*<i>) |^ n = cos (n*x) + sin (n*x)*<i>
 proof
-  let x be Real;
+  let x be real number;
   defpred P[Element of NAT] means
-  [*cos x,sin x*]|^ $1 = cos ($1*x)+sin ($1*x)*<i>;
+   (cos x +sin x*<i>)|^ $1 = cos ($1*x)+sin ($1*x)*<i>;
 A1: P[0] by NEWTON:9,SIN_COS:34;
 A2: now
     let n be Element of NAT;
-A3: [*cos(n*x),sin(n*x)*] = cos(n*x)+sin(n*x)*<i> &
-    [*cos x,sin x*] = cos x+(sin x)*<i> by COMPLEX1:27;
     assume P[n];
-    then [*cos x,sin x*] |^ (n+1)
-    = (cos(n*x)+sin(n*x)*<i>)*(cos x+(sin x)*<i>) by A3,NEWTON:11
+    then (cos x + sin x*<i>) |^ (n+1)
+    = (cos(n*x)+sin(n*x)*<i>)*(cos x+(sin x)*<i>) by NEWTON:11
       .= cos(n*x)*cos x - sin(n*x)*sin x+ (cos(n*x)*sin x+cos x*sin(n*x))*<i>
       .= cos(n*x+x)+(cos(n*x)*sin x+cos x*sin(n*x))*<i> by SIN_COS:80
       .= cos((n+1)*x)+sin((n+1)*x)*<i> by SIN_COS:80;
@@ -1325,22 +1132,14 @@ proof
 A1: z <> 0 or n > 0;
   per cases by A1;
   suppose z <> 0;
-    then
-A2: |.z.| > 0 by COMPLEX1:133;
-A3: [*|.z.|,0*] = |.z.|+0*<i> &
-    [*cos Arg z,sin Arg z*] = cos Arg z+(sin Arg z)*<i> by COMPLEX1:27;
     set x=Arg z;
-A4: [*cos (n*x),sin (n*x)*] = cos (n*x)+sin (n*x)*<i> by COMPLEX1:27;
-    z|^ n =[*|.z.|*cos Arg z-0*sin Arg z,|.z.|*sin Arg z+cos Arg z*0*]|^ n
+    z|^ n
+      =(|.z.|*cos Arg z-0*sin Arg z+(|.z.|*sin Arg z+cos Arg z*0)*<i>)|^ n
     by COMPLEX2:19
-      .=(|.z.|*cos Arg z-0*sin Arg z+(|.z.|*sin Arg z+cos Arg z*0)*<i>)|^ n
-    by COMPLEX1:27
-      .=([*|.z.|,0*]*[*cos Arg z,sin Arg z*])|^ n by A3
-      .= [*|.z.|,0*]|^ n*[*cos Arg z,sin Arg z*]|^ n by Th51;
-    hence z|^ n= [*|.z.|,0*]|^ n*[*cos (n*x),sin (n*x)*] by A4,Th53
-      .= (|.z.| to_power n)*[*cos (n*Arg z),sin (n*Arg z)*] by A2,Th52
-      .= (|.z.| to_power n+0*<i>)*(cos (n*Arg z)+(sin (n*Arg z))*<i>)
-    by COMPLEX1:27
+      .=(|.z.|*(cos Arg z+sin Arg z*<i>))|^ n
+      .= |.z.||^ n*(cos Arg z+sin Arg z*<i>)|^ n by NEWTON:12;
+    hence z|^ n
+      = (|.z.| to_power n)*(cos (n*Arg z)+sin (n*Arg z)*<i>) by Th53
       .= (|.z.| to_power n)*cos(n*Arg z)+(|.z.| to_power n)*sin(n*Arg z)*<i>;
   end;
   suppose
@@ -1353,12 +1152,12 @@ end;
 
 theorem Th55:
   for n,k be Element of NAT,x be Real st n <> 0 holds
-  [*cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)*]|^ n = cos x + (sin x)*<i>
+  (cos((x+2*PI*k)/n) + sin((x+2*PI*k)/n)*<i>)|^ n = cos x + (sin x)*<i>
 proof
   let n,k be Element of NAT,x be Real;
   assume
 A1: n <> 0;
-  thus [*cos((x+2*PI*k)/n),sin((x+2*PI*k)/n)*]|^ n
+  thus (cos((x+2*PI*k)/n)+ sin((x+2*PI*k)/n)*<i>)|^ n
   = cos (n*((x+2*PI*k)/n))+sin (n*((x+2*PI*k)/n))*<i> by Th53
     .= cos(x+2*PI*k)+sin(n*((x+2*PI*k)/n))*<i> by A1,XCMPLX_1:88
     .= cos(x+2*PI*k)+sin(x+2*PI*k)*<i> by A1,XCMPLX_1:88
@@ -1372,64 +1171,49 @@ end;
 
 theorem Th56:
   for z be complex number for n,k be Element of NAT st n <> 0 holds
-  z = [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]|^ n
+  z = ((n-root |.z.|)*cos((Arg z+2*PI*k)/n) +
+  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i>)|^ n
 proof
   let z be complex number;
   let n,k be Element of NAT;
   assume
 A1: n <> 0;
-  then
-A2: n > 0;
-  then
-A3: n >= 0+1 by NAT_1:13;
+A3: n >= 0+1 by NAT_1:13,A1;
   per cases;
   suppose z <> 0;
     then
 A4: |.z.| > 0 by COMPLEX1:133;
-    then n-root |.z.| = n -Root |.z.| by A3,POWER:def 1;
-    then
-A5: n-root |.z.| > 0 by A3,A4,PREPOWER:def 3;
-    thus [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-    (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]|^ n
-    =((n-root |.z.|)*cos((Arg z+2*PI*k)/n)-
-    0*sin((Arg z+2*PI*k)/n)+((n-root |.z.|)*sin((Arg z+2*PI*k)/n)+
-    cos((Arg z+2*PI*k)/n)*0)*<i>)|^ n by COMPLEX1:27
-      .= ((n-root |.z.|+0*<i>)*
-    (cos((Arg z+2*PI*k)/n)+(sin((Arg z+2*PI*k)/n))*<i>))|^ n
-      .= ((n-root |.z.|+0*<i>)*
-    [*cos((Arg z+2*PI*k)/n),sin((Arg z+2*PI*k)/n)*])|^ n by COMPLEX1:27
-      .= ([*n-root |.z.|,0*]*
-    [*cos((Arg z+2*PI*k)/n),sin((Arg z+2*PI*k)/n)*])|^ n by COMPLEX1:27
-      .= ([*n-root |.z.|,0*]|^ n)
-    *([*cos((Arg z+2*PI*k)/n),sin((Arg z+2*PI*k)/n)*]|^ n) by Th51
-      .= ([*n-root |.z.|,0*]|^ n)*(cos Arg z+(sin Arg z)*<i>) by A1,Th55
-      .= ((n-root |.z.|) to_power n)*(cos Arg z+(sin Arg z)*<i>) by A5,Th52
+    thus ((n-root |.z.|)*cos((Arg z+2*PI*k)/n)+
+    (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i>)|^ n
+      = ((n-root |.z.|)*
+    (cos((Arg z+2*PI*k)/n)+sin((Arg z+2*PI*k)/n)*<i>))|^ n
+      .= ((n-root |.z.|)|^ n)
+    *((cos((Arg z+2*PI*k)/n)+sin((Arg z+2*PI*k)/n)*<i>)|^ n) by NEWTON:12
+      .= ((n-root |.z.|)|^ n)*(cos Arg z+(sin Arg z)*<i>) by A1,Th55
       .= |.z.|*(cos Arg z+(sin Arg z)*<i>) by A1,A4,COMPTRIG:17
       .= |.z.|*cos Arg z-0*sin Arg z+(|.z.|*sin Arg z+0*cos Arg z)*<i>
-      .= [*|.z.|*cos Arg z-0*sin Arg z,|.z.|*sin Arg z+0*cos Arg z*]
-    by COMPLEX1:27
       .= z by COMPLEX2:19;
   end;
   suppose
 A6: z = 0;
-    hence [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-    (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]|^ n =([*0*cos((Arg z+2*PI*k)/n),
-    (n-root 0)*sin((Arg z+2*PI*k)/n)*]|^ n) by A3,COMPLEX1:130,POWER:6
-      .= [*0,0*sin((Arg z+2*PI*k)/n)*]|^ n by A3,POWER:6
-      .= z by A2,A6,Lm1,Th50;
+    hence ((n-root |.z.|)*cos((Arg z+2*PI*k)/n)+
+    (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i>)|^ n
+       =((0*cos((Arg z+2*PI*k)/n)+
+    (n-root 0)*sin((Arg z+2*PI*k)/n)*<i>)|^ n) by A3,COMPLEX1:130,POWER:6
+      .= (0*sin((Arg z+2*PI*k)/n)*<i>)|^ n by A3,POWER:6
+      .= z by A1,A6,Th50;
   end;
 end;
 
 theorem
   for z be Element of COMPLEX, n be non empty Element of NAT,
-  k be Element of NAT holds [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*] is CRoot of n,z
+  k be Element of NAT holds (n-root |.z.|)*cos((Arg z+2*PI*k)/n)+
+  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i> is CRoot of n,z
 proof
   let z be Element of COMPLEX,
   n be non empty Element of NAT,k be Element of NAT;
-  [*(n-root |.z.|)*cos((Arg z+2*PI*k)/n),
-  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*]|^ n=z by Th56;
+  ((n-root |.z.|)*cos((Arg z+2*PI*k)/n)+
+  (n-root |.z.|)*sin((Arg z+2*PI*k)/n)*<i>)|^ n=z by Th56;
   hence thesis by COMPTRIG:def 2;
 end;
 
@@ -1485,9 +1269,7 @@ theorem
   cos(2*PI*k/n) + sin(2*PI*k/n)*<i> is CRoot of n,1
 proof
   let n be non empty Element of NAT,k be Element of NAT;
-A1: [*cos(2*PI*k/n),sin(2*PI*k/n)*] = cos(2*PI*k/n)+sin(2*PI*k/n)*<i>
-  by COMPLEX1:27;
-  [*cos(2*PI*k/n),sin(2*PI*k/n)*]|^n
+  (cos(2*PI*k/n)+sin(2*PI*k/n)*<i>)|^n
   =cos(n*((2*PI*k)/n))+sin(n*((2*PI*k)/n))*<i> by Th53
     .=cos(2*PI*k)+(sin(n*((2*PI*k)/n)))*<i> by XCMPLX_1:88
     .=cos(2*PI*k+0)+(sin(2*PI*k+0))*<i> by XCMPLX_1:88
@@ -1495,7 +1277,7 @@ A1: [*cos(2*PI*k/n),sin(2*PI*k/n)*] = cos(2*PI*k/n)+sin(2*PI*k/n)*<i>
     .=cos.(2*PI*k+0)+(sin.(2*PI*k+0))*<i> by SIN_COS:def 21
     .=cos.(2*PI*k+0)+(sin.0)*<i> by SIN_COS2:10
     .=1 by SIN_COS:33,SIN_COS2:11;
-  hence thesis by A1,COMPTRIG:def 2;
+  hence thesis by COMPTRIG:def 2;
 end;
 
 canceled;
@@ -1509,28 +1291,23 @@ proof
 A1: s<>0 & z<>0 & n>=1 & s|^ n=z|^ n;
   then
 A2: |.s.|>0 & |.z.|>0 by COMPLEX1:133;
-  z|^ n =[* |.s.|*cos Arg s, |.s.|*sin Arg s *]|^ n by A1,COMPLEX2:19
-    .=([*|.s.|,0*]*[*cos Arg s,sin Arg s *])|^ n by Th46
-    .=([*|.s.|,0*]|^ n)*([*cos Arg s,sin Arg s *]|^ n) by Th51
-    .=(|.s.| to_power n)*([*cos Arg s,sin Arg s *]|^ n) by A2,Th52
+  z|^ n = (|.s.|*cos Arg s + |.s.|*sin Arg s *<i>)|^ n by A1,COMPLEX2:19
+    .=(|.s.|*(cos Arg s+sin Arg s *<i>))|^ n
+    .=(|.s.||^ n)*((cos Arg s+sin Arg s *<i>)|^ n) by NEWTON:12
     .=(|.s.| to_power n)*(cos (n*Arg s)+sin (n*Arg s)*<i>) by Th53
-    .= (|.s.| to_power n)*cos (n*Arg s)-0*sin (n*Arg s)+
-  ((|.s.| to_power n)*sin (n*Arg s)+cos (n*Arg s)*0)*<i>
-    .= [*(|.s.| to_power n)*cos (n*Arg s)
-  ,(|.s.| to_power n)*sin (n*Arg s)*] by COMPLEX1:27;
-  then [*(|.s.| to_power n)*cos (n*Arg s),(|.s.| to_power n)*sin (n*Arg s )*]
-  =[* |.z.|*cos Arg z, |.z.|*sin Arg z *]|^ n by COMPLEX2:19
-    .=([*|.z.|,0*]*[*cos Arg z,sin Arg z *])|^ n by Th46
-    .=([*|.z.|,0*]|^ n)*([*cos Arg z,sin Arg z *]|^ n) by Th51
-    .=(|.z.| to_power n)*([*cos Arg z,sin Arg z *]|^ n) by A2,Th52
+    .= ((|.s.| to_power n)*cos (n*Arg s)
+  )+((|.s.| to_power n)*sin (n*Arg s))*<i>;
+  then ((|.s.| to_power n)*cos (n*Arg s))
+  +((|.s.| to_power n)*sin (n*Arg s ))*<i>
+  = (|.z.|*cos Arg z + |.z.|*sin Arg z *<i>)|^ n by COMPLEX2:19
+    .=(|.z.|*(cos Arg z+sin Arg z *<i>))|^ n
+    .=(|.z.||^ n)*((cos Arg z+sin Arg z *<i>)|^ n) by NEWTON:12
     .=(|.z.| to_power n)*(cos (n*Arg z)+sin (n*Arg z)*<i>) by Th53
-    .= (|.z.| to_power n)*cos (n*Arg z)-0*sin (n*Arg z)+
-  ((|.z.| to_power n)*sin (n*Arg z)+cos (n*Arg z)*0)*<i>
-    .= [*(|.z.| to_power n)*cos (n*Arg z),(|.z.| to_power n)
-  *sin (n*Arg z)*] by COMPLEX1:27;
+    .= ((|.z.| to_power n)*cos (n*Arg z))+((|.z.| to_power n)
+  *sin (n*Arg z))*<i>;
   then (|.s.| to_power n)*cos (n*Arg s)=(|.z.| to_power n)*cos (n*Arg z)
   &(|.s.| to_power n)*sin (n*Arg s)
-  =(|.z.| to_power n)*sin (n*Arg z) by ARYTM_0:12;
+  =(|.z.| to_power n)*sin (n*Arg z) by COMPLEX1:163;
   then ((|.s.| to_power n))^2*(cos (n*Arg s))^2+
   ((|.s.| to_power n)*sin (n*Arg s))^2 =((|.z.| to_power n)*cos (n*Arg z))^2+
   ((|.z.| to_power n)*sin (n*Arg z))^2 by SQUARE_1:68;

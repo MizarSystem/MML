@@ -8,10 +8,10 @@ environ
 
  vocabularies ARYTM_1, SQUARE_1, ARYTM_3, FINSEQ_1, RELAT_1, FUNCT_1, RLVECT_1,
       BOOLE, FINSEQ_2, FINSEQ_4, BINOP_1, VECTSP_1, LATTICES, NORMSP_1, ARYTM,
-      COMPLFLD, GROUP_1, REALSET1, POLYNOM1, TARSKI, CARD_1, CARD_3, SETWISEO,
-      ALGSEQ_1, POLYNOM3, POLYNOM2, ALGSTR_2, FUNCT_4, VECTSP_2, FUNCOP_1,
-      FUNCT_2, RFINSEQ, POLYNOM5, FVSUM_1, FINSET_1, NEWTON, MCART_1, SGRAPH1,
-      CAT_1, DTCONSTR, MEMBERED, ANPROJ_1, UPROOTS, ORDINAL2, PBOOLE, FINSOP_1,
+      COMPLFLD, GROUP_1, REALSET1, POLYNOM1, TARSKI, CARD_1, CARD_3, ALGSEQ_1,
+      POLYNOM3, POLYNOM2, ALGSTR_2, FUNCT_4, VECTSP_2, FUNCOP_1, FUNCT_2,
+      RFINSEQ, POLYNOM5, FVSUM_1, FINSET_1, NEWTON, MCART_1, SGRAPH1, CAT_1,
+      DTCONSTR, MEMBERED, ANPROJ_1, UPROOTS, ORDINAL2, PBOOLE, FINSOP_1,
       ALGSTR_0, VALUED_0;
  notations TARSKI, XBOOLE_0, XCMPLX_0, XXREAL_0, SUBSET_1, ORDINAL1, CARD_1,
       NUMBERS, XREAL_0, ZFMISC_1, REAL_1, SETWISEO, VECTSP_2, BINOP_1, RELAT_1,
@@ -19,17 +19,17 @@ environ
       XXREAL_2, VALUED_0, NAT_1, NAT_D, STRUCT_0, ALGSTR_0, RLVECT_1, VECTSP_1,
       FINSOP_1, NORMSP_1, GROUP_4, RVSUM_1, ALGSEQ_1, COMPLFLD, BHSP_1,
       POLYNOM3, POLYNOM4, POLYNOM5, FINSET_1, MCART_1, PRE_CIRC, FUNCT_4,
-      FUNCOP_1, DTCONSTR, RFINSEQ, SEQ_1, PBOOLE, POLYNOM1, FVSUM_1, WSIERP_1,
-      MEMBERED, GROUP_1, RECDEF_1;
+      FUNCOP_1, DTCONSTR, CLASSES1, RFINSEQ, SEQ_1, PBOOLE, POLYNOM1, FVSUM_1,
+      WSIERP_1, MEMBERED, GROUP_1, RECDEF_1;
  constructors WELLORD2, SETWISEO, XXREAL_0, REAL_1, FINSEQOP, FINSOP_1,
       RFINSEQ, NAT_D, PRE_CIRC, WSIERP_1, VECTSP_2, REALSET2, ALGSTR_1,
       GROUP_4, BHSP_1, MATRIX_2, MONOID_0, GOBOARD1, DTCONSTR, POLYNOM2,
-      POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2, XXREAL_2;
+      POLYNOM4, POLYNOM5, SEQ_1, RECDEF_1, BINOP_2, CLASSES1, XXREAL_2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, FUNCOP_1,
       FINSET_1, NUMBERS, XXREAL_0, XREAL_0, NAT_1, INT_1, BINOP_2, CARD_1,
       MEMBERED, FINSEQ_1, PRE_CIRC, STRUCT_0, VECTSP_1, COMPLFLD, ALGSTR_1,
       MONOID_0, GOBRD13, POLYNOM1, POLYNOM3, POLYNOM4, POLYNOM5, POLYNOM7,
-      CHAIN_1, FINSEQ_2, VALUED_0, XXREAL_2;
+      CHAIN_1, FINSEQ_2, VALUED_0, XXREAL_2, FUNCT_2;
  requirements NUMERALS, BOOLE, SUBSET, ARITHM, REAL;
 
 
@@ -62,24 +62,27 @@ theorem :: UPROOTS:3
 
 begin :: Canonical ordering of a finite set into a finite sequence
 
-definition
+registration
   let A be finite set;
-  func canFS(A) -> FinSequence of A means
-:: UPROOTS:def 1
-
-  len it = card A &
-  ex f being FinSequence st len f = card A &
-  (f.1 = [choose A, A \ {choose A}] or card A = 0) &
-  (for i being Element of NAT st 1 <= i & i < card A for x being set
-  st f.i = x holds f.(i+1) = [choose x`2, x`2 \ {choose x`2}]) &
-  for i being Element of NAT st i in dom it holds it.i = (f.i)`1;
+  cluster bijective FinSequence of A;
 end;
 
-theorem :: UPROOTS:4
-  for A being finite set holds canFS(A) is one-to-one;
+definition
+  let A be finite set;
+  func canFS(A) -> FinSequence of A equals
+:: UPROOTS:def 1
+   the bijective FinSequence of A;
+end;
+
+registration
+  let A be finite set;
+  cluster canFS A -> bijective;
+end;
+
+canceled;
 
 theorem :: UPROOTS:5
-  for A being finite set holds rng canFS(A) = A;
+ for A being finite set holds len canFS A = card A;
 
 theorem :: UPROOTS:6
   for a being set holds canFS({a}) = <* a *>;

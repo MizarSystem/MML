@@ -52,9 +52,9 @@
 <Adjective nr="4"/>
 <Adjective nr="23"/>
 <Adjective nr="28"/>
-<Adjective nr="57"/>
 <Adjective nr="58"/>
-<Adjective nr="59">
+<Adjective nr="59"/>
+<Adjective nr="60">
 <Func kind="K" nr="24">
 <LocusVar nr="1"/>
 </Func>

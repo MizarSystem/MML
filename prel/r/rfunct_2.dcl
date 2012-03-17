@@ -159,7 +159,7 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 <CCluster aid="RFUNCT_2" nr="2">
@@ -175,14 +175,14 @@
 </Typ>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32"/>
+<Adjective nr="33"/>
 </Cluster>
 </CCluster>
 <CCluster aid="RFUNCT_2" nr="3">
 <ArgTypes/>
 <Cluster>
 <Adjective nr="4"/>
-<Adjective nr="32" value="false"/>
+<Adjective nr="33" value="false"/>
 </Cluster>
 <Typ kind="M" nr="4">
 <Cluster/>

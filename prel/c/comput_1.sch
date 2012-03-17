@@ -33,7 +33,6 @@
 <ArticleID name="RAT_1"/>
 <ArticleID name="VALUED_1"/>
 <ArticleID name="RFUNCT_3"/>
-<ArticleID name="FUNCT_7"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="UNIALG_1"/>
 <ArticleID name="FUNCT_6"/>
@@ -87,9 +86,9 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="K" nr="28">
-<Func kind="K" nr="316">
+<Func kind="K" nr="307">
 <Func kind="K" nr="125">
 <Func kind="F" nr="2"/>
 </Func>
@@ -117,9 +116,9 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="F" nr="1"/>
-<Func kind="K" nr="358">
+<Func kind="K" nr="349">
 <Func kind="K" nr="86"/>
 <Var nr="1"/>
 </Func>
@@ -140,7 +139,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="136">
 <Func kind="K" nr="86"/>
@@ -215,9 +214,9 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="K" nr="28">
-<Func kind="K" nr="316">
+<Func kind="K" nr="307">
 <Func kind="K" nr="126">
 <Func kind="F" nr="2"/>
 <Func kind="F" nr="3"/>
@@ -255,7 +254,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="F" nr="1"/>
 <Func kind="K" nr="136">
 <Func kind="K" nr="86"/>
@@ -281,7 +280,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="F" nr="2"/>
 <Func kind="K" nr="136">
 <Func kind="K" nr="86"/>
@@ -307,7 +306,7 @@
 <Func kind="K" nr="86"/>
 </Typ>
 <Pred kind="R" nr="1">
-<Func kind="K" nr="321">
+<Func kind="K" nr="312">
 <Func kind="F" nr="3"/>
 <Func kind="K" nr="136">
 <Func kind="K" nr="86"/>

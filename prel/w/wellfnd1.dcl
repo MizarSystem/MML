@@ -53,7 +53,7 @@
 <Adjective nr="15"/>
 <Adjective nr="21" value="false"/>
 <Adjective nr="24"/>
-<Adjective nr="30"/>
+<Adjective nr="32"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="2">
@@ -62,8 +62,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="66" value="false"/>
-<Adjective nr="117"/>
+<Adjective nr="69" value="false"/>
+<Adjective nr="120"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WELLFND1" nr="3">
@@ -81,7 +81,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="118">
+<Adjective nr="121">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>
@@ -110,10 +110,10 @@
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="103">
+<Adjective nr="106">
 <LocusVar nr="1"/>
 </Adjective>
-<Adjective nr="118">
+<Adjective nr="121">
 <LocusVar nr="1"/>
 </Adjective>
 </Cluster>

@@ -14,6 +14,8 @@
 <ArticleID name="ORDINAL1"/>
 <ArticleID name="NUMBERS"/>
 <ArticleID name="XREAL_0"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="PRE_TOPC"/>
 <ArticleID name="ENUMSET1"/>
@@ -33,19 +35,19 @@
 </Signature>
 <FCluster aid="FRECHET" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="195"/>
+<Func kind="K" nr="203"/>
 <Cluster>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="81"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
+<Adjective nr="86"/>
 </Cluster>
 </FCluster>
 <CCluster aid="FRECHET" nr="1">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </Typ>
 <Typ kind="M" nr="2">
@@ -68,33 +70,33 @@
 <CCluster aid="FRECHET" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="81"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="86"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="83"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="88"/>
 </Cluster>
 </CCluster>
 <CCluster aid="FRECHET" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="83"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="88"/>
 </Cluster>
 <Typ kind="G" nr="6">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="84"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="89"/>
 </Cluster>
 </CCluster>
 </Registrations>

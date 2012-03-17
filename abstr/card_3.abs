@@ -10,22 +10,23 @@ environ
       TARSKI, MCART_1, PROB_1, RLVECT_1, CARD_2, ORDINAL2, FINSET_1, ARYTM_1,
       CLASSES1, ZFMISC_1, WELLORD1, WELLORD2, RELAT_2, CARD_3, HAHNBAN,
       FRAENKEL, AMI_1, ZF_REFLE, PARTFUN1, FUNCT_4, CAT_1, ARYTM, SETFAM_1,
-      AMISTD_2, PRALG_2;
+      AMISTD_2, PRALG_2, CARD_4, SUPINF_2, FINSUB_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, NUMBERS, XCMPLX_0,
       NAT_1, RELAT_1, RELAT_2, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, FRAENKEL,
-      SETFAM_1, ORDINAL1, WELLORD1, MCART_1, WELLORD2, FUNCOP_1, FUNCT_4,
-      FINSET_1, CARD_2, CLASSES1;
+      SETFAM_1, ORDINAL1, ORDINAL2, WELLORD1, MCART_1, WELLORD2, FUNCOP_1,
+      FUNCT_4, FINSET_1, FINSUB_1, CARD_2, CLASSES1, XXREAL_0;
  constructors SETFAM_1, RELAT_2, WELLORD1, PARTFUN1, WELLORD2, FUNCOP_1,
-      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1;
+      FUNCT_4, FRAENKEL, XREAL_0, NAT_1, CARD_2, CLASSES1, ORDINAL2, ORDINAL3,
+      XXREAL_0, FINSUB_1;
  registrations XBOOLE_0, SUBSET_1, SETFAM_1, RELAT_1, FUNCT_1, ORDINAL1,
-      FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, XREAL_0, CARD_1;
- requirements NUMERALS, BOOLE, SUBSET;
+      FUNCOP_1, FUNCT_4, FINSET_1, FRAENKEL, XREAL_0, CARD_1, FINSUB_1;
+ requirements NUMERALS, BOOLE, SUBSET, ARITHM;
 
 
 begin
 
 reserve A,B,C for Ordinal,
-  K,M,N for Cardinal,
+  K,L,M,N for Cardinal,
   x,y,y1,y2,z,u,X,Y,Z,Z1,Z2 for set,
   n for Element of NAT,
   f,f1,g,h for Function,
@@ -78,7 +79,7 @@ definition
   func Card f -> Cardinal-Function means
 :: CARD_3:def 2
 
-   dom it = dom f & for x st x in dom f holds it.x = Card(f.x);
+   dom it = dom f & for x st x in dom f holds it.x = card(f.x);
   func disjoin f -> Function means
 :: CARD_3:def 3
 
@@ -103,7 +104,7 @@ theorem :: CARD_3:9
   Card {} = {};
 
 theorem :: CARD_3:10
-  Card (X --> Y) = X --> Card Y;
+  Card (X --> Y) = X --> card Y;
 
 theorem :: CARD_3:11
   disjoin {} = {};
@@ -171,7 +172,7 @@ theorem :: CARD_3:30
   pi(X,x) \+\ pi(Y,x) c= pi(X \+\ Y,x);
 
 theorem :: CARD_3:31
-  Card pi(X,x) c= Card X;
+  card pi(X,x) c= card X;
 
 theorem :: CARD_3:32
   x in Union disjoin f implies ex y,z st x = [y,z];
@@ -198,21 +199,21 @@ theorem :: CARD_3:38
 reserve F,G for Cardinal-Function;
 
 theorem :: CARD_3:39
-  for x st x in dom F holds Card (F.x) = F.x;
+  for x st x in dom F holds card (F.x) = F.x;
 
 theorem :: CARD_3:40
-  for x st x in dom F holds Card ((disjoin F).x) = F.x;
+  for x st x in dom F holds card ((disjoin F).x) = F.x;
 
 definition
   let F;
   func Sum F -> Cardinal equals
 :: CARD_3:def 7
 
-  Card Union disjoin F;
+  card Union disjoin F;
   func Product F -> Cardinal equals
 :: CARD_3:def 8
 
-  Card product F;
+  card product F;
 end;
 
 canceled 2;
@@ -253,10 +254,10 @@ theorem :: CARD_3:53
   Product(N --> M) = exp(M,N);
 
 theorem :: CARD_3:54
-  Card Union f c= Sum Card f;
+  card Union f c= Sum Card f;
 
 theorem :: CARD_3:55
-  Card Union F c= Sum F;
+  card Union F c= Sum F;
 
 ::
 :: K\"onig's theorem
@@ -295,13 +296,13 @@ theorem :: CARD_3:57
   Rank n is finite;
 
 theorem :: CARD_3:58
-  X is finite implies Card X in Card omega;
+  X is finite implies card X in card omega;
 
 theorem :: CARD_3:59
-  Card A in Card B implies A in B;
+  card A in card B implies A in B;
 
 theorem :: CARD_3:60
-  Card A in M implies A in M;
+  card A in M implies A in M;
 
 theorem :: CARD_3:61
   X is c=-linear implies
@@ -309,8 +310,8 @@ theorem :: CARD_3:61
   ex Z1 st Z1 in Z & for Z2 st Z2 in Z holds Z1 c= Z2;
 
 theorem :: CARD_3:62
-  (for Z st Z in X holds Card Z in M) & X is c=-linear implies
-  Card union X c= M;
+  (for Z st Z in X holds card Z in M) & X is c=-linear implies
+  card union X c= M;
 
 begin :: Addenda
 
@@ -564,3 +565,200 @@ theorem :: CARD_3:99
 theorem :: CARD_3:100
   for M,x, g being Function st x in product M holds x * g in product (M * g);
 
+:: moved from CARD_4, 2008.10.08, A.T.
+
+theorem :: CARD_3:101
+  X is finite iff card X in omega;
+
+reserve A,B for Ordinal;
+
+theorem :: CARD_3:102
+  A is infinite iff omega c= A;
+
+theorem :: CARD_3:103
+  N is finite & not M is finite implies N in M & N c= M;
+
+theorem :: CARD_3:104
+  not X is finite iff ex Y st Y c= X & card Y = omega;
+
+theorem :: CARD_3:105
+  card X = card Y iff nextcard X = nextcard Y;
+
+theorem :: CARD_3:106
+  nextcard N = nextcard M implies M = N;
+
+theorem :: CARD_3:107
+  N in M iff nextcard N c= M;
+
+theorem :: CARD_3:108
+  N in nextcard M iff N c= M;
+
+theorem :: CARD_3:109
+  0 in M iff 1 c= M;
+
+theorem :: CARD_3:110
+  1 in M iff 2 c= M;
+
+theorem :: CARD_3:111
+  M is finite & (N c= M or N in M) implies N is finite;
+
+reserve n,k for Nat;
+
+theorem :: CARD_3:112
+  A is limit_ordinal iff for B,n st B in A holds B+^ n in A;
+
+theorem :: CARD_3:113
+  A+^succ n = succ A +^ n & A +^ (n+1) = succ A +^ n;
+
+theorem :: CARD_3:114
+  ex n st A*^succ 1 = A +^ n;
+
+theorem :: CARD_3:115
+  A is limit_ordinal implies A *^ succ 1 = A;
+
+theorem :: CARD_3:116
+  omega c= A implies 1+^A = A;
+
+registration
+ cluster infinite -> limit_ordinal Cardinal;
+end;
+
+theorem :: CARD_3:117
+  not M is finite implies M+`M = M;
+
+theorem :: CARD_3:118
+  not M is finite & (N c= M or N in M) implies M+`N = M & N+`M = M;
+
+theorem :: CARD_3:119
+  not X is finite & (X,Y are_equipotent or Y,X are_equipotent) implies
+  X \/ Y,X are_equipotent & card (X \/ Y) = card X;
+
+theorem :: CARD_3:120
+  not X is finite & Y is finite implies
+  X \/ Y,X are_equipotent & card (X \/ Y) = card X;
+
+theorem :: CARD_3:121
+  not X is finite & (card Y in card X or card Y c= card X) implies
+  X \/ Y,X are_equipotent & card (X \/ Y) = card X;
+
+theorem :: CARD_3:122
+  for M,N being finite Cardinal holds M+`N is finite;
+
+theorem :: CARD_3:123
+  not M is finite implies not M+`N is finite & not N+`M is finite;
+
+theorem :: CARD_3:124
+  for M,N being finite Cardinal holds M*`N is finite;
+
+theorem :: CARD_3:125
+  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
+  implies K+`M c= L+`N & M+`K c= L+`N;
+
+theorem :: CARD_3:126
+  M in N or M c= N implies K+`M c= K+`N & K+`M c= N+`K &
+  M+`K c= K+`N & M+`K c= N+`K;
+
+definition
+  let X;
+  attr X is countable means
+:: CARD_3:def 15
+
+  card X c= omega;
+  attr X is denumerable means
+:: CARD_3:def 16
+  card X = omega;
+end;
+
+registration
+ cluster denumerable -> countable infinite set;
+ cluster countable infinite -> denumerable set;
+end;
+
+registration
+  cluster finite -> countable set;
+end;
+
+registration
+  cluster omega -> denumerable;
+end;
+
+registration
+ cluster denumerable set;
+end;
+
+theorem :: CARD_3:127
+  X is countable iff ex f st dom f = NAT & X c= rng f;
+
+registration let X be countable set;
+ cluster -> countable Subset of X;
+end;
+
+theorem :: CARD_3:128
+  X is countable & Y is countable implies X \/ Y is countable;
+
+theorem :: CARD_3:129
+  X is countable implies X /\ Y is countable;
+
+theorem :: CARD_3:130
+  X is countable implies X \ Y is countable;
+
+theorem :: CARD_3:131
+  X is countable & Y is countable implies X \+\ Y is countable;
+
+theorem :: CARD_3:132
+  (card dom f c= M & for x st x in dom f holds card (f.x) c= N) implies
+  card Union f c= M*`N;
+
+theorem :: CARD_3:133
+  (card X c= M & for Y st Y in X holds card Y c= N) implies card union X c=
+  M*`N;
+
+theorem :: CARD_3:134
+  for f st dom f is finite &
+  for x st x in dom f holds f.x is finite holds Union f is finite;
+
+theorem :: CARD_3:135
+  (omega)*`(card n) c= omega & (card n)*`(omega) c= omega;
+
+theorem :: CARD_3:136
+  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
+  implies K*`M c= L*`N & M*`K c= L*`N;
+
+theorem :: CARD_3:137
+  M in N or M c= N implies
+  K*`M c= K*`N & K*`M c= N*`K & M*`K c= K*`N & M*`K c= N*`K;
+
+theorem :: CARD_3:138
+  K in L & M in N or K c= L & M in N or K in L & M c= N or K c= L & M c= N
+  implies K = 0 or exp(K,M) c= exp(L,N);
+
+theorem :: CARD_3:139
+  M in N or M c= N implies K = 0 or
+  exp(K,M) c= exp(K,N) & exp(M,K) c= exp(N,K);
+
+theorem :: CARD_3:140
+  M c= M+`N & N c= M+`N;
+
+theorem :: CARD_3:141
+  N <> 0 implies M c= M*`N & M c= N*`M;
+
+theorem :: CARD_3:142
+  K in L & M in N implies K+`M in L+`N & M+`K in L+`N;
+
+theorem :: CARD_3:143
+  K+`M in K+`N implies M in N;
+
+theorem :: CARD_3:144
+  card X +` card Y = card X & card Y in card X implies card (X \ Y) = card X;
+
+theorem :: CARD_3:145
+  K*`M in K*`N implies M in N;
+
+registration
+  let A be finite set, B be set, f be Function of A, Fin B;
+  cluster Union f -> finite;
+end;
+
+theorem :: CARD_3:146
+  for A being non empty countable set
+  ex f being Function of NAT, A st rng f = A;

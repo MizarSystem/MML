@@ -34,7 +34,7 @@ definition
   & o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a3,b2 // a2,b1 &
   a3,b3 // a1,b1 holds a1,b2 // a2,b3;
   attr X is satisfying_PAP means
-  for o,a1,a2,a3,b1,b2,b3,M,N st M is_line & N is_line &
+  for o,a1,a2,a3,b1,b2,b3,M,N st M is being_line & N is being_line &
   o in M & a1 in M & a2 in M & a3 in M &
   o in N & b1 in N & b2 in N & b3 in N & not b2 in M & not a3 in N
   & o<>a1 & o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a3,b2 // a2,b1 &
@@ -57,7 +57,7 @@ definition
   o<>c1 & not LIN b,b1,a & not LIN b,b1,c & LIN o,a,a1 & LIN o,b,b1 & LIN
   o,c,c1 & a,b // a1,b1 & a,b // o,c & b,c // b1,c1 holds a,c // a1,c1;
   attr X is satisfying_SCH means
-  for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is_line & N is_line
+  for a1,a2,a3,a4,b1,b2,b3,b4,M,N st M is being_line & N is being_line
   & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N & a4 in N &
   b2 in N & b4 in N & not a4 in M & not a2 in M & not b2 in M &
   not b4 in M & not a1 in N & not a3 in N & not b1 in N & not b3 in N &
@@ -73,16 +73,6 @@ definition
   :Def8:
   for a,a1,b,b1,c,c1 st not LIN a,a1,b & not LIN a,a1,c & a,a1 // b,b1 &
   a,a1 // c,c1 & a,b // a1,b1 & a,c // a1,c1 holds b,c // b1,c1;
-end;
-
-notation
-  let X;
-  synonym OPAP_holds_in X for X is satisfying_OPAP; synonym PAP_holds_in X for
-  X is satisfying_PAP; synonym MH1_holds_in X for X is satisfying_MH1; synonym
-  MH2_holds_in X for X is satisfying_MH2; synonym TDES_holds_in X for
-  X is satisfying_TDES; synonym SCH_holds_in X for X is satisfying_SCH;
-  synonym OSCH_holds_in X for X is satisfying_OSCH; synonym des_holds_in X for
-  X is satisfying_des;
 end;
 
 theorem Th1:
@@ -147,10 +137,10 @@ A3: LIN a',b',c' & a'<>c' & b'<>c' by A1,A2,TRANSLAC:2;
 end;
 
 theorem Th3:
-  for A,a st A is_line ex K st a in K & A _|_ K
+  for A,a st A is being_line ex K st a in K & A _|_ K
 proof
   let A,a;
-  assume A is_line;
+  assume A is being_line;
   then consider b,c such that
 A1: b<>c & A = Line(b,c) by ANALMETR:def 13;
   consider d such that
@@ -162,28 +152,29 @@ A2: b,c _|_ a,d & a<>d by ANALMETR:51;
 end;
 
 theorem Th4:
-  A is_line & a in A & b in A & c in A implies LIN a,b,c
+  A is being_line & a in A & b in A & c in A implies LIN a,b,c
 proof
   assume that
-A1: A is_line and
+A1: A is being_line and
 A2: a in A & b in A & c in A;
   reconsider A'=A as Subset of Af(X) by ANALMETR:57;
   reconsider a'=a,b'=b,c'=c as Element of Af(X) by ANALMETR:47;
-  A' is_line by A1,ANALMETR:58;
+  A' is being_line by A1,ANALMETR:58;
   then LIN a',b',c' by A2,AFF_1:33;
   hence thesis by ANALMETR:55;
 end;
 
 theorem Th5:
-  A is_line & M is_line & a in A & b in A & a in M & b in M implies a=b or A=M
+  A is being_line & M is being_line & a in A & b in A & a in M & b in M
+   implies a=b or A=M
 proof
   assume that
-A1: A is_line & M is_line and
+A1: A is being_line & M is being_line and
 A2: a in A & b in A & a in M & b in M;
   assume
 A3: a<>b;
   reconsider A'=A,M'=M as Subset of Af X by ANALMETR:57;
-  A' is_line & M' is_line by A1,ANALMETR:58;
+  A' is being_line & M' is being_line by A1,ANALMETR:58;
   hence A=M by A2,A3,AFF_1:30;
 end;
 
@@ -196,21 +187,21 @@ proof
   let M' be Subset of Af(X),c',d' be Element of Af(X) such that
 A1: c =c' & d=d' & M=M' & a in M & b in M & c',d' // M';
   reconsider a'=a,b'=b as Element of Af(X) by ANALMETR:47;
-A2: M' is_line by A1,AFF_1:40;
+A2: M' is being_line by A1,AFF_1:40;
   then a',b' // M' by A1,AFF_1:66;
   then c',d' // a',b' by A1,A2,AFF_1:45;
   hence thesis by A1,ANALMETR:48;
 end;
 
 theorem Th7:
-  TDES_holds_in X implies Af(X) satisfies_TDES
+  X is satisfying_TDES implies Af(X) is Moufangian
 proof
   assume
-A1: TDES_holds_in X;
+A1: X is satisfying_TDES;
   let K' be Subset of Af(X);
   let o',a',b',c',a1',b1',c1' be Element of Af(X);
   assume
-A2: K' is_line & o' in K' & c' in K' & c1' in K' &
+A2: K' is being_line & o' in K' & c' in K' & c1' in K' &
   not a' in K' & o'<>c' & a'<>b' & LIN o',a',a1' & LIN o',b',b1' &
   a',b' // a1',b1' & a',c' // a1',c1' & a',b' // K';
   reconsider o=o',a=a',a1=a1',b=b',b1=b1',c =c',c1=c1' as Element
@@ -380,10 +371,10 @@ A34:    b,a // b1,a1 by A3,ANALMETR:81;
 end;
 
 theorem Th8:
-  Af(X) satisfies_des implies des_holds_in X
+  Af(X) is translational implies X is satisfying_des
 proof
   assume
-A1: Af(X) satisfies_des;
+A1: Af(X) is translational;
   let a,a1,b,b1,c,c1;
   assume
 A2: not LIN a,a1,b & not LIN a,a1,c & a,a1 // b,b1 &
@@ -392,13 +383,13 @@ A2: not LIN a,a1,b & not LIN a,a1,c & a,a1 // b,b1 &
   as Element of Af(X) by ANALMETR:47;
   LIN a',a1',a1' by AFF_1:16;
   then consider A' be Subset of Af(X) such that
-A3: A' is_line & a' in A' & a1' in A' & a1' in A' by AFF_1:33;
+A3: A' is being_line & a' in A' & a1' in A' & a1' in A' by AFF_1:33;
   LIN b',b1',b1' by AFF_1:16;
   then consider M' be Subset of Af(X) such that
-A4: M' is_line & b' in M' & b1' in M' & b1' in M' by AFF_1:33;
+A4: M' is being_line & b' in M' & b1' in M' & b1' in M' by AFF_1:33;
   LIN c',c1',c1' by AFF_1:16;
   then consider N' be Subset of Af(X) such that
-A5: N' is_line & c' in N' & c1' in N' & c1' in N' by AFF_1:33;
+A5: N' is being_line & c' in N' & c1' in N' & c1' in N' by AFF_1:33;
 A6: A' // M'
   proof
 A7: a'<>a1'
@@ -475,10 +466,10 @@ A17: a',b' // a1',b1' by A2,ANALMETR:48;
 end;
 
 theorem
-  MH1_holds_in X implies OSCH_holds_in X
+  X is satisfying_MH1 implies X is satisfying_OSCH
 proof
   assume
-A1: MH1_holds_in X;
+A1: X is satisfying_MH1;
   let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
   assume
 A2: M _|_ N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
@@ -486,11 +477,11 @@ A2: M _|_ N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
   not b4 in M & not a1 in N & not a3 in N & not b1 in N & not b3 in N &
   a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
   then
-A3: M is_line & N is_line by ANALMETR:62;
+A3: M is being_line & N is being_line by ANALMETR:62;
   reconsider b4'=b4,b1'=b1,b2'=b2,b3'=b3,a1'=a1,a2'=a2,a3'=a3,a4'=a4
   as Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-A4: M' is_line & N' is_line by A3,ANALMETR:58;
+A4: M' is being_line & N' is being_line by A3,ANALMETR:58;
   not M' // N'
   proof
     assume M' // N';
@@ -514,7 +505,8 @@ A9: LIN o',a4',a2' by A2,A4,A5,AFF_1:33;
     not LIN o',a1',a4'
     proof
       assume LIN o',a1',a4';
-      then ex A' st A' is_line & o' in A' & a1' in A' & a4' in A' by AFF_1:33;
+      then ex A' st A' is being_line & o' in A' & a1' in A' & a4' in A'
+       by AFF_1:33;
       hence contradiction by A2,A4,A5,AFF_1:30;
     end;
     hence thesis by A2,A7,A8,A9,AFF_1:23;
@@ -729,10 +721,10 @@ A49:  d3<>d4 by A2,A4,A5,A17,A44,AFF_1:30;
 end;
 
 theorem
-  MH2_holds_in X implies OSCH_holds_in X
+  X is satisfying_MH2 implies X is satisfying_OSCH
 proof
   assume
-A1: MH2_holds_in X;
+A1: X is satisfying_MH2;
   let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
   assume
 A2: M _|_ N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
@@ -740,11 +732,11 @@ A2: M _|_ N & a1 in M & a3 in M & b1 in M & b3 in M & a2 in N &
   not b4 in M & not a1 in N & not a3 in N & not b1 in N & not b3 in N &
   a3,a2 // b3,b2 & a2,a1 // b2,b1 & a1,a4 // b1,b4;
   then
-A3: M is_line & N is_line by ANALMETR:62;
+A3: M is being_line & N is being_line by ANALMETR:62;
   reconsider b4'=b4,b1'=b1,b2'=b2,b3'=b3,a1'=a1,a2'=a2,a3'=a3,a4'=a4
   as Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-A4: M' is_line & N' is_line by A3,ANALMETR:58;
+A4: M' is being_line & N' is being_line by A3,ANALMETR:58;
   not M' // N'
   proof
     assume M' // N';
@@ -944,10 +936,10 @@ A40:  b3,b4 _|_ d3,d4 by A1,A2,A18,A24,A29,A35,A38,A39,Def4;
 end;
 
 theorem
-  AH_holds_in X implies TDES_holds_in X
+  X is satisfying_AH implies X is satisfying_TDES
 proof
   assume
-A1: AH_holds_in X;
+A1: X is satisfying_AH;
   let o,a,a1,b,b1,c,c1;
   assume
 A2: o<>a & o<>a1 & o<>b & o<>b1 & o<>c & o<>c1 & not LIN b,b1,a &
@@ -1421,14 +1413,14 @@ A71:  a1=b1;
 end;
 
 theorem
-  OSCH_holds_in X & TDES_holds_in X implies SCH_holds_in X
+  X is satisfying_OSCH & X is satisfying_TDES implies X is satisfying_SCH
 proof
   assume that
-A1: OSCH_holds_in X and
-A2: TDES_holds_in X;
+A1: X is satisfying_OSCH and
+A2: X is satisfying_TDES;
   let a1,a2,a3,a4,b1,b2,b3,b4,M,N;
   assume that
-A3: M is_line & N is_line and
+A3: M is being_line & N is being_line and
 A4: a1 in M & a3 in M & b1 in M & b3 in M & a2 in N & a4 in N &
   b2 in N & b4 in N & not a4 in M & not a2 in M & not b2 in M &
   not b4 in M & not a1 in N & not a3 in N & not b1 in N &
@@ -1436,7 +1428,7 @@ A4: a1 in M & a3 in M & b1 in M & b3 in M & a2 in N & a4 in N &
   reconsider a1'=a1,a2'=a2,a3'=a3,a4'=a4,b1'=b1,b2'=b2,b3'=b3,b4'=b4
   as Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-A5: M' is_line & N' is_line by A3,ANALMETR:58;
+A5: M' is being_line & N' is being_line by A3,ANALMETR:58;
 A6: a1=b1 implies a2=b2 & a3=b3 & a4=b4
   proof
     assume
@@ -1592,11 +1584,11 @@ A37:    a1,b1 // x,y
           then x,e2 // x,y by ANALMETR:def 11;
           hence thesis by A34,ANALMETR:82;
         end;
-A38:    TDES_holds_in X implies des_holds_in X
+A38:    X is satisfying_TDES implies X is satisfying_des
         proof
-          assume TDES_holds_in X;
-          then Af(X) satisfies_TDES by Th7;
-          then Af(X) satisfies_des by AFF_2:28;
+          assume X is satisfying_TDES;
+          then Af(X) is Moufangian by Th7;
+          then Af(X) is translational by AFF_2:28;
           hence thesis by Th8;
         end;
 A39:    not LIN a1,b1,x
@@ -1794,9 +1786,9 @@ A70:    o' in M' & o' in N' by A5,AFF_1:72;
         consider K such that
 A71:    o in K & N _|_ K by A3,Th3;
         reconsider K'=K as Subset of Af(X) by ANALMETR:57;
-A72:    K is_line by A71,ANALMETR:62;
+A72:    K is being_line by A71,ANALMETR:62;
         then
-A73:    K' is_line & N' is_line by A3,ANALMETR:58;
+A73:    K' is being_line & N' is being_line by A3,ANALMETR:58;
         now
           assume
 A74:      K<>M;
@@ -1955,21 +1947,21 @@ A106:     a3,d3 // b3,e3 by A98,ANALMETR:81;
 end;
 
 theorem
-  OPAP_holds_in X & DES_holds_in X implies PAP_holds_in X
+  X is satisfying_OPAP & X is satisfying_DES implies X is satisfying_PAP
 proof
   assume that
-A1: OPAP_holds_in X and
-A2: DES_holds_in X;
+A1: X is satisfying_OPAP and
+A2: X is satisfying_DES;
   let o,a1,a2,a3,b1,b2,b3,M,N;
   assume that
-A3: M is_line & N is_line and
+A3: M is being_line & N is being_line and
 A4: o in M & a1 in M & a2 in M & a3 in M
   & o in N & b1 in N & b2 in N & b3 in N & not b2 in M & not a3 in N & o<>a1 &
   o<>a2 & o<>a3 & o<>b1 & o<>b2 & o<>b3 & a3,b2 // a2,b1 & a3,b3 // a1,b1;
   reconsider o'=o,a1'=a1,a2'=a2,a3'=a3,b1'=b1,b2'=b2,b3'=b3
   as Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-A5: M' is_line & N' is_line by A3,ANALMETR:58;
+A5: M' is being_line & N' is being_line by A3,ANALMETR:58;
   then
 A6: M' // M' & N' // N' by AFF_1:55;
   now
@@ -2110,7 +2102,7 @@ A39:    o,b2 _|_ o,x & o<>x by ANALMETR:51;
         reconsider x'=x as Element of Af(X) by ANALMETR:47;
         LIN o',x',x' by AFF_1:16;
         then consider A' be Subset of Af(X) such that
-A40:    A' is_line & o' in A' & x' in A' & x' in A' by AFF_1:33;
+A40:    A' is being_line & o' in A' & x' in A' & x' in A' by AFF_1:33;
         reconsider A=A' as Subset of X by ANALMETR:57;
 A41:    A _|_ N
         proof
@@ -2412,7 +2404,7 @@ A97:    o,b2 _|_ o,x & o<>x by ANALMETR:51;
         reconsider x'=x as Element of Af(X) by ANALMETR:47;
         LIN o',x',x' by AFF_1:16;
         then consider A' be Subset of Af(X) such that
-A98:    A' is_line & o' in A' & x' in A' & x' in A' by AFF_1:33;
+A98:    A' is being_line & o' in A' & x' in A' & x' in A' by AFF_1:33;
         reconsider A=A' as Subset of X by ANALMETR:57;
 A99:    A' // A' by A98,AFF_1:55;
 A100:   A _|_ N
@@ -2735,12 +2727,12 @@ A156:       c3=a3;
 end;
 
 theorem
-  MH1_holds_in X & MH2_holds_in X implies OPAP_holds_in X
+  X is satisfying_MH1 & X is satisfying_MH2 implies X is satisfying_OPAP
 proof
   assume
-A1: MH1_holds_in X;
+A1: X is satisfying_MH1;
   assume
-A2: MH2_holds_in X;
+A2: X is satisfying_MH2;
   let o,a1,a2,a3,b1,b2,b3,M,N;
   assume
 A3: o in M & a1 in M & a2 in M & a3 in M &
@@ -2750,9 +2742,9 @@ A3: o in M & a1 in M & a2 in M & a3 in M &
   reconsider o'=o,a1'=a1,a2'=a2,a3'=a3,b1'=b1,b2'=b2,b3'=b3 as
   Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-  M is_line & N is_line by A3,ANALMETR:62;
+  M is being_line & N is being_line by A3,ANALMETR:62;
   then
-A4: M' is_line & N' is_line by ANALMETR:58;
+A4: M' is being_line & N' is being_line by ANALMETR:58;
   then
 A5: M' // M' & N' // N' by AFF_1:55;
 A6: now
@@ -2849,9 +2841,9 @@ A26: LIN o,a3,a1 & LIN a3,a1,a2 & LIN o,b2,b3 & LIN
     not LIN a3,a1,b2 & not LIN b2,a3,b3 & o,a3 _|_ o,b3 & a3,b2 // a2,b1 &
     a3,b3 // a1,b1
     proof
-      M is_line & N is_line by A3,ANALMETR:62;
+      M is being_line & N is being_line by A3,ANALMETR:62;
       then
-A27:  M' is_line & N' is_line by ANALMETR:58;
+A27:  M' is being_line & N' is being_line by ANALMETR:58;
       then M' // M' & N' // N' by AFF_1:55;
 
 then o',a3' // o',a1' & a3',a1' // a3',a2' & o',b2' // o',b3' & b2',b3' //
@@ -3384,7 +3376,7 @@ A117: a3,b2 _|_ d2,d3 by A71,ANALMETR:83;
 A118: LIN d1',d3',b3' & LIN d1',d3',b2' & LIN d2',d4',a1' & LIN d2',d4',a3'
     by A82,ANALMETR:55;
     then consider A' such that
-A119: A' is_line & d1' in A' & d3' in A' & b3' in A' by AFF_1:33;
+A119: A' is being_line & d1' in A' & d3' in A' & b3' in A' by AFF_1:33;
     reconsider A=A' as Subset of X by ANALMETR:57;
 A120: d1'<>d3'
     proof
@@ -3393,7 +3385,7 @@ A120: d1'<>d3'
       hence contradiction by A72,ANALMETR:55;
     end;
     consider K' such that
-A121: K' is_line & d2' in K' & d4' in K' & a1' in K' by A118,AFF_1:33;
+A121: K' is being_line & d2' in K' & d4' in K' & a1' in K' by A118,AFF_1:33;
     reconsider K=K' as Subset of X by ANALMETR:57;
 A122: not d2 in A
     proof
@@ -3497,7 +3489,7 @@ A141: LIN o',a3',d2' by A46,ANALMETR:55;
     as Element of Af(X) by ANALMETR:47;
     LIN d1',d3',b3' by A132,ANALMETR:55;
     then consider A' such that
-A142: A' is_line & d1' in A' & d3' in A' & b3' in A' by AFF_1:33;
+A142: A' is being_line & d1' in A' & d3' in A' & b3' in A' by AFF_1:33;
     reconsider A=A' as Subset of X by ANALMETR:57;
 A143: d1'<>d3'
     proof
@@ -3508,7 +3500,7 @@ A143: d1'<>d3'
 A144: LIN d1',d3',b1' by A132,ANALMETR:55;
 A145: LIN d2',d4',a1' & LIN d2',d4',a2' by A132,ANALMETR:55;
     then consider K' such that
-A146: K' is_line & d2' in K' & d4' in K' & a1' in K' by AFF_1:33;
+A146: K' is being_line & d2' in K' & d4' in K' & a1' in K' by AFF_1:33;
     reconsider K=K' as Subset of X by ANALMETR:57;
 A147: not d2 in A
     proof
@@ -3581,10 +3573,10 @@ A159: a3',o' // a3',b2' by AFF_1:13;
 end;
 
 theorem
-  3H_holds_in X implies OPAP_holds_in X
+  X is satisfying_3H implies X is satisfying_OPAP
 proof
   assume
-A1: 3H_holds_in X;
+A1: X is satisfying_3H;
   let o,a1,a2,a3,b1,b2,b3,M,N;
   assume
 A2: o in M & a1 in M & a2 in M & a3 in M & o in N & b1 in N &
@@ -3593,9 +3585,9 @@ A2: o in M & a1 in M & a2 in M & a3 in M & o in N & b1 in N &
   reconsider o'=o,a1'=a1,a2'=a2,a3'=a3,b1'=b1,b2'=b2,b3'=b3
   as Element of Af(X) by ANALMETR:47;
   reconsider M'=M,N'=N as Subset of Af(X) by ANALMETR:57;
-  M is_line & N is_line by A2,ANALMETR:62;
+  M is being_line & N is being_line by A2,ANALMETR:62;
   then
-A3: M' is_line & N' is_line by ANALMETR:58;
+A3: M' is being_line & N' is being_line by ANALMETR:58;
   then
 A4: M' // M' & N' // N' by AFF_1:55;
 A5: LIN a,b,c implies LIN a,c,b & LIN b,a,c & LIN b,c,a & LIN c,a,b & LIN

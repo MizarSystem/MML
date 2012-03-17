@@ -78,7 +78,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="150"/>
+<Adjective nr="151"/>
 </Cluster>
 </CCluster>
 <CCluster aid="GOBRD13" nr="2">
@@ -86,7 +86,7 @@
 <Cluster>
 <Adjective nr="1"/>
 <Adjective nr="4"/>
-<Adjective nr="150"/>
+<Adjective nr="151"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>

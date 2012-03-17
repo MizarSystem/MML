@@ -9,7 +9,7 @@ environ
  vocabularies REALSET1, GROUP_2, GRAPH_1, GROUP_6, INT_1, GR_CY_1, NAT_1,
       ARYTM_1, ARYTM_3, GROUP_1, FINSET_1, GROUP_4, RELAT_1, FINSEQ_1, FUNCT_1,
       QC_LANG1, WELLORD1, FILTER_0, GROUP_5, GROUP_3, ARYTM, ALGSTR_0,
-      VECTSP_1, SGRAPH1;
+      VECTSP_1, SGRAPH1, CARD_1, INT_2;
  notations TARSKI, SUBSET_1, XCMPLX_0, RELAT_1, FUNCT_1, FUNCT_2, BINOP_1,
       NUMBERS, INT_1, INT_2, NAT_1, CARD_1, NAT_D, GROUP_2, DOMAIN_1, STRUCT_0,
       ALGSTR_0, GROUP_1, GROUP_3, GROUP_4, GROUP_5, GROUP_6, GR_CY_1, FINSEQ_1,
@@ -166,12 +166,12 @@ A3: G= gr {b};
   let a be Element of G;
   consider i such that
 A4: a= b|^i by A3,Th11;
-  reconsider n1=ord G as Integer;
+  reconsider n1=card G as Integer;
 A5: n1 > 0 by GROUP_1:90;
   reconsider p=i mod n1 as Element of NAT by INT_1:16,NEWTON:78;
 A6: a = b|^((i div n1) * n1 + (i mod n1)) by A4,A5,NEWTON:80
     .= b|^((i div n1)*n1) *(b|^(i mod n1)) by GROUP_1:63
-    .= b|^(i div n1)|^ord G *(b|^(i mod n1)) by GROUP_1:67
+    .= b|^(i div n1)|^card G *(b|^(i mod n1)) by GROUP_1:67
     .= (1_G) *(b|^(i mod n1)) by GR_CY_1:29
     .= b|^(i mod n1) by GROUP_1:def 5;
   take p;
@@ -201,14 +201,14 @@ end;
 
 theorem Th14:
   for G being finite Group, a being Element of G holds
-  G=gr {a} & ord G = n & n = p * s implies ord (a|^p) = s
+  G=gr {a} & card G = n & n = p * s implies ord (a|^p) = s
 proof
   let G be finite Group, a be Element of G;
   assume that
 A1: G=gr {a} and
-A2: ord G = n and
+A2: card G = n and
 A3: n = p * s;
-A4: a|^p is_not_of_order_0 by GR_CY_1:26;
+A4: a|^p is not being_of_order_0 by GR_CY_1:26;
 A5: a|^p|^ s = 1_G
   proof
     thus a|^p|^s = a|^n by A3,GROUP_1:50
@@ -226,7 +226,7 @@ A10: s > k;
 A11: p*s > p*k by A7,A10,XREAL_1:70;
 A12: ord a = n by A1,A2,GR_CY_1:27;
 A13: p*k <> 0 by A7,A9,XCMPLX_1:6;
-A14: a is_not_of_order_0 by GR_CY_1:26;
+A14: a is not being_of_order_0 by GR_CY_1:26;
     a|^(p*k) = 1_G by A8,GROUP_1:50;
     hence contradiction by A3,A11,A12,A13,A14,GROUP_1:def 12;
   end;
@@ -250,28 +250,28 @@ end;
 
 theorem Th16:
   for G being finite Group, a being Element of G holds
-  ord gr {a|^s} = ord gr {a|^k} & a|^k in gr {a|^s} implies
+  card gr {a|^s} = card gr {a|^k} & a|^k in gr {a|^s} implies
   gr {a|^s} = gr {a|^k}
 proof
   let G be finite Group, a be Element of G;
   assume
-A1: ord gr {a|^s} = ord gr {a|^k};
+A1: card gr {a|^s} = card gr {a|^k};
   assume a|^k in gr {a|^s};
   then reconsider h=a|^k as Element of gr {a|^s} by STRUCT_0:def 5;
-  ord gr {h} = ord gr {a|^s} by A1,Th9;
+  card gr {h} = card gr {a|^s} by A1,Th9;
   hence gr {a|^s} = gr {h} by GROUP_2:85
     .= gr {a|^k} by Th9;
 end;
 
 theorem Th17:
   for G being finite Group, G1 being Subgroup of G, a being Element of G holds
-  ord G = n & G=gr {a} & ord G1 = p & G1= gr{a|^k} implies n divides k*p
+  card G = n & G=gr {a} & card G1 = p & G1= gr{a|^k} implies n divides k*p
 proof
   let G be finite Group, G1 be Subgroup of G, a be Element of G;
   assume that
-A1: ord G = n and
+A1: card G = n and
 A2: G=gr {a} and
-A3: ord G1 = p and
+A3: card G1 = p and
 A4: G1= gr{a|^k};
   set z=k*p;
   n>0 by A1,GROUP_1:90;
@@ -294,7 +294,7 @@ A8: 1_G = (a|^(n*m))*(a|^l) by A5,GROUP_1:48
       .= ((1_G)|^m)*(a|^l) by A1,GR_CY_1:29
       .= (1_G)*(a|^l) by GROUP_1:42
       .= a|^l by GROUP_1:def 5;
-A9: a is_not_of_order_0 by GR_CY_1:26;
+A9: a is not being_of_order_0 by GR_CY_1:26;
     ord a = n by A1,A2,GR_CY_1:27;
     hence contradiction by A6,A7,A8,A9,GROUP_1:def 12;
   end;
@@ -303,19 +303,19 @@ end;
 
 theorem
   for G being strict finite Group, a be Element of G holds
-  G = gr {a} & ord G = n implies ( G = gr {a|^k} iff k hcf n = 1 )
+  G = gr {a} & card G = n implies ( G = gr {a|^k} iff k gcd n = 1 )
 proof
   let G be strict finite Group, a be Element of G;
   assume that
 A1: G = gr {a} and
-A2: ord G = n;
+A2: card G = n;
 A3: n > 0 by A2,GROUP_1:90;
-A4: G=gr {a|^k} implies k hcf n = 1
+A4: G=gr {a|^k} implies k gcd n = 1
   proof
     assume that
 A5: G = gr {a|^k} and
-A6: k hcf n <> 1;
-    set d=k hcf n;
+A6: k gcd n <> 1;
+    set d=k gcd n;
 A7: d divides k by NAT_D:def 5;
 A8: d divides n by NAT_D:def 5;
     consider l be Nat such that
@@ -340,13 +340,13 @@ A15:  p <= n by A3,A11,NAT_D:7;
       end;
       hence thesis by A15,XXREAL_0:1;
     end;
-    a|^k is_not_of_order_0 by GR_CY_1:26;
+    a|^k is not being_of_order_0 by GR_CY_1:26;
     then ord (a|^k) <= p by A12,A13,GROUP_1:def 12;
     hence contradiction by A2,A5,A14,GR_CY_1:27;
   end;
-  k hcf n = 1 implies G=gr {a|^k}
+  k gcd n = 1 implies G=gr {a|^k}
   proof
-    assume k hcf n = 1;
+    assume k gcd n = 1;
     then consider i,i1 such that
 A16: i*k+ i1*n=1 by A3,NEWTON:81;
     for b be Element of G holds b in gr {a|^k}
@@ -396,7 +396,7 @@ A2: Gc is finite implies ex i,i1 st i<>i1 & g|^i = g|^i1
   proof
     assume Gc is finite;
     then reconsider Gc as finite cyclic Group;
-    reconsider zero=0,i0=ord Gc as Integer;
+    reconsider zero=0,i0=card Gc as Integer;
 A3: zero <> i0 by GROUP_1:90;
     g|^zero = 1_Gc by GROUP_1:43
       .= g|^i0 by GR_CY_1:29;
@@ -627,10 +627,10 @@ end;
 
 theorem Th21:
   for Gc being strict finite cyclic Group holds
-  INT.Group(ord Gc),Gc are_isomorphic
+  INT.Group(card Gc),Gc are_isomorphic
 proof
   let Gc be strict finite cyclic Group;
-  set n = ord Gc;
+  set n = card Gc;
 A1: n>0 by GROUP_1:90;
   consider g being Element of Gc such that
 A2: for h be Element of Gc holds ex p st h=g|^p by GR_CY_1:42;
@@ -781,7 +781,7 @@ A34:          g|^(p1+-m1) = g|^zero by GROUP_1:63;
         end;
         hence thesis;
       end;
-A36:  g is_not_of_order_0 by GR_CY_1:26;
+A36:  g is not being_of_order_0 by GR_CY_1:26;
       ord g = n by A3,GR_CY_1:27;
       hence contradiction by A27,A36,GROUP_1:def 12;
     end;
@@ -898,12 +898,12 @@ end;
 
 theorem Th23:
   for Gc, Hc being strict finite cyclic Group st
-  ord Hc = ord Gc holds Hc,Gc are_isomorphic
+  card Hc = card Gc holds Hc,Gc are_isomorphic
 proof
   let Gc, Hc be strict finite cyclic Group;
   assume
-A1: ord Hc = ord Gc;
-  set p = ord Hc;
+A1: card Hc = card Gc;
+  set p = card Hc;
 A2: INT.Group(p),Hc are_isomorphic by Th21;
   INT.Group(p),Gc are_isomorphic by A1,Th21;
   hence thesis by A2,GROUP_6:78;
@@ -911,12 +911,12 @@ end;
 
 theorem Th24:
   for F,G being strict finite Group st
-  ord F = p & ord G = p & p is prime holds F,G are_isomorphic
+  card F = p & card G = p & p is prime holds F,G are_isomorphic
 proof
   let F,G be strict finite Group;
   assume that
-A1: ord F = p and
-A2: ord G = p and
+A1: card F = p and
+A2: card G = p and
 A3: p is prime;
 A4: F is cyclic Group by A1,A3,GR_CY_1:45;
   G is cyclic Group by A2,A3,GR_CY_1:45;
@@ -924,32 +924,32 @@ A4: F is cyclic Group by A1,A3,GR_CY_1:45;
 end;
 
 theorem
-  for F,G being strict finite Group st ord F = 2 & ord G = 2 holds
+  for F,G being strict finite Group st card F = 2 & card G = 2 holds
   F,G are_isomorphic by Th24,INT_2:44;
 
 theorem
-  for G being strict finite Group holds ord G = 2 implies
+  for G being strict finite Group holds card G = 2 implies
   for H being strict Subgroup of G holds
   H = (1).G or H = G by GR_CY_1:32,INT_2:44;
 
 theorem
   for G being strict finite Group st
-  ord G = 2 holds G is cyclic Group by GR_CY_1:45,INT_2:44;
+  card G = 2 holds G is cyclic Group by GR_CY_1:45,INT_2:44;
 
 theorem
-  for G being strict finite Group st G is cyclic & ord G = n
+  for G being strict finite Group st G is cyclic & card G = n
   holds (for p st p divides n holds
-  (ex G1 being strict Subgroup of G st ord G1 = p &
-  for G2 being strict Subgroup of G st ord G2 = p holds G2=G1))
+  (ex G1 being strict Subgroup of G st card G1 = p &
+  for G2 being strict Subgroup of G st card G2 = p holds G2=G1))
 proof
   let G be strict finite Group;
   assume that
 A1: G is cyclic and
-A2: ord G = n;
+A2: card G = n;
   let p such that
 A3: p divides n;
-  ex G1 being strict Subgroup of G st ord G1 = p &
-  for G2 being strict Subgroup of G st ord G2=p holds G2=G1
+  ex G1 being strict Subgroup of G st card G1 = p &
+  for G2 being strict Subgroup of G st card G2=p holds G2=G1
   proof
     consider a being Element of G such that
 A4: G= gr {a} by A1,GR_CY_1:def 9;
@@ -959,11 +959,11 @@ A6: s in NAT by ORDINAL1:def 13;
     then
 A7: ord (a|^s) = p by A2,A4,A5,Th14;
     then
-A8: ord gr {a|^s} = p by GR_CY_1:27;
-A9: for G2 being strict Subgroup of G st ord G2 = p holds G2=gr {a|^s}
+A8: card gr {a|^s} = p by GR_CY_1:27;
+A9: for G2 being strict Subgroup of G st card G2 = p holds G2=gr {a|^s}
     proof
       let G2 be strict Subgroup of G such that
-A10:  ord G2 = p;
+A10:  card G2 = p;
       consider k such that
 A11:  G2 = gr {a|^k} by A4,Th13;
       n divides k*p by A2,A4,A10,A11,Th17;
@@ -1004,20 +1004,20 @@ A1: Gc=gr {g};
 end;
 
 theorem Th30:
-  for Gc being strict finite cyclic Group st (ex k st ord Gc = 2*k) holds
+  for Gc being strict finite cyclic Group st (ex k st card Gc = 2*k) holds
   ex g1 being Element of Gc st ord g1 = 2 &
   for g2 being Element of Gc st ord g2 = 2 holds g1=g2
 proof
   let Gc be strict finite cyclic Group;
-  set n = ord Gc;
+  set n = card Gc;
   given k such that
 A1: n=2*k;
   consider g being Element of Gc such that
 A2: Gc=gr{g} by GR_CY_1:def 9;
   take g|^k;
-A3: g|^k|^2=g|^ord Gc by A1,GROUP_1:50
+A3: g|^k|^2=g|^card Gc by A1,GROUP_1:50
     .= 1_Gc by GR_CY_1:29;
-A4: g|^k is_not_of_order_0 by GR_CY_1:26;
+A4: g|^k is not being_of_order_0 by GR_CY_1:26;
 A5: ord g = n by A2,GR_CY_1:27;
 A6: k<>0 & 2<>0 by A1,GROUP_1:90;
   then
@@ -1030,7 +1030,7 @@ A8: g|^k|^p=1_Gc and
 A9: p<>0 and
 A10: 2>p;
 A11: n>k*p by A1,A7,A10,XREAL_1:70;
-A12: g is_not_of_order_0 by GR_CY_1:26;
+A12: g is not being_of_order_0 by GR_CY_1:26;
 A13: k*p<>0 by A6,A9,XCMPLX_1:6;
     1_Gc = g|^(k*p) by A8,GROUP_1:50;
     hence contradiction by A5,A11,A12,A13,GROUP_1:def 12;
@@ -1081,7 +1081,7 @@ A22: g|^(2*t1)=1_Gc
         .=1_Gc*(g|^(t1*2)) by GROUP_1:42
         .=g|^(2*t1) by GROUP_1:def 5;
     end;
-    g is_not_of_order_0 by GR_CY_1:26;
+    g is not being_of_order_0 by GR_CY_1:26;
     hence contradiction by A5,A20,A21,A22,GROUP_1:def 12;
   end;
   hence thesis;
@@ -1094,11 +1094,11 @@ registration
 end;
 
 theorem
-  for Gc being strict finite cyclic Group st ex k st ord Gc = 2*k holds
-  ex H being Subgroup of Gc st ord H = 2 & H is cyclic Group
+  for Gc being strict finite cyclic Group st ex k st card Gc = 2*k holds
+  ex H being Subgroup of Gc st card H = 2 & H is cyclic Group
 proof
   let Gc be strict finite cyclic Group;
-  set n = ord Gc;
+  set n = card Gc;
   assume
 A1: ex k st n=2*k;
   consider g1 being Element of Gc such that

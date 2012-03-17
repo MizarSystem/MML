@@ -14,6 +14,8 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FRAENKEL"/>
@@ -21,26 +23,26 @@
 </Signature>
 <FCluster aid="REAL_LAT" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="114"/>
 <Cluster>
-<Adjective nr="22" value="false"/>
-<Adjective nr="36"/>
+<Adjective nr="27" value="false"/>
+<Adjective nr="41"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="114"/>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="43"/>
+<Adjective nr="41"/>
+<Adjective nr="48"/>
 </Cluster>
 </FCluster>
 <FCluster aid="REAL_LAT" nr="3">
 <ArgTypes/>
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="114"/>
 <Cluster>
-<Adjective nr="36"/>
-<Adjective nr="44"/>
+<Adjective nr="41"/>
+<Adjective nr="49"/>
 </Cluster>
 </FCluster>
 <CCluster aid="REAL_LAT" nr="1">
@@ -49,7 +51,7 @@
 <Typ kind="M" nr="2">
 <Cluster/>
 <Func kind="U" nr="1">
-<Func kind="K" nr="106"/>
+<Func kind="K" nr="114"/>
 </Func>
 </Typ>
 <Cluster>

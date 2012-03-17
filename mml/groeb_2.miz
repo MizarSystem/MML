@@ -14,13 +14,11 @@ environ
       SQUARE_1, ALGSEQ_1, BAGORDER, ORDERS_1, RFINSEQ, WAYBEL_4, FINSEQ_7,
       GROEB_1, GROEB_2, ARYTM, ALGSTR_0, GROUP_1, XREAL_0;
  notations TARSKI, RELAT_1, XBOOLE_0, SUBSET_1, RELAT_2, RELSET_1, FUNCT_1,
-      ORDINAL1, XCMPLX_0, PARTFUN1, FINSET_1, MCART_1, XXREAL_0,
-      FINSEQ_1, STRUCT_0, ALGSTR_1, VECTSP_2, POLYNOM7, PBOOLE, ORDERS_2,
-      POLYNOM1, IDEAL_1,
-      REWRITE1, BAGORDER, ALGSTR_0, RLVECT_1, VECTSP_1, TERMORD,
-      POLYRED,
-      GROUP_1, NAT_D, NUMBERS, NAT_1, GROEB_1, RFINSEQ, FINSEQ_7, WAYBEL_4,
-      RECDEF_1;
+      ORDINAL1, XCMPLX_0, PARTFUN1, FINSET_1, MCART_1, XXREAL_0, FINSEQ_1,
+      STRUCT_0, ALGSTR_1, VECTSP_2, POLYNOM7, PBOOLE, ORDERS_2, POLYNOM1,
+      IDEAL_1, REWRITE1, BAGORDER, ALGSTR_0, RLVECT_1, VECTSP_1, TERMORD,
+      POLYRED, GROUP_1, NAT_D, NUMBERS, NAT_1, GROEB_1, RFINSEQ, FINSEQ_7,
+      WAYBEL_4, RECDEF_1;
  constructors RFINSEQ, REWRITE1, FINSEQ_7, VECTSP_2, WAYBEL_4, WELLFND1,
       IDEAL_1, BAGORDER, TERMORD, POLYRED, GROEB_1, RECDEF_1, REAL_1;
  registrations XBOOLE_0, RELAT_1, ORDINAL1, FINSET_1, XXREAL_0, XREAL_0, NAT_1,
@@ -28,57 +26,17 @@ environ
       POLYNOM1, POLYNOM2, POLYNOM4, IDEAL_1, POLYNOM7, TERMORD, POLYRED,
       VALUED_0, ALGSTR_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- theorems TARSKI, RELSET_1, FINSEQ_1, ZFMISC_1, VECTSP_1, POLYNOM1,
-      FINSEQ_4, RLVECT_1, NAT_1, MCART_1, POLYNOM7, REWRITE1, XBOOLE_0,
-      IDEAL_1, TERMORD, INT_1, FUNCT_1, FINSET_1, XBOOLE_1, PBOOLE, BINARITH,
-      VECTSP_2, POLYRED, SQUARE_1, FUNCT_2, BINOM, FINSEQ_3, RELAT_1, RELAT_2,
-      WAYBEL_4, BAGORDER, RFINSEQ, FINSEQ_5, ALGSTR_1, FINSEQ_7, GROEB_1,
-      GROUP_1, XREAL_1, XXREAL_0, PARTFUN1, VALUED_0, STRUCT_0, NAT_D;
+ theorems TARSKI, RELSET_1, FINSEQ_1, ZFMISC_1, VECTSP_1, POLYNOM1, FINSEQ_4,
+      RLVECT_1, NAT_1, MCART_1, POLYNOM7, REWRITE1, XBOOLE_0, IDEAL_1, TERMORD,
+      INT_1, FUNCT_1, FINSET_1, XBOOLE_1, PBOOLE, VECTSP_2, POLYRED, FUNCT_2,
+      BINOM, FINSEQ_3, RELAT_1, RELAT_2, WAYBEL_4, BAGORDER, RFINSEQ, FINSEQ_5,
+      ALGSTR_1, FINSEQ_7, GROEB_1, GROUP_1, XREAL_1, XXREAL_0, PARTFUN1,
+      VALUED_0, STRUCT_0, NAT_D;
  schemes NAT_1, CLASSES1;
 
 begin :: Preliminaries
 
-canceled;
-
-theorem Th2:
-  for L being non empty set, p being FinSequence of L,
-  n,m being Element of NAT st m <= n holds (p|n)|m = p|m
-proof
-  let L be non empty set, p be FinSequence of L, n,m be Element of NAT;
-  assume
-A1: m <= n;
-  set q = p|n;
-A2: dom q = dom(p|(Seg n)) by FINSEQ_1:def 15
-    .= dom p /\ (Seg n) by FUNCT_1:68;
-A3: Seg m c= Seg n by A1,FINSEQ_1:7;
-A4: dom(q|m) = dom(q|(Seg m)) by FINSEQ_1:def 15
-    .= (dom p /\ (Seg n)) /\ (Seg m) by A2,FUNCT_1:68
-    .= dom p /\ ((Seg n) /\ (Seg m)) by XBOOLE_1:16
-    .= dom p /\ (Seg m) by A3,XBOOLE_1:28
-    .= dom(p|(Seg m)) by FUNCT_1:68
-    .= dom(p|m) by FINSEQ_1:def 15;
-  now
-    let x be set;
-    assume
-A5: x in dom(p|m);
-    then reconsider x' = x as Element of NAT;
-A6: x' in dom(p|(Seg m)) by A5,FINSEQ_1:def 15;
-A7: x' in dom(q|(Seg m)) by A4,A5,FINSEQ_1:def 15;
-A8: (q|m).x' = (q|(Seg m)).x' by FINSEQ_1:def 15
-      .= q.x' by A7,FUNCT_1:68;
-    x' in dom(p) /\ (Seg m) by A6,FUNCT_1:68;
-    then x' in dom p & x' in Seg m by XBOOLE_0:def 4;
-    then x' in dom(p) /\ (Seg n) by A3,XBOOLE_0:def 4;
-    then
-A9: x' in dom(p|(Seg n)) by FUNCT_1:68;
-A10: q.x' = (p|(Seg n)).x' by FINSEQ_1:def 15
-      .= p.x' by A9,FUNCT_1:68;
-    (p|m).x' = (p|(Seg m)).x' by FINSEQ_1:def 15
-      .= p.x' by A6,FUNCT_1:68;
-    hence (p|m).x = (q|m).x by A8,A10;
-  end;
-  hence thesis by A4,FUNCT_1:9;
-end;
+canceled 2;
 
 theorem
   for L being add-associative right_zeroed
@@ -171,7 +129,7 @@ A24:      0.L = p.(k+1) by A5,A6,FINSEQ_1:6
             .= Sum q + p/.(k+1) by RLVECT_1:61
             .= Sum q by A24,RLVECT_1:def 7
             .= Sum(q|n) by A4,A8,A21
-            .= Sum(p|n) by A12,A20,Th2;
+            .= Sum(p|n) by A12,A20,FINSEQ_1:103;
         end;
       end;
       hence Sum p = Sum(p|n);
@@ -554,7 +512,7 @@ A1: b1 divides lcm(b2,b3);
     then
 A2: b1.k <= max(b2.k,b3.k) by Def2;
     b2.k <= max(b2.k,b3.k) by XXREAL_0:25;
-    then max(b2.k,b1.k) <= max(b2.k,b3.k) by A2,SQUARE_1:50;
+    then max(b2.k,b1.k) <= max(b2.k,b3.k) by A2,XXREAL_0:28;
     then max(b2.k,b1.k) <= lcm(b2,b3).k by Def2;
     hence lcm(b2,b1).k <= lcm(b2,b3).k by Def2;
   end;
@@ -582,7 +540,7 @@ A2: max(b2.k,b1.k) <= max(b2.k,b3.k) by Def2;
     then
 A3: b1.k <= max(b2.k,b3.k) by A2,XXREAL_0:2;
     b3.k <= max(b2.k,b3.k) by XXREAL_0:25;
-    then max(b1.k,b3.k) <= max(b2.k,b3.k) by A3,SQUARE_1:50;
+    then max(b1.k,b3.k) <= max(b2.k,b3.k) by A3,XXREAL_0:28;
     then max(b1.k,b3.k) <= lcm(b2,b3).k by Def2;
     hence lcm(b1,b3).k <= lcm(b2,b3).k by Def2;
   end;

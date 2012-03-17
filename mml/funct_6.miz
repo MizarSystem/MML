@@ -791,10 +791,8 @@ proof
 A1: x in dom f & g = f.x;
   then g in rng f by FUNCT_1:def 5;
   then g in SubFuncs rng f by Def1;
-  then
-A2: x in f"SubFuncs rng f by A1,FUNCT_1:def 13;
-  then (doms f).x = proj1 g & g = g & (rngs f).x = proj2 g by A1,Def2,Def3;
-  hence thesis by A2,Def2,Def3;
+  then x in f"SubFuncs rng f by A1,FUNCT_1:def 13;
+  hence thesis by A1,Def2,Def3;
 end;
 
 theorem
@@ -957,9 +955,8 @@ end;
 theorem Th37:
   f <> {} implies (x in meet f iff for y st y in dom f holds x in f.y)
 proof
-  assume f <> {};
-  then
-A1: rng f <> {} & meet rng f = meet f;
+  assume
+Z:  f <> {};
   thus x in meet f implies for y st y in dom f holds x in f.y
   proof
     assume
@@ -978,7 +975,7 @@ A3: for y st y in dom f holds x in f.y;
     then ex y st y in dom f & z = f.y by FUNCT_1:def 5;
     hence x in z by A3;
   end;
-  hence thesis by A1,SETFAM_1:def 1;
+  hence thesis by Z,SETFAM_1:def 1;
 end;
 
 canceled;
@@ -1669,11 +1666,9 @@ A2: dom Frege{} = product doms {} & product doms {} = {{}} by A1,Def7,CARD_3:19
 A3: x in {{}};
     then
 A4: x = {} by TARSKI:def 1;
-    then consider h such that
-A5: (Frege{}).{} = h & dom h = {}"SubFuncs rng {} &
+    then ex h st (Frege{}).{} = h & dom h = {}"SubFuncs rng {} &
     for x st x in dom h holds h.x = (uncurry {}).(x,{} .x) by A2,A3,Def7;
-    dom h = {} by A5,RELAT_1:172;
-    hence (Frege{}).x = {} by A4,A5;
+    hence (Frege{}).x = {} by A4,RELAT_1:172;
   end;
   hence thesis by A2,FUNCOP_1:17;
 end;
@@ -2119,9 +2114,12 @@ A1: not {} in rng f;
 A2: dom (dom f --> {}) = dom f by FUNCOP_1:19;
   now
     let x;
-    assume x in dom f;
-    then (dom f --> {}).x = {} & f.x in rng f by FUNCOP_1:13,FUNCT_1:def 5;
-    hence (dom f --> {}).x = Funcs(f.x,{}) by A1,FUNCT_2:14;
+    assume
+Z:   x in dom f;
+    then
+Y:    f.x <> {} by A1,FUNCT_1:def 5;
+    thus (dom f --> {}).x = {} by Z,FUNCOP_1:13
+         .= Funcs(f.x,{}) by Y;
   end;
   hence thesis by A2,Def8;
 end;
@@ -2506,8 +2504,7 @@ A9:   z in dom f;
       then g.z in Funcs(X,f).z & Funcs(X,f).z = Funcs(X,f.z) by A5;
       then consider h such that
 A10:  g.z = h & dom h = X & rng h c= f.z by FUNCT_2:def 2;
-      thus (dom f --> X).z = X by A9,FUNCOP_1:13
-        .= proj1 (g.z) by A10;
+      thus (dom f --> X).z = proj1 (g.z) by A10,A9,FUNCOP_1:13;
     end;
     then doms g = dom f --> X & dom f <> {} by A1,A5,A8,Def2;
     then meet doms g = X by Th43;

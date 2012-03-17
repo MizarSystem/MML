@@ -20,8 +20,8 @@ environ
  definitions TARSKI, XBOOLE_0, VALUED_1;
  theorems FUNCT_1, PARTFUN1, TARSKI, RFUNCT_1, SEQ_1, SEQ_2, SEQ_4, ZFMISC_1,
       RFUNCT_2, FCONT_1, FUNCT_2, RELAT_1, XREAL_0, XBOOLE_0, XBOOLE_1,
-      FUNCOP_1, XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, VALUED_1, RELSET_1;
- schemes FUNCT_1, SEQ_1;
+      XREAL_1, COMPLEX1, XXREAL_0, ORDINAL1, VALUED_1, RELSET_1;
+ schemes CLASSES1, SEQ_1;
 
 begin
 
@@ -48,8 +48,7 @@ definition
     then n in dom F by FUNCT_2:def 1;
     then
 A1: F.n in rng F by FUNCT_1:def 5;
-    rng F c= PFuncs(D1,D2) by FUNCT_2:def 1;
-    hence thesis by A1,PARTFUN1:120;
+    thus thesis by A1,PARTFUN1:120;
   end;
 end;
 
@@ -108,25 +107,15 @@ A1: for x st x in NAT holds F1.x=F2.x;
   hence thesis by A1,FUNCT_1:9;
 end;
 
-theorem Th2:
-  for F1,F2 st (for n holds F1.n = F2.n) holds F1 = F2
-proof
-  let F1,F2;
-  assume for n holds F1.n=F2.n;
-  then for x holds x in NAT implies F1.x=F2.x;
-  hence thesis by Lm2;
-end;
-
 scheme ExFuncSeq{D1() -> set, D2() -> set, F(set)->PartFunc of D1(),D2()}:
   ex G being Functional_Sequence of D1(), D2() st
   for n being Nat holds G.n = F(n)
 proof
   defpred P[set,set] means $2=F($1);
 A1: for x st x in NAT ex y st P[x,y];
-A2: for x,y,z st x in NAT & P[x,y] & P[x,z] holds y=z;
   consider f such that
 A3: dom f = NAT and
-A4: for x st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A2,A1);
+A4: for x st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
   now
     let x;
     assume x in NAT;
@@ -163,7 +152,7 @@ A2: for n being Nat holds H2.n=r(#)(H.n);
       H1.n=r(#)(H.n) & H2.n=r(#)(H.n) by A1,A2;
       hence H1.n=H2.n;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
 end;
 
@@ -188,7 +177,7 @@ A2: for n being Nat holds H2.n=(H.n)^;
       H1.n=(H.n)^ & H2.n=(H.n)^ by A1,A2;
       hence H1.n=H2.n;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
   func - H -> Functional_Sequence of D,REAL means
   :Def4:
@@ -209,7 +198,7 @@ A4: for n being Nat holds H2.n=-H.n;
       H1.n=-H.n & H2.n=-H.n by A3,A4;
       hence H1.n=H2.n;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
   func abs(H)->Functional_Sequence of D,REAL means
   :Def5:
@@ -230,7 +219,7 @@ A6: for n being Nat holds H2.n=abs(H.n);
       H2.n=abs(H.n) by A6;
       hence H1.n=H2.n by A5;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
 end;
 
@@ -255,7 +244,7 @@ A2: for n being Nat holds H2.n=G.n+H.n;
       H1.n=G.n+H.n & H2.n=G.n+H.n by A1,A2;
       hence H1.n=H2.n;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
 end;
 
@@ -288,7 +277,7 @@ A2: for n being Nat holds H2.n=G.n (#) H.n;
       H1.n=G.n(#)H.n & H2.n=G.n(#)H.n by A1,A2;
       hence H1.n=H2.n;
     end;
-    hence H1=H2 by Th2;
+    hence H1=H2 by FUNCT_2:113;
   end;
 end;
 
@@ -299,6 +288,8 @@ definition
   G (#) (H");
   correctness;
 end;
+
+canceled;
 
 theorem
   H1 = G/H iff for n holds H1.n = G.n / H.n
@@ -321,7 +312,7 @@ A2: for n holds H1.n = G.n / H.n;
       .= G.n (#) (H").n by Def3
       .= (G/H).n by Def8;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th4:
@@ -343,7 +334,7 @@ A2: for n holds H1.n = G.n - H.n;
       .= G.n + (-H).n by Def4
       .= (G - H).n by Def6;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -354,7 +345,7 @@ proof
     thus (G + H).n = H.n + G.n by Def6
       .= (H + G).n by Def6;
   end;
-  hence G + H = H + G by Th2;
+  hence G + H = H + G by FUNCT_2:113;
   now
     let n;
     thus ((G + H) + J).n = (G + H).n + J.n by Def6
@@ -363,7 +354,7 @@ proof
       .= G.n + (H + J).n by Def6
       .= (G + (H + J)).n by Def6;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th6:
@@ -374,7 +365,7 @@ proof
     thus (G (#) H).n = H.n (#) G.n by Def8
       .= (H (#) G).n by Def8;
   end;
-  hence G (#) H = H (#) G by Th2;
+  hence G (#) H = H (#) G by FUNCT_2:113;
   now
     let n;
     thus ((G (#) H) (#) J).n = (G (#) H).n (#) J.n by Def8
@@ -383,7 +374,7 @@ proof
       .= G.n (#) (H (#) J).n by Def8
       .= (G (#) (H (#) J)).n by Def8;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -398,7 +389,7 @@ proof
       .= (G(#)J).n + (H(#)J).n by Def8
       .= (G(#)J + H(#)J).n by Def6;
   end;
-  hence (G + H) (#) J = G(#)J + H(#)J by Th2;
+  hence (G + H) (#) J = G(#)J + H(#)J by FUNCT_2:113;
   hence J (#) (G + H) = G(#)J + H(#)J by Th6
     .= J(#)G + H(#)J by Th6
     .= J(#)G + J(#)H by Th6;
@@ -412,7 +403,7 @@ proof
     thus (-H).n = -H.n by Def4
       .=((-1)(#)H).n by Def2;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -428,7 +419,7 @@ proof
       .= (G(#)J - H(#)J).n by Th4;
   end;
   hence
-A1: (G - H) (#) J = G(#)J - H(#)J by Th2;
+A1: (G - H) (#) J = G(#)J - H(#)J by FUNCT_2:113;
   thus J(#)G - J(#)H = J(#)G - H(#)J by Th6
     .= (G - H) (#) J by A1,Th6
     .= J (#) (G - H) by Th6;
@@ -446,7 +437,7 @@ proof
       .=(r(#)G).n + (r(#)H).n by Def2
       .=(r(#)G + r(#)H).n by Def6;
   end;
-  hence r(#)(G + H) = r(#)G + r(#)H by Th2;
+  hence r(#)(G + H) = r(#)G + r(#)H by FUNCT_2:113;
   now
     let n;
     thus (r(#)(G - H)).n = r(#)(G - H).n by Def2
@@ -456,7 +447,7 @@ proof
       .= (r(#)G).n - (r(#)H).n by Def2
       .= (r(#)G - r(#)H).n by Th4;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th11:
@@ -469,7 +460,7 @@ proof
       .=r(#)(p(#)H).n by Def2
       .=(r(#)(p(#)H)).n by Def2;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th12:
@@ -480,7 +471,7 @@ proof
     thus (1 (#) H).n = 1 (#) H.n by Def2
       .= H.n by RFUNCT_1:33;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -504,7 +495,7 @@ proof
       .= ((G (#) H).n)^ by Def8
       .= ((G (#) H)").n by Def3;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -520,7 +511,7 @@ A1: r<>0;
       .= r" (#) (H".n) by Def3
       .= (r" (#) H").n by Def2;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th16:
@@ -534,7 +525,7 @@ proof
       .=(abs(H).n)^ by Def5
       .=(abs(H)").n by Def3;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem Th17:
@@ -549,7 +540,7 @@ proof
       .=((abs(G)).n)(#)(abs(H)).n by Def5
       .=(abs(G)(#)abs(H)).n by Def8;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 theorem
@@ -570,7 +561,7 @@ proof
       .=abs(r)(#)(abs(H)).n by Def5
       .=(abs(r)(#)abs(H)).n by Def2;
   end;
-  hence thesis by Th2;
+  hence thesis by FUNCT_2:113;
 end;
 
 reserve x for Element of D,
@@ -1497,14 +1488,12 @@ A1: H is_unif_conv_on X & for n holds (H.n)|X is continuous;
 A2: H is_point_conv_on X by Th23;
   then
 A3: dom l = X by Def14;
-  then
-B3: l|X = l by RELAT_1:98;
 A4: X common_on_dom H by A1,Def13;
   for x0 be real number st x0 in dom(l|X) holds l|X is_continuous_in x0
   proof
     let x0 be real number;
     assume
-A5: x0 in dom(l|X);
+ x0 in dom(l|X);
     then
 B5: x0 in X by RELAT_1:86;
     reconsider x0 as Real by XREAL_0:def 1;

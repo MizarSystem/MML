@@ -20,11 +20,10 @@ environ
       GLIB_002, XXREAL_2, CARD_1;
  requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
  definitions TARSKI, XBOOLE_0, GLIB_001;
- theorems TARSKI, FINSET_1, NAT_1, GRAPH_5, SETFAM_1, XBOOLE_0, XBOOLE_1,
-      GRFUNC_1, FUNCT_1, ZFMISC_1, ORDINAL1, FINSEQ_1, FINSEQ_2, FINSEQ_3,
-      INT_1, EULER_1, CARD_1, XREAL_1, XXREAL_0, CHORD, HEYTING3,
-      GLIB_000, GLIB_001, GLIB_002, MSSCYC_1, CHAIN_1, MEMBERED, PRE_CIRC,
-      HILBERT3, GRAPH_2, FSM_1, LEXBFS, XXREAL_2;
+ theorems TARSKI, NAT_1, GRAPH_5, SETFAM_1, XBOOLE_0, XBOOLE_1, GRFUNC_1,
+      FUNCT_1, ZFMISC_1, ORDINAL1, FINSEQ_1, FINSEQ_2, FINSEQ_3, INT_1,
+      EULER_1, CARD_1, XREAL_1, XXREAL_0, CHORD, HEYTING3, GLIB_000, GLIB_001,
+      GLIB_002, MSSCYC_1, MEMBERED, GRAPH_2, FSM_1, XXREAL_2;
  schemes NAT_1, FINSEQ_1;
 
 begin :: General preliminaries
@@ -94,7 +93,7 @@ A3:   x = n and 0 <= n & n <= len p & P[n];
     end;
     S is finite from FINSEQ_1:sch 6;
     then reconsider S as finite non empty natural-membered set by A1,A2,
-MEMBERED:def 6;
+    MEMBERED:def 6;
     set maxk = max S;
     maxk in S by XXREAL_2:def 8;
     then consider K being Element of NAT such that
@@ -462,6 +461,29 @@ A1: dom W1 c= dom W1a by FINSEQ_3:32;
   end;
 end;
 
+theorem Th15a: :: PathLike20 :: LEXBFS:9 in 1033
+  for G being _Graph, W1,W2 being Walk of G
+  st W1 is trivial & W1.last() = W2.first() holds W1.append(W2) = W2
+proof
+  let G be _Graph, W1,W2 be Walk of G such that
+A1: W1 is trivial & W1.last() = W2.first();
+A2: len W1 = 1 by A1,GLIB_001:127;
+  then
+A3: len W1.append(W2) + 1 = 1 + len W2 by A1,GLIB_001:29;
+  now
+    let k be Nat such that
+A4: 1 <= k & k <= len W1.append(W2);
+A5: 1-1 <= k-1 by A4,XREAL_1:11;
+    k-1 < k by XREAL_1:46;
+    then
+A6: 0 <= k-1 & k-1 < len W2 by A3,A4,A5,XXREAL_0:2;
+    reconsider k1 = k-1 as Element of NAT by A5,INT_1:16;
+    W1.append(W2).(1 + k1) = W2.(k1+1) by A1,A2,A6,GLIB_001:34;
+    hence W1.append(W2).k = W2.k;
+  end;
+  hence thesis by A3,FINSEQ_1:18;
+end;
+
 theorem Th16:
   for G being _Graph for W1, W2 being Trail of G
   st W1.last() = W2.first() & W1.edges() misses W2.edges()
@@ -805,7 +827,7 @@ A4: dI <= len W1 by Th3;
 A5: dI <= len W2 by Th3;
 A6: dI < len W1 by A2,A4,XXREAL_0:1;
 A7: dI < len W2 by A2,A5,XXREAL_0:1;
-  reconsider dIp = dI-1 as odd Element of NAT by A2,A3,HILBERT3:1,INT_1:18;
+  reconsider dIp = dI-1 as odd Element of NAT by A2,A3,INT_1:18;
 A8: dIp < dI by XREAL_1:148;
 A9: dIp < len W1 by A4,XREAL_1:148,XXREAL_0:2;
 A10: dI = dIp+1;
@@ -1263,7 +1285,7 @@ A78:  {v1, v2} c= pde.vertices() by A71,A72,ZFMISC_1:38;
       {u1, u2} c= rpdf.vertices() by A60,A75,A76,ZFMISC_1:38;
       then
 A79:  (v1 = e or v1 = d) & (v2 = e or v2 = d) by A41,A77,A78,XBOOLE_1:19
-,ZFMISC_1:28;
+      ,ZFMISC_1:28;
       1 <= m by HEYTING3:1;
       then consider im being Nat such that
 A80:  m = im+1 by NAT_1:6;
@@ -1580,7 +1602,7 @@ A1: P1.last() = P2.first() and
 A2: P1.vertices() /\ P2.vertices() = {P1.last()};
   per cases;
   suppose P1 is trivial;
-    hence P1.append(P2) is Path-like by A1,LEXBFS:9;
+    hence P1.append(P2) is Path-like by A1,Th15a;
   end;
   suppose P2 is trivial;
     hence P1.append(P2) is Path-like by GLIB_001:131;
@@ -1940,7 +1962,7 @@ A48: v1c in P4c.vertices() & v2c in P4c.vertices() by A42,A43,A44,GLIB_001:88;
     then {v1c, v2c} c= P1br.vertices() /\ P4c.vertices()
     by A46,A47,XBOOLE_1:19;
     then (v1c = b or v1c = x) & (v2c = b or v2c = x) by A24,A26,A33,XBOOLE_1:1
-,ZFMISC_1:28;
+    ,ZFMISC_1:28;
     hence contradiction by A6,A7,A23,A45,A48,GLIB_000:21;
   end;
   then

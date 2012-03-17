@@ -76,37 +76,6 @@
 <Adjective nr="35"/>
 </Cluster>
 </RCluster>
-<RCluster aid="MEASURE5" nr="5">
-<ArgTypes/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="43"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="31"/>
-</Cluster>
-</RCluster>
-<RCluster aid="MEASURE5" nr="6">
-<ArgTypes/>
-<Typ kind="M" nr="2">
-<Cluster/>
-<Func kind="K" nr="10">
-<Func kind="K" nr="43"/>
-</Func>
-</Typ>
-<Cluster>
-<Adjective nr="1"/>
-<Adjective nr="20"/>
-<Adjective nr="21"/>
-<Adjective nr="22"/>
-<Adjective nr="31"/>
-</Cluster>
-</RCluster>
 <CCluster aid="MEASURE5" nr="1">
 <ArgTypes/>
 <Cluster>
@@ -165,6 +134,21 @@
 </Typ>
 <Cluster>
 <Adjective nr="31"/>
+</Cluster>
+</CCluster>
+<CCluster aid="MEASURE5" nr="5">
+<ArgTypes/>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="K" nr="43"/>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="32"/>
 </Cluster>
 </CCluster>
 </Registrations>

@@ -1,0 +1,235 @@
+:: Kolmogorov's Zero-one Law
+::  by Agnes Doll
+:: 
+:: Received November 4, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies BOOLE, PROB_1, PROB_2, PROB_3, FINSUB_1, FUNCT_1, DYNKIN, TARSKI,
+      KOLMOG01, SUBSET_1, FINSET_1, FINSEQ_1, ARYTM_1, SERIES_1, SEQ_1,
+      RELAT_1, SETWISEO, ORDINAL2, ARYTM, SETFAM_1, CARD_3, FUNCOP_1;
+ notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, REAL_1, ORDINAL1,
+      XCMPLX_0, XXREAL_0, NAT_1, XREAL_0, NUMBERS, FINSET_1, DYNKIN, SETWOP_2,
+      FINSUB_1, RELAT_1, CARD_3, SEQ_2, SETFAM_1, FUNCT_1, RELSET_1, BINOP_2,
+      VALUED_1, SEQ_1, FINSEQ_1, RVSUM_1, SUPINF_1, PARTFUN1, FUNCT_2, PROB_3,
+      MEASURE1, SERIES_1, RINFSUP1, WELLORD2, BINOP_1, FUNCOP_1, SETWISEO,
+      FINSEQOP, CANTOR_1, PROB_1, PROB_2;
+ constructors TARSKI, ENUMSET1, PARTFUN1, BINOP_1, FUNCOP_1, FINSET_1,
+      VALUAT_1, BVFUNC_1, XXREAL_0, SEQ_2, XBOOLE_0, SUBSET_1, DYNKIN, PBOOLE,
+      ZFMISC_1, PROB_1, VALUED_1, ORDINAL1, NUMBERS, XCMPLX_0, REAL_1, SEQ_1,
+      NAT_1, PROB_2, PROB_3, PROB_4, SERIES_1, KURATO_2, RINFSUP1, SETFAM_1,
+      BINOP_2, SEQM_3, SEQ_4, FINSOP_1, RVSUM_1, SETLIM_1, SETLIM_2, NAT_D,
+      MEMBERED, FUNCT_2, RELAT_1, WELLORD2, FUNCT_6, CARD_3, FINSUB_1,
+      FINSEQOP, SETWISEO, CANTOR_1, TOPS_2;
+ registrations VALUAT_1, BVFUNC_1, XBOOLE_0, PBOOLE, SUBSET_1, ORDINAL1,
+      VALUED_1, RELSET_1, NUMBERS, XXREAL_0, XREAL_0, MEMBERED, PROB_1,
+      ZFMISC_1, SEQ_2, FUNCT_4, RELAT_1, NAT_1, ORDINAL2, RVSUM_1, FINSET_1,
+      FINSEQ_1, PARTFUN1, FINSUB_1, FUNCT_1, FUNCT_2, CARD_1, BINOP_1,
+      SETWISEO, VALUED_0;
+ requirements SUBSET, NUMERALS, BOOLE, ARITHM, REAL;
+
+
+begin
+
+ reserve Omega, I for non empty set;
+ reserve Sigma for SigmaField of Omega;
+ reserve P for Probability of Sigma;
+ reserve D, E, F for Subset-Family of Omega;
+ reserve A, B, sB for non empty Subset of Sigma;
+ reserve b for Element of B;
+ reserve a for Element of Sigma;
+ reserve p, q, u, v for Event of Sigma;
+ reserve n, m for Element of NAT;
+ reserve S, S', X, x, y, z, i, j for set;
+
+theorem :: KOLMOG01:1
+  for f being Function, X being set st X c= dom f holds
+    X <> {} implies rng (f|X) <> {};
+
+theorem :: KOLMOG01:2
+  for r being Real st r*r=r holds r=0 or r=1;
+
+theorem :: KOLMOG01:3
+  for X being Subset-Family of Omega st X={} holds sigma(X) = {{},Omega};
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     B be Subset of Sigma, P be Probability of Sigma;
+ func Indep(B,P) -> Subset of Sigma means
+:: KOLMOG01:def 1
+ for a being Element of Sigma holds
+ a in it iff for b being Element of B holds P.(a /\ b) = P.a * P.b;
+end;
+
+theorem :: KOLMOG01:4
+ for f being SetSequence of Sigma holds
+ (for n,b holds P.(f.n /\ b) = P.(f.n) * P.b) & f is disjoint_valued implies
+ P.(b /\ Union f) = P.b * P.Union f;
+
+theorem :: KOLMOG01:5
+  Indep(B,P) is Dynkin_System of Omega;
+
+theorem :: KOLMOG01:6
+ for A being Subset-Family of Omega st A is intersection_stable &
+ A c= Indep(B,P) holds sigma(A) c= Indep(B,P);
+
+theorem :: KOLMOG01:7
+ for A, B being non empty Subset of Sigma
+ holds A c= Indep(B,P) iff
+ for p,q st p in A & q in B holds p,q are_independent_respect_to P;
+
+theorem :: KOLMOG01:8
+  for A,B being non empty Subset of Sigma st
+    A c= Indep(B,P) holds B c= Indep(A,P);
+
+theorem :: KOLMOG01:9
+  for A being Subset-Family of Omega st A is non empty Subset of Sigma
+    & A is intersection_stable
+  for B being non empty Subset of Sigma st B is intersection_stable
+    holds A c= Indep(B,P) implies
+ (for D,sB st D=B & sigma(D)=sB holds sigma(A) c= Indep(sB,P));
+
+theorem :: KOLMOG01:10
+ for E,F st E is non empty Subset of Sigma & E is intersection_stable
+ & F is non empty Subset of Sigma & F is intersection_stable holds
+ (for p,q st p in E & q in F holds p,q are_independent_respect_to P)
+ implies
+ (for u,v st u in sigma(E) & v in sigma(F) holds
+ u,v are_independent_respect_to P);
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega;
+  mode ManySortedSigmaField of I,Sigma -> Function of I, bool Sigma means
+:: KOLMOG01:def 2
+
+  for i st i in I holds it.i is SigmaField of Omega;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      P be Probability of Sigma, I be set, A be Function of I, Sigma;
+  pred A is_independent_wrt P means
+:: KOLMOG01:def 3
+  for e being one-to-one FinSequence of I st e <> {} holds
+  Product (P*A*e) = P.(meet rng (A*e));
+end;
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     I be set, J be Subset of I, F be ManySortedSigmaField of I,Sigma;
+ mode SigmaSection of J,F -> Function of J, Sigma means
+:: KOLMOG01:def 4
+ for i st i in J holds it.i in F.i;
+end;
+
+definition
+ let Omega be non empty set, Sigma be SigmaField of Omega,
+     P be Probability of Sigma, I be set,
+     F be ManySortedSigmaField of I,Sigma;
+ pred F is_independent_wrt P means
+:: KOLMOG01:def 5
+ for E being finite Subset of I, A being SigmaSection of E,F holds
+ A is_independent_wrt P;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I,Sigma, J be Subset of I;
+  redefine func F|J -> Function of J, bool Sigma;
+end;
+
+definition
+  let I be set, J be Subset of I, Omega be non empty set,
+      Sigma be SigmaField of Omega, F be Function of J, bool Sigma;
+  redefine func Union F -> Subset-Family of Omega;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I,Sigma, J be Subset of I;
+  func sigUn(F,J) -> SigmaField of Omega equals
+:: KOLMOG01:def 6
+  sigma Union (F|J);
+end;
+
+definition
+ let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+     F be ManySortedSigmaField of I, Sigma;
+ func futSigmaFields(F,I) -> Subset-Family of bool Omega means
+:: KOLMOG01:def 7
+ for S being Subset-Family of Omega holds
+ S in it iff ex E being finite Subset of I st S=sigUn(F,I\E);
+end;
+
+registration
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I, Sigma;
+  cluster futSigmaFields(F,I) -> non empty;
+end;
+
+definition
+  let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+      F be ManySortedSigmaField of I, Sigma;
+  func tailSigmaField(F,I) -> Subset-Family of Omega equals
+:: KOLMOG01:def 8
+  meet futSigmaFields(F,I);
+end;
+
+registration let I be set, Omega be non empty set,
+                 Sigma be SigmaField of Omega,
+                 F be ManySortedSigmaField of I, Sigma;
+  cluster tailSigmaField(F,I) -> non empty;
+end;
+
+definition
+  let Omega be non empty set, Sigma be SigmaField of Omega,
+      I be non empty set, J be non empty Subset of I,
+      F be ManySortedSigmaField of I,Sigma;
+  func MeetSections(J,F) -> Subset-Family of Omega means
+:: KOLMOG01:def 9
+  for x being Subset of Omega holds
+  x in it iff ex E being non empty finite Subset of I,
+  f being SigmaSection of E,F st E c= J & x = meet rng f;
+end;
+
+theorem :: KOLMOG01:11
+  for F being ManySortedSigmaField of I, Sigma, J being non empty Subset of I
+  holds sigma MeetSections(J,F) = sigUn(F,J);
+
+theorem :: KOLMOG01:12
+ for F being ManySortedSigmaField of I, Sigma, J,K being non empty Subset of I
+ st F is_independent_wrt P & J misses K holds
+ for a,c being Subset of Omega st
+ a in MeetSections(J,F) & c in MeetSections(K,F) holds P.(a /\ c) = P.a * P.c;
+
+theorem :: KOLMOG01:13
+ for F being ManySortedSigmaField of I,Sigma, J being non empty Subset of I
+ holds MeetSections(J,F) is non empty Subset of Sigma;
+
+registration let I,Omega,Sigma;
+ let F be ManySortedSigmaField of I,Sigma, J be non empty Subset of I;
+ cluster MeetSections(J,F) -> intersection_stable;
+end;
+
+theorem :: KOLMOG01:14
+ for F being ManySortedSigmaField of I,Sigma, J,K being non empty Subset of I
+ st F is_independent_wrt P & J misses K holds
+ for u,v st u in sigUn(F,J) & v in sigUn(F,K) holds P.(u /\ v) = P.u * P.v;
+
+definition
+ let I be set, Omega be non empty set, Sigma be SigmaField of Omega,
+     F be ManySortedSigmaField of I, Sigma;
+ func finSigmaFields(F,I) -> Subset-Family of Omega means
+:: KOLMOG01:def 10
+ for S being Subset of Omega holds
+ S in it iff ex E being finite Subset of I st S in sigUn(F,E);
+end;
+
+theorem :: KOLMOG01:15
+  for F being ManySortedSigmaField of I, Sigma holds
+    tailSigmaField(F,I) is SigmaField of Omega;
+
+theorem :: KOLMOG01:16
+  for F being ManySortedSigmaField of I,Sigma st F is_independent_wrt P
+    & a in tailSigmaField(F,I) holds P.a=0 or P.a=1;

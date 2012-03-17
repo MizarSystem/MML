@@ -11,20 +11,20 @@ environ
       AMI_1, FINSET_1, VECTSP_1, RLSUB_1, RLSUB_2, MATRLIN, VECTSP_9, SETFAM_1,
       PENCIL_4, RLVECT_3, RLVECT_1, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, CARD_1, NUMBERS, XCMPLX_0,
-      XXREAL_0, NAT_1, NAT_D,
-      SETFAM_1, REALSET1, DOMAIN_1, STRUCT_0, FINSET_1,
+      XXREAL_0, NAT_1, NAT_D, SETFAM_1, REALSET1, DOMAIN_1, STRUCT_0, FINSET_1,
       PRE_TOPC, PENCIL_1, RLVECT_1, VECTSP_1, VECTSP_4, VECTSP_5, VECTSP_7,
       MATRLIN, VECTSP_9, BINARITH;
  constructors XXREAL_0, NAT_1, REALSET1, BINARITH, VECTSP_5, VECTSP_7,
       VECTSP_9, PENCIL_1, MATRLIN, NAT_D;
  registrations XBOOLE_0, SUBSET_1, FINSET_1, XXREAL_0, XREAL_0, REALSET1,
-      STRUCT_0, VECTSP_7, MATRLIN, VECTSP_9, PENCIL_1, ORDINAL1, CARD_1;
+      STRUCT_0, VECTSP_7, MATRLIN, VECTSP_9, PENCIL_1, ORDINAL1, CARD_1,
+      VECTSP_1;
  requirements REAL, BOOLE, SUBSET, NUMERALS, ARITHM;
  definitions TARSKI, XBOOLE_0, STRUCT_0, PENCIL_1, VECTSP_4, RLVECT_1;
  theorems XBOOLE_0, ZFMISC_1, NAT_1, TARSKI, PENCIL_1, CARD_1, XBOOLE_1,
       CARD_2, STRUCT_0, SUBSET_1, VECTSP_5, VECTSP_9, VECTSP_4, RLVECT_1,
-      VECTSP_7, VECTSP10, VECTSP_1, EULER_1, XREAL_1, BINARITH,
-      XXREAL_0, ORDINAL1, NAT_D;
+      VECTSP_7, VECTSP10, VECTSP_1, EULER_1, XREAL_1, XXREAL_0, ORDINAL1,
+      NAT_D;
  schemes NAT_1, XBOOLE_0, SUBSET_1;
 
 begin :: Spaces of pencils
@@ -150,11 +150,11 @@ definition
   proof
     hereby
       assume W1 is Subspace of W2;
-      deffunc A()=Subspaces(V);
+      set A=Subspaces(V);
       defpred P[set] means for W being Subspace of V st W=$1 holds
       W1 is Subspace of W & W is Subspace of W2;
-      consider X being Subset of A() such that
-A1:   for x being set holds x in X iff x in A() & P[x] from SUBSET_1:sch 1;
+      consider X being Subset of A such that
+A1:   for x being set holds x in X iff x in A & P[x] from SUBSET_1:sch 1;
       take X;
       let W be strict Subspace of V;
       thus W in X implies W1 is Subspace of W & W is Subspace of W2 by A1;
@@ -306,12 +306,12 @@ definition
   W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k);
   existence
   proof
-    deffunc A() = bool (k Subspaces_of V);
+    set A = bool (k Subspaces_of V);
     defpred P[set] means ex W1,W2 being Subspace of V st
     W1 is Subspace of W2 & dim W1+1=k & dim W2=k+1 & $1=pencil(W1,W2,k);
     consider X being set such that
-A1: for x being set holds x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
-    X c= A()
+A1: for x being set holds x in X iff x in A & P[x] from XBOOLE_0:sch 1;
+    X c= A
     proof
       let a be set;
       assume a in X;
@@ -619,7 +619,7 @@ A21: v1-a*u1 = v-a*u by VECTSP_4:24;
   end;
   W1+Lin{u1} in pencil(W1,W2,k) &
   W1+Lin{v1} in pencil(W1,W2,k) by A2,A9,A10,A12,A13,Th16;
-  then 2 c= Card pencil(W1,W2,k) by A16,PENCIL_1:2;
+  then 2 c= card pencil(W1,W2,k) by A16,PENCIL_1:2;
   hence pencil(W1,W2,k) is non trivial by PENCIL_1:4;
 end;
 
@@ -723,7 +723,7 @@ A15:    u <> 0.T & v <> 0.T by A14,VECTSP_7:6;
 A16:    i in I by XBOOLE_0:def 1;
         reconsider i as Vector of W1 by A16;
         reconsider J=I1\{i} as finite Subset of V by A3,XBOOLE_1:1;
-A17:    Card I = dim W1 by VECTSP_9:def 2;
+A17:    card I = dim W1 by VECTSP_9:def 2;
 A18:    card J = card I1 - card{i} by A16,EULER_1:5
           .= dim W1 - 1 by A17,CARD_1:50;
 A19:    J c= the carrier of Lin J
@@ -879,7 +879,7 @@ A1: 1 <= k & k < dim V;
 A2: W1 is Subspace of W2 &
     dim W1+1=k & dim W2=k+1 & X=pencil(W1,W2,k) by Def4;
     X is non trivial by A1,A2,Th17;
-    hence 2 c= Card X by PENCIL_1:4;
+    hence 2 c= card X by PENCIL_1:4;
   end;
 end;
 
@@ -896,14 +896,14 @@ A1: 1 <= k & k < dim V;
   thus S is identifying_close_blocks
   proof
     let X,Y be Block of S;
-    assume 2 c= Card(X/\Y);
+    assume 2 c= card(X/\Y);
     then consider P,Q being set such that
 A2: P in X/\Y & Q in X/\Y & P<>Q by PENCIL_1:2;
 A3: P in X & P in Y & Q in X & Q in Y by A2,XBOOLE_0:def 4;
 A4: S is non empty by A1,VECTSP_9:40;
 B5: S is non void by A1,Th19;
     then
-A5: the topology of S is non empty;
+ the topology of S is non empty;
     then X in the topology of S & Y in the topology of S;
     then reconsider P,Q as Point of S by A3;
     consider P1 being strict Subspace of V such that
@@ -943,16 +943,16 @@ definition
   ex W being Subspace of V st dim W = n & X = m Subspaces_of W;
   existence
   proof
-    deffunc A()=bool (m Subspaces_of V);
+    set A=bool (m Subspaces_of V);
     defpred P[set] means
     ex W being Subspace of V st dim W = n & $1 = m Subspaces_of W;
     consider X being set such that
-A1: for x being set holds x in X iff x in A() & P[x] from XBOOLE_0:sch 1;
-    X c= A()
+A1: for x being set holds x in X iff x in A & P[x] from XBOOLE_0:sch 1;
+    X c= A
     proof
       let a be set;
       assume a in X;
-      hence a in A() by A1;
+      hence a in A by A1;
     end;
     then reconsider X as Subset-Family of m Subspaces_of V;
     take X;
@@ -1042,9 +1042,9 @@ A3: dim W <> dim V by VECTSP_9:32;
 A4: dim W < dim V by A3,XXREAL_0:1;
     per cases by A1,XXREAL_0:1;
     suppose
-A5:   m=dim V;
+   m=dim V;
       then m Subspaces_of W = {} by A4,VECTSP_9:41;
-      hence contradiction by A1,A5,VECTSP_9:40;
+      hence contradiction by A1,VECTSP_9:40;
     end;
     suppose
 A7:   m < dim V;
@@ -1213,10 +1213,10 @@ A3: dim U = m+1 by A2,VECTSP_9:39;
   consider I being Basis of U;
   reconsider I'=I as finite Subset of U by VECTSP_9:24;
 A4: I is linearly-independent & Lin I=the VectSpStr of U by VECTSP_7:def 3;
-A5: Card I = m+1 by A3,VECTSP_9:def 2;
+A5: card I = m+1 by A3,VECTSP_9:def 2;
   reconsider m as Element of NAT by ORDINAL1:def 13;
   1+1 <= m+1 by A1,XREAL_1:9;
-  then 2 c= Card I by A5,NAT_1:40;
+  then 2 c= card I by A5,NAT_1:40;
   then consider i,j being set such that
 A6: i in I & j in I & i<>j by PENCIL_1:2;
   reconsider I1=I'\{i} as finite Subset of U;
@@ -1268,7 +1268,7 @@ A14: Lin I2 in B by A2,A13,VECTSP_9:def 3;
   then
 A15: j in Lin I1 by VECTSP_7:13;
   not j in Lin I2 by A4,A6,VECTSP_9:18;
-  hence 2 c= Card B by A10,A14,A15,PENCIL_1:2;
+  hence 2 c= card B by A10,A14,A15,PENCIL_1:2;
 end;
 
 theorem Th31:
@@ -1287,7 +1287,7 @@ A2: the topology of S is non empty by A1,Th24;
 A3: dim W1 = m+1 & K = m Subspaces_of W1 by Def6;
   consider W2 being Subspace of V such that
 A4: dim W2 = m+1 & L = m Subspaces_of W2 by A2,Def6;
-  assume 2 c= Card(K/\L);
+  assume 2 c= card(K/\L);
   then consider x,y being set such that
 A5: x in K/\L & y in K/\L & x <> y by PENCIL_1:2;
 A6: x in K & x in L & y in K & y in L by A5,XBOOLE_0:def 4;
@@ -1459,7 +1459,7 @@ registration
   cluster PairSet(t,X) -> non trivial;
   coherence
   proof
-    2 c= Card X by PENCIL_1:4;
+    2 c= card X by PENCIL_1:4;
     then consider x,y being set such that
 A1: x in X & y in X & x<>y by PENCIL_1:2;
 A2: {t,x} in PairSet(t,X) & {t,y} in PairSet(t,X) by A1,Def9;
@@ -1469,7 +1469,7 @@ A3:   {t,x}={t,y};
       then y=t by A1,ZFMISC_1:10;
       hence contradiction by A1,A3,ZFMISC_1:10;
     end;
-    then 2 c= Card PairSet(t,X) by A2,PENCIL_1:2;
+    then 2 c= card PairSet(t,X) by A2,PENCIL_1:2;
     hence PairSet(t,X) is non trivial by PENCIL_1:4;
   end;
 end;
@@ -1483,11 +1483,11 @@ definition
   ex t being set, l being Subset of X st t in X & l in L & S=PairSet(t,l);
   existence
   proof
-    deffunc A()=PairSet(X);
-    defpred P[Subset of A()] means
+    set A=PairSet(X);
+    defpred P[Subset of A] means
     ex t being set, l being Subset of X st t in X & l in L & $1=PairSet(t,l);
-    consider F being Subset-Family of A() such that
-A1: for B being Subset of A() holds B in F iff P[B] from SUBSET_1:sch 3;
+    consider F being Subset-Family of A such that
+A1: for B being Subset of A holds B in F iff P[B] from SUBSET_1:sch 3;
     take F;
     let S be set;
     thus S in F implies ex t being set, l being Subset of X st
@@ -1590,10 +1590,10 @@ registration
     let L be Block of VeroneseSpace(S);
     consider t being set, l being Subset of S such that
 A1: t in the carrier of S & l in the topology of S & L=PairSet(t,l) by Def10;
-    2 c= Card l by A1,PENCIL_1:def 6;
+    2 c= card l by A1,PENCIL_1:def 6;
     then reconsider l as non trivial set by PENCIL_1:4;
     PairSet(t,l) is non trivial;
-    hence 2 c= Card L by A1,PENCIL_1:4;
+    hence 2 c= card L by A1,PENCIL_1:4;
   end;
 end;
 
@@ -1603,7 +1603,7 @@ registration
   coherence
   proof
     let K,L be Block of VeroneseSpace(S);
-    assume 2 c= Card (K/\L);
+    assume 2 c= card (K/\L);
     then consider a,b being set such that
 A1: a in K/\L & b in K/\L & a <> b by PENCIL_1:2;
 A2: a in K & a in L & b in K & b in L by A1,XBOOLE_0:def 4;
@@ -1636,7 +1636,7 @@ A13:  y<>w;
       hence contradiction by A7,A9,A13,ZFMISC_1:10;
     end;
     then x in k/\l & y in k/\l by A6,A7,A8,A9,A11,XBOOLE_0:def 4;
-    then 2 c= Card (k/\l) by A1,A6,A7,PENCIL_1:2;
+    then 2 c= card (k/\l) by A1,A6,A7,PENCIL_1:2;
     hence K=L by A1,A4,A5,A8,A9,A10,PENCIL_1:def 7;
   end;
 end;

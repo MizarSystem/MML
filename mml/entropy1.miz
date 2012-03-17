@@ -8,14 +8,14 @@ environ
 
  vocabularies ARYTM, FINSEQ_1, BOOLE, ARYTM_1, FUNCT_1, NAT_1, MATRIXC1,
       MATRPROB, RELAT_1, RVSUM_1, ARYTM_3, FINSEQ_2, INCSP_1, MATRIXR1,
-      RLVECT_1, MATRIX_1, TREES_1, PARTFUN1, CAT_3, POWER, TAYLOR_1,
-      LIMFUNC1, FDIFF_1, RCOMP_1, SEQ_1, SUPINF_2, PARTFUN3, ROUGHS_1,
-      FINSEQ_4, ENTROPY1, FUNCOP_1, RELAT_2, ORDINAL2;
+      RLVECT_1, MATRIX_1, TREES_1, PARTFUN1, CAT_3, POWER, TAYLOR_1, LIMFUNC1,
+      FDIFF_1, RCOMP_1, SEQ_1, SUPINF_2, PARTFUN3, ROUGHS_1, FINSEQ_4,
+      ENTROPY1, FUNCOP_1, ORDINAL2;
  notations TARSKI, SUBSET_1, XBOOLE_0, XXREAL_0, XREAL_0, REAL_1, NAT_1, NAT_D,
-      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1,
-      XXREAL_2, VALUED_1, SEQ_1, ZFMISC_1, PARTFUN1,
-      FUNCOP_1, RVSUM_1, FINSEQ_1, FINSEQ_2, NEWTON, MATRIXR1, MATRIX_1,
-      PARTFUN3, POWER, LIMFUNC1, RCOMP_1, MATRPROB, FDIFF_1, TAYLOR_1, FCONT_1;
+      ORDINAL1, NUMBERS, RELAT_1, FUNCT_1, XXREAL_2, VALUED_1, SEQ_1, ZFMISC_1,
+      PARTFUN1, FUNCOP_1, RVSUM_1, FINSEQ_1, FINSEQ_2, NEWTON, MATRIXR1,
+      MATRIX_1, PARTFUN3, POWER, LIMFUNC1, RCOMP_1, MATRPROB, FDIFF_1,
+      TAYLOR_1, FCONT_1;
  constructors REAL_1, NAT_D, BINOP_2, MATRIX_3, MATRIXR1, MATRLIN, EUCLID_2,
       NAT_1, MATRPROB, PARTFUN3, PARTFUN2, FDIFF_1, FCONT_1, POWER, LIMFUNC1,
       SIN_COS, TAYLOR_1, INTEGRA1, SEQ_1, XXREAL_2, RVSUM_1;
@@ -23,13 +23,14 @@ environ
       RCOMP_1, XXREAL_0, NUMBERS, XBOOLE_0, VALUED_0, FINSEQ_1, CARD_1,
       XXREAL_2;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions TARSKI, PARTFUN3, FINSEQ_2, LIMFUNC1, RCOMP_1, VALUED_1;
- theorems FUNCT_1, NAT_1, REAL_2, MATRIX_2, XREAL_1, NAT_2, MATRIXR1, GOBOARD1,
+ definitions TARSKI, PARTFUN3, FINSEQ_2, LIMFUNC1, RCOMP_1, VALUED_1, XCMPLX_0,
+      TAYLOR_1;
+ theorems FUNCT_1, NAT_1, MATRIX_2, XREAL_1, NAT_2, MATRIXR1, GOBOARD1,
       XBOOLE_0, EUCLID_2, PROB_3, INTEGRA5, FINSEQ_1, MATRIX_1, GOBRD13,
       FINSEQ_2, PARTFUN3, FINSEQ_3, RVSUM_1, POWER, FDIFF_1, RELSET_1, TREES_1,
-      XBOOLE_1, TAYLOR_1, LIMFUNC1, SQUARE_1, RELAT_1, ROLLE, FCONT_1,
-      XCMPLX_1, INTEGRA1, XXREAL_0, ORDINAL1, MATRPROB, FUNCOP_1,
-      PEPIN, NAT_D, PARTFUN1, VALUED_1, CARD_2, XXREAL_1, XXREAL_2;
+      XBOOLE_1, TAYLOR_1, RELAT_1, ROLLE, FCONT_1, XCMPLX_1, INTEGRA1,
+      XXREAL_0, ORDINAL1, MATRPROB, FUNCOP_1, PEPIN, NAT_D, PARTFUN1, VALUED_1,
+      XXREAL_1, XXREAL_2;
  schemes FINSEQ_2, SEQ_1, NAT_1, RECDEF_1, FINSEQ_1, MATRIX_1;
 
 begin :: Preliminaries
@@ -42,6 +43,8 @@ reserve D for non empty set,
   p,q for FinSequence of REAL,
   MR,MR1 for Matrix of REAL;
 
+
+
 theorem Th1:
   k <> 0 & i < l & l <= j & k divides l implies i div k < j div k
 proof
@@ -49,29 +52,28 @@ proof
 A1: k <> 0 & i < l & l <= j & k divides l;
   then
 A2: l mod k = 0 by PEPIN:6;
-A3: k > 0 by A1;
-  then l = k * (l div k) + (l mod k) by NAT_D:2
+  l = k * (l div k) + (l mod k) by NAT_D:2,A1
     .= k * (l div k) by A2;
-  then k / k * (l div k) = l / k by XCMPLX_1:75;
+  then k / k * (l div k) = l / k;
   then
 A4: 1 * (l div k) = l / k by A1,XCMPLX_1:60;
-  i = k * (i div k) + (i mod k) by A3,NAT_D:2;
-  then k / k * (i div k) = (i - (i mod k)) / k by XCMPLX_1:75;
+  i = k * (i div k) + (i mod k) by A1,NAT_D:2;
+  then k / k * (i div k) = (i - (i mod k)) / k;
   then
 A5: 1 * (i div k) = (i - (i mod k)) / k by A1,XCMPLX_1:60;
   i + (i mod k) >= i by NAT_1:11;
   then i - (i mod k) <= (i + (i mod k)) - (i mod k) by XREAL_1:11;
   then i - (i mod k) < l by A1,XXREAL_0:2;
   then
-A6: (i - (i mod k)) / k < l / k by A3,XREAL_1:76;
+A6: (i - (i mod k)) / k < l / k by A1,XREAL_1:76;
   l div k <= j div k by A1,NAT_2:26;
   hence thesis by A4,A5,A6,XXREAL_0:2;
 end;
 
 theorem Th2:
-  r > 0 implies ((log_ number_e).r <= r - 1) &
-  (r = 1 iff (log_ number_e).r = r - 1) &
-  (r <> 1 iff (log_ number_e).r < r - 1)
+  r > 0 implies (ln.r <= r - 1) &
+  (r = 1 iff ln.r = r - 1) &
+  (r <> 1 iff ln.r < r - 1)
 proof
   set Z = right_open_halfline(0);
 Z: 1 in Z by XXREAL_1:235;
@@ -84,11 +86,11 @@ A1: (for r holds r in dom f1 iff P[r]) &
   then
 A2: dom f1 = REAL by A1,FDIFF_1:1;
   defpred P[set] means $1 in Z;
-  deffunc G(Real) = (log_ number_e).$1;
+  deffunc G(Real) = ln.$1;
   reconsider f2 = log_ number_e as PartFunc of REAL, REAL;
 A3: dom f2 = Z by TAYLOR_1:def 2;
   defpred P[set] means $1 in Z;
-  deffunc F(Real) = ($1 - 1) - (log_ number_e).$1;
+  deffunc F(Real) = ($1 - 1) - ln.$1;
   set f = f1 - f2;
 A4: dom f = Z /\ REAL by A2,A3,VALUED_1:12
     .= Z by XBOOLE_1:28;
@@ -112,14 +114,14 @@ A8:   r in Z;
   end;
 A9: f is_differentiable_on Z & for r st r in Z holds diff(f,r)=1 - 1/r
   proof thus
-A10: f is_differentiable_on Z by A4,A6,FDIFF_1:27,TAYLOR_1:18,def 3;
+A10: f is_differentiable_on Z by A4,A6,FDIFF_1:27,TAYLOR_1:18;
     hereby
       let r such that
 A11:  r in Z;
       ((f1-f2)`|Z).r = diff(f1,r) - diff(f2,r)
-      by A4,A6,A11,FDIFF_1:27,TAYLOR_1:18,def 3
+      by A4,A6,A11,FDIFF_1:27,TAYLOR_1:18
         .= 1 - diff(f2,r) by A6,A11
-        .= 1 - 1/r by A11,TAYLOR_1:18,def 3;
+        .= 1 - 1/r by A11,TAYLOR_1:18;
       hence diff(f,r) = 1 - 1/r by A10,A11,FDIFF_1:def 8;
     end;
   end;
@@ -127,7 +129,7 @@ A11:  r in Z;
   then
 A12: 1 in Z by XXREAL_1:230;
 A13: number_e > 0 & number_e <> 1 by TAYLOR_1:11;
-A14: for x be Real st x > 0 holds f.x = (x - 1) - (log_ number_e).x
+A14: for x be Real st x > 0 holds f.x = (x - 1) - ln.x
   proof
     let x be Real such that
 A15: x > 0;
@@ -141,29 +143,26 @@ A17: f.x = f1.x - f2.x by VALUED_1:13;
     hence thesis by A1,A17;
   end;
   then
-A18: f.1 = (1 - 1) - (log_ number_e).1
-    .= - (log_ number_e).1
+A18: f.1 = (1 - 1) - ln.1
     .= - log(number_e,1) by A12,TAYLOR_1:def 2
     .= - 0 by A13,POWER:59
     .= 0;
   set Z1 = right_open_halfline(1);
 A19: Z1 c= Z by XXREAL_1:46;
-  then
-A20: f is_differentiable_on Z1 by A9,FDIFF_1:34;
+A20: f is_differentiable_on Z1 by A9,FDIFF_1:34,XXREAL_1:46;
 A21: for r st r in Z1 holds diff(f,r) > 0
   proof
     let r such that
 A22: r in Z1;
     r in {g where g is Real: 1 < g} by A22,XXREAL_1:230;
     then
-A23: ex g1 being Real st g1 = r & 1 < g1;
+C23: ex g1 being Real st g1 = r & 1 < g1;
     diff(f,r) = 1 - 1/r by A9,A19,A22;
-    hence thesis by A23,SQUARE_1:2,XREAL_1:52;
+    hence thesis by XREAL_1:52,214,C23;
   end;
   set Z2 = ].0,1.[;
 A24: Z2 c= Z by XXREAL_1:247;
-  then
-A25: f is_differentiable_on Z2 by A9,FDIFF_1:34;
+A25: f is_differentiable_on Z2 by A9,FDIFF_1:34,XXREAL_1:247;
 A26: for r st r in Z2 holds diff(f,r) < 0
   proof
     let r;
@@ -177,25 +176,21 @@ A28: 1 < 1/r by XREAL_1:189;
   end;
 A29: f|Z is continuous & f|Z1 is continuous & f|Z2 is continuous
   by A9,A20,A25,FDIFF_1:33;
-X:  Z c= dom f by A4;
 A30: for r st r in Z1 holds f.r > 0
   proof
     assume not for r st r in Z1 holds f.r > 0;
     then consider r1 such that
 A31: r1 in Z1 & f.r1 <= 0;
-Y:  r1 in dom f by A19,A31,A4;
     r1 in {g where g is Real: 1 < g} by A31,XXREAL_1:230;
     then
 A32: ex g1 being Real st g1 = r1 & 1 < g1;
-A33: f|[.1,r1.] is continuous  by A29,X,FCONT_1:17,XXREAL_1:249;
-    ].1,r1.[ c= Z by XXREAL_1:247;
-    then
-A34: f is_differentiable_on ].1,r1.[ by A9,FDIFF_1:34;
-y:  [.1,r1.] c= dom f by Y,A4,Z,XXREAL_2:def 12;
+A33: f|[.1,r1.] is continuous  by A29,FCONT_1:17,XXREAL_1:249;
+A34: f is_differentiable_on ].1,r1.[ by A9,FDIFF_1:34,XXREAL_1:247;
+y:  [.1,r1.] c= dom f by A19,A31,A4,Z,XXREAL_2:def 12;
     per cases by A31;
     suppose f.r1 = 0;
       then consider r2 being Real such that
-A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,X,y,ROLLE:1;
+A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,y,ROLLE:1;
       ex g1 being Real st g1 = r2 & 1 < g1 & g1 < r1 by A35;
       then r2 in {g where g is Real : 1<g};
       then r2 in Z1 by XXREAL_1:230;
@@ -204,14 +199,13 @@ A35:  r2 in ].1,r1.[ & diff(f,r2)=0 by A18,A32,A33,A34,X,y,ROLLE:1;
     suppose
 A36:  f.r1 < 0;
       consider r3 being Real such that
-A37:  r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,X,y,ROLLE:3;
+A37:  r3 in ].1,r1.[ & diff(f,r3)=(f.r1-f.1)/(r1-1) by A32,A33,A34,y,ROLLE:3;
       ex g1 being Real st g1 = r3 & 1 < g1 & g1 < r1 by A37;
       then r3 in {g where g is Real : 1<g};
       then
 A38:  r3 in Z1 by XXREAL_1:230;
       r1 -1 > 0 by A32,XREAL_1:52;
-      then diff(f,r3) < 0 by A18,A36,A37,REAL_2:128;
-      hence contradiction by A21,A38;
+      hence contradiction by A21,A38,A18,A36,A37;
     end;
   end;
 A39: for r st r in Z2 holds f.r > 0
@@ -219,16 +213,11 @@ A39: for r st r in Z2 holds f.r > 0
     assume not for r st r in Z2 holds f.r > 0;
     then consider r1 such that
 A40: r1 in Z2 & f.r1 <= 0;
-Y:  r1 in dom f by A24,A40,A4;
 A41: ex g1 being Real st g1 = r1 & 0<g1 & g1<1 by A40;
     then
-A42: f|[.r1,1.] is continuous  by A29,X,FCONT_1:17,XXREAL_1:249;
-    Z is connected by Y,A4;
-    then
-y:  [.r1,1.] c= dom f by Y,A4,Z,XXREAL_2:def 12;
-    ].r1,1.[ c= Z by A41,XXREAL_1:247;
-    then
-A43: f is_differentiable_on ].r1,1.[ by A9,FDIFF_1:34;
+A42: f|[.r1,1.] is continuous  by A29,FCONT_1:17,XXREAL_1:249;
+y:  [.r1,1.] c= dom f by A24,A40,A4,Z,XXREAL_2:def 12;
+A43: f is_differentiable_on ].r1,1.[ by A9,FDIFF_1:34,A41,XXREAL_1:247;
     per cases by A40;
     suppose f.r1 = 0;
       then consider r2 being Real such that
@@ -244,10 +233,8 @@ A46:  r3 in ].r1,1.[ & diff(f,r3)=(f.1-f.r1)/(1-r1) by A41,A42,A43,y,ROLLE:3;
       ex g1 being Real st g1 = r3 & r1 < g1 & g1 < 1 by A46;
       then
 A47:  r3 in Z2 by A41;
-A48:  f.1 - f.r1 > 0 by A18,A45;
       1 -r1 > 0 by A41,XREAL_1:52;
-      then diff(f,r3) > 0 by A46,A48,REAL_2:127;
-      hence contradiction by A26,A47;
+      hence contradiction by A26,A47,A46,A18,A45;
     end;
   end;
 A49: for r st r > 0 & r < 1 holds f.r > 0
@@ -283,19 +270,19 @@ A54: r > 0;
   assume
 A55: r > 0;
   then f.r >= 0 by A53;
-  then (r - 1) - (log_ number_e).r >= 0 by A14,A55;
-  then (r - 1) - 0 >= (log_ number_e).r by XREAL_1:13;
-  hence (log_ number_e).r <= r - 1; thus
-A56: r = 1 iff (log_ number_e).r = r - 1
+  then (r - 1) - ln.r >= 0 by A14,A55;
+  then (r - 1) - 0 >= ln.r by XREAL_1:13;
+  hence ln.r <= r - 1; thus
+A56: r = 1 iff ln.r = r - 1
   proof
     hereby
       assume r = 1;
-      then (r - 1) - (log_ number_e).r = 0 by A14,A18;
-      hence (log_ number_e).r = r - 1;
+      then (r - 1) - ln.r = 0 by A14,A18;
+      hence ln.r = r - 1;
     end;
-    assume (log_ number_e).r = r - 1;
+    assume ln.r = r - 1;
     then
-A57: (r - 1) - (log_ number_e).r = 0;
+A57: (r - 1) - ln.r = 0;
     assume
 A58: r <> 1;
     per cases by A58,XXREAL_0:1;
@@ -309,27 +296,27 @@ A59:  r > 1;
       hence contradiction by A14,A57,A59;
     end;
   end;
-  thus r <> 1 iff (log_ number_e).r < r - 1
+  thus r <> 1 iff ln.r < r - 1
   proof
     hereby
       assume r <> 1;
       then
 A60:  r-1>0 or 1-r>0 by XREAL_1:57;
-      per cases by A60,REAL_2:106;
+      per cases by A60,XREAL_1:49;
       suppose r < 1;
         then f.r > 0 by A49,A55;
-        then (r - 1) - (log_ number_e).r > 0 by A14,A55;
-        hence (log_ number_e).r < r - 1 by REAL_2:106;
+        then (r - 1) - ln.r > 0 by A14,A55;
+        hence ln.r < r - 1 by XREAL_1:49;
       end;
       suppose
 A61:    r > 1;
         then f.r > 0 by A51;
-        then (r - 1) - (log_ number_e).r > 0 by A14,A61;
-        hence (log_ number_e).r < r - 1 by REAL_2:106;
+        then (r - 1) - ln.r > 0 by A14,A61;
+        hence ln.r < r - 1 by XREAL_1:49;
       end;
     end;
     assume
-A62: (log_ number_e).r < r - 1;
+A62: ln.r < r - 1;
     assume r = 1;
     hence contradiction by A56,A62;
   end;
@@ -343,7 +330,7 @@ proof
 A1: r>0;
   then r in {g where g is Real : 0<g};
   then r in right_open_halfline(0) by XXREAL_1:230;
-  then log(number_e,r) = (log_ number_e).r by TAYLOR_1:def 2;
+  then log(number_e,r) = ln.r by TAYLOR_1:def 2;
   hence thesis by A1,Th2;
 end;
 
@@ -599,10 +586,11 @@ A2: 1 <= k & k <= len p by A1,FINSEQ_3:27;
   then consider p2 being FinSequence such that
 A3: p=p1^p2 by TREES_1:8;
   k in Seg k by A2,FINSEQ_1:5;
-  then k in (dom p) /\ (Seg k) by A1,XBOOLE_0:def 4;
+  then
+B4: k in (dom p) /\ (Seg k) by A1,XBOOLE_0:def 4;
   then
 A4: k in dom p1 by RELAT_1:90;
-  then p1 <> {} by RELAT_1:60;
+  p1 <> {} by RELAT_1:60,90,B4;
   then len p1<>0;
   then consider p3 being FinSequence of REAL,x being Element of REAL such that
 A5: p1=p3^<*x*> by FINSEQ_2:22;
@@ -638,7 +626,7 @@ X: dom p2 = Seg len p2 by FINSEQ_1:def 3;
       assume
 A15:  j in dom p2;
       hence p2.j =0 by A8,X
-        .= (len p2 |->0).j by A15,X,FINSEQ_1:4,FINSEQ_2:71;
+        .= (len p2 |->0).j by A15,X,FINSEQ_2:71;
     end;
     hence thesis by A14,FINSEQ_2:10;
   end;
@@ -666,7 +654,7 @@ X: dom p3 = Seg len p3 by FINSEQ_1:def 3;
       assume
 A23:  j in dom p3;
       hence p3.j =0 by A16,X
-        .= (len p3 |->0).j by A23,X,FINSEQ_1:4,FINSEQ_2:71;
+        .= (len p3 |->0).j by A23,X,FINSEQ_2:71;
     end;
     hence thesis by A22,FINSEQ_2:10;
   end;
@@ -1569,8 +1557,7 @@ A1: len p = len M & p.1 = M.1 &
   suppose
 A2: len M = 0;
     then p = {} by A1;
-    then dom p = {} by RELAT_1:60;
-    then p.1 = {} by FUNCT_1:def 4;
+    then p.1 = {} by FUNCT_1:def 4,RELAT_1:60;
     hence len(p.1)=width M by A2,MATRIX_1:def 4;
     let j such that
 A3: [1,j] in Indices M;
@@ -1804,8 +1791,7 @@ A3: for k st k >= 1 & k < len M holds p.(k+1) = (p.k) ^ M.(k+1);
   suppose
 A4: len M = 0;
     then p = {} by A1;
-    then dom p = {} by RELAT_1:60;
-    hence Sum(p.(len M)) = 0 by FUNCT_1:def 4,RVSUM_1:102
+    hence Sum(p.(len M)) = 0 by FUNCT_1:def 4,RVSUM_1:102,RELAT_1:60
       .= SumAll M by A4,MATRPROB:23;
   end;
   suppose
@@ -1821,7 +1807,7 @@ A10: len M in dom Sum p by A1,A8,FINSEQ_1:def 3;
     consider qq being FinSequence of REAL such that
 A11: len qq = len q & qq.1 = q.1 &
     (for k st 0 <> k & k < len q holds qq.(k+1) = qq.k + q.(k+1)) &
-    Sum q = qq.(len q) by A7,Th9;
+    Sum q = qq.(len q) by A6,Th9,A5,NAT_1:14;
 A12: qq = Sum p
     proof
 A13:  len qq = len M by A11,MATRPROB:def 1
@@ -2040,8 +2026,7 @@ A2: Mx2FinS(M) <> {} by A1,RELAT_1:60;
 A3: len Mx2FinS(M) = len M * width M by Th39;
   then
 A4: len M <> 0 & width M <> 0 by A2;
-  then
-A5: len M > 0 & width M > 0;
+A5: len M > 0 & width M > 0 by A2,A3;
   set ii = (l div width M)+1;
   set jj = (l mod width M)+1;
   k in Seg len Mx2FinS(M) by A1,FINSEQ_1:def 3;
@@ -2539,10 +2524,12 @@ A11:    len MR = 0;
 A12:    len MR > 0;
         then len p >= 1 by A2,NAT_1:14;
         then 1 in Seg len p by FINSEQ_1:3;
-        then 1 in dom p by FINSEQ_1:def 3;
+        then
+B13:     1 in dom p by FINSEQ_1:def 3;
         then
 A13:    p.1 in rng p by FUNCT_1:12;
-        then ex q being FinSequence st q=p.1 & len q = width MR by A4;
+         ex q being FinSequence st q=p.1 & len q = width MR
+          by A4,FUNCT_1:12,B13;
         hence thesis by A2,A12,A13,MATRIX_1:def 4;
       end;
     end;
@@ -2762,14 +2749,13 @@ A10:  k in dom p;
 A11:  p.k > 0 & q.k > 0 & pp.k=-p.k*log(2,p.k) &
       qq.k=-p.k*log(2,q.k) by A2,A10;
       then
-A12:  1/(p.k) > 0 & (q.k)/(p.k) > 0 by REAL_2:127;
+A12:  1/(p.k) > 0 & (q.k)/(p.k) > 0 by XREAL_1:141;
 A13:  -log(2,p.k)=log(2,1/(p.k)) by A11,Th5;
 A14:  log(2,(q.k)/(p.k))
       = log(2,number_e)*log(number_e,(q.k)/(p.k)) by A4,A12,POWER:64;
       thus p1.k = pp.k - qq.k by A6,A7,A10,VALUED_1:13
         .= p.k*(log(2,1/(p.k)) + log(2,(q.k))) by A11,A13
-        .= p.k*log(2,(1/(p.k))*(q.k)) by A11,A12,POWER:61
-        .= p.k*log(2,(1*(q.k))/(p.k)) by XCMPLX_1:75
+        .= p.k*log(2,(1/(p.k))*(q.k)) by A11,POWER:61
         .= p.k*log(2,number_e)*log(number_e,(q.k)/(p.k)) by A14;
     end;
   end;
@@ -2791,12 +2777,12 @@ A22: k in Seg n;
 A23: k in dom p by A22,FINSEQ_1:def 3;
     then
 A24: p.k > 0 & q.k > 0 by A2;
-    then (q.k)/(p.k) > 0 by REAL_2:127;
+    then (q.k)/(p.k) > 0 by XREAL_1:141;
     then
 A25: log(number_e,(q.k)/(p.k)) <= ((q.k)/(p.k))-1 by Th3;
-    p.k * log(2,number_e) > 0 by A20,A24,REAL_2:122;
-    then p.k * log(2,number_e)*log(number_e,(q.k)/(p.k))<=
-    p.k * log(2,number_e)*(((q.k)/(p.k))-1) by A25,XREAL_1:66;
+    p.k * log(2,number_e)*log(number_e,(q.k)/(p.k))<=
+    p.k * log(2,number_e)*(((q.k)/(p.k))-1)
+     by A25,XREAL_1:66,A20,A24;
     then p1.k <= p.k * log(2,number_e) *(((q.k)/(p.k))-1) by A9,A23;
     hence thesis by A16,A22,A17;
   end;
@@ -2813,9 +2799,7 @@ A31: for k be Nat st k in dom p2 holds p2.k=(log(2,number_e)*(q-p)).k
 A32: k in dom p2;
 A34: p.k>0 by A2,A18,A32;
     thus p2.k = log(2,number_e)*p.k*(((q.k)/(p.k))-1) by A16,A32
-      .= log(2,number_e)*(p.k*((q.k)/(p.k))-p.k)
-      .= log(2,number_e)*(((p.k)*(q.k))/(p.k)-p.k) by XCMPLX_1:75
-      .= log(2,number_e)*(((p.k)/(p.k))*(q.k)-p.k) by XCMPLX_1:75
+      .= log(2,number_e)*(((p.k)/(p.k))*(q.k)-p.k)
       .= log(2,number_e)*(1*(q.k)-p.k) by A34,XCMPLX_1:60
       .= log(2,number_e)*(q-p).k by A29,A32,VALUED_1:13
       .= (log(2,number_e)*(q-p)).k by RVSUM_1:66;
@@ -2833,8 +2817,7 @@ A37: Sum p2 = Sum(log(2,number_e)*(q-p)) by A30,A31,FINSEQ_1:17
     .= log(2,number_e)*(1-Sum p) by MATRPROB:def 5
     .= log(2,number_e)*(1-1) by MATRPROB:def 5
     .=0;
-  then Sum pp +- Sum qq <=0 by A8,A21,A26,A27,RVSUM_1:112;
-  hence Sum pp <= Sum qq by REAL_2:105;
+  hence Sum pp <= Sum qq by XREAL_1:52,A8,A21,A26,A27,RVSUM_1:112;
 A38: (ex k st k in Seg n & p.k<>q.k) implies Sum pp < Sum qq
   proof
     assume ex k st k in Seg n & p.k<>q.k;
@@ -2844,17 +2827,17 @@ A40: k1 in dom p by A39,FINSEQ_1:def 3;
     then
 A41: p.k1 > 0 & q.k1 > 0 by A2;
     then
-A42: q.k1/p.k1 >0 by REAL_2:127;
+A42: q.k1/p.k1 >0 by XREAL_1:141;
     q.k1/p.k1 <> 1 by A39,XCMPLX_1:58;
     then
 A43: log(number_e,(q.k1)/(p.k1)) < ((q.k1)/(p.k1)-1) by A42,Th3;
-    p.k1 * log(2,number_e) > 0 by A20,A41,REAL_2:122;
+    p.k1 * log(2,number_e) > 0 by A20,A41,XREAL_1:131;
     then p.k1 * log(2,number_e) * log(number_e,(q.k1)/(p.k1)) <
     p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A43,XREAL_1:70;
     then p1.k1 < p.k1 * log(2,number_e) * ((q.k1)/(p.k1)-1) by A9,A40;
     then p1.k1 < p2.k1 by A16,A39,A17;
-    then Sum pp +- Sum qq < 0 by A8,A21,A26,A27,A37,A39,RVSUM_1:113;
-    hence Sum pp < Sum qq by REAL_2:106;
+    then Sum pp - Sum qq < 0 by A8,A21,A26,A27,A37,A39,RVSUM_1:113;
+    hence Sum pp < Sum qq by XREAL_1:50;
   end; thus
   (for k st k in dom p holds p.k=q.k) iff Sum pp = Sum qq
   proof
@@ -2896,14 +2879,9 @@ A1: for k st k in dom p holds p.k > 0;
   set n = len p;
   reconsider n1=n as non empty Element of NAT;
 A2: dom p = Seg len p by FINSEQ_1:def 3;
-  deffunc F(Nat) = 1/n1;
-  consider p1 be FinSequence of REAL such that
-A3: len p1 = n and
-A4: for k be Nat st k in dom p1 holds p1.k = F(k) from FINSEQ_2:sch 1;
-A5: dom p1 = Seg n by A3,FINSEQ_1:def 3;
-A6: 1/n1 > 0 by REAL_2:127;
-  p1 =(n1 |-> (1/n1)) by A3,A4,MATRPROB:1;
-  then
+  reconsider nn=1/n1 as Element of REAL;
+  reconsider p1 = n |-> nn as FinSequence of REAL;
+A3: len p1 = n by FINSEQ_2:69;
 A7: p1 is non empty ProbFinS FinSequence of REAL by Th16;
   deffunc F(Nat) = -p.$1*log(2,p1.$1);
   consider p2 be FinSequence of REAL such that
@@ -2926,7 +2904,8 @@ A14:  k in Seg n;
   end;
   then
 A15: for k st k in dom p holds p.k > 0 & p1.k > 0 &
-  p3.k=-p.k*log(2,p.k) & p2.k = -p.k*log(2,p1.k) by A1,A2,A4,A6,A9,A5,A10;
+  p3.k=-p.k*log(2,p.k) & p2.k = -p.k*log(2,p1.k)
+   by A1,A2,FINSEQ_2:71,A9,A10;
   then
 A16: Sum p3 <= Sum p2 &
   ((for k st k in dom p holds p.k=p1.k) iff Sum p3 = Sum p2) &
@@ -2941,7 +2920,7 @@ A19: dom p2 = dom((-log(2,1/n1))*p) by A18,VALUED_1:def 5;
       let k be Nat such that
 A20:  k in dom p2;
       thus p2.k = -p.k*log(2,p1.k) by A9,A20
-        .= -p.k*log(2,1/n1) by A4,A20,A5,A10
+        .= -p.k*log(2,1/n1) by FINSEQ_2:71,A20,A10
         .= (-log(2,1/n1))*p.k
         .= ((-log(2,1/n1))*p).k by RVSUM_1:66;
     end;
@@ -2950,8 +2929,8 @@ A20:  k in dom p2;
   then
 A21: Sum p2 = (-log(2,1/n1)) * Sum p by RVSUM_1:117
     .= (-log(2,1/n1)) * 1 by MATRPROB:def 5
-    .= log(2,1/(1/n1)) by A6,Th5
-    .= log(2,n) by XCMPLX_1:56;
+    .= log(2,1/(1/n1)) by Th5
+    .= log(2,n);
   hence Entropy p <= log(2,len p) by A3,A7,A8,A13,A15,A17,Th57;
   thus (for k st k in dom p holds p.k=1/(len p)) iff Entropy p=log(2,len p)
   proof
@@ -2962,7 +2941,7 @@ A22:  for k st k in dom p holds p.k=1/(len p);
         let k such that
 A23:    k in dom p;
         thus p.k = 1/n by A22,A23
-          .= p1.k by A2,A4,A23,A5;
+          .= p1.k by A2,FINSEQ_2:71,A23;
       end;
       hence Entropy p=log(2,n) by A3,A7,A8,A13,A15,A17,A21,Th57;
     end;
@@ -2973,7 +2952,7 @@ A24: Entropy p=log(2,n);
       assume
 A25:  k in dom p;
       hence p.k = p1.k by A3,A7,A8,A13,A15,A17,A21,A24,Th57
-        .= 1/n by A2,A4,A25,A5;
+        .= 1/n by A2,FINSEQ_2:71,A25;
     end;
   end;
   thus (ex k st k in dom p & p.k<>1/(len p)) iff Entropy p<log(2,len p)
@@ -2982,13 +2961,13 @@ A25:  k in dom p;
       assume ex k st k in dom p & p.k<>1/(len p);
       then consider k1 being Nat such that
 A26:  k1 in dom p & p.k1<>1/n;
-      p1.k1 <> p.k1 by A2,A4,A26,A5;
+      p1.k1 <> p.k1 by A2,FINSEQ_2:71,A26;
       hence Entropy p<log(2,n) by A3,A7,A8,A13,A15,A17,A21,A26,Th57;
     end;
     assume Entropy p<log(2,n);
     then consider k1 being Nat such that
 A27: k1 in dom p & p.k1<>p1.k1 by A16,A21,RVSUM_1:118;
-    p1.k1 = 1/n by A2,A4,A27,A5;
+    p1.k1 = 1/n by A2,FINSEQ_2:71,A27;
     hence thesis by A27;
   end;
 end;

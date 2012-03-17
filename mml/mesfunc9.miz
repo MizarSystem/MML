@@ -11,14 +11,13 @@ environ
       SQUARE_1, RLVECT_1, GROUP_1, PROB_1, INTEGRA1, MESFUNC2, MESFUNC5,
       SUPINF_1, SUPINF_2, FUNCT_3, SEQFUNC, TDGROUP, SERIES_1, RFUNCT_3,
       SETFAM_1, GRCAT_1, MESFUNC8, MESFUNC9, FUNCT_2, SEQM_3, RINFSUP1,
-      MEASURE2, VALUED_0, XXREAL_2;
+      MEASURE2, VALUED_0, XXREAL_2, FUNCOP_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, ORDINAL1, NUMBERS, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, XXREAL_0, VALUED_0, RELAT_1, FUNCT_1,
       RELSET_1, BINOP_1, FUNCT_2, PARTFUN1, NAT_1, MEMBERED, PROB_1, SETFAM_1,
-      SUPINF_1, SUPINF_2, SEQ_1, KURATO_2, XXREAL_2, SEQM_3,
-      MEASURE1, MEASURE2, EXTREAL1,
-      MESFUNC1, MEASURE6, MESFUNC2, LIMFUNC1, SEQFUNC, MESFUNC5, MESFUNC8,
-      RINFSUP2;
+      SUPINF_1, SUPINF_2, SEQ_1, KURATO_2, XXREAL_2, SEQM_3, MEASURE1,
+      MEASURE2, EXTREAL1, MESFUNC1, MEASURE6, MESFUNC2, LIMFUNC1, SEQFUNC,
+      MESFUNC5, MESFUNC8, RINFSUP2, FUNCOP_1;
  constructors REAL_1, NAT_1, EXTREAL1, EXTREAL2, BINOP_1, SEQ_1, NEWTON,
       MESFUNC1, MEASURE2, MESFUNC3, MEASURE6, MESFUNC2, LIMFUNC1, KURATO_2,
       MESFUNC5, MESFUNC8, RINFSUP2, VALUED_0, SUPINF_1, SEQFUNC, SEQM_3;
@@ -31,9 +30,9 @@ environ
  theorems TARSKI, SUPINF_1, PARTFUN1, FUNCT_1, SUPINF_2, EXTREAL1, EXTREAL2,
       MESFUNC1, XREAL_0, XBOOLE_0, XBOOLE_1, XCMPLX_1, MESFUNC2, XREAL_1,
       XXREAL_0, MESFUNC5, PROB_1, NAT_1, RELAT_1, FUNCT_3, ZFMISC_1, FUNCT_2,
-      MEASURE1, MESFUNC6, MEASURE6, SEQFUNC, ORDINAL1, SETFAM_1,
-      MESFUNC8, RINFSUP2, KURATO_2, MESFUNC7, SEQ_4, RELSET_1, MEASURE2,
-      XXREAL_2, SEQM_3;
+      MEASURE1, MESFUNC6, MEASURE6, SEQFUNC, ORDINAL1, SETFAM_1, MESFUNC8,
+      RINFSUP2, MESFUNC7, SEQ_4, RELSET_1, MEASURE2, XXREAL_2, VALUED_0,
+      FUNCOP_1;
  schemes FUNCT_2, NAT_1, BINOP_1, RECDEF_1, SEQFUNC, FUNCT_1;
 
 begin :: Preliminaries
@@ -696,7 +695,7 @@ G4: G.i is_simple_func_in S by C1;
    end;
    reconsider ES = {} as Element of S by PROB_1:42;
    M.ES <= M.EE by MEASURE1:62,XBOOLE_1:2; then
-L1:0 < M.EE by A2,MEASURE1:def 11;
+L1:0 < M.EE by A2,VALUED_0:def 19;
    for n,m be Element of NAT st m <= n holds K.m <= K.n
    proof
     let n,m be Element of NAT;
@@ -1246,7 +1245,7 @@ P2:for n be Nat st IND[n] holds IND[n+1]
    for n be Nat holds IND[n] from NAT_1:sch 2(P1,P2); then
 
    for m be Element of NAT holds PS1.m = PS2.m;
-   hence thesis by SEQFUNC:2;
+   hence thesis by FUNCT_2:113;
 end;
 end;
 
@@ -2273,11 +2272,8 @@ A0: E c= dom f and
 B2: f is_measurable_on E and
 A1: E ={} and
 A2: for n be Nat holds F.n is_simple_func_in S;
-   deffunc I(Element of NAT) = 0.;
-   consider I be ExtREAL_sequence such that
-A3: for n be Element of NAT holds I.n = I(n) from FUNCT_2:sch 4;
-   take I;
-A5:M.E = 0 by A1,MEASURE1:def 11;
+   take I = NAT --> 0.;
+A5:M.E = 0 by A1,VALUED_0:def 19;
    thus for n be Nat holds I.n = Integral(M,(F.n)|E)
    proof
     let n be Nat;
@@ -2285,18 +2281,18 @@ A5:M.E = 0 by A1,MEASURE1:def 11;
     reconsider D = dom(F.m) as Element of S by A2,MESFUNC5:43;
     F.m is_measurable_on D by A2,MESFUNC2:37; then
     Integral(M,(F.m)|E) = 0 by A5,MESFUNC5:100;
-    hence thesis by A3;
+    hence thesis by FUNCOP_1:13;
    end;
 
    defpred P[Element of NAT] means (Partial_Sums I).$1 = 0;
 
    (Partial_Sums I).0 = I.0 by Def1; then
-P1:P[0] by A3;
+P1:P[0] by FUNCOP_1:13;
 P2:for k be Element of NAT st P[k] holds P[k+1]
    proof
     let k be Element of NAT;
     assume P21: P[k];
-P22:I.(k+1) = 0 by A3;
+P22:I.(k+1) = 0 by FUNCOP_1:13;
     (Partial_Sums I).(k+1) = (Partial_Sums I).k + I.(k+1) by Def1; then
     (Partial_Sums I).(k+1) = 0 + 0 by P21,P22,SUPINF_2:1;
     hence thesis;
@@ -2995,7 +2991,7 @@ A2: for m be Nat holds G2.m = F.(n,m);
     G1.m = F.(n,m1) by A1;
     hence G1.m = G2.m by A2;
    end;
-   hence thesis by SEQFUNC:2;
+   hence thesis by FUNCT_2:113;
 end;
 
  func ProjMap2(F,n) -> Functional_Sequence of X,Y means :defproj2:
@@ -3045,7 +3041,7 @@ A2: for m be Nat holds G2.m = F.(m,n);
     G1.m = F.(m1,n) by A1;
     hence G1.m = G2.m by A2;
    end;
-   hence thesis by SEQFUNC:2;
+   hence thesis by FUNCT_2:113;
 end;
 end;
 
@@ -4456,8 +4452,6 @@ E48:  (F#x1)^\N1 is non-decreasing & sup(F#x1) = sup((F#x1)^\N1)
      end;
 
 E16: E /\ eq_dom(lim F,+infty) is Element of S by E12,E13,MESFUNC1:37;
-
-     M is nonnegative by MEASURE1:def 11; then
      0 < M.(E /\ eq_dom(F.N,+infty)) by B1,SUPINF_2:70;
      hence M.(E /\ eq_dom(lim F,+infty)) <> 0 by E16,E14,MEASURE1:62;
     end;
@@ -4498,8 +4492,6 @@ F6: for n be Element of NAT st 0 <= n holds (M*L).n = 0
     SUM(M*L) = (M*L).0 by SUPINF_2:63; then
     SUM(M*L) = 0 by F6; then
 F7: M.(union E0) <= 0 by MEASURE2:13;
-
-    M is nonnegative by MEASURE1:def 11; then
 F8: M.(union E0) = 0 by F7,SUPINF_2:70;
 F9: E = dom(lim F) by A0,MESFUNC8:def 10;
 

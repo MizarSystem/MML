@@ -100,27 +100,27 @@
 </Typ>
 <Typ kind="G" nr="11">
 <Cluster>
-<Adjective nr="58" value="false"/>
-<Adjective nr="63" value="false"/>
-<Adjective nr="82"/>
-<Adjective nr="107"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="83"/>
 <Adjective nr="108"/>
 <Adjective nr="109"/>
-<Adjective nr="114"/>
-<Adjective nr="136"/>
+<Adjective nr="110"/>
+<Adjective nr="115"/>
 <Adjective nr="137"/>
+<Adjective nr="138"/>
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="389">
+<Func kind="K" nr="393">
 <LocusVar nr="1"/>
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="58" value="false"/>
-<Adjective nr="63" value="false"/>
-<Adjective nr="105"/>
-<Adjective nr="137"/>
+<Adjective nr="59" value="false"/>
+<Adjective nr="64" value="false"/>
+<Adjective nr="106"/>
+<Adjective nr="138"/>
 </Cluster>
 </FCluster>
 </Registrations>

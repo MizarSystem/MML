@@ -11,6 +11,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 </Signature>
@@ -20,7 +23,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="2">
@@ -29,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="3">
@@ -38,7 +41,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="4">
@@ -47,8 +50,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="5">
@@ -57,8 +60,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="6">
@@ -67,8 +70,8 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="7">
@@ -77,10 +80,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="8">
@@ -89,10 +92,10 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="26"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="9">
@@ -101,9 +104,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="47"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="10">
@@ -112,19 +115,19 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
-<Adjective nr="37"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
+<Adjective nr="49"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="11">
@@ -133,16 +136,16 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="40"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="52"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="12">
@@ -151,17 +154,17 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
 <Adjective nr="40"/>
 <Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <RCluster aid="LATTICES" nr="13">
@@ -170,16 +173,16 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="40"/>
+<Adjective nr="41"/>
 <Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
+<Adjective nr="47"/>
+<Adjective nr="54"/>
 </Cluster>
 </RCluster>
 <FCluster aid="LATTICES" nr="1">
@@ -212,8 +215,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="27"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="39"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATTICES" nr="2">
@@ -246,8 +249,8 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="26"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="38"/>
 </Cluster>
 </FCluster>
 <FCluster aid="LATTICES" nr="3">
@@ -298,124 +301,124 @@
 <LocusVar nr="3"/>
 </Func>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="28"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="40"/>
 </Cluster>
 </FCluster>
 <CCluster aid="LATTICES" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="29"/>
-<Adjective nr="30"/>
-<Adjective nr="31"/>
-<Adjective nr="32"/>
-<Adjective nr="33"/>
-<Adjective nr="34"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="41"/>
+<Adjective nr="42"/>
+<Adjective nr="43"/>
+<Adjective nr="44"/>
+<Adjective nr="45"/>
+<Adjective nr="46"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="35"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="47"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="3">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="4">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="40"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="52"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="38"/>
-<Adjective nr="39"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="50"/>
+<Adjective nr="51"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="5">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="48"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="6">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="36"/>
-<Adjective nr="40"/>
-<Adjective nr="41"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="48"/>
+<Adjective nr="52"/>
+<Adjective nr="53"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="42"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="54"/>
 </Cluster>
 </CCluster>
 <CCluster aid="LATTICES" nr="7">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="36"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="47"/>
+<Adjective nr="48"/>
 </Cluster>
 <Typ kind="G" nr="8">
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="14" value="false"/>
-<Adjective nr="35"/>
-<Adjective nr="37"/>
+<Adjective nr="26" value="false"/>
+<Adjective nr="47"/>
+<Adjective nr="49"/>
 </Cluster>
 </CCluster>
 </Registrations>

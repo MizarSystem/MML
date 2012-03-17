@@ -11,6 +11,9 @@
 <ArticleID name="RELSET_1"/>
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="ORDINAL1"/>
+<ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="E_SIEC"/>
 </Signature>
@@ -20,7 +23,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
+<Adjective nr="38"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="2">
@@ -29,7 +32,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="27"/>
+<Adjective nr="39"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="3">
@@ -38,7 +41,7 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 <RCluster aid="E_SIEC" nr="4">
@@ -47,9 +50,9 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="26"/>
-<Adjective nr="27"/>
-<Adjective nr="28"/>
+<Adjective nr="38"/>
+<Adjective nr="39"/>
+<Adjective nr="40"/>
 </Cluster>
 </RCluster>
 </Registrations>

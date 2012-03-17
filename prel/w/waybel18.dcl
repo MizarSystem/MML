@@ -71,7 +71,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="229"/>
+<Adjective nr="232"/>
 </Cluster>
 </RCluster>
 <RCluster aid="WAYBEL18" nr="2">
@@ -87,8 +87,8 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="222"/>
-<Adjective nr="229"/>
+<Adjective nr="225"/>
+<Adjective nr="232"/>
 </Cluster>
 </RCluster>
 <FCluster aid="WAYBEL18" nr="1">
@@ -98,8 +98,8 @@
 </Typ>
 <Typ kind="M" nr="29">
 <Cluster>
-<Adjective nr="222"/>
-<Adjective nr="229"/>
+<Adjective nr="225"/>
+<Adjective nr="232"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -121,8 +121,8 @@
 </Typ>
 <Typ kind="M" nr="29">
 <Cluster>
-<Adjective nr="222"/>
-<Adjective nr="229"/>
+<Adjective nr="225"/>
+<Adjective nr="232"/>
 </Cluster>
 <LocusVar nr="1"/>
 </Typ>
@@ -134,7 +134,7 @@
 <Cluster>
 <Adjective nr="41"/>
 <Adjective nr="42"/>
-<Adjective nr="175"/>
+<Adjective nr="176"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="3">
@@ -263,7 +263,7 @@
 <Func kind="K" nr="467"/>
 <Cluster>
 <Adjective nr="41"/>
-<Adjective nr="230"/>
+<Adjective nr="233"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="8">
@@ -282,7 +282,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="222"/>
+<Adjective nr="225"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="9">
@@ -299,7 +299,7 @@
 <LocusVar nr="2"/>
 </Func>
 <Cluster>
-<Adjective nr="229"/>
+<Adjective nr="232"/>
 </Cluster>
 </FCluster>
 <FCluster aid="WAYBEL18" nr="10">
@@ -399,8 +399,8 @@
 <Adjective nr="71"/>
 <Adjective nr="93"/>
 <Adjective nr="94"/>
-<Adjective nr="210"/>
-<Adjective nr="227"/>
+<Adjective nr="213"/>
+<Adjective nr="230"/>
 </Cluster>
 </Typ>
 </ArgTypes>
@@ -413,7 +413,7 @@
 </Func>
 <Cluster>
 <Adjective nr="67"/>
-<Adjective nr="227"/>
+<Adjective nr="230"/>
 </Cluster>
 </FCluster>
 <CCluster aid="WAYBEL18" nr="1">
@@ -421,7 +421,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="229"/>
+<Adjective nr="232"/>
 </Cluster>
 <Typ kind="M" nr="1">
 <Cluster/>
@@ -429,7 +429,7 @@
 <Cluster>
 <Adjective nr="4"/>
 <Adjective nr="7"/>
-<Adjective nr="207"/>
+<Adjective nr="210"/>
 </Cluster>
 </CCluster>
 </Registrations>

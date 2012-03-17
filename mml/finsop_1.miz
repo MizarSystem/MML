@@ -18,9 +18,8 @@ environ
  requirements REAL, NUMERALS, BOOLE, SUBSET, ARITHM;
  definitions FUNCT_1, TARSKI, XBOOLE_0;
  theorems BINOP_1, FINSEQ_1, FINSEQ_2, FINSEQ_3, FINSEQ_4, FUNCT_1, FUNCT_2,
-      NAT_1, SETWISEO, TARSKI, RELAT_1, FUNCOP_1, FUNCT_4, FINSUB_1,
-      RELSET_1, XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1,
-      CARD_1, CARD_2;
+      NAT_1, SETWISEO, TARSKI, RELAT_1, FUNCOP_1, FUNCT_4, FINSUB_1, RELSET_1,
+      XBOOLE_0, XBOOLE_1, XCMPLX_1, XREAL_1, XXREAL_0, ORDINAL1;
  schemes FINSEQ_1, FINSEQ_2, NAT_1, FUNCT_2;
 
 begin
@@ -43,10 +42,10 @@ end;
 definition
   let D,F,g;
   assume
-A1: g has_a_unity or len F >= 1;
+A1: g is having_a_unity or len F >= 1;
   func g "**" F -> Element of D means
   :Def1:
-  it = the_unity_wrt g if g has_a_unity & len F = 0 otherwise
+  it = the_unity_wrt g if g is having_a_unity & len F = 0 otherwise
   ex f st f.1 = F.1 & (for n st 0 <> n & n < len F holds
   f.(n + 1) = g.(f.n,F.(n + 1))) & it = f.(len F);
   existence
@@ -169,10 +168,11 @@ A24:                  n + 1 in dom G by A23,FINSEQ_3:27;
   uniqueness
   proof
     let d1,d2;
-    thus g has_a_unity & len F = 0 & d1 = the_unity_wrt g & d2 = the_unity_wrt
+    thus g is having_a_unity & len F = 0 & d1 = the_unity_wrt g
+     & d2 = the_unity_wrt
     g implies d1 = d2;
     assume
-A25: not g has_a_unity or len F <> 0;
+A25: not g is having_a_unity or len F <> 0;
     given f1 such that
 A26: f1.1 = F.1 and
 A27: for n st 0 <> n & n < len F holds f1.(n + 1) = g.(f1.n,F.(n + 1)) and
@@ -266,7 +266,7 @@ A5: g "**" F = f.(len F) by A1,Def1;
   set h = (NAT-->the_unity_wrt g)+*F;
   set A = findom F;
 A6: dom F = Seg len F by FINSEQ_1:def 3;
-  then dom F <> {} by A1,FINSEQ_1:5;
+  then dom F <> {} by A1;
   then consider G being Function of Fin NAT,D such that
 A7: g $$ (A,h) = G.A and for d st d is_a_unity_wrt g holds G.{} = d and
 A8: for n holds G.{n} = h.n and
@@ -294,7 +294,7 @@ A15:    n <> 0;
 A16:    n < len F by A13,NAT_1:13;
         then
 A17:    f.(n + 1) = g.(f.n,F.(n + 1)) by A4,A15;
-A18:    Seg n <> {} by A15,FINSEQ_1:5;
+A18:    Seg n <> {} by A15;
 A19:    Seg n c= A by A6,A16,FINSEQ_1:7;
         n + 1 >= 1 by NAT_1:12;
         then
@@ -315,11 +315,12 @@ hence f.(n+1) = G.(Seg(n+1)) by A12,A13,A15,A17,A20,FUNCT_4:14,NAT_1:13;
   hence g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F) by A1,A5,A6,A7;
 end;
 
-Lm2: len F = 0 & g has_a_unity & g is associative & g is commutative implies
+Lm2: len F = 0 & g is having_a_unity & g is associative & g is commutative
+ implies
 g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F)
 proof
   assume
-A1: len F = 0 & g has_a_unity & g is associative & g is commutative;
+A1: len F = 0 & g is having_a_unity & g is associative & g is commutative;
   then F = {};
   then
 A2: dom F = {}.NAT by RELAT_1:60;
@@ -328,16 +329,17 @@ A2: dom F = {}.NAT by RELAT_1:60;
 end;
 
 theorem
-  (g has_a_unity or len F >= 1) & g is associative & g is commutative implies
+  (g is having_a_unity or len F >= 1) & g is associative & g is commutative
+   implies
   g "**" F = g $$(findom F,(NAT-->the_unity_wrt g)+*F)
 proof len F = 0 or len F >= 1 by NAT_1:14;
   hence thesis by Lm1,Lm2;
 end;
 
-Lm3: g has_a_unity implies g "**" <*>D = the_unity_wrt g
+Lm3: g is having_a_unity implies g "**" <*>D = the_unity_wrt g
 proof
   assume
-A1: g has_a_unity;
+A1: g is having_a_unity;
   len <*>D = 0;
   hence thesis by A1,Def1;
 end;
@@ -408,10 +410,11 @@ A22:    f.(n + 1) = g.(f.n,F.(n + 1)) by A3,A19;
   hence thesis by A1,A4,A5,A9,A10,XREAL_1:31;
 end;
 
-Lm6: g has_a_unity & len F = 0 implies g "**" (F ^ <* d *>) = g.(g "**" F,d)
+Lm6: g is having_a_unity & len F = 0 implies
+ g "**" (F ^ <* d *>) = g.(g "**" F,d)
 proof
   assume
-A1: g has_a_unity & len F = 0;
+A1: g is having_a_unity & len F = 0;
   then F = <*>D & {} = <*>D;
   hence g "**" (F ^ <* d *>) = g "**" <* d *> by FINSEQ_1:47
     .= d by Lm4
@@ -420,23 +423,24 @@ A1: g has_a_unity & len F = 0;
 end;
 
 theorem Th5:
-  g has_a_unity or len F >= 1 implies g "**" (F ^ <* d *>) = g.(g "**" F,d)
+  g is having_a_unity or len F >= 1 implies
+   g "**" (F ^ <* d *>) = g.(g "**" F,d)
 proof len F >= 1 or len F = 0 by NAT_1:14;
   hence thesis by Lm5,Lm6;
 end;
 
 theorem Th6:
-  g is associative & (g has_a_unity or len F >= 1 & len G >= 1) implies
+  g is associative & (g is having_a_unity or len F >= 1 & len G >= 1) implies
   g "**" (F ^ G) = g.(g "**" F,g "**" G)
 proof
   defpred P[FinSequence of D] means for F,g st g is associative &
-  (g has_a_unity or len F >= 1 & len $1 >= 1) holds
+  (g is having_a_unity or len F >= 1 & len $1 >= 1) holds
   g "**" (F ^ $1) = g.(g "**" F,g "**" $1);
 A1: P[<*>D]
   proof
     let F,g;
     assume
-A2: g is associative & (g has_a_unity or len F >= 1 & len <*>D >= 1);
+A2: g is associative & (g is having_a_unity or len F >= 1 & len <*>D >= 1);
     thus g "**" (F ^ <*>D) = g "**" F by FINSEQ_1:47
       .= g.(g "**"
     F,the_unity_wrt g) by A2,SETWISEO:23
@@ -449,9 +453,10 @@ A3: for G,d st P[G] holds P[G ^ <* d *>]
 A4: P[G];
     let F,g;
     assume
-A5: g is associative & (g has_a_unity or len F >= 1 & len(G ^ <* d *>) >= 1);
+A5: g is associative & (g is having_a_unity
+ or len F >= 1 & len(G ^ <* d *>) >= 1);
 A6: now
-      assume not g has_a_unity;
+      assume not g is having_a_unity;
       then len F >= 1 & len(F ^ G) = len F + len G & len F + len G >= len F
       by A5,FINSEQ_1:35,NAT_1:12;
       hence len(F ^ G) >= 1 by XXREAL_0:2;
@@ -483,11 +488,11 @@ A9:     G = {};
 end;
 
 theorem Th7:
-  g is associative & (g has_a_unity or len F >= 1) implies
+  g is associative & (g is having_a_unity or len F >= 1) implies
   g "**" (<* d *> ^ F) = g.(d,g "**" F)
 proof
   assume
-A1: g is associative & (g has_a_unity or len F >= 1);
+A1: g is associative & (g is having_a_unity or len F >= 1);
   len<* d *> = 1 by FINSEQ_1:56;
   hence g "**" (<* d *> ^ F) = g.(g "**" <* d *>,g "**" F) by A1,Th6
     .= g.(d,g "**" F) by Lm4;
@@ -959,10 +964,10 @@ A113:     len p = 0;
   hence thesis;
 end;
 
-Lm8: g has_a_unity & len F = 0 & G = F * P implies g "**" F = g "**" G
+Lm8: g is having_a_unity & len F = 0 & G = F * P implies g "**" F = g "**" G
 proof
   assume
-A1: g has_a_unity & len F = 0;
+A1: g is having_a_unity & len F = 0;
   then
 A2: F = {};
   assume G = F * P;
@@ -974,11 +979,11 @@ A3: len G = 0;
 end;
 
 theorem Th8:
-  g is commutative associative & (g has_a_unity or len F >= 1) &
+  g is commutative associative & (g is having_a_unity or len F >= 1) &
   G = F * P implies g "**" F = g "**" G
 proof
   assume
-A1: g is commutative associative & (g has_a_unity or len F >= 1);
+A1: g is commutative associative & (g is having_a_unity or len F >= 1);
   assume
 A2: G = F * P;
   now per cases;
@@ -1017,7 +1022,7 @@ A8: dom P = dom G by A4,RELAT_1:46
   then
 A9: rng P c= dom F by RELAT_1:45;
   dom F = Seg len F by FINSEQ_1:def 3;
-  then dom F <> {} by A5,FINSEQ_1:5;
+  then dom F <> {} by A5;
   then reconsider P as Function of dom F, dom F by A8,A9,FUNCT_2:def 1
 ,RELSET_1:11;
 A10: rng P = rng(F") by A4,A7,RELAT_1:47
@@ -1031,11 +1036,11 @@ A10: rng P = rng(F") by A4,A7,RELAT_1:47
   hence thesis by A1,A5,Th8;
 end;
 
-Lm10: len F = 0 & g has_a_unity &
+Lm10: len F = 0 & g is having_a_unity &
 F is one-to-one & G is one-to-one & rng F = rng G implies g "**" F = g "**" G
 proof
   assume that
-A1: len F = 0 & g has_a_unity and
+A1: len F = 0 & g is having_a_unity and
 A2: F is one-to-one & G is one-to-one & rng F = rng G;
   len G = len F by A2,FINSEQ_1:65;
   then g "**" F = the_unity_wrt g & g "**" G = the_unity_wrt g by A1,Def1;
@@ -1043,7 +1048,7 @@ A2: F is one-to-one & G is one-to-one & rng F = rng G;
 end;
 
 theorem
-  (g has_a_unity or len F >= 1) & g is associative commutative &
+  (g is having_a_unity or len F >= 1) & g is associative commutative &
   F is one-to-one & G is one-to-one & rng F = rng G implies g "**" F = g "**" G
 proof len F >= 1 or len F = 0 by NAT_1:14;
   hence thesis by Lm9,Lm10;
@@ -1145,11 +1150,11 @@ A19: for k holds P[k] from NAT_1:sch 1(A3,A4);
   hence thesis by A19;
 end;
 
-Lm13: g has_a_unity & len F = 0 & len F = len G & len F = len H implies
+Lm13: g is having_a_unity & len F = 0 & len F = len G & len F = len H implies
 g "**" F = g.(g "**" G,g "**" H)
 proof
   assume that
-A1: g has_a_unity and
+A1: g is having_a_unity and
 A2: len F = 0 & len F = len G & len F = len H;
   thus g "**" F = the_unity_wrt g by A1,A2,Def1
     .= g.(the_unity_wrt g,the_unity_wrt g) by A1,SETWISEO:23
@@ -1158,13 +1163,13 @@ A2: len F = 0 & len F = len G & len F = len H;
 end;
 
 theorem
-  g is associative commutative & (g has_a_unity or len F >= 1) &
+  g is associative commutative & (g is having_a_unity or len F >= 1) &
   len F = len G & len F = len H &
   (for k st k in dom F holds F.k = g.(G.k,H.k)) implies
   g "**" F = g.(g "**" G,g "**" H)
 proof
   assume
-A1: g is associative commutative & (g has_a_unity or len F >= 1);
+A1: g is associative commutative & (g is having_a_unity or len F >= 1);
 A2: dom F = Seg len F & dom G = Seg len G & dom H = Seg len H
   by FINSEQ_1:def 3;
   len F = 0 or len F >= 1 by NAT_1:14;
@@ -1172,7 +1177,7 @@ A2: dom F = Seg len F & dom G = Seg len G & dom H = Seg len H
 end;
 
 theorem
-  g has_a_unity implies g "**" <*>D = the_unity_wrt g by Lm3;
+  g is having_a_unity implies g "**" <*>D = the_unity_wrt g by Lm3;
 
 theorem
   g "**" <* d *> = d by Lm4;
@@ -1230,7 +1235,7 @@ proof
 end;
 
 theorem Th19:
-  g is associative & (g has_a_unity or k <> 0 & l <> 0) implies
+  g is associative & (g is having_a_unity or k <> 0 & l <> 0) implies
   g "**" ((k + l) |-> d) = g.(g "**" (k |-> d),g "**" (l |-> d))
 proof k <> 0 & l <> 0 implies len(k |-> d) <> 0 & len(l |-> d) <> 0
   by FINSEQ_2:69;
@@ -1241,16 +1246,17 @@ A1: k <> 0 & l <> 0 implies len(k |-> d) >= 1 & len(l |-> d) >= 1 by NAT_1:14;
 end;
 
 theorem
-  g is associative & (g has_a_unity or k <> 0 & l <> 0) implies
+  g is associative & (g is having_a_unity or k <> 0 & l <> 0) implies
   g "**" (k * l |-> d) = g "**" (l |-> (g "**" (k |-> d)))
 proof
   defpred P[Element of NAT] means
-  for g,k,d st g is associative & (g has_a_unity or k <> 0 & $1 <> 0) holds
+  for g,k,d st g is associative & (g is having_a_unity or k <> 0 & $1 <> 0)
+   holds
   g "**" (k * $1 |-> d) = g "**" ($1 |-> (g "**" (k |-> d)));
 A1: P[0]
   proof
     let g,k,d;
-    assume g is associative & (g has_a_unity or k <> 0 & 0 <> 0);
+    assume g is associative & (g is having_a_unity or k <> 0 & 0 <> 0);
     thus g "**" (k * 0 |-> d) = g "**" <*>D by FINSEQ_2:72
       .= g "**" (0 |-> (g "**" (k |-> d))) by FINSEQ_2:72;
   end;
@@ -1262,7 +1268,7 @@ A3: P[l];
     let g,k,d;
     assume that
 A4: g is associative and
-A5: g has_a_unity or (k <> 0 & l + 1 <> 0);
+A5: g is having_a_unity or (k <> 0 & l + 1 <> 0);
     now per cases;
       suppose l = 0;
         hence g "**" (k * (l + 1) |-> d) =

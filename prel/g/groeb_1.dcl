@@ -57,16 +57,16 @@
 </Typ>
 </ArgTypes>
 <Func kind="G" nr="14">
-<Func kind="K" nr="389">
+<Func kind="K" nr="393">
 <LocusVar nr="1"/>
 </Func>
-<Func kind="K" nr="409">
+<Func kind="K" nr="413">
 <LocusVar nr="1"/>
 </Func>
 </Func>
 <Cluster>
-<Adjective nr="118"/>
-<Adjective nr="128"/>
+<Adjective nr="120"/>
+<Adjective nr="130"/>
 </Cluster>
 </FCluster>
 </Registrations>

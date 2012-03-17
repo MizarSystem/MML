@@ -7,8 +7,7 @@
 environ
 
  vocabularies FUZZY_1, FUNCT_1, BOOLE, SQUARE_1, RELAT_1, ARYTM_1, PARTFUN1,
-      RCOMP_1, INTEGRA1, ORDINAL2, FUZZY_2, ARYTM, FUZZY_3, FUNCT_2, FUNCT_3,
-      SEQ_4;
+      RCOMP_1, INTEGRA1, FUZZY_2, ARYTM, FUZZY_3, FUNCT_2, FUNCT_3, SEQ_4;
  notations TARSKI, XBOOLE_0, SUBSET_1, ZFMISC_1, NUMBERS, XXREAL_0, SQUARE_1,
       REAL_1, RELSET_1, PARTFUN1, FUNCT_2, FUNCT_3, INTEGRA1, SEQ_1, RCOMP_1,
       SEQ_4, PSCOMP_1, FUZZY_1;
@@ -17,9 +16,9 @@ environ
  registrations RELSET_1, NUMBERS, MEMBERED, INTEGRA1, XBOOLE_0, SUBSET_1,
       VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
- definitions FUZZY_1;
- theorems TARSKI, FUNCT_1, REAL_2, SQUARE_1, PARTFUN1, INTEGRA1, INTEGRA2,
-      FUZZY_1, XBOOLE_0, XREAL_1, XXREAL_0, FUNCT_3, FUNCT_2;
+ definitions FUZZY_1, XCMPLX_0;
+ theorems TARSKI, FUNCT_1, PARTFUN1, INTEGRA1, INTEGRA2, FUZZY_1, XBOOLE_0,
+      XREAL_1, XXREAL_0, FUNCT_3, FUNCT_2;
  schemes PARTFUN1;
 
 begin :: Basic Properties of Membership Function and Difference Set
@@ -83,7 +82,7 @@ proof
 A1: f.c <= g.c;
   let c;
   f.c <= g.c by A1;
-  then 1 - f.c >= 1 - g.c by REAL_2:106;
+  then 1 - f.c >= 1 - g.c by XREAL_1:12;
   then (1_minus g).c <= 1- f.c by FUZZY_1:def 6;
   then (1_minus g).c <= (1_minus f).c by FUZZY_1:def 6;
   then min((1_minus g).c,h.c) <= min((1_minus f).c,h.c) by XXREAL_0:18;
@@ -99,7 +98,7 @@ A1: f.c <= g.c and
 A2: h.c <= h1.c;
   let c;
   f.c <= g.c & h.c <= h1.c by A1,A2;
-  then f.c <= g.c & 1-h.c >= 1-h1.c by REAL_2:106;
+  then f.c <= g.c & 1-h.c >= 1-h1.c by XREAL_1:12;
   then min(f.c,1-h1.c) <= min(g.c,1- h.c) by XXREAL_0:18;
   then min(f.c,(1_minus h1).c) <= min(g.c,1- h.c) by FUZZY_1:def 6;
   then min(f.c,(1_minus h1).c) <= min(g.c,(1_minus h).c) by FUZZY_1:def 6;
@@ -448,7 +447,7 @@ A9:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
           then x in dom h & x in dom g by FUZZY_1:def 1;
           then h.x in rng h & g.x in rng g by FUNCT_1:def 5;
           then 0 <= h.x & h.x <= 1 & 0 <= g.x & g.x <= 1 by A7,A9,INTEGRA2:1;
-          then 0 <= (h.x)*(g.x) & (h.x)*(g.x) <= 1 by REAL_2:140,XREAL_1:129;
+          then 0 <= (h.x)*(g.x) & (h.x)*(g.x) <= 1 by XREAL_1:129,162;
           then 0 <= IT.x & IT.x <= 1 by A3,A8;
           hence thesis by A8,A9,INTEGRA2:1;
         end;
@@ -531,9 +530,9 @@ A8:       0=lower_bound A & 1=upper_bound A by INTEGRA1:6;
 
 then 0 <= 1-h.x & 1-h.x <= 1 & 0 <= 1- g.x & 1-g.x <= 1 by FUZZY_1:def 6;
             then 0 <= (1-h.x)*(1-g.x) & (1-h.x)*(1-g.x) <= 1
-            by REAL_2:140,XREAL_1:129;
+            by XREAL_1:129,162;
             then 1 - (1-h.x)*(1-g.x) >= 1 - 1 & 1-0 >= 1 -(1-h.x)*(1-g.x) by
-            REAL_2:106;
+XREAL_1:12;
             hence thesis;
           end;
           then 0 <= IT.x & IT.x <= 1 by A3,A7;
@@ -651,7 +650,7 @@ proof
   then (f*f).c <= f.c & (g*h).c >= 0 by Th1,FUZZY_1:def 3;
   then ((f*f).c)*((g*h).c) <= (f.c)*((g*h).c) by XREAL_1:66;
   then ((f*g).c + (f*h).c ) - ((f*f).c)*((g*h).c) >=
-  ((f*g).c + (f*h).c) - (f.c)*((g*h).c) by REAL_2:106;
+  ((f*g).c + (f*h).c) - (f.c)*((g*h).c) by XREAL_1:12;
   then ((f*g).c + (f*h).c ) - ((f*f)*(g*h)).c >=
   ((f*g).c + (f*h).c) - (f.c)*((g*h).c) by Def2;
   then ((f*g).c + (f*h).c ) - ((f*f)*(g*h)).c >=
@@ -690,7 +689,7 @@ A1: ((f ++ g)*(f ++ h)).c - (f ++ (g*h)).c
   then (f*f).c <= f.c by FUZZY_1:def 3;
   then x*x <= x by Def2;
   then
-A2: -x+ x*x <= 0 by REAL_2:106;
+A2: x*x - x <= 0 by XREAL_1:49;
   0<=(1_minus (g++h)).c by Th1;
   then ((1_minus (g++h)).c)*(-x+ x*x) <= 0*(-x+ x*x) by A2,XREAL_1:67;
   hence thesis by A1,XREAL_1:52;
@@ -1270,7 +1269,7 @@ A6:         min(f.c,h.c) = h.c;
 f.c >= 0 & 1 >= h.c & f.c <= g.c & h.c >= 0 by A2,Th1,XXREAL_0:def 9;
 
 then (f.c)*(h.c) <= (f.c)*1 & (f.c)*(h.c) <= (g.c)*(h.c) by XREAL_1:66;
-              then (f.c)*(h.c) <= min((f.c),(g.c)*(h.c)) by SQUARE_1:39;
+              then (f.c)*(h.c) <= min((f.c),(g.c)*(h.c)) by XXREAL_0:20;
               then (f.c)*(h.c) <= min(f.c,(g*h).c) by Def2;
               hence thesis by A2,A6,FUZZY_1:6;
             end;
@@ -1292,7 +1291,7 @@ A8:         min(f.c,h.c) = f.c;
 f.c >= 0 & 1 >= g.c & f.c <= h.c & g.c >= 0 by A8,Th1,XXREAL_0:def 9;
 
 then (g.c)*(f.c) <= (f.c)*1 & (f.c)*(g.c) <= (h.c)*(g.c) by XREAL_1:66;
-              then (f.c)*(g.c) <= min((f.c),(h.c)*(g.c)) by SQUARE_1:39;
+              then (f.c)*(g.c) <= min((f.c),(h.c)*(g.c)) by XXREAL_0:20;
               then (f.c)*(g.c) <= min(f.c,(g*h).c) by Def2;
               hence thesis by A7,A8,FUZZY_1:6;
             end;
@@ -1311,7 +1310,7 @@ then g.c >= 0 & h.c <= f.c & f.c >= 0 & g.c <= f.c & (f*f).c <= f.c
 
 then (h.c)*(g.c) <= (f.c)*(f.c) & (f.c)*(f.c) <= f.c by XXREAL_0:2;
               then (h.c)*(g.c) <= f.c by XXREAL_0:2;
-              then (h.c)*(g.c) <= min(f.c,(h.c)*(g.c)) by SQUARE_1:39;
+              then (h.c)*(g.c) <= min(f.c,(h.c)*(g.c)) by XXREAL_0:20;
               then (g.c)*(h.c) <= min(f.c,(g*h).c) by Def2;
               hence thesis by A7,A9,FUZZY_1:6;
             end;
@@ -1364,16 +1363,17 @@ A3:   max(f.c,g.c) = f.c & max(f.c,h.c) = f.c;
         g.c <= f.c & h.c <= f.c &
         (1_minus f).c >= 0 & (1_minus g).c >= 0 by A3,Th1,XXREAL_0:def 10;
         then 1 - g.c >= 1 - f.c & 1 - h.c >= 1 - f.c &
-        1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,REAL_2:106;
+        1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,XREAL_1:12;
         then (1 - f.c)*(1 - f.c) <= (1 - g.c)*(1 - f.c) &
         (1 - g.c)*(1 - f.c) <= (1 - g.c)*(1 - h.c) by XREAL_1:66;
         then (1 - f.c)*(1 - f.c) <= (1 - g.c)*(1 - h.c) by XXREAL_0:2;
         then
-A4:     1 - (1 - f.c)*(1 - f.c) >= 1 - (1 - g.c)*(1 - h.c) by REAL_2:106;
+A4:     1 - (1 - f.c)*(1 - f.c) >= 1 - (1 - g.c)*(1 - h.c) by XREAL_1:12
+;
         f c= f++f by Th33;
         then (f ++ f).c >= f.c by FUZZY_1:def 3;
         then f.c + f.c - (f.c)*(f.c) >= f.c by Def3;
-        hence thesis by A3,A4,SQUARE_1:50;
+        hence thesis by A3,A4,XXREAL_0:28;
       end;
       hence thesis;
     end;
@@ -1385,13 +1385,13 @@ A5:   max(f.c,g.c) = f.c & max(f.c,h.c) = h.c;
         g.c <= f.c & (1_minus h).c >= 0 & (1_minus f).c >= 0 & h.c >= 0
         by A5,Th1,XXREAL_0:def 10;
         then 1 - f.c <= 1 - g.c & 1 - h.c >= 0 & 1 - f.c >= 0 & h.c >= 0
-        by FUZZY_1:def 6,REAL_2:106;
+        by FUZZY_1:def 6,XREAL_1:12;
 
 then (1 - f.c)*(1 -h.c) <= (1 - g.c)*(1 -h.c) & 0*(h.c) <= (h.c)*(1-f.c)
         by XREAL_1:66;
         then 1-(1 - f.c)*(1 -h.c) >= 1-(1 - g.c)*(1 -h.c) &
-        0 + f.c <= (h.c)*(1-f.c) + f.c by REAL_2:106,XREAL_1:8;
-        hence thesis by A5,SQUARE_1:50;
+        0 + f.c <= (h.c)*(1-f.c) + f.c by XREAL_1:8,12;
+        hence thesis by A5,XXREAL_0:28;
       end;
       hence thesis;
     end;
@@ -1403,13 +1403,13 @@ A6:   max(f.c,g.c) = g.c & max(f.c,h.c) = f.c;
         h.c <= f.c & (1_minus g).c >= 0 & (1_minus f).c >= 0 & g.c >= 0
         by A6,Th1,XXREAL_0:def 10;
         then 1 - f.c <= 1 - h.c & 1 - g.c >= 0 & 1 - f.c >= 0 & g.c >= 0
-        by FUZZY_1:def 6,REAL_2:106;
+        by FUZZY_1:def 6,XREAL_1:12;
 
 then (1 - f.c)*(1 -g.c) <= (1 - h.c)*(1 -g.c) & 0*(g.c) <= (g.c)*(1-f.c)
         by XREAL_1:66;
         then 1-(1 - f.c)*(1 -g.c) >= 1-(1 - h.c)*(1 - g.c) &
-        0 + f.c <= (g.c)*(1-f.c) + f.c by REAL_2:106,XREAL_1:8;
-        hence thesis by A6,SQUARE_1:50;
+        0 + f.c <= (g.c)*(1-f.c) + f.c by XREAL_1:8,12;
+        hence thesis by A6,XXREAL_0:28;
       end;
       hence thesis;
     end;
@@ -1421,18 +1421,18 @@ A7:   max(f.c,g.c) = g.c & max(f.c,h.c) = h.c;
         g.c >= f.c & h.c >= f.c &
         (1_minus f).c >= 0 & (1_minus g).c >= 0 by A7,Th1,XXREAL_0:def 10;
         then 1 - g.c <= 1 - f.c & 1 - h.c <= 1 - f.c &
-        1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,REAL_2:106;
+        1-f.c >= 0 & 1-g.c >= 0 by FUZZY_1:def 6,XREAL_1:12;
         then (1 - f.c)*(1 - f.c) >= (1 - g.c)*(1 - f.c) &
         (1 - g.c)*(1 - f.c) >= (1 - g.c)*(1 - h.c) by XREAL_1:66;
         then (1 - f.c)*(1 - f.c) >= (1 - g.c)*(1 - h.c) by XXREAL_0:2;
 
-then 1 - ((1 - f.c)*(1 - f.c)) <= 1 - (1 - g.c)*(1 - h.c) by REAL_2:106;
+then 1 - ((1 - f.c)*(1 - f.c)) <= 1 - (1 - g.c)*(1 - h.c) by XREAL_1:12;
         then
 A8:     (f ++ f).c <= 1 - (1 - g.c)*(1 - h.c) by Th54;
         f c= f++f by Th33;
         then (f ++ f).c >= f.c by FUZZY_1:def 3;
         then f.c <= 1 - (1 - g.c)*(1 - h.c) by A8,XXREAL_0:2;
-        hence thesis by A7,SQUARE_1:50;
+        hence thesis by A7,XXREAL_0:28;
       end;
       hence thesis;
     end;

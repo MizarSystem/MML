@@ -13,6 +13,7 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="FUNCT_2"/>
 <ArticleID name="FINSET_1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="SETFAM_1"/>
 <ArticleID name="CLASSES2"/>
 <ArticleID name="STRUCT_0"/>
@@ -27,22 +28,22 @@
 <Cluster/>
 </Typ>
 <Cluster>
-<Adjective nr="28" value="false"/>
-<Adjective nr="34"/>
-<Adjective nr="45"/>
-<Adjective nr="51"/>
+<Adjective nr="30" value="false"/>
+<Adjective nr="36"/>
+<Adjective nr="47"/>
+<Adjective nr="53"/>
 </Cluster>
 </RCluster>
 <FCluster aid="NECKLA_2" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="125"/>
+<Func kind="K" nr="133"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
 </FCluster>
 <FCluster aid="NECKLA_2" nr="2">
 <ArgTypes/>
-<Func kind="K" nr="126"/>
+<Func kind="K" nr="134"/>
 <Cluster>
 <Adjective nr="7" value="false"/>
 </Cluster>
@@ -58,7 +59,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="115">
+<Func kind="K" nr="123">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -71,7 +72,7 @@
 <Cluster/>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="102"/>
+<Func kind="K" nr="109"/>
 </Typ>
 <Cluster>
 <Adjective nr="20"/>

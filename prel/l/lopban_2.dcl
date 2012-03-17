@@ -231,7 +231,7 @@
 </FCluster>
 <FCluster aid="LOPBAN_2" nr="6">
 <ArgTypes/>
-<Func kind="K" nr="211"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="100"/>
@@ -239,7 +239,7 @@
 </FCluster>
 <FCluster aid="LOPBAN_2" nr="7">
 <ArgTypes/>
-<Func kind="K" nr="211"/>
+<Func kind="K" nr="212"/>
 <Cluster>
 <Adjective nr="33" value="false"/>
 <Adjective nr="38" value="false"/>

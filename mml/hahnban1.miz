@@ -52,23 +52,7 @@ theorem
   for x1,y1,x2,y2 being real number holds
   (x1+y1*<i>) * (x2+y2*<i>) = x1*x2-y1*y2 + (x1*y2+x2*y1)*<i>;
 
-theorem
-  for r be Real holds [*r,0*]*<i> = [*0,r*]
-proof
-  let r be Real;
-  [*0,r*] = (0+r*<i>)*(-0+(-1)*<i>)*<i> by COMPLEX1:27
-    .= (-r*-1+(0*(-1)+r*0*<i>))*<i>
-    .= [*r*1,0*]*<i> by COMPLEX1:27;
-  hence thesis;
-end;
-
-theorem Th4:
-  for r be Real holds |.[*r,0*].| = abs r
-proof
-  let r be Real;
-  [*r,0*] = r+0*<i> by COMPLEX1:27;
-  hence thesis;
-end;
+canceled 2;
 
 theorem Th5:
   for z be Element of COMPLEX holds |.z.|+0*<i> = (z*'/(|.z.|+0*<i>))*z
@@ -82,22 +66,21 @@ A1: |.z.| = 0;
   end;
   suppose
 A2: |.z.| <> 0;
-A3: (z*'/[*|.z.|,0*])*z = z*z*'/[*|.z.|,0*] by XCMPLX_1:75;
+A3: (z*'/|.z.|)*z = z*z*'/|.z.| by XCMPLX_1:75;
 A4: Re(z*z*') = (Re z)^2 + (Im z)^2 & Im(z*z*') = 0 by COMPLEX1:126;
-    [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
+    |.z.| = |.z.|+0*<i>;
     then
-A5: Re [*|.z.|,0*] = |.z.| & Im [*|.z.|,0*] = 0 by COMPLEX1:28;
+A5: Re |.z.| = |.z.| & Im |.z.| = 0 by COMPLEX1:28;
     then
-A6: Re((z*'/[*|.z.|,0*])*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z
-    .|^2 +0) by A3,A4,COMPLEX1:82,SQUARE_1:60
+A6: Re((z*'/|.z.|)*z) = (((Re z)^2+(Im z)^2)*|.z.| + 0*0) / (|.z
+    .|^2 +0^2) by A3,A4,COMPLEX1:82
       .= |.z*z.|*|.z.| / (|.z.|*|.z.|) by COMPLEX1:154
       .= |.z*z.| / |.z.| by A2,XCMPLX_1:92
       .= |.z.|*|.z.| / |.z.| by COMPLEX1:151
       .= |.z.| by A2,XCMPLX_1:90;
-A7: [*|.z.|,0*] = |.z.|+0*<i> by COMPLEX1:27;
-    Im((z*'/[*|.z.|,0*])*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.| ^2
-    +0) by A3,A4,A5,COMPLEX1:82,SQUARE_1:60;
-    hence thesis by A6,A7,COMPLEX1:29;
+    Im((z*'/|.z.|)*z) = (|.z.|*0 - ((Re z)^2+(Im z)^2)*0) / (|.z.| ^2
+    +0^2) by A3,A4,A5,COMPLEX1:82;
+    hence thesis by A6,COMPLEX1:29;
   end;
 end;
 
@@ -126,10 +109,7 @@ definition
   end;
 end;
 
-theorem
-  i_FC = [*0,1*] & i_FC = [**0,1**];
-
-canceled;
+canceled 2;
 
 theorem Th8:
   i_FC * i_FC = -1_F_Complex
@@ -941,8 +921,6 @@ A1: F is additive;
   end;
 end;
 
-Lm2: 0c = [*0,0*] by ARYTM_0:def 7;
-
 registration
   let V be VectSp of F_Complex;
   cluster Real_homogeneous -> 0-preserving RFunctional of V;
@@ -1723,19 +1701,15 @@ A6: for e be VECTOR of RealVS(V) holds L1.e <= p1.e by HAHNBAN:35;
 A7: L1.x1 = (projRe(l)).x1 by A3,A5,FUNCT_1:72
       .= Re(l.x) by Def23;
     reconsider lx=l.x as Element of COMPLEX by COMPLFLD:def 1;
-A8: [*0,1*] = 0+1*<i> & [*Re lx,Im lx*] = Re lx +(Im lx)*<i> by COMPLEX1:27;
-    lx = Re lx+(Im lx)*<i> by COMPLEX1:29
-      .= [*Re lx,Im lx*] by COMPLEX1:27;
+    lx = Re lx+(Im lx)*<i> by COMPLEX1:29;
     then
-A9: i_FC*l.x = 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i> by A8
-      .= [*-Im lx,Re lx*] by COMPLEX1:27;
-A10: [*-Im lx,Re lx*] = -Im lx+(Re lx)*<i> by COMPLEX1:27;
+A9: i_FC*l.x = 0*Re lx-1*Im lx + (0*Im lx+1*Re lx)*<i>;
 A11: i_FC*x = i_FC*x2 by VECTSP_4:22;
     then
 A12: L1.ix1 = (projRe(l)).ix1 by A3,A5,FUNCT_1:72
       .= Re(l.(i_FC*x)) by A11,Def23
-      .= Re [*-Im lx,Re lx*] by A9,Def12
-      .= -Im(l.x) by A10,COMPLEX1:28;
+      .= Re((-Im lx)+Re lx*<i>) by A9,Def12
+      .= -Im(l.x) by COMPLEX1:28;
     thus (L|tcM).x = L.x by FUNCT_1:72
       .= [**(RtoC L1).x2,-(i-shift(RtoC L1)).x2**] by Def28
       .= [**Re(l.x),-(RtoC L1).(i_FC*x2)**] by A7,Def27
@@ -1744,34 +1718,31 @@ A12: L1.ix1 = (projRe(l)).ix1 by A3,A5,FUNCT_1:72
   hence L|the carrier of M = l by FUNCT_2:113;
   let e be Vector of V;
   reconsider Le = L.e as Element of COMPLEX by COMPLFLD:def 1;
-  reconsider Ledz = Le*'/[*|.Le.|,0*] as Element of F_Complex
+  reconsider Ledz = Le*'/|.Le.| as Element of F_Complex
   by COMPLFLD:def 1;
   reconsider e1=e,Ledze=Ledz*e as VECTOR of RealVS(V) by A2;
   per cases;
   suppose
 A13: |.Le.| <> 0;
-A14: |.[*|.Le.|,0*].| = abs |.Le.| by Th4
-      .= |.Le.|;
-A15: |.Ledz.| = |.Le*'.|/|.[*|.Le.|,0*].| by COMPLEX1:153
-      .= |.Le.|/|.Le.| by A14,COMPLEX1:139
+A15: |.Ledz.| = |.Le*'.|/|.|.Le.|.| by COMPLEX1:153
+      .= |.Le.|/|.Le.| by COMPLEX1:139
       .= 1 by A13,XCMPLX_1:60;
 A16: p1.Ledze = |.Ledz.|*p.e by Def19
       .= p.e by A15;
-    [*|.Le.|,0*] = |.Le.|+0*<i> by COMPLEX1:27;
-    then [*|.Le.|,0*] = Ledz*L.e by Th5
+    |.Le.|+0*<i> = Ledz*L.e by Th5
       .= L.(Ledz*e) by Def12
       .= [**(RtoC L1).(Ledz*e),-(i-shift(RtoC L1)).(Ledz*e)**] by Def28
-      .= [*L1.Ledze,-(i-shift(RtoC L1)).(Ledz*e)*] by COMPLEX1:27;
-    then L1.Ledze = |.L.e.| by ARYTM_0:12;
+      .= L1.Ledze+(-(i-shift(RtoC L1)).(Ledz*e))*<i>;
+    then L1.Ledze = |.L.e.| by COMPLEX1:163;
     hence |.L.e.| <= p.e by A6,A16;
   end;
   suppose
 A17: |.Le.| = 0;
     |.L.e.| = |.[**(RtoC L1).e,-(i-shift(RtoC L1)).e**].| by Def28
-      .= |.[*(RtoC L1).e,-(i-shift(RtoC L1)).e*].| by COMPLEX1:27;
-    then [*(RtoC L1).e,-(i-shift(RtoC L1)).e*] = [*0,0*]
-    by A17,Lm2,COMPLEX1:131;
-    then L1.e1 = 0 by ARYTM_0:12;
+      .= |.(RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i>.|;
+    then (RtoC L1).e+(-(i-shift(RtoC L1)).e)*<i> = 0+0*<i>
+    by A17,COMPLEX1:131;
+    then L1.e1 = 0 by COMPLEX1:163;
     hence |.L.e.| <= p.e by A6,A17;
   end;
 end;

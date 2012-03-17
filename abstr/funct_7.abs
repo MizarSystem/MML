@@ -9,17 +9,18 @@ environ
  vocabularies FUNCT_1, RELAT_1, BOOLE, CAT_1, FUNCOP_1, FINSET_1, PBOOLE,
       CAT_4, FUNCT_4, INT_1, FINSEQ_1, CARD_1, SETFAM_1, SUBSET_1, PRALG_1,
       ZF_REFLE, FINSEQ_2, MCART_1, TARSKI, FINSEQ_4, REWRITE1, FUNCT_5,
-      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1, ARYTM;
- notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, CARD_1, WELLORD2, NUMBERS,
-      XCMPLX_0, XXREAL_0, NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, RELAT_1, FUNCT_1,
-      RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2, FINSEQ_1,
-      FINSEQ_2, FUNCT_4, RFINSEQ, NAT_D, REWRITE1;
+      FUNCT_2, FUNCT_7, PARTFUN1, ARYTM_1, RFINSEQ, FINSEQ_7, SGRAPH1, ARYTM,
+      DYNKIN, NORMSP_1;
+ notations TARSKI, XBOOLE_0, ZFMISC_1, ENUMSET1, SUBSET_1, CARD_1, WELLORD2,
+      NUMBERS, XCMPLX_0, XXREAL_0, NAT_1, SETFAM_1, PBOOLE, DOMAIN_1, RELAT_1,
+      FUNCT_1, RELSET_1, BINOP_1, FINSET_1, PARTFUN1, FUNCOP_1, FUNCT_2,
+      FINSEQ_1, FINSEQ_2, FUNCT_4, CLASSES1, RFINSEQ, NAT_D, REWRITE1;
  constructors SETFAM_1, PARTFUN1, WELLORD2, BINOP_1, DOMAIN_1, FUNCT_4,
       XXREAL_0, NAT_1, INT_1, PBOOLE, RFINSEQ, NAT_D, REWRITE1, RELAT_2,
-      REAL_1;
+      REAL_1, CLASSES1;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCOP_1, FUNCT_4, XREAL_0, NAT_1, INT_1, CARD_1, FINSEQ_1, FUNCT_2,
-      RELSET_1;
+      RELSET_1, NUMBERS, XXREAL_0, REAL_1;
  requirements NUMERALS, REAL, BOOLE, SUBSET, ARITHM;
 
 
@@ -132,7 +133,7 @@ registration
 end;
 
 registration
-  cluster {} -> Function-yielding;
+  cluster empty -> Function-yielding Function;
   let f be Function;
   cluster <*f*> -> Function-yielding;
   let g be Function;
@@ -729,3 +730,97 @@ theorem :: FUNCT_7:118
 
 theorem :: FUNCT_7:119
   (f+*g)+~(x,y) = f+~(x,y)+*(g+~(x,y));
+
+definition
+  let a,b be set;
+  func a followed_by b equals
+:: FUNCT_7:def 13
+  (NAT --> b) +* (0,a);
+end;
+
+registration
+  let a,b be set;
+  cluster a followed_by b -> Function-like Relation-like;
+end;
+
+reserve a,b,c for set,
+        n for Nat;
+
+
+theorem :: FUNCT_7:120
+ dom(a followed_by b) = NAT;
+
+definition
+  let X be non empty set;
+  let a,b be Element of X;
+  redefine func a followed_by b -> sequence of X;
+end;
+
+theorem :: FUNCT_7:121
+ (a followed_by b).0 = a;
+
+theorem :: FUNCT_7:122
+ for n st n > 0 holds (a followed_by b).n = b;
+
+:: from DYNKIN, 2008.09.24, A.T.
+
+definition
+  let a,b,c be set;
+  func (a,b) followed_by c equals
+:: FUNCT_7:def 14
+  (NAT --> c) +* ((0,1) --> (a,b));
+end;
+
+registration
+  let a,b,c be set;
+  cluster (a,b) followed_by c -> Function-like Relation-like;
+end;
+
+theorem :: FUNCT_7:123
+ dom (a,b) followed_by c = NAT;
+
+theorem :: FUNCT_7:124
+  ((a,b) followed_by c).0 = a;
+
+theorem :: FUNCT_7:125
+  ((a,b) followed_by c).1 = b;
+
+theorem :: FUNCT_7:126
+  for n st n > 1 holds ((a,b) followed_by c).n = c;
+
+theorem :: FUNCT_7:127
+  (a,b) followed_by c = (a followed_by c) +* (1,b);
+
+definition
+  let X be non empty set;
+  let a,b,c be Element of X;
+  redefine func (a,b) followed_by c -> sequence of X;
+end;
+
+theorem :: FUNCT_7:128
+ rng(a followed_by b) = {a,b};
+
+theorem :: FUNCT_7:129
+ rng (a,b) followed_by c = {a,b,c};
+
+:: from POLYNOM1, 2008.12.15, A.T.
+
+definition
+  let A, B be set, f be Function of A, B, x be set, y be Element of B;
+  redefine func f+*(x,y) -> Function of A, B;
+end;
+
+:: missing, 2008.12.14, A.T.
+
+theorem :: FUNCT_7:130
+ for A, B being non empty set, f being Function of A, B,
+     x being Element of A, y being set
+  holds f+*(x,y).x = y;
+
+theorem :: FUNCT_7:131
+ for A, B being non empty set, f,g being Function of A, B,
+     x being Element of A
+  st for y being Element of A st f.y <> g.y holds y = x
+  holds f = g+*(x,f.x);
+
+

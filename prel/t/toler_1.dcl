@@ -44,10 +44,17 @@
 </Adjective>
 </Cluster>
 </RCluster>
-<FCluster aid="TOLER_1" nr="1">
+<CCluster aid="TOLER_1" nr="1">
 <ArgTypes/>
-<Func kind="K" nr="22"/>
 <Cluster>
+<Adjective nr="1"/>
+<Adjective nr="9"/>
+</Cluster>
+<Typ kind="M" nr="1">
+<Cluster/>
+</Typ>
+<Cluster>
+<Adjective nr="1"/>
 <Adjective nr="12"/>
 <Adjective nr="13"/>
 <Adjective nr="14"/>
@@ -57,5 +64,5 @@
 <Adjective nr="18"/>
 <Adjective nr="19"/>
 </Cluster>
-</FCluster>
+</CCluster>
 </Registrations>

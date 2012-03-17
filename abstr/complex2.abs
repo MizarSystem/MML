@@ -63,19 +63,16 @@ theorem :: COMPLEX2:12
   st 0 <= a & a < 2*PI & 0 <= b & b < 2*PI & sin a = sin b & cos a = cos b
   holds a = b;
 
-begin
+begin :: More on the argument of a complex number
+
+:: ALL these to be changed (mainly deleted) after the change in COMPTRIG
 
 canceled 6;
 
 theorem :: COMPLEX2:19
-  for z being complex number holds z = [* |.z.|*cos Arg z, |.z.|*sin Arg z *];
+  for z being complex number holds z = |.z.|*cos Arg z + |.z.|*sin Arg z *<i>;
 
-canceled;
-
-theorem :: COMPLEX2:21
-  for z being complex number, r being Real
-  st z <> 0 & z = [* |.z.|*cos r, |.z.|*sin r *] & 0 <= r & r < 2*PI
-  holds r = Arg z;
+canceled 2;
 
 theorem :: COMPLEX2:22
   for z being complex number st z <> 0
@@ -83,10 +80,10 @@ theorem :: COMPLEX2:22
   (Arg z >= PI implies Arg -z = Arg z -PI);
 
 theorem :: COMPLEX2:23
-  for r being Real st r >= 0 holds Arg [*r,0*] = 0;
+  for r being Real st r >= 0 holds Arg r = 0;
 
 theorem :: COMPLEX2:24
-  for z being complex number holds Arg z = 0 iff z = [* |.z.|,0 *];
+  for z being complex number holds Arg z = 0 iff z = |.z.|;
 
 theorem :: COMPLEX2:25
   for z being complex number st z <> 0 holds Arg(z) < PI iff Arg -z >= PI;
@@ -128,11 +125,11 @@ theorem :: COMPLEX2:39
 
 theorem :: COMPLEX2:40
   for a being complex number, r being Real st r > 0
-  holds Arg(a*[*r,0*]) = Arg a;
+  holds Arg(a*r) = Arg a;
 
 theorem :: COMPLEX2:41
   for a being complex number, r being Real st r < 0
-  holds Arg(a*[*r,0*]) = Arg -a;
+  holds Arg(a*r) = Arg -a;
 
 begin :: Inner product
 
@@ -148,14 +145,13 @@ end;
 reserve a, b, c, d, x, y, z for Element of COMPLEX;
 
 theorem :: COMPLEX2:42
-  x.|.y = [* (Re x)*(Re y)+(Im x)*(Im y), -(Re x)*(Im y)+(Im x)*(Re y) *];
+  x.|.y = (Re x)*(Re y)+(Im x)*(Im y) + (-(Re x)*(Im y)+(Im x)*(Re y))*<i>;
 
 theorem :: COMPLEX2:43
-  z.|.z = [* (Re z)*(Re z)+(Im z)*(Im z),0*] & z.|.z = [* (Re z)^2+(Im z)^2,0*]
-;
+  z.|.z = (Re z)*(Re z)+(Im z)*(Im z) & z.|.z = (Re z)^2+(Im z)^2;
 
 theorem :: COMPLEX2:44
-  z.|.z = [* |.z.|^2,0*] & |.z.|^2 = Re (z.|.z);
+  z.|.z = |.z.|^2 & |.z.|^2 = Re (z.|.z);
 
 theorem :: COMPLEX2:45
   |. x.|.y .| = |.x.|*|.y.|;
@@ -222,7 +218,7 @@ definition
   let a be complex number, r be Real;
   func Rotate(a, r) -> Element of COMPLEX equals
 :: COMPLEX2:def 4
-  [* |.a.|*cos (r+Arg a), |.a.|*sin (r+Arg a) *];
+   |.a.|*cos (r+Arg a) + |.a.|*sin (r+Arg a) *<i>;
 end;
 
 reserve r for Real;
@@ -231,16 +227,18 @@ theorem :: COMPLEX2:65
   Rotate(a, 0) = a;
 
 theorem :: COMPLEX2:66
-  Rotate(a, r) = 0 iff a = 0;
+  for a being complex number
+  holds Rotate(a, r) = 0 iff a = 0;
 
 theorem :: COMPLEX2:67
-  |.Rotate(a,r).| = |.a.|;
+ for a being complex number holds |.Rotate(a,r).| = |.a.|;
 
 theorem :: COMPLEX2:68
-  a <> 0 implies ex i being Integer st Arg(Rotate(a,r)) = 2*PI*i+(r+Arg(a));
+ for a being complex number st a <> 0
+  ex i being Integer st Arg(Rotate(a,r)) = 2*PI*i+(r+Arg(a));
 
 theorem :: COMPLEX2:69
-  Rotate(a,-Arg a) = [* |.a.|, 0 *];
+  Rotate(a,-Arg a) = |.a.|;
 
 theorem :: COMPLEX2:70
   Re Rotate(a,r) = (Re a)*(cos r)-(Im a)*(sin r) &
@@ -261,7 +259,7 @@ theorem :: COMPLEX2:74
 begin :: Angles
 
 definition
-  let a, b be Element of COMPLEX;
+  let a, b be complex number;
   func angle(a,b) -> Real equals
 :: COMPLEX2:def 5
 
@@ -269,13 +267,15 @@ definition
 end;
 
 theorem :: COMPLEX2:75
-  r >= 0 implies angle([*r,0*],a) = Arg a;
+ for a being complex number holds
+  r >= 0 implies angle(r,a) = Arg a;
 
 theorem :: COMPLEX2:76
+ for a,b being complex number holds
   Arg a = Arg b & a <> 0 & b <> 0 implies Arg Rotate(a,r) = Arg Rotate(b,r);
 
 theorem :: COMPLEX2:77
-  r > 0 implies angle(a,b) = angle(a*[*r,0*],b*[*r,0*]);
+  r > 0 implies angle(a,b) = angle(a*r,b*r);
 
 theorem :: COMPLEX2:78
   a <> 0 & b <> 0 & Arg a = Arg b implies Arg -a = Arg -b;
@@ -284,7 +284,7 @@ theorem :: COMPLEX2:79
   a <> 0 & b <> 0 implies angle(a,b) = angle(Rotate(a,r),Rotate(b,r));
 
 theorem :: COMPLEX2:80
-  r < 0 & a <> 0 & b <> 0 implies angle(a,b) = angle(a*[*r,0*],b*[*r,0*]);
+  r < 0 & a <> 0 & b <> 0 implies angle(a,b) = angle(a*r,b*r);
 
 theorem :: COMPLEX2:81
   a <> 0 & b <> 0 implies angle(a,b) = angle(-a,-b);
@@ -371,6 +371,7 @@ theorem :: COMPLEX2:101
   a <> b & a <> c & b <> c & angle(a,b,c) = 0
   implies angle(b,c,a) = 0 & angle(c,a,b) = PI or
   angle(b,c,a) = PI & angle(c,a,b) = 0;
+
 
 theorem :: COMPLEX2:102
   angle(a,b,c)+angle(b,c,a)+angle(c,a,b) = PI or

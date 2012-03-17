@@ -36,10 +36,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="58"/>
+<Adjective nr="49"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="2">
@@ -51,10 +51,10 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="46"/>
 <Adjective nr="47"/>
 <Adjective nr="48"/>
-<Adjective nr="58"/>
+<Adjective nr="49"/>
+<Adjective nr="59"/>
 </Cluster>
 </RCluster>
 <RCluster aid="INTEGRA1" nr="3">
@@ -89,7 +89,7 @@
 </Func>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="144">
+<Func kind="K" nr="146">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
@@ -99,7 +99,7 @@
 <CCluster aid="INTEGRA1" nr="1">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -115,7 +115,7 @@
 <CCluster aid="INTEGRA1" nr="2">
 <ArgTypes/>
 <Cluster>
-<Adjective nr="58"/>
+<Adjective nr="59"/>
 </Cluster>
 <Typ kind="M" nr="2">
 <Cluster/>
@@ -124,7 +124,7 @@
 </Func>
 </Typ>
 <Cluster>
-<Adjective nr="56"/>
+<Adjective nr="57"/>
 </Cluster>
 </CCluster>
 </Registrations>

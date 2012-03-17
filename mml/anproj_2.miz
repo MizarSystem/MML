@@ -1424,14 +1424,9 @@ reserve f,g,h,f1 for Element of Funcs(A,REAL);
 reserve x1,x2,x3,x4 for Element of A;
 
 theorem Th10:
-  ex f,g,h st (for z st z in A holds
-  (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) & (for z st z in A holds
-  (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) & (for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0))
+  ex f st f.x1 = 1 & for z st z in A & z<>x1 holds f.z = 0
 proof
   defpred P[set] means $1 = x1;
-  defpred R[set] means $1 = x2;
-  defpred S[set] means $1 = x3;
   deffunc F(set) = 1;
   deffunc G(set) = 0;
 A1: for z st z in A holds
@@ -1440,28 +1435,15 @@ A1: for z st z in A holds
 A2: for z st z in A holds
   (P[z] implies f.z = F(z)) & (not P[z] implies f.z = G(z))
   from FUNCT_2:sch 5(A1);
-A3: for z st z in A holds
-  (R[z] implies F(z) in REAL) & (not R[z] implies G(z) in REAL);
-  consider g being Function of A,REAL such that
-A4: for z st z in A holds
-  (R[z] implies g.z = F(z)) & (not R[z] implies g.z = G(z))
-  from FUNCT_2:sch 5(A3);
-A5: for z st z in A holds
-  (S[z] implies F(z) in REAL) & (not S[z] implies G(z) in REAL);
-  consider h being Function of A,REAL such that
-A6: for z st z in A holds
-  (S[z] implies h.z = F(z)) & (not S[z] implies h.z = G(z))
-  from FUNCT_2:sch 5(A5);
-  reconsider f,g,h as Element of Funcs(A,REAL) by FUNCT_2:11;
-  take f,g,h; thus thesis by A2,A4,A6;
+  reconsider f as Element of Funcs(A,REAL) by FUNCT_2:11;
+  take f; thus thesis by A2;
 end;
 
 theorem Th11:
   (x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3) &
-  (for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
-  (for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
-  (for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) implies
+   f.x1 = 1 & (for z st z in A holds(z<>x1 implies f.z = 0)) &
+   g.x2 = 1 & (for z st z in A holds(z<>x2 implies g.z = 0)) &
+   h.x3 = 1 & (for z st z in A holds(z<>x3 implies h.z = 0)) implies
   (for a,b,c st (RealFuncAdd(A)).((RealFuncAdd(A)).
   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
   (RealFuncExtMult(A)).[c,h]) = RealFuncZero(A) holds a=0 & b=0 & c = 0)
@@ -1469,9 +1451,9 @@ proof
   set RM = RealFuncExtMult(A), RA = RealFuncAdd(A);
   assume that
 A1: x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3 and
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0);
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) and
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) and
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0);
 A5: f.x1=1 & f.x2=0 & f.x3=0 & g.x1=0 & g.x2=1 & g.x3=0 &
   h.x1=0 & h.x2=0 & h.x3=1 by A1,A2,A3,A4;
   let a,b,c;
@@ -1510,11 +1492,12 @@ theorem
 proof
   assume
 A1: x1 in A & x2 in A & x3 in A & x1<>x2 & x1<>x3 & x2<>x3;
-  consider f,g,h such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+  consider f such that
+A2: f.x1 = 1 & for z st z in A holds (z<>x1 implies f.z = 0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
   take f,g,h;
   let a,b,c;
   assume (RealFuncAdd(A)).((RealFuncAdd(A)).
@@ -1524,10 +1507,11 @@ A4: for z st z in A holds
 end;
 
 theorem Th13:
-  A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 & (for z st z in A holds
-  (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) & (for z st z in A holds
-  (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) & (for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0))
+  A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 & f.x1 = 1 &
+  (for z st z in A holds
+  (z<>x1 implies f.z = 0)) & g.x2 = 1 & (for z st z in A holds
+  (z<>x2 implies g.z = 0)) & h.x3 = 1 & (for z st z in A holds
+  (z<>x3 implies h.z = 0))
   implies for h' being Element of Funcs(A,REAL) holds
   (ex a,b,c st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
@@ -1535,9 +1519,9 @@ theorem Th13:
 proof
   assume that
 A1: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3 and
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0);
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) and
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) and
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0);
 A5: f.x1=1 & f.x2=0 & f.x3=0 & g.x1=0 & g.x2=1 & g.x3=0 &
   h.x1=0 & h.x2=0 & h.x3=1 by A1,A2,A3,A4;
   let h' be Element of Funcs(A,REAL);
@@ -1600,11 +1584,12 @@ theorem
 proof
   assume
 A1: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3;
-  consider f,g,h such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+  consider f such that
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z =0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
   take f,g,h;
   let h' be Element of Funcs(A,REAL); thus thesis by A1,A2,A3,A4,Th13;
 end;
@@ -1621,11 +1606,12 @@ theorem Th15:
 proof
   assume
 A1: A = {x1,x2,x3} & x1<>x2 & x1<>x3 & x2<>x3;
-  consider f,g,h such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) by Th10;
+  consider f such that
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z =0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
   take f,g,h;
   thus thesis by A1,A2,A3,A4,Th11,Th13;
 end;
@@ -1675,54 +1661,15 @@ A5: h' = (RealFuncAdd(A)).((RealFuncAdd(A)).
   thus thesis by A2,A4;
 end;
 
-theorem Th17:
-  ex f,g,h,f1 st (for z st z in A holds
-  (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) & (for z st z in A holds
-  (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) & (for z st z in A holds
-  (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) & (for z st z in A holds
-  (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
-proof
-  defpred P[set] means $1 = x1;
-  defpred R[set] means $1 = x2;
-  defpred S[set] means $1 = x3;
-  deffunc F(set) = 1;
-  deffunc G(set) = 0;
-A1: for z st z in A holds
-  (P[z] implies F(z) in REAL) & (not P[z] implies G(z) in REAL);
-  consider f being Function of A,REAL such that
-A2: for z st z in A holds
-  (P[z] implies f.z = F(z)) & (not P[z] implies f.z = G(z))
-  from FUNCT_2:sch 5(A1);
-A3: for z st z in A holds
-  (R[z] implies F(z) in REAL) & (not R[z] implies G(z) in REAL);
-  consider g being Function of A,REAL such that
-A4: for z st z in A holds
-  (R[z] implies g.z = F(z)) & (not R[z] implies g.z = G(z))
-  from FUNCT_2:sch 5(A3);
-A5: for z st z in A holds
-  (S[z] implies F(z) in REAL) & (not S[z] implies G(z) in REAL);
-  consider h being Function of A,REAL such that
-A6: for z st z in A holds
-  (S[z] implies h.z = F(z)) & (not S[z] implies h.z = G(z))
-  from FUNCT_2:sch 5(A5);
-  defpred Z[set] means $1 = x4;
-A7: for z st z in A holds
-  (Z[z] implies F(z) in REAL) & (not Z[z] implies G(z) in REAL);
-  consider f1 being Function of A,REAL such that
-A8: for z st z in A holds
-  (Z[z] implies f1.z = F(z)) & (not Z[z] implies f1.z = G(z))
-  from FUNCT_2:sch 5(A7);
-  reconsider f,g,h,f1 as Element of Funcs(A,REAL) by FUNCT_2:11;
-  take f,g,h,f1; thus thesis by A2,A4,A6,A8;
-end;
+canceled;
 
 theorem Th18:
   (x1 in A & x2 in A & x3 in A & x4 in A &
   x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4) &
-  (for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
-  (for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
-  (for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) &
-  (for z st z in A holds (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
+   f.x1 = 1 & (for z st z in A holds(z<>x1 implies f.z = 0)) &
+   g.x2 = 1 & (for z st z in A holds(z<>x2 implies g.z = 0)) &
+   h.x3 = 1 & (for z st z in A holds(z<>x3 implies h.z = 0)) &
+   f1.x4 = 1 & (for z st z in A holds(z<>x4 implies f1.z = 0))
   implies (for a,b,c,d st
   (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
@@ -1733,10 +1680,10 @@ proof
   assume that
 A1: x1 in A & x2 in A & x3 in A & x4 in A &
   x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 and
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
-A5: for z st z in A holds (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0);
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) and
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) and
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) and
+A5:  f1.x4 = 1 & for z st z in A holds(z<>x4 implies f1.z = 0);
 A6: f.x1=1 & f.x2=0 & f.x3=0 & f.x4=0 & g.x1=0 & g.x2=1 & g.x3=0 & g.x4=0 &
   h.x1=0 & h.x2=0 & h.x3=1 & h.x4=0 & f1.x1=0 & f1.x2=0 & f1.x3=0 & f1.x4=1
   by A1,A2,A3,A4,A5;
@@ -1812,12 +1759,14 @@ proof
   assume
 A1: x1 in A & x2 in A & x3 in A & x4 in A &
   x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
-  consider f,g,h,f1 such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
-A5: for z st z in A holds
-  (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+  consider f such that
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
+  consider f1 such that
+A5:  f1.x4 = 1 & for z st z in A holds(z<>x4 implies f1.z = 0) by Th10;
   take f,g,h,f1;
   let a,b,c,d;
   assume (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
@@ -1828,10 +1777,10 @@ end;
 
 theorem Th20:
   A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4 &
-  (for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0)) &
-  (for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0)) &
-  (for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0)) &
-  (for z st z in A holds (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0))
+   f.x1 = 1 & (for z st z in A holds(z<>x1 implies f.z = 0)) &
+   g.x2 = 1 & (for z st z in A holds(z<>x2 implies g.z = 0)) &
+   h.x3 = 1 & (for z st z in A holds(z<>x3 implies h.z = 0)) &
+   f1.x4 = 1 & (for z st z in A holds(z<>x4 implies f1.z = 0))
   implies for h' being Element of Funcs(A,REAL) holds
   ( ex a,b,c,d st h' = (RealFuncAdd(A)).((RealFuncAdd(A)).((RealFuncAdd(A)).
   ((RealFuncExtMult(A)).[a,f],(RealFuncExtMult(A)).[b,g]),
@@ -1840,10 +1789,10 @@ proof
   assume that
 A1: A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4
   and
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
-A5: for z st z in A holds (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0);
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) and
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) and
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) and
+A5:  f1.x4 = 1 & for z st z in A holds(z<>x4 implies f1.z = 0);
 A6: f.x1=1 & f.x2=0 & f.x3=0 & f.x4=0 & g.x1=0 & g.x2=1 & g.x3=0 & g.x4=0 &
   h.x1=0 & h.x2=0 & h.x3=1 & h.x4=0 & f1.x1=0 & f1.x2=0 & f1.x3=0 & f1.x4=1
   by A1,A2,A3,A4,A5;
@@ -1949,12 +1898,14 @@ theorem
 proof
   assume
 A1: A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
-  consider f,g,h,f1 such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z =0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
-A5: for z st z in A holds
-  (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+  consider f such that
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z =0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
+  consider f1 such that
+A5:  f1.x4 = 1 & for z st z in A holds(z<>x4 implies f1.z = 0) by Th10;
   take f,g,h,f1;
   let h' be Element of Funcs(A,REAL); thus thesis by A1,A2,A3,A4,A5,Th20;
 end;
@@ -1973,12 +1924,14 @@ theorem Th22:
 proof
   assume
 A1: A = {x1,x2,x3,x4} & x1<>x2 & x1<>x3 & x1<>x4 & x2<>x3 & x2<>x4 & x3<>x4;
-  consider f,g,h,f1 such that
-A2: for z st z in A holds (z=x1 implies f.z = 1) & (z<>x1 implies f.z = 0) and
-A3: for z st z in A holds (z=x2 implies g.z = 1) & (z<>x2 implies g.z = 0) and
-A4: for z st z in A holds (z=x3 implies h.z = 1) & (z<>x3 implies h.z = 0) and
-A5: for z st z in A holds
-  (z=x4 implies f1.z = 1) & (z<>x4 implies f1.z = 0) by Th17;
+  consider f such that
+A2:  f.x1 = 1 & for z st z in A holds(z<>x1 implies f.z = 0) by Th10;
+  consider g such that
+A3:  g.x2 = 1 & for z st z in A holds(z<>x2 implies g.z = 0) by Th10;
+  consider h such that
+A4:  h.x3 = 1 & for z st z in A holds(z<>x3 implies h.z = 0) by Th10;
+  consider f1 such that
+A5:  f1.x4 = 1 & for z st z in A holds(z<>x4 implies f1.z = 0) by Th10;
   take f,g,h,f1;
   thus thesis by A1,A2,A3,A4,A5,Th18,Th20;
 end;

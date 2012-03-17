@@ -1,0 +1,2263 @@
+:: Complex Function Differentiability
+::  by Chanapat Pacharapokin , Hiroshi Yamazaki , Yasunari Shidama and Yatsuka Nakamura
+:: 
+:: Received November 4, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies COMPLEX1, COMSEQ_1, PARTFUN1, ORDINAL2, SEQM_3, SEQ_1, SEQ_2,
+      RELAT_1, FUNCT_1, CFUNCT_1, FCONT_1, FINSEQ_4, ARYTM_1, ANPROJ_1, BOOLE,
+      ARYTM, ARYTM_3, FDIFF_1, PRE_TOPC, INCSP_1, RCOMP_1, ABSVALUE, NORMSP_1,
+      LATTICES, FUNCOP_1, SQUARE_1, SUBSET_1, CFDIFF_1, ASYMPT_0, OPPCAT_1;
+ notations TARSKI, XBOOLE_0, SUBSET_1, RELAT_1, ORDINAL1, FUNCT_1, NUMBERS,
+      XCMPLX_0, XREAL_0, COMPLEX1, REAL_1, NAT_1, PARTFUN1, PARTFUN2, FUNCT_2,
+      FUNCOP_1, VALUED_0, VALUED_1, SEQ_1, RELSET_1, SEQ_2, SEQM_3, CFUNCT_1,
+      COMSEQ_1, COMSEQ_2, COMSEQ_3, FINSEQ_4, CFCONT_1, XXREAL_0, SQUARE_1;
+ constructors PARTFUN1, REAL_1, NAT_1, VALUED_0, VALUED_1, SEQ_1, SEQ_2,
+      FINSEQ_4, SEQM_3, PARTFUN2, SQUARE_1, COMSEQ_2, COMSEQ_3, CFCONT_1,
+      XXREAL_0, CFUNCT_1;
+ registrations FUNCT_1, RELSET_1, FUNCT_2, MEMBERED, NUMBERS, ORDINAL1,
+      XREAL_0, XXREAL_0, COMSEQ_1, COMSEQ_2, NAT_1, XBOOLE_0, VALUED_0, SEQM_3,
+      SEQ_4, VALUED_1, FUNCOP_1, SEQ_2;
+ requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
+ definitions XCMPLX_0, XBOOLE_0, TARSKI, RELAT_1, COMSEQ_2, SEQM_3, CFCONT_1,
+      SUBSET_1, FINSEQ_4, VALUED_0, VALUED_1, SEQ_2, COMPLEX1, FUNCT_2;
+ theorems TARSKI, NAT_1, FUNCT_1, FUNCT_2, ZFMISC_1, COMPLEX1, SEQ_1, SEQ_2,
+      SEQ_4, NUMBERS, COMSEQ_1, COMSEQ_2, COMSEQ_3, CFUNCT_1, CFCONT_1,
+      RELAT_1, XBOOLE_0, XBOOLE_1, PARTFUN1, PARTFUN2, XCMPLX_0, XCMPLX_1,
+      XREAL_1, XXREAL_0, ORDINAL1, ABSVALUE, XREAL_0, FUNCOP_1, SUBSET_1,
+      VALUED_1, VALUED_0;
+ schemes SEQ_1, COMSEQ_1, FUNCT_2;
+
+begin
+
+reserve k, k1, n, n1, m, m1 for Element of NAT;
+reserve X, y for set;
+reserve p for Real;
+reserve r for real number;
+reserve a, a1, a2, b, b1, b2, x, x0, z, z0 for Complex;
+reserve s1, s2, s3, seq, seq1 for Complex_Sequence;
+reserve Y for Subset of COMPLEX;
+reserve f, f1, f2 for PartFunc of COMPLEX,COMPLEX;
+reserve Nseq for increasing sequence of NAT;
+
+definition
+  let IT be Complex_Sequence;
+  attr IT is convergent_to_0 means
+  :Def1:
+  IT is non-zero convergent & lim IT = 0;
+end;
+
+theorem
+  for rs be Real_Sequence, cs be Complex_Sequence
+  st rs = cs & rs is convergent holds cs is convergent
+  proof
+    let rs be Real_Sequence, cs be Complex_Sequence such that
+    A1: rs = cs & rs is convergent;
+    deffunc F(Nat) = 0;
+    consider bs being Real_Sequence such that
+A2: for n holds bs.n = F(n) from SEQ_1:sch 1;
+    for n be Nat holds bs.n = F(n)
+    proof
+      let n be Nat;
+      n in NAT by ORDINAL1:def 13;
+      hence thesis by A2;
+    end; then
+a3: bs is constant by VALUED_0:def 18;
+    for n holds Re (cs.n) = rs.n & Im (cs.n) = bs.n
+    proof
+      let n;
+      thus Re (cs.n) = rs.n by A1, COMPLEX1:def 2;
+      Im (cs.n) = Im (rs.n) by A1; then
+      Im (cs.n) = 0 by COMPLEX1:def 3;
+      hence Im (cs.n) = bs.n by A2;
+    end;
+    hence thesis by a3,A1,COMSEQ_3:38;
+  end;
+
+definition
+  let r be real number;
+  func InvShift(r) -> Complex_Sequence means
+  :Def2:
+  for n holds it.n = 1/(n+r);
+  existence
+  proof
+    deffunc F(real number) = 1/($1+r);
+    ex seq st for n holds seq.n = F(n) from COMSEQ_1:sch 1;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let f, g be Complex_Sequence such that
+    A1: (for n holds f.n = 1/(n+r)) and
+    A2: for n holds g.n = 1/(n+r);
+    let n;
+    thus f.n = 1/(n+r) by A1
+    .= g.n by A2;
+  end;
+end;
+
+theorem Th2:
+  0 < r implies InvShift(r) is convergent
+  proof
+    assume A1: 0 < r;
+    set seq = InvShift(r);
+    take g = 0c;
+    let p;
+    assume a3: 0 < p;
+    consider k1 such that
+    A4: p" < k1 by SEQ_4:10;
+    take n = k1;
+    let m such that
+    A5: n <= m;
+    (p") + 0 < k1+r by A1,A4,XREAL_1:10; then
+    A6: 1/(k1+r) < 1/p" by a3,XREAL_1:78;
+    n+r <= m+r by A5,XREAL_1:8; then
+    1/(m+r) <= 1/(n+r) by A1,XREAL_1:120; then
+    A7: 1/(m+r) < p by XXREAL_0:2,A6;
+    seq.m = 1/(m+r) by Def2;
+    hence abs(seq.m-g) < p by A7,ABSVALUE:def 1,A1;
+  end;
+
+registration
+  let r be positive (real number);
+  cluster InvShift(r) -> convergent;
+  coherence by Th2;
+end;
+
+theorem Th3:
+  0 < r implies lim InvShift(r) = 0
+  proof
+    assume A1: 0 < r;
+    set seq = InvShift(r);
+    now let p;
+    assume a2: 0 < p;
+      consider k1 such that
+      A3: p" < k1 by SEQ_4:10;
+      take n = k1;
+      let m such that
+      A4: n <= m;
+      p"+ 0 < k1 + r by A1,A3,XREAL_1:10; then
+      A5: 1/(k1+r) < 1/p" by a2,XREAL_1:78;
+      n+r <= m+r by A4,XREAL_1:8; then
+      1/(m+r) <= 1/(n+r) by A1,XREAL_1:120; then
+      A6: 1/(m+r) < p by A5,XXREAL_0:2;
+      seq.m = 1/(m+r) by Def2;
+      hence abs(seq.m-0c) < p by A6,ABSVALUE:def 1,A1;
+    end;
+    hence thesis by A1,COMSEQ_2:def 5;
+  end;
+
+registration
+  let r be positive (real number);
+  cluster InvShift(r) -> convergent_to_0;
+  coherence
+  proof
+    set s = InvShift(r);
+    now let n;
+      1/(n+r) <> 0;
+      hence s.n <> 0c by Def2;
+    end;
+    hence s is non-zero by COMSEQ_1:4;
+    thus thesis by Th3;
+  end;
+end;
+
+registration
+  cluster convergent_to_0 Complex_Sequence;
+  existence
+  proof
+    take InvShift(1);
+    thus thesis;
+  end;
+end;
+
+registration
+  cluster convergent_to_0 -> non-zero convergent Complex_Sequence;
+  coherence by Def1;
+end;
+
+reconsider cs = NAT --> 0c as Complex_Sequence;
+
+registration
+  cluster constant Complex_Sequence;
+  existence
+  proof
+    take cs;
+    thus cs is constant;
+  end;
+end;
+
+theorem
+  seq is constant iff for n,m holds seq.n = seq.m
+  proof
+    thus seq is constant implies for n,m holds seq.n = seq.m
+      by VALUED_0:23;
+    assume that
+A5: for n,m holds seq.n = seq.m and
+A6: seq is non constant;
+    now let n be Nat;
+      consider n1 be Nat such that
+A7:   seq.n1 <> seq.n by A6,VALUED_0:def 18;
+      n1 in NAT & n in NAT by ORDINAL1:def 13;
+      hence contradiction by A5,A7;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for n holds (seq*Nseq).n = seq.(Nseq.n)
+  proof
+    let n;
+    dom (seq*Nseq) = NAT by FUNCT_2:def 1;
+    hence (seq*Nseq).n = seq.(Nseq.n) by FUNCT_1:22;
+  end;
+
+reserve h for convergent_to_0 Complex_Sequence;
+reserve c for constant Complex_Sequence;
+
+definition
+  let IT be PartFunc of COMPLEX,COMPLEX;
+  attr IT is REST-like means :Def3:
+  for h holds (h")(#)(IT/*h) is convergent &
+  lim ((h")(#)(IT/*h)) = 0;
+end;
+
+reconsider cf = COMPLEX --> 0c as Function of COMPLEX,COMPLEX;
+
+registration
+  cluster total REST-like PartFunc of COMPLEX,COMPLEX;
+  existence
+  proof
+    take f = cf;
+    thus f is total;
+    let h;
+    A1: now let n be Nat;
+X:  n in NAT by ORDINAL1:def 13;
+    dom f = COMPLEX by PARTFUN1:def 4; then
+A2: rng h c= dom f;
+    thus ((h")(#)(f/*h)).n = (h").n*((f/*h).n) by VALUED_1:5
+    .= (h").n*(f/.(h.n)) by A2,FUNCT_2:185,X
+    .= (h").n*0c by FUNCOP_1:13
+    .= 0c;
+  end; then
+  A3: (h")(#)(f/*h) is constant by VALUED_0:def 18;
+  ((h")(#)(f/*h)).0 = 0c by A1;
+  hence (h")(#)(f/*h) is convergent &
+  lim ((h")(#)(f/*h)) = 0c by A3,CFCONT_1:48,49;
+  end;
+end;
+
+definition
+  mode C_REST is total REST-like PartFunc of COMPLEX,COMPLEX;
+end;
+
+definition
+  let IT be PartFunc of COMPLEX,COMPLEX;
+  attr IT is linear means
+  :Def4:
+  ex a st for z holds IT/.z = a*z;
+end;
+
+registration
+  cluster total linear PartFunc of COMPLEX,COMPLEX;
+  existence
+  proof
+    defpred P[set] means $1 in COMPLEX;
+    deffunc F(Element of COMPLEX) = 1r*$1;
+    consider f such that
+    A1: (for a be Element of COMPLEX holds a in dom f iff P[a]) &
+    (for a st a in dom f holds f.a = F(a)) from SEQ_1:sch 3;
+    take f;
+    for y holds y in COMPLEX implies y in dom f by A1; then
+    COMPLEX c= dom f by TARSKI:def 3; then
+    A2: dom f = COMPLEX by XBOOLE_0:def 10;
+    hence f is total by PARTFUN1:def 4;
+    take 1r;
+    let z;
+    thus f/.z = f.z by A2,PARTFUN1:def 8
+    .= 1r*z by A2,A1;
+  end;
+end;
+
+definition
+  mode C_LINEAR is total linear PartFunc of COMPLEX,COMPLEX;
+end;
+
+reserve R, R1, R2 for C_REST;
+reserve L, L1, L2 for C_LINEAR;
+
+registration let L1,L2;
+  cluster L1+L2 -> total linear PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    consider a1 such that
+    A1: for z holds L1/.z = a1*z by Def4;
+    consider a2 such that
+    A2: for z holds L2/.z = a2*z by Def4;
+    now let z;
+      thus (L1+L2)/.z = L1/.z+L2/.z by CFUNCT_1:76
+      .= a1*z+L2/.z by A1
+      .= a1*z+a2*z by A2
+      .= (a1+a2)*z;
+    end;
+    hence L1+L2 is C_LINEAR by Def4;
+  end;
+  cluster L1-L2 -> total linear PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    consider a1 such that
+    A3: for z holds L1/.z = a1*z by Def4;
+    consider a2 such that
+    A4: for z holds L2/.z = a2*z by Def4;
+    now let z;
+      thus (L1-L2)/.z = L1/.z-L2/.z by CFUNCT_1:76
+      .= a1*z-L2/.z by A3
+      .= a1*z-a2*z by A4
+      .= (a1-a2)*z;
+    end;
+    hence thesis by Def4;
+  end;
+end;
+
+registration let a,L;
+  cluster a(#)L -> total linear PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    consider b such that
+    A1: for z holds L/.z = b*z by Def4;
+    now let z;
+      thus (a(#)L)/.z = a*L/.z by CFUNCT_1:77
+      .= a*(b*z) by A1
+      .= a*b*z;
+    end;
+    hence thesis by Def4;
+  end;
+end;
+
+registration let R1,R2;
+  cluster R1+R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    now let h;
+      A1: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by Def3;
+      A2: (h")(#)(R2/*h) is convergent & lim ((h")(#)(R2/*h)) = 0 by Def3;
+      A3: (h")(#)((R1+R2)/*h) = (h")(#)((R1/*h)+(R2/*h)) by CFCONT_1:29
+      .= ((h")(#)(R1/*h))+((h")(#)(R2/*h)) by COMSEQ_1:13;
+      hence (h")(#)((R1+R2)/*h) is convergent by A1,A2,COMSEQ_2:13;
+      thus lim ((h")(#)((R1+R2)/*h))
+      =lim ((h")(#)(R1/*h)) + lim ((h")(#)(R2/*h)) by A1,A2,A3,COMSEQ_2:14
+      .= 0 by A1, Def3;
+    end;
+    hence R1+R2 is C_REST by Def3;
+  end;
+  cluster R1-R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    now let h;
+      A4: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0c by Def3;
+      A5: (h")(#)(R2/*h) is convergent & lim ((h")(#)(R2/*h)) = 0c by Def3;
+      A6: (h")(#)((R1-R2)/*h) = (h")(#)((R1/*h)-(R2/*h)) by CFCONT_1:29
+      .= ((h")(#)(R1/*h))-((h")(#)(R2/*h)) by COMSEQ_1:18;
+      hence (h")(#)((R1-R2)/*h) is convergent by A4,A5,COMSEQ_2:25;
+      thus lim ((h")(#)((R1-R2)/*h)) = 0c-0c by A4,A5,A6,COMSEQ_2:26
+      .= 0c;
+    end;
+    hence R1-R2 is C_REST by Def3;
+ end;
+  cluster R1(#)R2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+ proof
+    now let h;
+      A7: (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0c by Def3;
+      A8: (h")(#)(R2/*h) is convergent & lim ((h")(#)(R2/*h)) = 0c by Def3;
+      A9: h is non-zero & h is convergent & lim h = 0c by Def1;
+      seq is non-zero implies seq" is non-zero
+      proof
+        assume that A10: seq is non-zero and
+        A11: not seq" is non-zero;
+        consider n1 such that
+        A12: (seq").n1 = 0c by A11,COMSEQ_1:4;
+        (seq.n1)" = (seq").n1 by VALUED_1:10;
+        hence contradiction by A10,A12,XCMPLX_1:203,COMSEQ_1:4;
+      end; then
+      A13: h" is non-zero;
+      A14: h(#)((h")(#)(R1/*h)) is convergent by A7,COMSEQ_2:29;
+      A15: lim (h(#)((h")(#)(R1/*h))) = 0*0 by A7,A9,COMSEQ_2:30
+      .= 0c;
+      A16: (h")(#)((R1(#)R2)/*h)
+      = ((R1/*h)(#)(R2/*h))/"h by CFCONT_1:29
+      .= ((R1/*h)(#)(R2/*h)(#)(h"))/"(h(#)(h")) by A13,COMSEQ_1:40
+      .= ((R1/*h)(#)(R2/*h)(#)(h"))(#)((h"")(#)(h")) by A13,COMSEQ_1:33
+      .= h(#)(h")(#)((R1/*h)(#)((h")(#)(R2/*h))) by COMSEQ_1:11
+      .= h(#)(h")(#)(R1/*h)(#)((h")(#)(R2/*h)) by COMSEQ_1:11
+      .= h(#)((h")(#)(R1/*h))(#)((h")(#)(R2/*h)) by COMSEQ_1:11;
+      hence (h")(#)((R1(#)R2)/*h) is convergent by A8,A14,COMSEQ_2:29;
+      thus lim ((h")(#)((R1(#)R2)/*h)) = 0c*0c by A8,A14,A15,A16,COMSEQ_2:30
+      .= 0c;
+    end;
+    hence thesis by Def3;
+  end;
+end;
+
+registration let a,R;
+  cluster a(#)R -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    now let h;
+      A1: (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by Def3;
+      A2: (h")(#)((a(#)R)/*h) = (h")(#)(a(#)(R/*h)) by CFCONT_1:30
+      .= a(#)((h")(#)(R/*h)) by COMSEQ_1:16;
+      hence (h")(#)((a(#)R)/*h) is convergent by A1;
+      thus lim ((h")(#)((a(#)R)/*h)) = a*0c by A1,A2,COMSEQ_2:18
+      .= 0c;
+    end;
+    hence thesis by Def3;
+  end;
+end;
+
+registration let L1,L2;
+  cluster L1(#)L2 -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    reconsider LL = L1(#)L2 as PartFunc of COMPLEX,COMPLEX;
+    LL is REST-like
+    proof
+    consider b1 such that
+    A1: for z holds L1/.z = b1*z by Def4;
+    consider b2 such that
+    A2: for z holds L2/.z = b2*z by Def4;
+    let h;
+      A3: h is convergent & lim h = 0c by Def1;
+      now let n;
+        A4: h.n <> 0c by COMSEQ_1:4;
+        thus ((h")(#)((L1(#)L2)/*h)).n = (h").n *((L1(#)L2)/*h).n by VALUED_1:5
+        .= (h").n*(L1(#)L2)/.(h.n) by FUNCT_2:192
+        .= (h").n*(L1/.(h.n)*L2/.(h.n)) by CFUNCT_1:76
+        .= (h").n*L1/.(h.n)*L2/.(h.n)
+        .= ((h.n)")*L1/.(h.n)*L2/.(h.n) by VALUED_1:10
+        .= ((h.n)")*((h.n)*b1)*L2/.(h.n) by A1
+        .= ((h.n)")*(h.n)*b1*L2/.(h.n)
+        .= 1r*b1*L2/.(h.n) by A4,XCMPLX_0:def 7
+        .= b1*(b2*(h.n)) by A2
+        .= b1*b2*(h.n)
+        .= ((b1*b2)(#)h).n by VALUED_1:6;
+      end; then
+      A5: (h")(#)((L1(#)L2)/*h) = (b1*b2)(#)h by FUNCT_2:113;
+      hence (h")(#)(LL/*h) is convergent;
+      thus lim ((h")(#)(LL/*h)) = (b1*b2)*0c by A3,A5,COMSEQ_2:18
+      .= 0c;
+  end;
+  hence thesis;
+end;
+end;
+
+registration let R,L;
+  cluster R(#)L -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence
+  proof
+    consider b1 such that
+    A1: for z holds L/.z = b1*z by Def4;
+    now let h;
+      A2: (h")(#)((R(#)L)/*h) = (h")(#)((R/*h)(#)(L/*h)) by CFCONT_1:29
+      .= ((h")(#)(R/*h))(#)(L/*h) by COMSEQ_1:11;
+      A3: h is convergent & lim h = 0c by Def1;
+      now let n;
+        thus (L/*h).n = L/.(h.n) by FUNCT_2:192
+        .= b1*(h.n) by A1
+        .= (b1(#)h).n by VALUED_1:6;
+      end; then
+      A4: (L/*h) = b1(#)h by FUNCT_2:113; then
+      A5: L/*h is convergent;
+      A6: lim (L/*h) = b1*0c by A3,A4,COMSEQ_2:18
+      .= 0c;
+      A7: (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c by Def3;
+      hence (h")(#)((R(#)L)/*h) is convergent by A2,A5,COMSEQ_2:29;
+      thus lim ((h")(#)((R(#)L)/*h)) = 0c*0c by A2,A5,A6,A7,COMSEQ_2:30
+      .= 0c;
+    end;
+    hence R(#)L is C_REST by Def3;
+  end;
+  cluster L(#)R -> total REST-like PartFunc of COMPLEX,COMPLEX;
+  coherence;
+end;
+
+definition
+  let z0 be Complex;
+  mode Neighbourhood of z0 -> Subset of COMPLEX means
+  :Def5:
+  ex g be Real st 0 < g & {y where y is Complex : |.y-z0.| < g} c= it;
+  existence
+  proof
+    set N = {y where y is Complex : |.y-z0.| < 1};
+    A1: N c= COMPLEX
+    proof
+      let z be set;
+      assume A2: z in {y where y is Complex : |.y-z0.| < 1};
+      consider y be Complex such that
+      A3: z = y and |.y-z0.| < 1 by A2;
+      thus z in COMPLEX by A3;
+    end;
+    take N;
+    thus thesis by A1;
+  end;
+end;
+
+theorem Th8:
+  for g be real number st 0 < g holds
+  {y where y is Complex : |.y-z0.| < g} is Neighbourhood of z0
+  proof
+    let g be real number such that
+    A1: g > 0;
+    A2: g in REAL by XREAL_0:def 1;
+    set N = {y where y is Complex : |.y-z0.| < g};
+    N c= COMPLEX
+    proof
+      let z be set;
+      assume A3: z in {y where y is Complex : |.y-z0.| < g};
+      consider y be Complex such that
+      A4: z = y and |.y-z0.| < g by A3;
+      thus z in COMPLEX by A4;
+    end;
+    hence thesis by A1,A2,Def5;
+  end;
+
+theorem Th9:
+  for N being Neighbourhood of z0 holds z0 in N
+  proof
+    let N be Neighbourhood of z0;
+    consider g be Real such that
+    A1: 0 < g and
+    A2: {z where z is Complex : |.z-z0.| < g} c= N by Def5;
+    |.z0-z0.| = 0 by COMPLEX1:130; then
+    z0 in {z where z is Complex : |.z-z0.| < g} by A1;
+    hence thesis by A2;
+  end;
+
+Th10:
+  for z0 be Complex
+  for N1,N2 being Neighbourhood of z0
+  ex N being Neighbourhood of z0 st N c= N1 & N c= N2
+  proof
+    let z0 be Complex;
+    let N1,N2 be Neighbourhood of z0;
+    consider a1 be Real such that
+    A1: 0 < a1 & {y where y is Complex : |.y-z0.| < a1} c= N1 by Def5;
+    consider a2 be Real such that
+    A2: 0 < a2 & {y where y is Complex : |.y-z0.| < a2} c= N2 by Def5;
+    set g = min(a1,a2);
+    A3: 0 < g by A1,A2,XXREAL_0:15;
+    A4: g <= a2 & g <= a1 by XXREAL_0:17;
+    A5: {y where y is Complex : |.y-z0.| < g}
+    c= {y where y is Complex : |.y-z0.| < a1}
+    proof
+      let z be set such that
+      A6: z in {y where y is Complex : |.y-z0.| < g};
+      consider y be Complex such that
+      A7: z = y & |.y-z0.| < g by A6;
+      |.y-z0.| < a1 by A4,A7,XXREAL_0:2;
+      hence z in {y1 where y1 is Complex : |.y1-z0.| < a1} by A7;
+    end;
+    A8: {y where y is Complex : |.y-z0.| < g}
+    c= {y where y is Complex : |.y-z0.| < a2}
+    proof
+      let z be set such that
+      A9: z in {y where y is Complex : |.y-z0.| < g};
+      consider y be Complex such that
+      A10: z = y & |.y-z0.| < g by A9;
+      |.y-z0.| < a2 by A4,A10,XXREAL_0:2;
+      hence z in {y1 where y1 is Complex : |.y1-z0.| < a2} by A10;
+    end;
+    take N = {y where y is Complex : |.y-z0.| < g};
+    thus thesis by A1,A2,A3,A5,A8,Th8,XBOOLE_1:1;
+  end;
+
+definition
+  let f;
+  let z0 be Complex;
+  pred f is_differentiable_in z0 means
+  :Def6:
+  ex N being Neighbourhood of z0 st N c= dom f & ex L,R st for z be Complex
+  st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
+end;
+
+definition
+  let f;
+  let z0 be Complex;
+  assume A1:f is_differentiable_in z0;
+  func diff(f,z0) -> Complex means
+  :Def7:
+  ex N being Neighbourhood of z0 st N c= dom f &
+  ex L,R st it = L/.1r & for z be Complex
+  st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
+  existence
+  proof
+    consider N being Neighbourhood of z0 such that A2: N c= dom f &
+    ex L, R st for z st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0)
+    by A1,Def6;
+    consider L,R such that
+    A3: for z be Complex st z in N holds
+    f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A2;
+    consider a be Complex such that
+    A4: for d be Complex holds L/.d = a*d by Def4;
+    take a;
+    L/.1r = a*1r by A4
+    .= a;
+    hence thesis by A2,A3;
+  end;
+  uniqueness
+  proof
+    let a, b be Complex;
+    assume that A5: ex N being Neighbourhood of z0 st N c= dom f &
+    ex L,R st a = L/.1r & for z st z in N holds
+    f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) and
+    A6: ex N being Neighbourhood of z0 st N c= dom f &
+    ex L,R st b = L/.1r & for z st z in N holds
+    f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0);
+    consider N being Neighbourhood of z0 such that
+    A7: N c= dom f & ex L,R st a = L/.1r & for z be Complex
+    st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A5;
+    consider L,R such that
+    A8: a = L/.1r & for z be Complex
+    st z in N holds f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A7;
+    consider N1 being Neighbourhood of z0 such that
+    A9: N1 c= dom f & ex L,R st b = L/.1r & for z st z in N1 holds
+    f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A6;
+    consider L1,R1 such that
+    A10: b = L1/.1r & for z st z in N1 holds
+    f/.z-f/.z0 = L1/.(z-z0)+R1/.(z-z0) by A9;
+    consider a1 such that A11: for b holds L/.b = a1*b by Def4;
+    consider b1 such that A12: for b holds L1/.b = b1*b by Def4;
+    A13: a = a1*1r by A8,A11;
+    A14: now let z be Complex;
+      assume A15: z in N & z in N1; then
+      A16: f/.z-f/.z0 = L/.(z-z0)+R/.(z-z0) by A8;
+      L/.(z-z0)+R/.(z-z0) = L1/.(z-z0)+R1/.(z-z0) by A10,A15,A16; then
+      a1*(z-z0)+R/.(z-z0) = L1/.(z-z0)+R1/.(z-z0) by A11; then
+      (a1*1r)*(z-z0)+R/.(z-z0) = (b1*1r)*(z-z0)+R1/.(z-z0) by A12;
+      hence a*(z-z0)+R/.(z-z0)
+      = b*(z-z0)+R1/.(z-z0) by A10,A12,A13;
+    end;
+    consider N0 be Neighbourhood of z0 such that
+    A17: N0 c= N & N0 c= N1 by Th10;
+    consider g be Real such that
+    A18: 0 < g & {y where y is Complex : |.y-z0.| < g} c= N0 by Def5;
+    deffunc F(Element of NAT) = (1/($1+2));
+    set s0=InvShift(2);
+    reconsider s0 as Complex_Sequence;
+    A20:s0 is convergent & lim s0 = 0 by Th3;
+    set s1 = g(#)s0;
+    A21: s1 is convergent & lim s1 = g*0 by A20,COMSEQ_2:18;
+    A22: now let n;
+      thus s1.n = g*s0.n by VALUED_1:6
+      .= g*(1/(n+2)) by Def2
+      .= g/(n+2);
+    end;
+    now let n;
+      s1.n = g/(n+2) by A22;
+      hence 0 <> s1.n by A18,XREAL_1:141;
+    end; then
+    A23: s1 is non-zero by COMSEQ_1:4;
+    reconsider h = s1 as convergent_to_0 Complex_Sequence by A21,A23,Def1;
+    A24: for n ex x be Complex st x in N & x in N1 & h.n = x-z0
+    proof
+      let n;
+      g/(n+2) in REAL; then
+      reconsider g0 = g/(n+2) as Complex by NUMBERS:11;
+      0+1 < n+1+1 by XREAL_1:8; then
+      A26: g/(n+2) < g/1 by A18,XREAL_1:78;
+      A27: |.z0+g0-z0.| = g/(n+2) by A18,ABSVALUE:def 1;
+      take x = z0+g0;
+      x in {y where y is Complex : |.y-z0.| < g} by A26,A27; then
+      x in N0 by A18;
+      hence thesis by A17,A22;
+    end;
+    A28: now let n be Nat;
+X:    n in NAT by ORDINAL1:def 13; then
+      ex x be Complex st x in N & x in N1 & h.n = x-z0 by A24; then
+      A29: a*(h.n)+R/.(h.n) = b*(h.n)+R1/.(h.n) by A14;
+      A30: h.n <> 0c by COMSEQ_1:4,X;
+      A31: (a*(h.n))/(h.n)+(R/.(h.n))/(h.n) = (b*(h.n)+R1/.(h.n))/(h.n)
+      by A29,XCMPLX_1:63;
+      A32: (a*(h.n))/(h.n) = a*((h.n)/(h.n))
+      .= a*1 by A30,XCMPLX_1:60
+      .= a;
+      A33: (b*(h.n))/(h.n) = b*((h.n)/(h.n))
+      .= b*1 by A30,XCMPLX_1:60
+      .= b;
+      dom R = COMPLEX by PARTFUN1:def 4; then
+      A34: rng h c= dom R;
+      dom R1 = COMPLEX by PARTFUN1:def 4; then
+      A35: rng h c= dom R1;
+      A36: (R/.(h.n))/(h.n) = (R/.(h.n))*(h".n) by VALUED_1:10
+      .= ((R/*h).n)*(h".n) by A34,FUNCT_2:186,X
+      .= ((h")(#)(R/*h)).n by VALUED_1:5;
+      (R1/.(h.n))/(h.n) = (R1/.(h.n))*(h".n) by VALUED_1:10
+      .= ((R1/*h).n)*(h".n) by A35,FUNCT_2:185,X
+      .= ((h")(#)(R1/*h)).n by VALUED_1:5;
+      hence
+      a-b = (((h")(#)(R1/*h)).n+-((h")(#)(R/*h)).n) by A31,A32,A33,A36
+      .= (((h")(#)(R1/*h)).n+(-((h")(#)(R/*h))).n) by VALUED_1:8
+      .= ((h")(#)(R1/*h)+-((h")(#)(R/*h))).n by VALUED_1:1,X;
+    end; then
+    A37: ((h")(#)(R1/*h))-((h")(#)(R/*h)) is constant by VALUED_0:def 18;
+    (((h")(#)(R1/*h))-((h")(#)(R/*h))).1 = a-b by A28; then
+    A38: lim (((h")(#)(R1/*h))-((h")(#)(R/*h))) = a-b by A37,CFCONT_1:50;
+    A39: (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0 by Def3;
+    (h")(#)(R1/*h) is convergent & lim ((h")(#)(R1/*h)) = 0 by Def3; then
+    a-b = 0-0 by A38,A39,COMSEQ_2:26;
+    hence thesis;
+  end;
+end;
+
+definition
+  let f;
+  attr f is differentiable means
+  :Def8:
+  for x st x in dom f holds f is_differentiable_in x;
+end;
+
+definition
+  let f,X;
+  pred f is_differentiable_on X means
+  :Def9:
+  X c= dom f & f|X is differentiable;
+end;
+
+theorem Th11:
+  f is_differentiable_on X implies X is Subset of COMPLEX
+  proof
+    assume f is_differentiable_on X; then
+    X c= dom f by Def9;
+    hence thesis by XBOOLE_1:1;
+  end;
+
+definition :: complex-membered set
+  let X be Subset of COMPLEX;
+  attr X is closed means
+  :Def10:
+  for s1 be Complex_Sequence
+  st rng s1 c= X & s1 is convergent holds lim s1 in X;
+end;
+
+definition
+  let X be Subset of COMPLEX;
+  attr X is open means
+  :Def11:
+  X` is closed;
+end;
+
+theorem Th12:
+  for X being Subset of COMPLEX st X is open
+  for z0 be Complex st z0 in X
+  ex N being Neighbourhood of z0 st N c= X
+  proof
+    let X be Subset of COMPLEX such that
+    A1: X is open;
+    let z0 be Complex;
+    assume that
+    A2: z0 in X and
+    A3: for N be Neighbourhood of z0 holds not N c= X;
+    A4: now let g be Real such that
+    A5: 0 < g;
+      set N = {y where y is Complex : |.y-z0.| < g};
+      N is  Neighbourhood of z0 by A5,Th8; then
+      not N c= X by A3; then
+      consider x be set such that
+      A6: x in N & not x in X by TARSKI:def 3;
+      consider s be Complex such that A7: x = s & |.s-z0.| < g by A6;
+      take s;
+      thus s in N by A7;
+      thus s in X` by A6,A7,XBOOLE_0:def 5;
+    end;
+    defpred P[Element of NAT,Complex] means
+    $2 in {y where y is Complex : |.y-z0.| < 1/($1+1)} & $2 in X`;
+    A8: for n ex s be Complex st P[n,s] by A4;
+    consider s1 be Function of NAT,COMPLEX such that
+    A9: for n being Element of NAT holds P[n,s1.n] from FUNCT_2:sch 3(A8);
+    A10: now let p be Real;
+      assume A: 0 < p;
+      consider n such that
+      A12: p" < n by SEQ_4:10;
+      p"+0 < n+1 by A12,XREAL_1:10; then
+      A13: 1/(n+1) < 1/p" by A,XREAL_1:78;
+      take n;
+      let m be Element of NAT;
+      assume n <= m; then
+      A14: n+1 <= m+1 by XREAL_1:8;
+      A15: 1/(m+1) <= 1/(n+1) by A14,XREAL_1:120;
+      s1.m in {y where y is Complex : |.y-z0.| < 1/(m+1)} by A9; then
+      consider y be Complex such that A16: s1.m = y & |.y-z0.| < 1/(m+1);
+      |.s1.m-z0.| < 1/(n+1) by A15,A16,XXREAL_0:2;
+      hence |.s1.m - z0.| < p by A13,XXREAL_0:2;
+    end; then
+    A17: s1 is convergent by COMSEQ_2:def 4; then
+    A18: lim s1 = z0 by A10,COMSEQ_2:def 5;
+    A19: rng s1 c= X`
+    proof
+      let y;
+      assume y in rng s1; then
+      consider y1 be set such that
+      A20: y1 in dom s1 and A21: s1.y1 = y by FUNCT_1:def 5;
+      reconsider y1 as Element of NAT by A20;
+      s1.y1 in X` by A9;
+      hence y in X` by A21;
+    end;
+    X` is closed by A1,Def11; then
+    z0 in COMPLEX \ X by A17,A18,A19,Def10;
+    hence contradiction by A2,XBOOLE_0:def 5;
+  end;
+
+theorem
+  for X being Subset of COMPLEX st X is open
+  for z0 be Complex st z0 in X holds
+  ex g be Real st {y where y is Complex : |.y-z0.| < g} c= X
+  proof
+    let X be Subset of COMPLEX such that
+    A1: X is open;
+    let z0 be Complex;
+    assume z0 in X; then
+    consider N be Neighbourhood of z0 such that
+    A2: N c= X by A1,Th12;
+    consider g be Real such that
+    A3: 0 < g & {y where y is Complex : |.y-z0.| < g}  c= N by Def5;
+    take g; thus thesis by A2,A3,XBOOLE_1:1;
+  end;
+
+theorem Th14:
+  for X being Subset of COMPLEX holds
+  ((for z0 be Complex st z0 in X holds ex N be Neighbourhood of z0 st N c= X)
+  implies X is open)
+  proof
+    let X be Subset of COMPLEX;
+    assume that A1: for z0 be Complex st z0 in X
+    holds ex N be Neighbourhood of z0 st N c= X and
+    A2: not X is open;
+    not X` is closed by A2,Def11; then
+    consider s1 be Function of NAT,COMPLEX such that
+    A3: rng s1 c= X` & s1 is convergent & not lim s1 in X` by Def10;
+    consider N be Neighbourhood of (lim s1) such that
+    A4: N c= X by A1,A3,SUBSET_1:50; consider g be Real such that
+    A5: 0 < g and A6: {y where y is Complex : |.y-(lim s1).| < g} c= N by Def5;
+    consider n such that
+    A7: for m be Element of NAT st n <= m holds |.(s1.m)-(lim s1).| < g
+    by A3,A5,COMSEQ_2:def 5;
+    |.s1.n-(lim s1).| < g by A7; then
+    s1.n in {y where y is Complex : |.y-(lim s1).| < g}; then
+    A8: s1.n in N by A6;
+    n in NAT; then
+    n in dom s1 by FUNCT_2:def 1; then
+    s1.n in rng s1 by FUNCT_1:def 5;
+    hence contradiction by A3,A4,A8,XBOOLE_0:def 5;
+  end;
+
+theorem
+  for X be Subset of COMPLEX holds X is open iff
+  for x be Complex st x in X
+  ex N be Neighbourhood of x st N c= X by Th12,Th14;
+
+theorem Th16:
+  for X be Subset of COMPLEX, z0 be Element of COMPLEX, r be Element of REAL st
+  X = {y where y is Complex : |.y-z0.| < r} holds X is open
+  proof
+    let X be Subset of COMPLEX,
+    z0 be Element of COMPLEX,
+    r be Element of REAL;
+    assume A1:X = {y where y is Complex : |.y-z0.| < r};
+    reconsider X0 = X as Subset of COMPLEX;
+    for x be Complex st x in X0 ex N be Neighbourhood of x st N c= X0
+    proof
+      let x be Complex;
+      assume x in X0; then
+      A2: ex y be Complex st x = y & |.y-z0.| < r by A1;
+      reconsider r1 = (r- |.x-z0.|)/2 as Real;
+      A3: r - |.x-z0.| > 0 by A2,XREAL_1:52;
+      set N = {y where y is Complex : |.y-x.| < r1};
+      reconsider N as Neighbourhood of x by Th8,A3,XREAL_1:217;
+      take N;
+        let z be set;
+        assume z in N; then
+        consider y1 be Complex
+        such that
+        A5: z = y1 & |.y1-x.| < r1;
+        A6: |.y1-z0.| <= |.y1-x.|+|.x-z0.| by COMPLEX1:149;
+        A7: |.y1-x.|+|.x-z0.| < r1+|.x-z0.| by A5,XREAL_1:10;
+        r1 < r- |.x-z0.| by A3,XREAL_1:218; then
+        r1+|.x-z0.| < (r- |.x-z0.|)+|.x-z0.| by XREAL_1:10; then
+        |.y1-x.|+|.x-z0.| < r by A7,XXREAL_0:2; then
+        |.y1-z0.| < r by A6,XXREAL_0:2;
+        hence thesis by A1,A5;
+    end;
+    hence thesis by Th14;
+  end;
+
+theorem
+  for X be Subset of COMPLEX,
+  z0 be Element of COMPLEX,
+  r be Element of REAL
+  st X = {y where y is Complex : |.y-z0.| <= r} holds X is closed
+  proof
+    let X be Subset of COMPLEX,
+    z0 be Element of COMPLEX,
+    r be Element of REAL;
+    assume A1:X = {y where y is Complex : |.y-z0.| <= r};
+    reconsider X0 = X as Subset of COMPLEX;
+    for s1 be Complex_Sequence
+    st rng s1 c= X0 & s1 is convergent holds lim s1 in X0
+    proof
+      let s1 be Complex_Sequence;
+      assume A2: rng s1 c= X0 & s1 is convergent;
+      reconsider s2 = NAT --> z0 as Complex_Sequence;
+      A3: s2 is convergent by CFCONT_1:48;
+      A4: for n be Element of NAT holds lim s2 = z0
+      proof
+        let n be Element of NAT;
+        lim s2 = s2.n by CFCONT_1:50
+        .= z0 by FUNCOP_1:13;
+        hence thesis;
+      end;
+      set s3 = s1-s2;
+      A5: s3 is convergent & lim s3 = lim s1-lim s2
+      by A2,A3,COMSEQ_2:25,COMSEQ_2:26; then
+      A6: s3 is convergent & lim |.s3.| = |.lim s3.| by COMSEQ_2:11;
+      A7: for n be Element of NAT holds (|.s3.|).n <= r
+      proof
+        let n be Element of NAT;
+        A8: s3.n = s1.n-z0
+        proof
+          now let n be Element of NAT;
+            s3.n = s1.n+(-s2).n by VALUED_1:1
+            .= s1.n-s2.n by VALUED_1:8;
+            hence s3.n = s1.n-z0 by FUNCOP_1:13;
+          end;
+          hence thesis;
+        end;
+        dom s1 = NAT by FUNCT_2:def 1; then
+        s1.n in rng s1 by FUNCT_1:def 5; then
+        s1.n in X0 by A2; then
+        ex y be Complex st y = s1.n & |.y-z0.| <= r by A1;
+        hence (|.s3.|).n <= r by A8,VALUED_1:18;
+      end;
+      reconsider s3 = s1-s2 as convergent
+      Complex_Sequence by A2,A3,COMSEQ_2:25;
+      reconsider s4 = NAT --> r as Real_Sequence;
+      A11: lim s4 = s4.0 by SEQ_4:41
+      .= r by FUNCOP_1:13;
+      for n be Element of NAT holds |.s3.|.n <= s4.n
+      proof
+        let n be Element of NAT;
+        (|.s3.|).n <= r by A7;
+        hence thesis by FUNCOP_1:13;
+      end; then
+      lim |.s3.| <= r by A11,SEQ_2:32; then
+      |.(lim s1)-z0.| <= r by A6,A5,A4;
+      hence lim s1 in X0 by A1;
+    end;
+    hence thesis by Def10;
+  end;
+
+registration
+  cluster open Subset of COMPLEX;
+  existence
+  proof
+    reconsider X = {y where y is Complex : |.y-0c.| < 1}
+    as Subset of COMPLEX by Th8;
+    X is open by Th16;
+    hence thesis;
+  end;
+end;
+
+reserve Z for open Subset of COMPLEX;
+
+theorem Th18:
+  f is_differentiable_on Z iff
+  Z c= dom f & for x st x in Z holds f is_differentiable_in x
+  proof
+    thus f is_differentiable_on Z implies Z c= dom f &
+    for x st x in Z holds f is_differentiable_in x
+    proof
+      assume A1: f is_differentiable_on Z;
+      hence
+      A2: Z c= dom f by Def9;
+      let x0;
+      assume A3: x0 in Z; then
+      AA: x0 in dom (f|Z) by A2,RELAT_1:86;
+      f|Z is differentiable by A1,Def9; then
+      f|Z is_differentiable_in x0 by AA,Def8; then
+      consider N being Neighbourhood of x0 such that
+      A4: N c= dom(f|Z) & ex L,R st for x st x in N holds
+      (f|Z)/.x-(f|Z)/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+      take N; dom(f|Z) = dom f/\Z by RELAT_1:90; then
+      dom(f|Z) c= dom f by XBOOLE_1:17;
+      hence N c= dom f by A4,XBOOLE_1:1;
+      A5: x0 in dom f/\ Z by A2,A3,XBOOLE_0:def 4;
+      consider L,R such that
+      A6: for x st x in N holds (f|Z)/.x-(f|Z)/.x0 = L/.(x-x0)+R/.(x-x0) by A4;
+      take L, R;
+      let x;
+      assume A7: x in N; then
+      (f|Z)/.x-(f|Z)/.x0 = L/.(x-x0)+R/.(x-x0) by A6; then
+      f/.x-(f|Z)/.x0 = L/.(x-x0)+R/.(x-x0) by A4,A7,PARTFUN2:32;
+      hence thesis by A5,PARTFUN2:34;
+    end;
+    assume
+    A8: Z c= dom f & for x st x in Z holds f is_differentiable_in x;
+    hence Z c= dom f;
+    let x0;
+    assume x0 in dom (f|Z); then
+    A9: x0 in dom f & x0 in Z by RELAT_1:86;
+    then f is_differentiable_in x0 by A8; then
+    consider N being Neighbourhood of x0 such that
+    A10: N c= dom f &
+    ex L,R st for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+    consider N1 being Neighbourhood of x0 such that
+    A11: N1 c= Z by A9,Th12;
+    consider N2 being Neighbourhood of x0 such that
+    A12: N2 c= N1 & N2 c= N by Th10;
+    take N2;
+    A13: N2 c= dom f by A10,A12,XBOOLE_1:1;
+    N2 c= Z by A11,A12,XBOOLE_1:1; then
+    N2 c= dom f/\Z by A13,XBOOLE_1:19;
+    hence A14: N2 c= dom(f|Z) by RELAT_1:90;
+    consider L,R such that
+    A15: for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A10;
+    take L, R;
+    let x; assume A16: x in N2; then
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A12,A15; then
+    A17: (f|Z)/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A14,A16,PARTFUN2:32;
+    x0 in N2 by Th9;
+    hence thesis by A14,A17,PARTFUN2:32;
+  end;
+
+theorem
+  f is_differentiable_on Y implies Y is open
+  proof
+    assume A1: f is_differentiable_on Y; then
+    A2: Y c= dom f by Def9;
+    now let x0 be Complex;
+      assume x0 in Y; then
+      A3: x0 in dom (f|Y) by A2,RELAT_1:86;
+      f|Y is differentiable by A1,Def9; then
+      f|Y is_differentiable_in x0 by A3,Def8; then
+      consider N being Neighbourhood of x0 such that
+      A4: N c= dom(f|Y) & ex L,R st for x st x in N holds
+      (f|Y)/.x-(f|Y)/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+      take N;
+      dom(f|Y) = dom f/\Y by RELAT_1:90; then
+      dom(f|Y) c= Y by XBOOLE_1:17;
+      hence N c= Y by A4,XBOOLE_1:1;
+    end;
+    hence thesis by Th14;
+  end;
+
+definition
+  let f, X;
+  assume A1:f is_differentiable_on X;
+  func f`|X -> PartFunc of COMPLEX,COMPLEX means
+  :Def12:
+  dom it = X & for x st x in X holds it/.x = diff(f,x);
+  existence
+  proof
+    defpred P[set] means $1 in X;
+    deffunc F(Element of COMPLEX) = diff(f,$1);
+    consider F being PartFunc of COMPLEX,COMPLEX such that
+    A2: (for x be Element of COMPLEX holds x in dom F iff P[x]) &
+    for x be Element of COMPLEX st x in dom F holds
+    F.x = F(x) from SEQ_1:sch 3;
+    take F;
+    for y st y in dom F holds y in X by A2; then
+    A3: dom F c= X by TARSKI:def 3;
+    now let y such that
+      A4: y in X;
+      X is Subset of COMPLEX by A1,Th11;
+      hence y in dom F by A2,A4;
+    end; then
+    X c= dom F by TARSKI:def 3;
+    hence dom F = X by A3,XBOOLE_0:def 10;
+    now let x;
+      assume x in X; then
+      A5: x in dom F by A2; then
+      F.x = diff(f,x) by A2;
+      hence F/.x = diff(f,x) by A5,PARTFUN1:def 8;
+    end;
+    hence thesis;
+  end;
+  uniqueness
+  proof
+    let F,G be PartFunc of COMPLEX,COMPLEX;
+    assume that
+    A6: dom F = X & for x st x in X holds F/.x = diff(f,x) and
+    A7: dom G = X & for x st x in X holds G/.x = diff(f,x);
+    now let x;
+    assume A8: x in dom F; then
+      F/.x = diff(f,x) by A6;
+      hence F/.x = G/.x by A6,A7,A8;
+    end;
+    hence thesis by A6,A7,PARTFUN2:3;
+  end;
+end;
+
+theorem
+  for f,Z st Z c= dom f & ex a1 st rng f = {a1} holds
+  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 0c
+  proof
+    let f, Z such that
+    A1: Z c= dom f;
+    given a1 such that
+    A2: rng f = {a1};
+    A3: now let x0;
+    assume A4: x0 in dom f; then
+      f.x0 in {a1} by A2,FUNCT_1:def 5; then
+      f/.x0 in {a1} by A4,PARTFUN1:def 8;
+      hence f/.x0 = a1 by TARSKI:def 1;
+    end;
+    set L = cf;
+    L/.z = 0c*z by FUNCOP_1:13; then
+    reconsider L as C_LINEAR by Def4;
+    set R = cf;
+    A5: dom R = COMPLEX by FUNCOP_1:19;
+    now let h;
+      A6: now let n be Nat;
+    A7: rng h c= dom R by A5;
+X:      n in NAT by ORDINAL1:def 13;
+        thus ((h")(#)(R/*h)).n = (h").n*((R/*h).n) by VALUED_1:5
+        .= (h").n*(R/.(h.n)) by A7,X,FUNCT_2:186
+        .= (h").n* 0c by FUNCOP_1:13
+        .= 0c;
+      end; then
+      A8: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+      ((h")(#)(R/*h)).0 = 0c by A6;
+      hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c
+      by A8,CFCONT_1:48,49;
+    end; then
+    reconsider R as C_REST by Def3;
+    A9: now let x0;
+    assume A10: x0 in Z; then
+      consider N being Neighbourhood of x0 such that
+      A11: N c= Z by Th12;
+      A12: N c= dom f by A1, A11, XBOOLE_1:1;
+      for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+      proof
+        let x;
+        assume x in N;
+        hence f/.x-f/.x0 = a1-f/.x0 by A3,A12
+        .= a1-a1 by A1,A3,A10
+        .= L/.(x-x0)+0c by FUNCOP_1:13
+        .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+      end;
+      hence f is_differentiable_in x0 by A12,Def6;
+    end;
+    hence
+    A15: f is_differentiable_on Z by A1,Th18;
+    let x0;
+    assume A16: x0 in Z; then
+    A17: f is_differentiable_in x0 by A9; then
+    ex N being Neighbourhood of x0 st N c= dom f &
+    ex L,R st for x st x in N holds
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6; then
+    consider N being Neighbourhood of x0 such that
+    A18: N c= dom f;
+    A19: for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+    proof
+      let x;
+      assume x in N;
+      hence f/.x-f/.x0 = a1-f/.x0 by A3,A18
+      .= a1-a1 by A1,A3,A16
+      .= L/.(x-x0)+0c by FUNCOP_1:13
+      .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+    end;
+    thus (f`|Z)/.x0 = diff(f,x0) by A15,A16,Def12
+    .= L/.1r by A17,A18,A19,Def7
+    .= 0c by FUNCOP_1:13;
+  end;
+
+registration let seq be non-zero Complex_Sequence, k be Nat;
+ cluster seq ^\k -> non-zero;
+ coherence
+  proof
+    now let n;
+      (seq ^\k).n = seq.(n+k) by NAT_1:def 3;
+      hence (seq ^\k).n <> 0c by COMSEQ_1:4;
+    end;
+    hence thesis by COMSEQ_1:4;
+  end;
+end;
+
+registration let h,n;
+  cluster h^\n -> convergent_to_0;
+  coherence
+  proof
+    h^\n is convergent_to_0
+    proof
+      A1: h is non-zero & h is convergent & lim h = 0 by Def1;
+      thus h^\n is non-zero;
+      thus thesis by A1,CFCONT_1:43;
+    end;
+    hence thesis;
+  end;
+end;
+
+theorem Th22:
+  (seq+seq1)^\k = (seq^\k)+(seq1^\k)
+  proof
+    now let n;
+      thus ((seq+seq1)^\k).n = (seq+seq1).(n+k) by NAT_1:def 3
+      .= seq.(n+k)+seq1.(n+k) by VALUED_1:1
+      .= (seq^\k).n+seq1.(n+k) by NAT_1:def 3
+      .= (seq^\k).n+(seq1^\k).n by NAT_1:def 3
+      .= ((seq^\k)+(seq1^\k)).n by VALUED_1:1;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th23:
+  (seq-seq1)^\k = (seq^\k)-(seq1^\k)
+  proof
+    now let n; thus
+      ((seq-seq1)^\k).n
+      = (seq+-seq1).(n+k) by NAT_1:def 3
+      .= seq.(n+k)+(-seq1).(n+k) by VALUED_1:1
+      .= seq.(n+k)+-seq1.(n+k) by VALUED_1:8
+      .= (seq^\k).n-seq1.(n+k) by NAT_1:def 3
+      .= (seq^\k).n+-(seq1^\k).n by NAT_1:def 3
+      .= (seq^\k).n+(-(seq1^\k)).n by VALUED_1:8
+      .= ((seq^\k)-(seq1^\k)).n by VALUED_1:1;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th24:
+  (seq")^\k = (seq^\k)"
+  proof
+    now let n;
+      thus ((seq")^\k).n = (seq").(n+k) by NAT_1:def 3
+      .= (seq.(n+k))" by VALUED_1:10
+      .= ((seq^\k).n)" by NAT_1:def 3
+      .= ((seq^\k)").n by VALUED_1:10;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th25:
+  (seq(#)seq1)^\k = (seq^\k)(#)(seq1^\k)
+  proof
+    now let n;
+      thus ((seq(#)seq1)^\k).n = (seq(#)seq1).(n+k) by NAT_1:def 3
+      .= seq.(n+k)*seq1.(n+k) by VALUED_1:5
+      .= (seq^\k).n*seq1.(n+k) by NAT_1:def 3
+      .= (seq^\k).n*(seq1^\k).n by NAT_1:def 3
+      .= ((seq^\k)(#)(seq1^\k)).n by VALUED_1:5;
+    end;
+    hence thesis by FUNCT_2:113;
+  end;
+
+theorem Th26:
+  for x0 be Complex for N being Neighbourhood of x0 st
+  f is_differentiable_in x0 & N c= dom f holds
+  for h,c st rng c = {x0} & rng (h+c) c= N holds
+  h"(#)(f/*(h+c)-f/*c) is convergent & diff(f,x0) = lim (h"(#)(f/*(h+c)-f/*c))
+  proof
+    let x0 be Complex;
+    let N be Neighbourhood of x0;
+    assume
+    A1: f is_differentiable_in x0 & N c= dom f;
+    let h, c such that
+    A2: rng c = {x0} & rng (h+c) c= N;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f &
+    ex L,R st for x st x in N1 holds
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A1,Def6;
+    consider L,R such that
+    A4: for x st x in N1 holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A3;
+    consider N2 be Neighbourhood of x0 such that
+    A5: N2 c= N & N2 c= N1 by Th10;
+    consider g be Real such that
+    A6: 0 < g & {y where y is Complex : |.y-x0.| < g} c= N2 by Def5;
+    |.x0-x0.| = 0 by COMPLEX1:130; then
+    x0 in {y where y is Complex : |.y-x0.| < g} by A6; then
+    A7: x0 in N2 by A6;
+    ex n st rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2
+    proof
+      A8: c is convergent by CFCONT_1:48;
+      x0 in rng c by A2,TARSKI:def 1; then
+      A9: lim c = x0 by CFCONT_1:49;
+      h is convergent & lim h = 0 by Def1; then
+      A11: lim (h+c) = 0+x0 by A8,A9,COMSEQ_2:14
+      .= x0;
+      h+c is convergent by A8,COMSEQ_2:13; then
+      consider n such that
+      A12: for m being Element of NAT st n <= m holds |.(h+c).m-x0.| < g
+      by A6,A11,COMSEQ_2:def 5;
+      A13: rng (c^\n) = {x0} by A2,VALUED_0:26;
+      take n;
+      thus rng (c^\n) c= N2
+      proof
+        let y;
+        assume y in rng (c^\n);
+        hence y in N2 by A7,A13,TARSKI:def 1;
+      end;
+      let y;
+      assume y in rng ((h+c)^\n); then
+      consider m such that
+      A14: y = ((h+c)^\n).m by FUNCT_2:190;
+      n+0 <= n+m by XREAL_1:9; then
+      |.(h+c).(n+m)-x0.| < g by A12; then
+      A15: |.((h+c)^\n).m-x0.| < g by NAT_1:def 3;
+      reconsider y1 = y as Complex by A14;
+      y1 in {z where z is Complex : |.z-x0.| < g} by A14,A15;
+      hence y in N2 by A6;
+    end; then
+    consider n such that
+    A16: rng (c^\n) c= N2 & rng ((h+c)^\n) c= N2;
+    A17: rng (c^\n) c= dom f
+    proof
+      let y;
+      A18: rng (c^\n) = rng c by VALUED_0:26;
+      assume y in rng (c^\n); then
+      y = x0 by A2,A18,TARSKI:def 1; then
+      y in N by A5,A7;
+      hence thesis by A1;
+    end;
+    A19: rng ((h+c)^\n) c= dom f
+    proof
+      let y;
+      assume y in rng ((h+c)^\n); then
+      y in N2 by A16; then
+      y in N by A5;
+      hence y in dom f by A1;
+    end;
+    A20: rng c c= dom f
+    proof
+      let y;
+      assume y in rng c; then
+      y = x0 by A2,TARSKI:def 1; then
+      y in N by A5,A7;
+      hence thesis by A1;
+    end;
+    A21: rng (h+c) c= dom f
+    proof
+      let y;
+      assume y in rng (h+c); then
+      y in N by A2;
+      hence y in dom f by A1;
+    end;
+    A22: for x st x in N2 holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A4,A5;
+    A23: for k holds f/.(((h+c)^\n).k)-f/.((c^\n).k)
+    = L/.((h^\n).k)+R/.((h^\n).k)
+    proof
+      let k;
+      ((h+c)^\n).k in rng ((h+c)^\n) by FUNCT_2:189; then
+      A24: ((h+c)^\n).k in N2 by A16;
+      A25: ((h+c)^\n).k-(c^\n).k
+      = (h+c).(k+n)-(c^\n).k by NAT_1:def 3
+      .= h.(k+n)+c.(k+n)-(c^\n).k by VALUED_1:1
+      .= (h^\n).k+c.(k+n)-(c^\n).k by NAT_1:def 3
+      .= (h^\n).k+(c^\n).k-(c^\n).k by NAT_1:def 3
+      .= (h^\n).k;
+      A26: (c^\n).k in rng (c^\n) by FUNCT_2:189;
+      rng (c^\n) = rng c by VALUED_0:26; then
+      (c^\n).k = x0 by A2,A26,TARSKI:def 1;
+      hence thesis by A4,A5,A24,A25;
+    end;
+    A29: for k holds f/*((h+c)^\n)-f/*(c^\n) = L/*(h^\n)+R/*(h^\n)
+    proof
+      now let k;
+        thus (f/*((h+c)^\n)-f/*(c^\n)).k
+        = (f/*((h+c)^\n)).k-(f/*(c^\n)).k by CFCONT_1:2
+        .= f/.(((h+c)^\n).k)-(f/*(c^\n)).k by A19,FUNCT_2:186
+        .= f/.(((h+c)^\n).k)-f/.((c^\n).k) by A17,FUNCT_2:186
+        .= L/.((h^\n).k)+R/.((h^\n).k) by A23
+        .= (L/*(h^\n)).k+R/.((h^\n).k) by FUNCT_2:192
+        .= (L/*(h^\n)).k+(R/*(h^\n)).k by FUNCT_2:192
+        .= (L/*(h^\n)+R/*(h^\n)).k by VALUED_1:1;
+      end;
+      hence thesis by FUNCT_2:113;
+    end;
+    A30: (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent &
+    lim ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)") = L/.1r
+    proof
+      deffunc F(Element of NAT) = L/.1r+((R/*(h^\n))(#)(h^\n)").$1;
+      consider s1 such that
+      A31: for k holds s1.k = F(k) from COMSEQ_1:sch 1;
+      consider x such that
+      A32: for b1 holds L/.b1 = x*b1 by Def4;
+      A33: L/.1r = x*1r by A32
+      .= x;
+      now let m;
+        A34: (h^\n).m <> 0c by COMSEQ_1:4;
+        thus ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)").m
+        = ((L/*(h^\n)+R/*(h^\n)).m)*((h^\n)").m by VALUED_1:5
+        .= ((L/*(h^\n)).m+(R/*(h^\n)).m) *((h^\n)").m by VALUED_1:1
+        .= ((L/*(h^\n)).m)*((h^\n)").m+((R/*(h^\n)).m)*((h^\n)").m
+        .= ((L/*(h^\n)).m)*((h^\n)").m+((R/*(h^\n))(#)(h^\n)").m by VALUED_1:5
+        .= ((L/*(h^\n)).m)*((h^\n).m)"+((R/*(h^\n))(#)(h^\n)").m by VALUED_1:10
+        .= (L/.((h^\n).m))*((h^\n).m)"+((R/*(h^\n))(#)(h^\n)").m
+          by FUNCT_2:192
+        .= (x*((h^\n).m))*((h^\n).m)"+((R/*(h^\n))(#)(h^\n)").m by A32
+        .= x*(((h^\n).m)*((h^\n).m)")+((R/*(h^\n))(#)(h^\n)").m
+        .= x*1r+((R/*(h^\n))(#)(h^\n)").m by A34,XCMPLX_0:def 7
+        .= s1.m by A31,A33;
+      end; then
+      A35: (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" = s1 by FUNCT_2:113;
+      A36: now let r be Real such that
+      A37: 0 < r;
+        ((h^\n)")(#)(R/*(h^\n)) is convergent
+        & lim (((h^\n)")(#)(R/*(h^\n))) = 0 by Def3; then
+        consider m being Element of NAT such that
+        A38: for k st m <= k holds abs((((h^\n)")(#)(R/*(h^\n))).k-0c) < r
+        by A37,COMSEQ_2:def 5;
+        take n1 = m;
+        let k such that
+        A39: n1 <= k;
+        abs(s1.k-L/.1r) = abs(L/.1r+((R/*(h^\n))(#)(h^\n)").k-L/.1r ) by A31
+        .= abs((((h^\n)")(#)(R/*(h^\n))).k-0c);
+        hence abs(s1.k-L/.1r) < r by A38,A39;
+      end;
+      hence (L/*(h^\n)+R/*(h^\n))(#)(h^\n)" is convergent
+        by A35,COMSEQ_2:def 4;
+      hence thesis by A35,A36,COMSEQ_2:def 5;
+    end;
+    A40: N2 c= dom f by A1,A5,XBOOLE_1:1;
+    A41: ((L/*(h^\n)+R/*(h^\n))(#)(h^\n)")
+     = ((f/*((h+c)^\n)-f/*(c^\n))(#)(h^\n)") by A29
+    .= ((((f/*(h+c))^\n)-f/*(c^\n))(#)(h^\n)") by A21,VALUED_0:27
+    .= ((((f/*(h+c))^\n)-((f/*c)^\n))(#)(h^\n)") by A20,VALUED_0:27
+    .= ((((f/*(h+c))-(f/*c))^\n)(#)(h^\n)") by Th23
+    .= ((((f/*(h+c))-(f/*c))^\n)(#)((h")^\n)) by Th24
+    .= ((((f/*(h+c))-(f/*c))(#) h")^\n) by Th25; then
+    A42: L/.1r = lim ((h")(#)((f/*(h+c))-(f/*c))) by A30,CFCONT_1:45;
+    thus h" (#) (f/*(h+c)-f/*c) is convergent by A30,A41,CFCONT_1:44;
+    thus diff(f,x0) = lim (h"(#)(f/*(h+c)-f/*c)) by A1,A22,A40,A42,Def7;
+  end;
+
+theorem Th27:
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
+  holds f1+f2 is_differentiable_in x0 &
+  diff(f1+f2,x0) = diff(f1,x0)+diff(f2,x0)
+  proof
+    let f1,f2,x0;
+    assume that
+    A1: f1 is_differentiable_in x0 and
+    A2: f2 is_differentiable_in x0;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f1 &
+    ex L, R st for x st x in N1 holds
+    f1/.x-f1/.x0 = L/.(x-x0)+R/.(x-x0) by A1,Def6;
+    consider L1, R1 such that
+    A4: for x st x in N1 holds f1/.x-f1/.x0 = L1/.(x-x0)+R1/.(x-x0) by A3;
+    consider N2 be Neighbourhood of x0 such that
+    A5: N2 c= dom f2 & ex L,R st for x st x in N2 holds
+    f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0) by A2,Def6;
+    consider L2,R2 such that
+    A6: for x st x in N2 holds
+    f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A5;
+    consider N be Neighbourhood of x0 such that
+    A7: N c= N1 & N c= N2 by Th10;
+    reconsider L = L1+L2 as C_LINEAR;
+    reconsider R = R1+R2 as C_REST;
+    A10: N c= dom f1 by A3,A7,XBOOLE_1:1;
+    N c= dom f2 by A5,A7,XBOOLE_1:1; then
+    N /\ N c= dom f1/\ dom f2 by A10,XBOOLE_1:27; then
+    A11: N c= dom (f1+f2) by VALUED_1:def 1;
+    A12: now let x;
+      assume
+      A13: x in N; A14: x0 in N by Th9;
+      thus (f1+f2)/.x-(f1+f2)/.x0 = (f1/.x+f2/.x)-(f1+f2)/.x0
+      by A11,A13,CFUNCT_1:3
+      .= f1/.x+f2/.x-(f1/.x0+f2/.x0) by A11,A14,CFUNCT_1:3
+      .= (f1/.x-f1/.x0)+(f2/.x-f2/.x0)
+      .= L1/.(x-x0)+R1/.(x-x0)+(f2/.x-f2/.x0) by A4,A7,A13
+      .= L1/.(x-x0)+R1/.(x-x0)+(L2/.(x-x0)+R2/.(x-x0)) by A6,A7,A13
+      .= (L1/.(x-x0)+L2/.(x-x0))+(R1/.(x-x0)+R2/.(x-x0))
+      .= L/.(x-x0)+(R1/.(x-x0)+R2/.(x-x0)) by CFUNCT_1:76
+      .= L/.(x-x0)+R/.(x-x0) by CFUNCT_1:76;
+    end;
+    hence f1+f2 is_differentiable_in x0 by A11,Def6;
+    hence diff(f1+f2,x0) = L/.1r by A11,A12,Def7
+    .= L1/.1r+L2/.1r by CFUNCT_1:76
+    .= diff(f1,x0)+L2/.1r by A1,A3,A4,Def7
+    .= diff(f1,x0)+diff(f2,x0) by A2,A5,A6,Def7;
+  end;
+
+theorem Th28:
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0
+  holds f1-f2 is_differentiable_in x0 &
+  diff(f1-f2,x0) = diff(f1,x0)-diff(f2,x0)
+  proof
+    let f1,f2,x0;
+    assume that
+    A1: f1 is_differentiable_in x0 and
+    A2: f2 is_differentiable_in x0;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f1 & ex L,R st for x st x in N1 holds
+    f1/.x-f1/.x0 = L/.(x-x0)+R/.(x-x0) by A1,Def6;
+    consider L1,R1 such that
+    A4: for x st x in N1 holds f1/.x-f1/.x0 = L1/.(x-x0)+R1/.(x-x0) by A3;
+    consider N2 be Neighbourhood of x0 such that
+    A5: N2 c= dom f2 & ex L,R st for x st x in N2 holds
+    f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0) by A2,Def6;
+    consider L2,R2 such that
+    A6: for x st x in N2 holds f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A5;
+    consider N be Neighbourhood of x0 such that
+    A7: N c= N1 & N c= N2 by Th10;
+    reconsider L = L1-L2 as C_LINEAR;
+    reconsider R = R1-R2 as C_REST;
+    A10: N c= dom f1 by A3,A7,XBOOLE_1:1;
+    N c= dom f2 by A5,A7,XBOOLE_1:1; then
+    N /\ N c= dom f1/\ dom f2 by A10,XBOOLE_1:27; then
+    A11: N c= dom (f1-f2) by CFUNCT_1:4;
+    A12: now let x;
+    assume
+    A13: x in N;
+    A14: x0 in N by Th9;
+      thus (f1-f2)/.x-(f1-f2)/.x0 = (f1/.x-f2/.x)-(f1-f2)/.x0
+      by A11,A13,CFUNCT_1:4
+      .= f1/.x-f2/.x-(f1/.x0-f2/.x0) by A11,A14,CFUNCT_1:4
+      .= f1/.x-f1/.x0-(f2/.x-f2/.x0)
+      .= L1/.(x-x0)+R1/.(x-x0)-(f2/.x-f2/.x0) by A4,A7,A13
+      .= L1/.(x-x0)+R1/.(x-x0)-(L2/.(x-x0)+R2/.(x-x0)) by A6,A7,A13
+      .= L1/.(x-x0)-L2/.(x-x0)+(R1/.(x-x0)-R2/.(x-x0))
+      .= L/.(x-x0)+(R1/.(x-x0)-R2/.(x-x0)) by CFUNCT_1:76
+      .= L/.(x-x0)+R/.(x-x0) by CFUNCT_1:76;
+    end;
+    hence f1-f2 is_differentiable_in x0 by A11,Def6;
+    hence diff(f1-f2,x0) = L/.1r by A11,A12,Def7
+    .= L1/.1r-L2/.1r by CFUNCT_1:76
+    .= diff(f1,x0)-L2/.1r by A1,A3,A4,Def7
+    .= diff(f1,x0)-diff(f2,x0) by A2,A5,A6,Def7;
+  end;
+
+theorem Th29:
+  for a,f,x0 st f is_differentiable_in x0 holds
+  a(#)f is_differentiable_in x0 & diff((a(#)f),x0) = a*diff(f,x0)
+  proof
+    let a,f,x0;
+    assume
+    A1: f is_differentiable_in x0; then
+    consider N1 be Neighbourhood of x0 such that
+    A2: N1 c= dom f & ex L,R st for x st x in N1 holds
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+    consider L1,R1 such that
+    A3: for x st x in N1 holds f/.x-f/.x0 = L1/.(x-x0)+R1/.(x-x0) by A2;
+    reconsider L = a(#)L1 as C_LINEAR;
+    reconsider R = a(#)R1 as C_REST;
+    A6: N1 c= dom(a(#)f) by A2,VALUED_1:def 5;
+    A7: now let x;
+      assume
+      A8: x in N1;
+      A9: x0 in N1 by Th9;
+      thus (a(#)f)/.x-(a(#)f)/.x0 = a*(f/.x)-(a(#)f)/.x0 by A6,A8,CFUNCT_1:7
+      .= a*f/.x-a*f/.x0 by A6,A9,CFUNCT_1:7
+      .= a*(f/.x-f/.x0)
+      .= a*(L1/.(x-x0)+R1/.(x-x0)) by A3,A8
+      .= a*L1/.(x-x0)+a*R1/.(x-x0)
+      .= L/.(x-x0)+a*R1/.(x-x0) by CFUNCT_1:77
+      .= L/.(x-x0)+R/.(x-x0) by CFUNCT_1:77;
+    end;
+    hence a(#)f is_differentiable_in x0 by A6,Def6;
+    hence diff((a(#)f),x0) = L/.1r by A6,A7,Def7
+    .= a*L1/.1r by CFUNCT_1:77
+    .= a*diff(f,x0) by A1,A2,A3,Def7;
+  end;
+
+theorem Th30:
+  for f1,f2,x0 st f1 is_differentiable_in x0 & f2 is_differentiable_in x0 holds
+  f1(#)f2 is_differentiable_in x0 &
+  diff(f1(#)f2,x0) = (f2/.x0)*diff(f1,x0)+(f1/.x0)*diff(f2,x0)
+  proof
+    let f1,f2,x0;
+    assume that
+    A1: f1 is_differentiable_in x0 and
+    A2: f2 is_differentiable_in x0;
+    consider N1 be Neighbourhood of x0 such that
+    A3: N1 c= dom f1 & ex L,R st for x st x in N1 holds
+    f1/.x-f1/.x0 = L/.(x-x0)+R/.(x-x0) by A1,Def6;
+    consider L1,R1 such that
+    A4: for x st x in N1 holds f1/.x-f1/.x0 = L1/.(x-x0)+R1/.(x-x0) by A3;
+    consider N2 be Neighbourhood of x0 such that
+    A5: N2 c= dom f2 & ex L,R st for x st x in N2 holds
+    f2/.x-f2/.x0 = L/.(x-x0)+R/.(x-x0) by A2,Def6;
+    consider L2,R2 such that
+    A6: for x st x in N2 holds f2/.x-f2/.x0 = L2/.(x-x0)+R2/.(x-x0) by A5;
+    consider N be Neighbourhood of x0 such that
+    A7: N c= N1 & N c= N2 by Th10;
+    reconsider L11 = (f2/.x0)(#)L1 as C_LINEAR;
+    reconsider L12 = (f1/.x0)(#)L2 as C_LINEAR;
+    reconsider L = L11+L12 as C_LINEAR;
+    reconsider R11 = (f2/.x0)(#)R1 as C_REST;
+    reconsider R12 = (f1/.x0)(#)R2 as C_REST;
+    reconsider R13 = R11+R12 as C_REST;
+    reconsider R14 = L1(#)L2 as C_REST;
+    reconsider R15 = R13+R14 as C_REST;
+    reconsider R16 = R1(#)L2 as C_REST;
+    reconsider R17 = R1(#)R2 as C_REST;
+    reconsider R18 = R2(#)L1 as C_REST;
+    reconsider R19 = R16+R17 as C_REST;
+    reconsider R20 = R19+R18 as C_REST;
+    reconsider R = R15+R20 as C_REST;
+    A10: N c= dom f1 by A3,A7,XBOOLE_1:1;
+    N c= dom f2 by A5,A7,XBOOLE_1:1; then
+    N/\ N c= dom f1/\ dom f2 by A10,XBOOLE_1:27; then
+    A11: N c= dom (f1(#)f2) by VALUED_1:def 4;
+    A12: now let x;
+    assume A13: x in N;
+    A14: x0 in N by Th9;
+    A15: f1/.x-f1/.x0+f1/.x0 = L1/.(x-x0)+R1/.(x-x0)+f1/.x0 by A4,A7,A13;
+      thus (f1(#)f2)/.x-(f1(#)f2)/.x0 = (f1/.x)*(f2/.x)-(f1(#)f2)/.x0
+      by A11,A13,CFUNCT_1:5
+      .= (f1/.x)*(f2/.x)+-(f1/.x)*(f2/.x0)+(f1/.x)*(f2/.x0)-(f1/.x0)*(f2/.x0)
+         by A11,A14,CFUNCT_1:5
+      .= (f1/.x)*((f2/.x)-(f2/.x0))+((f1/.x)-(f1/.x0))*(f2/.x0)
+      .= (f1/.x)*((f2/.x)-(f2/.x0))+(L1/.(x-x0)+R1/.(x-x0))*(f2/.x0)
+         by A4,A7,A13
+      .= (f1/.x)*((f2/.x)-(f2/.x0))+((f2/.x0)*L1/.(x-x0)+R1/.(x-x0)*(f2/.x0))
+      .= (f1/.x)*((f2/.x)-(f2/.x0))+(L11/.(x-x0)+(f2/.x0)*R1/.(x-x0))
+         by CFUNCT_1:77
+      .= (L1/.(x-x0)+R1/.(x-x0)+f1/.x0)*((f2/.x)
+         -(f2/.x0))+(L11/.(x-x0)+R11/.(x-x0)) by A15,CFUNCT_1:77
+      .= (L1/.(x-x0)+R1/.(x-x0)+f1/.x0)*(L2/.(x-x0)+R2/.(x-x0))
+         +(L11/.(x-x0)+R11/.(x-x0)) by A6,A7,A13
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +((f1/.x0)*L2/.(x-x0)+(f1/.x0)*R2/.(x-x0))+(L11/.(x-x0)+R11/.(x-x0))
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +(L12/.(x-x0)+(f1/.x0)*R2/.(x-x0))+(L11/.(x-x0)+R11/.(x-x0))
+         by CFUNCT_1:77
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +(L12/.(x-x0)+R12/.(x-x0))+(L11/.(x-x0)+R11/.(x-x0)) by CFUNCT_1:77
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +(L12/.(x-x0)+(L11/.(x-x0)+(R11/.(x-x0)+R12/.(x-x0))))
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +(L12/.(x-x0)+(L11/.(x-x0)+R13/.(x-x0))) by CFUNCT_1:76
+      .= (L1/.(x-x0)+R1/.(x-x0))*(L2/.(x-x0)+R2/.(x-x0))
+         +(L11/.(x-x0)+L12/.(x-x0)+R13/.(x-x0))
+      .= (L1/.(x-x0)*L2/.(x-x0)+L1/.(x-x0)*R2/.(x-x0))+R1/.(x-x0)*(L2/.(x-x0)
+         +R2/.(x-x0))+(L/.(x-x0)+R13/.(x-x0)) by CFUNCT_1:76
+      .= R14/.(x-x0)+R2/.(x-x0)*L1/.(x-x0)+R1/.(x-x0)*(L2/.(x-x0)+R2/.(x-x0))
+         +(L/.(x-x0)+R13/.(x-x0)) by CFUNCT_1:76
+      .= R14/.(x-x0)+R18/.(x-x0)+(R1/.(x-x0)*L2/.(x-x0)+R1/.(x-x0)*R2/.(x-x0))
+         +(L/.(x-x0)+R13/.(x-x0)) by CFUNCT_1:76
+      .= R14/.(x-x0)+R18/.(x-x0)+(R16/.(x-x0)+R1/.(x-x0)*R2/.(x-x0))
+         +(L/.(x-x0)+R13/.(x-x0)) by CFUNCT_1:76
+      .= R14/.(x-x0)+R18/.(x-x0)+(R16/.(x-x0)+R17/.(x-x0))
+         +(L/.(x-x0)+R13/.(x-x0)) by CFUNCT_1:76
+      .= R14/.(x-x0)+R18/.(x-x0)+R19/.(x-x0)+(L/.(x-x0)+R13/.(x-x0))
+         by CFUNCT_1:76
+      .= R14/.(x-x0)+(R19/.(x-x0)+R18/.(x-x0))+(L/.(x-x0)+R13/.(x-x0))
+      .= L/.(x-x0)+R13/.(x-x0)+(R14/.(x-x0)+R20/.(x-x0)) by CFUNCT_1:76
+      .= L/.(x-x0)+(R13/.(x-x0)+R14/.(x-x0)+R20/.(x-x0))
+      .= L/.(x-x0)+(R15/.(x-x0)+R20/.(x-x0)) by CFUNCT_1:76
+      .= L/.(x-x0)+R/.(x-x0) by CFUNCT_1:76;
+    end;
+    hence f1(#)f2 is_differentiable_in x0 by A11,Def6;
+    hence diff(f1(#)f2,x0) = L/.1r by A11,A12,Def7
+    .= L11/.1r+L12/.1r by CFUNCT_1:76
+    .= f2/.x0*L1/.1r+L12/.1r by CFUNCT_1:77
+    .= f2/.x0*L1/.1r+f1/.x0 *L2/.1r by CFUNCT_1:77
+    .= f2/.x0*diff(f1,x0)+f1/.x0*L2/.1r by A1,A3,A4,Def7
+    .= f2/.x0*diff(f1,x0)+f1/.x0*diff(f2,x0) by A2,A5,A6,Def7;
+  end;
+
+theorem
+  for f,Z st Z c= dom f & f|Z = id Z holds
+  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 1r
+  proof
+    let f, Z;
+    assume that
+    A1: Z c= dom f and
+    A2: f|Z = id Z;
+    reconsider L = id COMPLEX as PartFunc of COMPLEX,COMPLEX;
+    P0: COMPLEX c= COMPLEX;
+    for b holds L/.b = 1r*b by PARTFUN2:12,P0; then
+    reconsider L as C_LINEAR by Def4;
+    set R = cf;
+    A3: dom R = COMPLEX by FUNCOP_1:19;
+    now let h;
+    A4: now let n be Nat;
+X:      n in NAT by ORDINAL1:def 13;
+    A5: rng h c= dom R by A3;
+        thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by VALUED_1:5
+        .= (h").n*(R/.(h.n)) by A5,FUNCT_2:186,X
+        .= (h".n)*0c by FUNCOP_1:13
+        .= 0c;
+      end; then
+      A6: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+      ((h")(#)(R/*h)).0 = 0c by A4;
+      hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c
+      by A6,CFCONT_1:48,49;
+    end; then
+    reconsider R as C_REST by Def3;
+    A7: now let x be Complex;
+      assume
+      A8: x in Z; then
+      (f|Z).x = x by A2,FUNCT_1:35; then
+      f.x = x by A8,FUNCT_1:72;
+      hence f/.x = x by A1,A8,PARTFUN1:def 8;
+    end;
+    A9: now let x0;
+      assume
+      A10: x0 in Z; then
+      consider N being Neighbourhood of x0 such that
+      A11: N c= Z by Th12;
+      A12: N c= dom f by A1,A11,XBOOLE_1:1;
+      for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+      proof
+        let x;
+        assume x in N;
+        hence f/.x-f/.x0 = x-f/.x0 by A7,A11
+        .= x-x0 by A7,A10
+        .= L/.(x-x0)+0c by PARTFUN2:12,P0
+        .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+      end;
+      hence f is_differentiable_in x0 by A12,Def6;
+    end;
+    hence
+    A13: f is_differentiable_on Z by A1,Th18;
+    let x0;
+    assume A14: x0 in Z; then
+    A15: f is_differentiable_in x0 by A9; then
+    ex N being Neighbourhood of x0 st N c= dom f &
+    ex L,R st for x st x in N holds
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6; then
+    consider N being Neighbourhood of x0 such that
+    A16: N c= dom f;
+    consider N1 being Neighbourhood of x0 such that
+    A17: N1 c= Z by A14,Th12;
+    consider N2 being Neighbourhood of x0 such that
+    A18: N2 c= N1 & N2 c= N by Th10;
+    A19: N2 c= dom f by A16,A18,XBOOLE_1:1;
+    A20: for x st x in N2 holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+    proof
+      let x;
+      assume x in N2; then
+      x in N1 by A18;
+      hence f/.x-f/.x0 = x-f/.x0 by A7,A17
+      .= x-x0 by A7,A14
+      .= L/.(x-x0)+0c by PARTFUN2:12,P0
+      .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+    end;
+    thus (f`|Z)/.x0 = diff(f,x0) by A13,A14,Def12
+    .= L/.1r by A15,A19,A20,Def7
+    .= 1r by PARTFUN2:12,P0;
+  end;
+
+theorem
+  for f1,f2,Z st Z c= dom (f1+f2) & f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z holds f1+f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1+f2)`|Z)/.x = diff(f1,x)+diff(f2,x)
+  proof
+    let f1,f2,Z;
+    assume that
+    A1: Z c= dom (f1+f2) and
+    A2: f1 is_differentiable_on Z and
+    A3: f2 is_differentiable_on Z;
+    now let x0;
+      assume
+      A4: x0 in Z; then
+      A5: f1 is_differentiable_in x0 by A2,Th18;
+      f2 is_differentiable_in x0 by A3,A4,Th18;
+      hence f1+f2 is_differentiable_in x0 by A5,Th27;
+    end;
+    hence
+    A6: f1+f2 is_differentiable_on Z by A1,Th18;
+    now let x;
+      assume
+      A7: x in Z; then
+      A8: f1 is_differentiable_in x by A2,Th18;
+      A9: f2 is_differentiable_in x by A3,A7,Th18;
+      thus ((f1+f2)`|Z)/.x = diff((f1+f2),x) by A6,A7,Def12
+      .= diff(f1,x)+diff(f2,x) by A8,A9,Th27;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for f1,f2,Z st Z c= dom (f1-f2) & f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z holds f1-f2 is_differentiable_on Z &
+  for x st x in Z holds ((f1-f2)`|Z)/.x = diff(f1,x)-diff(f2,x)
+  proof
+    let f1,f2,Z;
+    assume that
+    A1: Z c= dom (f1-f2) and
+    A2: f1 is_differentiable_on Z and
+    A3: f2 is_differentiable_on Z;
+    now let x0;
+      assume
+      A4: x0 in Z; then
+      A5: f1 is_differentiable_in x0 by A2,Th18;
+      f2 is_differentiable_in x0 by A3,A4,Th18;
+      hence f1-f2 is_differentiable_in x0 by A5,Th28;
+    end;
+    hence
+    A6: f1-f2 is_differentiable_on Z by A1,Th18;
+    now let x;
+      assume A7: x in Z; then
+      A8: f1 is_differentiable_in x by A2,Th18;
+      A9: f2 is_differentiable_in x by A3,A7,Th18;
+      thus ((f1-f2)`|Z)/.x = diff((f1-f2),x) by A6,A7,Def12
+      .= diff(f1,x)-diff(f2,x) by A8,A9,Th28;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for a,f,Z st Z c= dom (a(#)f) & f is_differentiable_on Z holds
+  a(#)f is_differentiable_on Z & for x st x in Z holds
+  ((a(#)f)`|Z)/.x = a*diff(f,x)
+  proof
+    let a,f,Z;
+    assume that
+    A1: Z c= dom (a(#)f) and
+    A2: f is_differentiable_on Z;
+    now let x0;
+      assume x0 in Z; then
+      f is_differentiable_in x0 by A2,Th18;
+      hence a(#)f is_differentiable_in x0 by Th29;
+    end;
+    hence
+    A3: a(#)f is_differentiable_on Z by A1,Th18;
+    now let x;
+    assume
+      A4: x in Z; then
+      A5: f is_differentiable_in x by A2,Th18;
+      thus ((a(#)f)`|Z)/.x = diff((a(#)f),x) by A3,A4,Def12
+      .= a*diff(f,x) by A5,Th29;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  for f1,f2,Z st Z c= dom (f1(#)f2) & f1 is_differentiable_on Z &
+  f2 is_differentiable_on Z holds f1(#)f2 is_differentiable_on Z &
+  for x st x in Z holds
+  ((f1(#)f2)`|Z)/.x = (f2/.x)*diff(f1,x)+(f1/.x)*diff(f2,x)
+  proof
+    let f1,f2,Z;
+    assume that
+    A1: Z c= dom (f1(#)f2) and
+    A2: f1 is_differentiable_on Z and
+    A3: f2 is_differentiable_on Z;
+    now let x0;
+      assume
+      A4: x0 in Z; then
+      A5: f1 is_differentiable_in x0 by A2,Th18;
+      f2 is_differentiable_in x0 by A3,A4,Th18;
+      hence f1(#)f2 is_differentiable_in x0 by A5,Th30;
+    end;
+    hence
+    A6: f1(#)f2 is_differentiable_on Z by A1,Th18;
+    now let x;
+      assume
+      A7: x in Z; then
+      A8: f1 is_differentiable_in x by A2,Th18;
+      A9: f2 is_differentiable_in x by A3,A7,Th18;
+      thus ((f1(#)f2)`|Z)/.x = diff((f1(#)f2),x) by A6,A7,Def12
+      .= f2/.x*diff(f1,x)+f1/.x*diff(f2,x) by A8,A9,Th30;
+    end;
+    hence thesis;
+  end;
+
+theorem
+  Z c= dom f & f|Z is constant implies
+  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = 0c
+  proof
+    assume
+    A1: Z c= dom f & f|Z is constant; then
+    consider a1 such that
+    A2: for x st x in Z/\dom f holds f/.x = a1 by PARTFUN2:54;
+    set L = cf;
+    L/.x = 0c*x by FUNCOP_1:13; then
+    reconsider L as C_LINEAR by Def4;
+    set R = cf;
+    A3: dom R = COMPLEX by FUNCOP_1:19;
+    now let h;
+      A4: now let n be Nat;
+      X:  n in NAT by ORDINAL1:def 13;
+      A5: rng h c= dom R by A3;
+        thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by VALUED_1:5
+        .= (h".n)*(R/.(h.n)) by A5,FUNCT_2:186,X
+        .= (h".n)*0c by FUNCOP_1:13
+        .= 0c;
+      end; then
+      A6: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+      ((h")(#)(R/*h)).0 = 0c by A4;
+      hence (h")(#)(R/*h) is convergent &
+      lim ((h")(#)(R/*h)) = 0c by A6,CFCONT_1:48,49;
+    end; then
+    reconsider R as C_REST by Def3;
+    A7: now let x0;
+      assume
+      A8: x0 in Z; then
+      A9: x0 in Z/\dom f by A1,XBOOLE_0:def 4;
+      consider N being Neighbourhood of x0 such that
+      A10: N c= Z by A8,Th12;
+      A11: N c= dom f by A1,A10,XBOOLE_1:1;
+      for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+      proof
+        let x;
+        assume x in N; then
+        x in Z/\dom f by A10,A11,XBOOLE_0:def 4;
+        hence f/.x-f/.x0 = a1-f/.x0 by A2
+        .= a1-a1 by A2,A9
+        .= L/.(x-x0)+0c by FUNCOP_1:13
+        .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+      end;
+      hence f is_differentiable_in x0 by A11,Def6;
+    end;
+    hence
+    A14: f is_differentiable_on Z by A1,Th18;
+    let x0;
+    assume
+    A15: x0 in Z; then
+    A16: x0 in Z/\dom f by A1,XBOOLE_0:def 4;
+    A17: f is_differentiable_in x0 by A7,A15;
+    consider N being Neighbourhood of x0 such that
+    A18: N c= Z by A15,Th12;
+    A19: N c= dom f by A1,A18,XBOOLE_1:1;
+    A20: for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+    proof
+      let x;
+      assume x in N; then
+      x in Z/\dom f by A18,A19,XBOOLE_0:def 4;
+      hence f/.x-f/.x0 = a1-f/.x0 by A2
+      .= a1-a1 by A2,A16
+      .= L/.(x-x0)+0c by FUNCOP_1:13
+      .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+    end;
+   thus (f`|Z)/.x0 = diff(f,x0) by A14, A15, Def12
+.= L/.1r by A17, A19, A20, Def7
+  .= 0c by FUNCOP_1:13;
+  end;
+
+theorem
+  Z c= dom f & (for x st x in Z holds f/.x = a*x+b) implies
+  f is_differentiable_on Z & for x st x in Z holds (f`|Z)/.x = a
+  proof
+    assume
+    A1: Z c= dom f & for x st x in Z holds f/.x = a*x+b;
+    defpred P[set] means $1 in COMPLEX;
+    deffunc G(Complex) = a*$1;
+    consider L being Function of COMPLEX,COMPLEX such that
+    A2: for x being Element of COMPLEX holds L.x = G(x) from FUNCT_2:sch 4;
+    for z holds L/.z = a*z by A2;
+    then reconsider L as C_LINEAR by Def4;
+    set R = cf;
+    A6: dom R = COMPLEX by FUNCOP_1:19;
+    now let h;
+      A7: now let n be Nat;
+X:        n in NAT by ORDINAL1:def 13;
+      A8: rng h c= dom R by A6;
+        thus ((h")(#)(R/*h)).n = (h".n)*((R/*h).n) by VALUED_1:5
+        .= (h".n)*(R/.(h.n)) by A8,FUNCT_2:186,X
+        .= (h".n)*0c by FUNCOP_1:13
+        .= 0c;
+      end; then
+      A9: (h")(#)(R/*h) is constant by VALUED_0:def 18;
+      ((h")(#)(R/*h)).0 = 0c by A7;
+      hence (h")(#)(R/*h) is convergent & lim ((h")(#)(R/*h)) = 0c
+      by A9,CFCONT_1:48,49;
+    end; then
+    reconsider R as C_REST by Def3;
+    A10: now let x0;
+      assume
+      A11: x0 in Z; then
+      consider N being Neighbourhood of x0 such that
+      A12: N c= Z by Th12;
+      A13: N c= dom f by A1,A12,XBOOLE_1:1;
+      for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+      proof
+        let x;
+        assume x in N;
+        hence f/.x-f/.x0 = a*x+b-f/.x0 by A1,A12
+        .= a*x+b-(a*x0+b) by A1,A11
+        .= a*(x-x0)+0c
+        .= L/.(x-x0)+0c by A2
+        .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+      end;
+      hence f is_differentiable_in x0 by A13,Def6;
+    end;
+    hence
+    A15: f is_differentiable_on Z by A1,Th18;
+    let x0;
+    assume
+    A16: x0 in Z; then
+    A17: f is_differentiable_in x0 by A10;
+    consider N being Neighbourhood of x0 such that
+    A18: N c= Z by A16,Th12;
+    A19: N c= dom f by A1,A18,XBOOLE_1:1;
+    A20: for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0)
+    proof
+      let x;
+      assume x in N;
+      hence f/.x-f/.x0 = a*x+b-f/.x0 by A1,A18
+      .= a*x+b-(a*x0+b) by A1,A16
+      .= a*(x-x0)+0c
+      .= L/.(x-x0)+0c by A2
+      .= L/.(x-x0)+R/.(x-x0) by FUNCOP_1:13;
+    end;
+    thus (f`|Z)/.x0 = diff(f,x0) by A15,A16,Def12
+    .= L/.1r by A17,A19,A20,Def7
+    .= a*1r by A2
+    .= a;
+  end;
+
+theorem Th38:
+  for x0 be Complex holds
+  f is_differentiable_in x0 implies f is_continuous_in x0
+  proof
+    let x0 be Complex;
+    assume
+    A1: f is_differentiable_in x0; then
+    consider N being Neighbourhood of x0 such that
+    A2: N c= dom f & ex L,R st for x be Complex st x in N
+    holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+    A3: x0 in N by Th9;
+    now let s1 such that
+      A4: rng s1 c= dom f & s1 is convergent &
+      lim s1 = x0 & for n holds s1.n <> x0;
+      consider g be Real such that
+      A5: 0 < g & {y where y is Complex : |.y-x0.| < g} c= N by Def5;
+      reconsider s2 = NAT --> x0 as Complex_Sequence;
+      deffunc G(Element of NAT) = s1.$1-s2.$1;
+      consider s3 such that
+      A6: for n holds s3.n = G(n) from FUNCT_2:sch 4;
+      A7: s2 is convergent by CFCONT_1:48;
+      A8: lim s2 = s2.0 by CFCONT_1:50
+      .= x0 by FUNCOP_1:13;
+      A9: s3 = s1-s2 by A6,CFCONT_1:2; then
+      A10: s3 is convergent by A4,A7,COMSEQ_2:25;
+      A11: lim s3 = lim (s1-s2) by A6,CFCONT_1:2
+      .= x0-x0 by A4,A7,A8,COMSEQ_2:26
+      .= 0c;
+      A12: now given n such that
+      A13: s3.n = 0c; s1.n-s2.n = 0c by A6,A13;
+        hence contradiction by FUNCOP_1:13, A4;
+      end;
+      consider l be Element of NAT such that
+      A14: for m be Element of NAT st l <= m holds |.s1.m-x0.| < g
+      by A4,A5,COMSEQ_2:def 5;
+      A15: s3^\l is convergent & lim(s3^\l) = 0c by A10,A11,CFCONT_1:43;
+      A16: now given n such that
+      A17: (s3^\l).n = 0c; s3.(n+l) = 0c by A17,NAT_1:def 3;
+        hence contradiction by A12;
+      end; then
+      s3^\l is non-zero by COMSEQ_1:4; then
+      reconsider h = s3^\l as convergent_to_0 Complex_Sequence by A15,Def1;
+      reconsider c = s2^\l as constant Complex_Sequence;
+      A18: rng c = {x0}
+      proof
+        thus rng c c= {x0}
+        proof
+          let y be set;
+          assume y in rng c; then
+          consider n such that A19: y = (s2^\l).n by FUNCT_2:190;
+          y = s2.(n+l) by A19,NAT_1:def 3; then
+          y = x0 by FUNCOP_1:13;
+          hence y in {x0} by TARSKI:def 1;
+        end;
+        let y;
+        assume y in {x0}; then
+        A20:y = x0 by TARSKI:def 1;
+        c.0 = s2.(0+l) by NAT_1:def 3
+        .= y by A20,FUNCOP_1:13;
+        hence y in rng c by FUNCT_2:6;
+      end;
+      rng (h+c) c= N
+      proof
+        let y be set;
+        assume A21: y in rng(h+c); then
+        consider n such that
+        A22: y = (h+c).n by FUNCT_2:190;
+        A23: (h+c).n = ((s1-s2+s2)^\l).n by A9,Th22
+        .= (s1-s2+s2).(n+l) by NAT_1:def 3
+        .= (s1-s2).(n+l)+s2.(n+l) by VALUED_1:1
+        .= s1.(n+l)-s2.(n+l)+s2.(n+l) by CFCONT_1:2
+        .= s1.(l+n);
+        A24: |.(h+c).n-x0.| < g by NAT_1:12, A14, A23;
+        reconsider y1 = y as Complex by A21;
+        y1 in {z where z is Complex : |.z-x0.| < g} by A22,A24;
+        hence y in N by A5;
+      end; then
+      A25: h"(#)(f/*(h+c)-f/*c) is convergent by A1,A2,A18,Th26; then
+      A26: lim (h(#)(h"(#)(f/*(h+c)-f/*c))) = 0c*lim(h"(#)(f/*(h+c)-f/*c))
+      by A15,COMSEQ_2:30
+      .= 0;
+      now let n;
+        A27: h.n <> 0 by A16;
+        thus (h(#)(h"(#)(f/*(h+c)-f/*c))).n = h.n*(h"(#)(f/*(h+c)-f/*c)).n
+        by VALUED_1:5
+        .= h.n*((h").n*(f/*(h+c)-f/*c).n) by VALUED_1:5
+        .= h.n*(((h.n)")*(f/*(h+c)-f/*c).n) by VALUED_1:10
+        .= h.n*((h.n)")*(f/*(h+c)-f/*c).n
+        .= 1*(f/*(h+c)-f/*c).n by A27,XCMPLX_0:def 7
+        .= (f/*(h+c)-f/*c).n;
+      end; then
+      A28: h(#)(h"(#)(f/*(h+c)-f/*c)) = f/*(h+c)-f/*c by FUNCT_2:113; then
+      A29: f/*(h+c)-f/*c is convergent by A25,COMSEQ_2:29;
+      A30: now let p be Real such that A31: 0 < p;
+        take n = 0;
+        thus for m st n <= m holds |.(f/*c).m-f/.x0.| < p
+        proof
+          let m such that n <= m;
+          {x0} c= dom f by A2,A3,ZFMISC_1:37; then
+          |.(f/*c).m-f/.x0.| = |.(f/.(c.m))-f/.x0.| by A18,FUNCT_2:186
+          .= |.f/.(s2.(m+l))-f/.x0.| by NAT_1:def 3
+          .= |.f/.x0-f/.x0.| by FUNCOP_1:13
+          .= 0 by ABSVALUE:7;
+          hence |.(f/*c).m-f/.x0.| < p by A31;
+        end;
+      end; then
+      A32: f/*c is convergent by COMSEQ_2:def 4; then
+      A33: f/*(h+c)-f/*c+f/*c is convergent by A29,COMSEQ_2:13;
+      A34: lim(f/*(h+c)-f/*c+f/*c) = 0c+lim (f/*c)
+      by A26,A28,A29,A32,COMSEQ_2:14
+      .= f/.x0 by A32,A30,COMSEQ_2:def 5;
+      now let n;
+        thus (f/*(h+c)-f/*c+f/*c).n = (f/*(h+c)-f/*c).n+(f/*c).n by VALUED_1:1
+        .= (f/*(h+c)).n-(f/*c).n+(f/*c).n by CFCONT_1:2
+        .= (f/*(h+c)).n;
+      end; then
+      A35: f/*(h+c)-f/*c+(f/*c) = f/*(h+c) by FUNCT_2:113;
+      now let n;
+        thus (h+c).n = ((s1-s2+s2)^\l).n by A9,Th22
+        .= (s1-s2+s2).(n+l) by NAT_1:def 3
+        .= (s1-s2).(n+l)+s2.(n+l) by VALUED_1:1
+        .= s1.(n+l)-s2.(n+l)+s2.(n+l) by CFCONT_1:2
+        .= (s1^\l).n by NAT_1:def 3;
+      end; then
+      A36: f/*(h+c)-f/*c+(f/*c) = f/*(s1^\l) by A35,FUNCT_2:113
+      .= (f/*s1)^\l by A4,VALUED_0:27;
+      hence f/*s1 is convergent by A33,CFCONT_1:44;
+      thus f/.x0 = lim(f/*s1) by A33,A34,A36,CFCONT_1:45;
+    end;
+    hence thesis by A2,A3,CFCONT_1:53;
+  end;
+
+theorem
+  f is_differentiable_on X implies f is_continuous_on X
+  proof
+    assume
+    A1: f is_differentiable_on X;
+    hence
+    A2: X c= dom f by Def9;
+    let x be Complex;
+    assume x in X; then
+    A3: x in dom (f|X) by A2,RELAT_1:86;
+    f|X is differentiable by A1,Def9; then
+    f|X is_differentiable_in x by A3,Def8;
+    hence f|X is_continuous_in x by Th38;
+  end;
+
+theorem
+  f is_differentiable_on X & Z c= X implies f is_differentiable_on Z
+  proof
+    assume that
+    A1: f is_differentiable_on X and
+    A2: Z c= X;
+    X c= dom f by A1,Def9;
+    hence Z c= dom f by A2,XBOOLE_1:1;
+    let x0;
+    assume x0 in dom (f|Z); then
+    A3: x0 in dom f & x0 in Z by RELAT_1:86; then
+    A4: x0 in dom (f|X) by A2,RELAT_1:86;
+    f|X is differentiable by A1,Def9;
+    then f|X is_differentiable_in x0 by A4,Def8; then
+    consider N being Neighbourhood of x0 such that
+    A5: N c= dom(f|X) & ex L,R st for x st x in N holds
+    (f|X)/.x-(f|X)/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+    consider N1 being Neighbourhood of x0 such that
+    A6: N1 c= Z by A3,Th12;
+    consider N2 being Neighbourhood of x0 such that
+    A7: N2 c= N & N2 c= N1 by Th10;
+    take N2;
+    dom(f|X) = dom f/\X by RELAT_1:90; then
+    dom(f|X) c= dom f by XBOOLE_1:17; then
+    N c= dom f by A5,XBOOLE_1:1; then
+    A8: N2 c= dom f by A7,XBOOLE_1:1;
+    N2 c= Z by A6,A7,XBOOLE_1:1; then
+    N2 c= dom f/\Z by A8,XBOOLE_1:19;
+    hence
+    A9: N2 c= dom(f|Z) by RELAT_1:90;
+    consider L,R such that
+    A10: for x st x in N holds (f|X)/.x-(f|X)/.x0 = L/.(x-x0)+R/.(x-x0) by A5;
+    take L,R;
+    let x;
+    assume
+    A11: x in N2; then
+    A12: x in N by A7;
+    (f|X)/.x-(f|X)/.x0 = L/.(x-x0)+R/.(x-x0) by A7,A10,A11; then
+    (f|X)/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A3,A2,PARTFUN2:35;then
+    f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A5,A12,PARTFUN2:32; then
+    f/.x-(f|Z)/.x0 = L/.(x-x0)+R/.(x-x0) by A3,PARTFUN2:35;
+    hence thesis by A9,A11,PARTFUN2:32;
+  end;
+
+theorem
+  seq is convergent implies |.seq.| is convergent;
+
+theorem
+  f is_differentiable_in x0 implies ex R st R/.0c = 0c & R is_continuous_in 0c
+  proof
+    assume f is_differentiable_in x0; then
+    consider N being Neighbourhood of x0 such that
+    A1: N c= dom f &
+    ex L,R st for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by Def6;
+    consider L,R such that
+    A2: for x st x in N holds f/.x-f/.x0 = L/.(x-x0)+R/.(x-x0) by A1;
+    take R;
+    consider a such that
+    A3: for z holds L/.z = a*z by Def4;
+    f/.x0-f/.x0 = L/.(x0-x0)+R/.(x0-x0) by A2,Th9; then
+    A4: 0c = a*0c+R/.0c by A3;
+    hence R/.0c = 0c;
+    A6: now let h;
+      (h")(#)(R/*h) is bounded by Def3; then
+      consider M being Real such that
+      A7: M > 0 & for n holds |.((h")(#)(R/*h)).n.| < M by COMSEQ_2:8;
+      A8: h is non-zero & h is convergent & lim h = 0 by Def1;
+      A10: lim |.h.| = |. 0 .| by A8, COMSEQ_2:11;
+      A11: M(#)|.h.| is convergent by SEQ_2:21;
+      A12: lim (M(#)|.h.|) = M * |. 0 .| by A10,SEQ_2:22
+      .=M*0 by ABSVALUE:7
+      .=0;
+      A13: now let p be Real;
+        assume 0 < p; then
+        consider m such that
+        A14: for n st m <= n holds abs((M(#)|.h.|).n-0) < p
+        by A11, A12, SEQ_2:def 7;
+        take m;
+        now let n;
+          assume
+          A15: m <= n;
+          A16: h.n <> 0c by COMSEQ_1:4;
+          |.((h")(#)(R/*h)).n.| = |.((h").n)*(R/*h).n.| by VALUED_1:5
+          .= |.(h.n)"*(R/*h).n.| by VALUED_1:10; then
+          A17: |.(h.n)"*(R/*h).n.| <= M by A7;
+          |.(h.n).| >= 0 by COMPLEX1:132; then
+          |.(h.n).|*|.(h.n)"*(R/*h).n.| <= M*|.(h.n).| by A17,XREAL_1:66; then
+          |.(h.n)*((h.n)"*(R/*h).n).| <= M*|.(h.n).| by COMPLEX1:151; then
+          |.(h.n)*(h.n)"*(R/*h).n.| <= M*|.(h.n).|; then
+          |.1r*(R/*h).n.| <= M*|.(h.n).| by A16,XCMPLX_0:def 7; then
+          |.(R/*h).n.| <= M*|.h.|.n by VALUED_1:18; then
+          A18: |.(R/*h).n.| <= (M(#)|.h.|).n by SEQ_1:13;
+          A19: abs((M(#)|.h.|).n-0) < p by A14,A15;
+          0 <= (M(#)|.h.|).n by A18,COMPLEX1:132; then
+          (M(#)|.h.|).n < p by A19,ABSVALUE:def 1;
+          hence |.(R/*h).n-0c.| < p by XXREAL_0:2,A18;
+        end;
+        hence for n st m <= n holds |.(R/*h).n-0c.| < p;
+      end;
+      hence R/*h is convergent by COMSEQ_2:def 4;
+      hence lim (R/*h) = R/.0c by A4,A13,COMSEQ_2:def 5;
+    end;
+    A20: now let s1;
+      assume
+      A21: rng s1 c= dom R & s1 is convergent &
+      lim s1 = 0 & (for n holds s1.n <> 0); then
+      s1 is non-zero by COMSEQ_1:4; then
+      s1 is convergent_to_0 Complex_Sequence by A21,Def1;
+      hence R/*s1 is convergent & lim (R/*s1) = R/.0c by A6;
+    end;
+    dom R = COMPLEX by PARTFUN1:def 4;
+    hence thesis by A20,CFCONT_1:53;
+  end;

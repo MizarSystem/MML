@@ -10,7 +10,7 @@ environ
       FUNCT_1, RELAT_1, QC_LANG1, PREPOWER, SERIES_1, ABSVALUE, RLVECT_1,
       SEQM_3, SEQ_2, SUPINF_2, ORDINAL2, PROB_1, SQUARE_1, PARTFUN1, INCSP_1,
       RCOMP_1, PRE_TOPC, BOOLE, FCONT_1, SIN_COS, GROUP_1, XCMPLX_0, FRECHET2,
-      SIN_COS4, RELOC, ANPROJ_1, OPPCAT_1;
+      SIN_COS4, RELOC, ANPROJ_1, OPPCAT_1, NORMSP_1, SUBSET_1;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XXREAL_0, XREAL_0, COMPLEX1, REAL_1, RELAT_1, FUNCT_1, RELSET_1, FCONT_1,
       FUNCT_2, VALUED_1, SEQ_1, SEQ_2, FDIFF_1, SERIES_1, NAT_1, NEWTON,
@@ -22,17 +22,17 @@ environ
       NAT_D, SEQ_1, RECDEF_1, SEQM_3, SERIES_1, SEQ_2, VALUED_1;
  registrations XBOOLE_0, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS, XCMPLX_0,
       XXREAL_0, XREAL_0, SQUARE_1, NAT_1, MEMBERED, SEQM_3, RCOMP_1, COMSEQ_2,
-      FDIFF_1, NEWTON, COMSEQ_3, VALUED_0, VALUED_1, SEQ_4;
+      FDIFF_1, NEWTON, COMSEQ_3, VALUED_0, VALUED_1, SEQ_4, FCONT_3;
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
- definitions COMSEQ_3, SQUARE_1, SUBSET_1, VALUED_1;
- theorems NAT_1, ABSVALUE, REAL_2, INT_1, SEQ_1, SEQ_2, SERIES_1,
+ definitions COMSEQ_3, SQUARE_1, SUBSET_1, VALUED_1, XCMPLX_0, COMPLEX1;
+ theorems NAT_1, ABSVALUE, INT_1, SEQ_1, SEQ_2, SERIES_1,
       SEQM_3, SEQ_4, PREPOWER, COMPLEX1, COMSEQ_1, COMSEQ_2, SQUARE_1,
       COMSEQ_3, FCONT_2, RCOMP_1, FUNCT_1, FDIFF_1, FDIFF_2, FCONT_1, FCONT_3,
       TARSKI, FUNCT_2, RFUNCT_1, SUBSET_1, RFUNCT_2, POWER, ROLLE, NEWTON,
       RELAT_1, XREAL_0, BINARITH, XBOOLE_0, XBOOLE_1, XCMPLX_0, XCMPLX_1,
       ARYTM_0, XREAL_1, XXREAL_0, ORDINAL1, VALUED_1, XXREAL_1, MEMBERED,
       VALUED_0;
- schemes NAT_1, SEQ_1, COMSEQ_1, FUNCT_1, BINOP_2, FUNCT_2;
+ schemes NAT_1, SEQ_1, COMSEQ_1, CLASSES1, BINOP_2, FUNCT_2;
 
 begin
 
@@ -92,10 +92,9 @@ A4: now
     take y;
     thus P[x,y] by A2,A3,A4;
   end;
-A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
   consider f be Function such that
 A6: dom f = NAT and
-A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
+A7: for x be set st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
   now
     let x be set;
     assume x in NAT;
@@ -137,10 +136,9 @@ A4: now
     take y;
     thus P[x,y] by A2,A3,A4;
   end;
-A5: for x,y,z be set st x in NAT & P[x,y] & P[x,z] holds y=z;
   consider f be Function such that
 A6: dom f = NAT and
-A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
+A7: for x be set st x in NAT holds P[x,f.x] from CLASSES1:sch 1(A1);
   now
     let x be set;
     assume x in NAT;
@@ -156,6 +154,11 @@ A7: for x be set st x in NAT holds P[x,f.x] from FUNCT_1:sch 2(A5,A1);
   hence ((n <= k implies rseq.n=F(k,n)) & (n > k implies rseq.n=0));
 end;
 
+definition let x be Element of COMPLEX, c be complex number;
+ redefine func x*c -> Element of COMPLEX;
+ coherence by XCMPLX_0:def 2;
+end;
+
 definition
   canceled;
   func Prod_complex_n -> Complex_Sequence means
@@ -163,15 +166,14 @@ definition
   it.0 = 1 & for n holds it.(n+1) = it.n * (n+1);
   existence
   proof
-    deffunc U(Nat,Element of COMPLEX) = $2 * [*$1+1,0*];
+    deffunc U(Nat,Element of COMPLEX) = $2 * ($1+1);
     consider f being Function of NAT,COMPLEX such that
 A1: f.0 = 1r & for n being Nat holds f.(n+1) = U(n,f.n)
     from NAT_1:sch 12;
     take f;
-    thus f.0 = 1 by A1,COMPLEX1:def 7;
+    thus f.0 = 1 by A1;
     let n be Element of NAT;
-    n+1 = [*n+1,0*] by ARYTM_0:def 7;
-    hence thesis by A1;
+    thus thesis by A1;
   end;
   uniqueness
   proof
@@ -189,7 +191,7 @@ A5: for k be Element of NAT st X[k] holds X[k+1]
         .= seq2.(k+1) by A3;
     end;
     for n holds X[n] from NAT_1:sch 1(A4,A5);
-    hence seq1 = seq2 by COMSEQ_1:6;
+    hence seq1 = seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -280,7 +282,7 @@ end;
 definition
   let a be real number;
   deffunc U(Element of NAT) = a |^ $1 /($1!);
-  func a ExpSeq -> Real_Sequence means
+  func a rExpSeq -> Real_Sequence means
   :Def9:
   for n holds it.n = a |^ n /(n!);
   existence
@@ -314,8 +316,7 @@ A3: X[n];
   thus (n+1)!c = n!c * (n+1) by Def4;
 end;
 
-theorem
-  (n+1)! = n! * (n+1) by NEWTON:21;
+canceled;
 
 theorem Th3:
   (0 < k implies ((k-'1)!c ) * k = k!c) &
@@ -381,7 +382,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -422,7 +423,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -456,7 +457,7 @@ A5: for k be Element of NAT st X[k] holds X[k+1]
         .= seq2.(k+1) by A3;
     end;
     for n holds X[n] from NAT_1:sch 1(A4,A5);
-    hence seq1 = seq2 by COMSEQ_1:6;
+    hence seq1 = seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -501,7 +502,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -546,7 +547,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -592,7 +593,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -602,36 +603,36 @@ definition
   func Conj(n,a,b) -> Real_Sequence means
 
   for k be Element of NAT holds
-  ( k <= n implies it.k= (a ExpSeq).k * (Partial_Sums(b ExpSeq).n
-  -Partial_Sums(b ExpSeq).(n-'k))) & (n < k implies it.k=0);
+  ( k <= n implies it.k= (a rExpSeq).k * (Partial_Sums(b rExpSeq).n
+  -Partial_Sums(b rExpSeq).(n-'k))) & (n < k implies it.k=0);
   existence
   proof
     deffunc U(Element of NAT,Element of NAT)
-    = (a ExpSeq).$2 * (Partial_Sums(b ExpSeq).$1
-    -Partial_Sums(b ExpSeq).($1-'$2));
+    = (a rExpSeq).$2 * (Partial_Sums(b rExpSeq).$1
+    -Partial_Sums(b rExpSeq).($1-'$2));
     for n holds ex rseq st for k holds (k <= n implies rseq.k = U(n,k) ) &
     (k > n implies rseq.k=0) from ExRealCASE;
     hence ex rseq st for k holds
-    (k <= n implies rseq.k =(a ExpSeq).k * (Partial_Sums(b ExpSeq).n
-    -Partial_Sums(b ExpSeq).(n-'k))) & (k > n implies rseq.k=0);
+    (k <= n implies rseq.k =(a rExpSeq).k * (Partial_Sums(b rExpSeq).n
+    -Partial_Sums(b rExpSeq).(n-'k))) & (k > n implies rseq.k=0);
   end;
   uniqueness
   proof
     let rseq1,rseq2;
     assume that
 A1: for k holds
-    (k <= n implies rseq1.k =(a ExpSeq).k * (Partial_Sums(b ExpSeq).n
-    -Partial_Sums(b ExpSeq).(n-'k)) ) & (k > n implies rseq1.k=0) and
+    (k <= n implies rseq1.k =(a rExpSeq).k * (Partial_Sums(b rExpSeq).n
+    -Partial_Sums(b rExpSeq).(n-'k)) ) & (k > n implies rseq1.k=0) and
 A2: for k holds
-    (k <= n implies rseq2.k = (a ExpSeq).k * (Partial_Sums(b ExpSeq).n
-    -Partial_Sums(b ExpSeq).(n-'k)) ) & (k > n implies rseq2.k=0);
+    (k <= n implies rseq2.k = (a rExpSeq).k * (Partial_Sums(b rExpSeq).n
+    -Partial_Sums(b rExpSeq).(n-'k)) ) & (k > n implies rseq2.k=0);
     now
       let k;
       per cases;
       suppose
 A3:     k <= n;
-        hence rseq1.k =(a ExpSeq).k * (Partial_Sums(b ExpSeq).n
-        -Partial_Sums(b ExpSeq).(n-'k)) by A1
+        hence rseq1.k =(a rExpSeq).k * (Partial_Sums(b rExpSeq).n
+        -Partial_Sums(b rExpSeq).(n-'k)) by A1
           .= rseq2.k by A2,A3;
       end;
       suppose
@@ -688,7 +689,7 @@ A4:     k > n;
           .= seq2.k by A2,A4;
       end;
     end;
-    hence seq1=seq2 by COMSEQ_1:6;
+    hence seq1=seq2 by FUNCT_2:113;
   end;
 end;
 
@@ -698,29 +699,29 @@ Lm1: for p1,p2,g1,g2 being Element of REAL holds
 proof
   let p1,p2,g1,g2 be Element of REAL;
   thus (p1+g1*<i>)*(p2+g2*<i>) =(p1*p2-g1*g2+(p1*g2+p2*g1)*<i>);
-  thus (p2+g2*<i>)*' = Re(p2+g2*<i>)-Im(p2+g2*<i>)*<i> by COMPLEX1:def 15
-    .= p2-Im(p2+g2*<i>)*<i> by COMPLEX1:28
+  thus (p2+g2*<i>)*' = p2-Im(p2+g2*<i>)*<i> by COMPLEX1:28
     .= p2-g2*<i> by COMPLEX1:28
     .=(p2+(-g2)*<i>);
 end;
 
 theorem Th4:
+ for z being complex number holds
   z ExpSeq.(n+1) = z ExpSeq.n * z /(n+1+0*<i>) & z ExpSeq.0=1 &
-  |.(z ExpSeq).n .| = (|.z.| ExpSeq ).n
-proof
+  |.(z ExpSeq).n .| = (|.z.| rExpSeq ).n
+proof let z be complex number;
 A1: now
     let n be Element of NAT;
     thus (z ExpSeq).(n+1)=z |^ (n+1) / ((n+1) !c ) by Def8
       .=(z GeoSeq).n * z /((n+1)!c ) by COMSEQ_3:def 1
       .=z |^ n * z /(n!c * (n+1+0*<i>)) by Th1
       .=(z |^ n / (n!c ) )*( z / (n+1+0*<i>)) by XCMPLX_1:77
-      .=(z |^ n / (n!c ) * z) / (n+1+0*<i>) by XCMPLX_1:75
+      .=(z |^ n / (n!c ) * z) / (n+1+0*<i>)
       .=z ExpSeq.n * z /(n+1+0*<i>) by Def8;
   end;
 A2: (z ExpSeq).0=z |^ 0 /(0!c ) by Def8
-    .=1 by Th1,COMPLEX1:def 7,COMSEQ_3:def 1;
-  defpred X[Element of NAT] means |. ((z ExpSeq)).$1 .| =( |.z.| ExpSeq ).$1;
-  ( |.z.| ExpSeq ).0 = ((|.z .|) |^ 0)/ (0!) by Def9
+    .=1 by Th1,COMSEQ_3:def 1;
+  defpred X[Element of NAT] means |. ((z ExpSeq)).$1 .| =( |.z.| rExpSeq ).$1;
+  ( |.z.| rExpSeq ).0 = ((|.z .|) |^ 0)/ (0!) by Def9
     .= 1/((Prod_real_n).0) by NEWTON:9
     .= 1/1 by Def5
     .= 1;
@@ -732,12 +733,12 @@ A5: X[n];
 A6: |.(n+1+0*<i>).|=n+1 by ABSVALUE:def 1;
     |. ((z ExpSeq)).(n+1) .| =|. z ExpSeq.n * z /(n+1+0*<i>) .| by A1
       .=|. z ExpSeq.n * z .|/|.(n+1+0*<i>).| by COMPLEX1:153
-      .=(( |.z.| ExpSeq ).n) * |.z .|/|.(n+1+0*<i>).| by A5,COMPLEX1:151
+      .=(( |.z.| rExpSeq ).n) * |.z .|/|.(n+1+0*<i>).| by A5,COMPLEX1:151
       .= (|.z.| |^ n)/(n!) * |.z .|/|.(n+1+0*<i>).| by Def9
       .=( (|.z.| |^ n) * |.z .| )/( (n!) * |.(n+1+0*<i>).| ) by XCMPLX_1:84
       .=( (|.z.| |^ n) * |.z .| )/( (n+1)! ) by A6,NEWTON:21
       .=( (|.z.| |^ (n+1)) )/( (n+1)! ) by NEWTON:11
-      .=( |.z.| ExpSeq ).(n+1) by Def9;
+      .=( |.z.| rExpSeq ).(n+1) by Def9;
     hence X[n+1];
   end;
   for n holds X[n] from NAT_1:sch 1(A3,A4);
@@ -791,7 +792,7 @@ A1: 0-'0=0 by XREAL_1:234;
     .= (Coef(0)).0 * (z |^ 0) * (w |^ 0) by A1,Def13
     .= 1/(1 * 1) * z |^ 0 * w |^ 0 by A1,Def10,Th1
     .= 1r * (w GeoSeq).0 by COMSEQ_3:def 1
-    .= 1r by COMPLEX1:def 7,COMSEQ_3:def 1;
+    .= 1r by COMSEQ_3:def 1;
   then
 A2: X[0] by COMSEQ_3:def 1;
 A3: for n st X[n] holds X[n+1]
@@ -811,7 +812,7 @@ A5: (z+w) |^ (n+1) =((z+w) GeoSeq ).n * (z+w) by COMSEQ_3:def 1
           .=(z (#) Expan(n,z,w)).k+(w (#) Expan(n,z,w)).k by VALUED_1:6
           .=((z (#) Expan(n,z,w))+(w (#) Expan(n,z,w))).k by VALUED_1:1;
       end;
-      hence thesis by COMSEQ_1:6;
+      hence thesis by FUNCT_2:113;
     end;
     then
 A6: (z+w) |^ (n+1) =( Partial_Sums(z (#) (Expan(n,z,w))) +Partial_Sums ((w (#)
@@ -946,10 +947,7 @@ A35:            (Coef(n+1)).0 = (n+1)!c /((0!c ) * ((n+1)!c )) by A32,Def10
             now
               assume
 A36:          k<>0;
-              then
-A37:          0<k;
-              then
-A38:          0+1 <= k by INT_1:20;
+A38:          0+1 <= k by INT_1:20,A36;
 A39:          k+1-1 <= n+1-1 by A28,INT_1:20;
               k < k+1 by XREAL_1:31;
               then k-1 <= k+1-1 by XREAL_1:11;
@@ -965,7 +963,7 @@ A41:            ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
                   .=(w * Expan(n,z,w).k) + (Shift((z (#) Expan(n,z,w)))).k
                 by VALUED_1:6
                   .=(w * Expan(n,z,w).k) + (z (#) Expan(n,z,w)).(k-'1)
-                by A37,Th5
+                by A36,Th5
                   .=(w * Expan(n,z,w).k) + (z * Expan(n,z,w).(k-'1))
                 by VALUED_1:6
                   .=(w * ((Coef n).k * (z |^ k) * (w |^ (n-'k))))
@@ -995,7 +993,7 @@ A48:            ((k!c) * ((n-'k)!c)) * (n+1-k+0*<i>)
                 =(k!c) * (((n-'k)!c) * (n+1-k+0*<i>));
 A49:            (((k-'1)!c) * (((n-'(k-'1)))!c )) * (k+0*<i>)
                 =(k+0*<i>) * ((k-'1)!c) * (((n-'(k-'1)))!c )
-                  .=(k!c) * ((n+1-'k)!c) by A37,A43,Th3;
+                  .=(k!c) * ((n+1-'k)!c) by A36,A43,Th3;
                 k!c <> 0c & (n-'k)!c <>0c & (k-'1)!c <>0c
                 & ((n-'(k-'1)))!c <>0c & ((n+1-'k))!c <>0c &
                 (n+1-k+0*<i>) <>0c & (k+0*<i>) <>0c by A28,A36,Th1;
@@ -1008,9 +1006,8 @@ A50:            n !c /((k!c) * ((n-'k)!c)) =(n!c * (n+1-k+0*<i>))
                 =(n!c * (k+0*<i>))/((k!c) * ((n+1-'k)!c ))
                 by A36,A49,XCMPLX_1:92;
                 then (Coef n).k +(Coef n).(k-'1)
-                =((n!c * (n+1-k+0*<i>))+(n!c * (k+0*<i>)))
-                / ((k!c) * ((n+1-'k)!c )) by A47,A50,XCMPLX_1:63
-                  .=( n!c * (n+1-k+k+(0+0)*<i>)) / ((k!c) * ((n+1-'k)!c))
+                  =( n!c * (n+1-k+k+(0+0)*<i>)) / ((k!c) * ((n+1-'k)!c))
+                             by A47,A50
                   .=((n+1)!c ) / ((k!c) * ((n+1-'k)!c)) by Th1
                   .=(Coef(n+1)).k by A28,Def10;
                 hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
@@ -1028,7 +1025,7 @@ A50:            n !c /((k!c) * ((n-'k)!c)) =(n!c * (n+1-k+0*<i>))
         hence ((w (#) Expan(n,z,w))+Shift((z (#) Expan(n,z,w)))).k
         =Expan(n+1,z,w).k by A14;
       end;
-      hence thesis by COMSEQ_1:6;
+      hence thesis by FUNCT_2:113;
     end;
     thus (z+w) |^ (n+1) =(Partial_Sums((w (#) Expan(n,z,w))) +
     Partial_Sums(Shift((z (#) Expan(n,z,w))))).(n+1)
@@ -1054,17 +1051,14 @@ A2:   n <k;
     now
       assume
 A3:   k <= n;
-A4:   n!c <> 0c by Th1; thus
 A5:   Expan_e(n,z,w).k = (Coef_e(n)).k * (z |^ k) * (w |^ (n-'k)) by A3,Def14
         .= 1r/((k!c ) * ((n-'k)!c )) * (z |^ k) * (w |^ (n-'k)) by A3,Def11;
       1r/((k!c ) * ((n-'k)!c ))
       =(((n!c ) * 1r )/(n!c )) /((k!c ) * ((n-'k)!c))
-      by A4,COMPLEX1:def 7,XCMPLX_1:60
-        .= (1r /(n!c )) * (n!c ) /((k!c ) * ((n-'k)!c )) by XCMPLX_1:75;
+      by Th1,XCMPLX_1:60
+        .= (1r /(n!c )) * (n!c ) /((k!c ) * ((n-'k)!c ));
       hence Expan_e(n,z,w).k = (1r/(n!c )) * (n!c ) /((k!c ) * ((n-'k)!c ))
       * ((z |^ k) * (w |^ (n-'k))) by A5
-        .= (1r/(n!c )) * ( (n!c ) /((k!c ) * ((n-'k)!c )) )
-      * ((z |^ k) * (w |^ (n-'k))) by XCMPLX_1:75
         .= (1r/(n!c )) * ((n!c ) /((k!c ) * ((n-'k)!c ))
       * (z |^ k) * (w |^ (n-'k)))
         .= (1r/(n!c )) * ((Coef(n)).k * ((z |^ k))
@@ -1074,15 +1068,14 @@ A5:   Expan_e(n,z,w).k = (Coef_e(n)).k * (z |^ k) * (w |^ (n-'k)) by A3,Def14
     end;
     hence Expan_e(n,z,w).k = ( (1r/(n!c )) (#) Expan(n,z,w) ).k by A1;
   end;
-  hence Expan_e(n,z,w)=((1r/(n!c )) (#) Expan(n,z,w)) by COMSEQ_1:6;
+  hence Expan_e(n,z,w)=((1r/(n!c )) (#) Expan(n,z,w)) by FUNCT_2:113;
 end;
 
 theorem Th9:
   ((z+w) |^ n) / (n!c) = Partial_Sums(Expan_e(n,z,w)).n
 proof
   thus ((z+w) |^ n)/(n!c )
-  = ((Partial_Sums(Expan(n,z,w)).n) * 1r)/(n!c ) by Th7,COMPLEX1:def 7
-    .= (Partial_Sums(Expan(n,z,w)).n) * (1r/(n!c )) by XCMPLX_1:75
+     = (Partial_Sums(Expan(n,z,w)).n) * (1r/(n!c )) by Th7
     .= ((1r/(n!c )) (#) (Partial_Sums(Expan(n,z,w)))).n by VALUED_1:6
     .= Partial_Sums( (1r/(n!c )) (#) Expan(n,z,w)).n by COMSEQ_3:29
     .= Partial_Sums(Expan_e(n,z,w)).n by Th8;
@@ -1096,7 +1089,7 @@ proof
   Partial_Sums(|.((0c qua complex number) ExpSeq).|).0
   =|.((0c qua complex number) ExpSeq).|.0 by SERIES_1:def 1
     .=|. ((0c qua complex number) ExpSeq).0 .| by VALUED_1:18
-    .=1 by Th4,COMPLEX1:134,def 7;
+    .=1 by Th4,COMPLEX1:134;
   then
 A1: X[0];
 A2: for n being Nat st X[n] holds X[n+1]
@@ -1105,7 +1098,7 @@ A2: for n being Nat st X[n] holds X[n+1]
 A3: Partial_Sums(|.(0c qua complex number) ExpSeq.|).n=1;
 X:   n in NAT by ORDINAL1:def 13;
     thus Partial_Sums(|.(0c qua complex number) ExpSeq.|).(n+1)
-    =1 + |.(0c qua complex number) ExpSeq.|.(n+1) by A3,SERIES_1:def 1,X
+    =1 + |.(0c qua complex number) ExpSeq.|.(n+1) by A3,X,SERIES_1:def 1
       .=1 + |.((0c qua complex number) ExpSeq).(n+1).| by VALUED_1:18
       .=1 + |.((0c qua complex number) ExpSeq.n) * 0c/(n+1+0*<i>) .| by Th4,X
       .=1 by COMPLEX1:130;
@@ -1115,8 +1108,6 @@ A4: (0c qua complex number) ExpSeq is absolutely_summable
     for n being Nat holds X[n] from NAT_1:sch 2(A1,A2);
     then Partial_Sums(|.(0c qua complex number) ExpSeq.|)
     is constant by VALUED_0:def 18;
-    then Partial_Sums(|.(0c qua complex number) ExpSeq.|)
-    is convergent;
     hence |.(0c qua complex number) ExpSeq.| is summable by SERIES_1:def 2;
   end;
   defpred X[set] means Partial_Sums((0c qua complex number) ExpSeq).$1=1;
@@ -1130,17 +1121,16 @@ A6: for n st X[n] holds X[n+1]
     let n such that
 A7: Partial_Sums((0c qua complex number) ExpSeq).n=1;
     thus Partial_Sums((0c qua complex number) ExpSeq).(n+1)
-    =1r + ((0c qua complex number) ExpSeq).(n+1)
-    by A7,COMPLEX1:def 7,COMSEQ_3:def 7
+    =1r + ((0c qua complex number) ExpSeq).(n+1) by A7,COMSEQ_3:def 7
       .=1r + ((0c qua complex number) ExpSeq.n) * 0c/(n+1+0*<i>) by Th4
-      .=1 by COMPLEX1:def 7;
+      .=1;
   end;
   for n holds X[n] from NAT_1:sch 1(A5,A6);
-  hence thesis by A4,COMPLEX1:def 7,COMSEQ_2:10;
+  hence thesis by A4,COMSEQ_2:10;
 end;
 
 registration
-  let z;
+  let z be complex number;
   cluster z ExpSeq -> absolutely_summable;
   coherence
   proof
@@ -1161,7 +1151,7 @@ A4:     (z ExpSeq).n <> 0c;
 A5:       ((z ExpSeq).n * z)/(n+1+0*<i>)=0c by Th4;
           0c = 0c/z
             .=(z ExpSeq).n * z/z by A5,XCMPLX_1:50
-            .=(z ExpSeq).n * (z/z) by XCMPLX_1:75
+            .=(z ExpSeq).n * (z/z)
             .=(z ExpSeq).n * 1 by A1,XCMPLX_1:60
             .=(z ExpSeq).n;
           hence contradiction by A4;
@@ -1183,7 +1173,6 @@ A7:   for n holds rseq.n=|.z ExpSeq.|.(n+1)/|.z ExpSeq.|.n;
             .=|.(z ExpSeq).(n+1)/(z ExpSeq).n.| by COMPLEX1:153
             .=|.((z ExpSeq).n * z/(n+1+0*<i>)) /(z ExpSeq).n.| by Th4
             .=|.((z ExpSeq).n * (z/(n+1+0*<i>))) /(z ExpSeq).n.|
-          by XCMPLX_1:75
             .=|.(z/(n+1+0*<i>)) .| by A6,XCMPLX_1:90
             .=|.z.|/abs(n+1) by COMPLEX1:153
             .=|.z.|/(n+1) by ABSVALUE:def 1;
@@ -1200,12 +1189,12 @@ theorem Th11:
   (z ExpSeq).0 = 1 & Expan(0,z,w).0 = 1
 proof
   thus (z ExpSeq).0 = (z |^ 0)/(0!c ) by Def8
-    .= 1 by Th1,COMPLEX1:def 7,COMSEQ_3:def 1;
+    .= 1 by Th1,COMSEQ_3:def 1;
 A1: 0-'0=0 by XREAL_1:234;
   hence Expan(0,z,w).0 = (Coef(0)).0 * (z |^ 0) * (w |^ 0) by Def13
     .= 1/(1 * 1) * z |^ 0 * w |^ 0 by A1,Def10,Th1
     .= 1r * (w GeoSeq).0 by COMSEQ_3:def 1
-    .= 1 by COMPLEX1:def 7,COMSEQ_3:def 1;
+    .= 1 by COMSEQ_3:def 1;
 end;
 
 theorem Th12:
@@ -1232,9 +1221,8 @@ A5: (Alfa(k+1,z,w)).l
   =(z |^ l/(l!c )) * (w ExpSeq).((k+1-'l)) by Def8
     .=(z |^ l/(l!c )) * (w |^ ((k+1-'l))/(((k+1-'l))!c )) by Def8
     .=(((z |^ l) * (w |^ ((k+1-'l))) * 1r)/((l!c ) * (((k+1-'l))!c )))
-  by COMPLEX1:def 7,XCMPLX_1:77
+  by XCMPLX_1:77
     .=((z |^ l) * (w |^ ((k+1-'l))) * ((1r/((l!c ) * (((k+1-'l))!c )))))
-  by XCMPLX_1:75
     .= ((Coef_e(k+1)).l) * ((z |^ l) * (w |^ ((k+1-'l)))) by A3,Def11
     .= ((Coef_e(k+1)).l) * (z |^ l) * (w |^ ((k+1-'l)))
     .=Expan_e(k+1,z,w).l by A3,Def14;
@@ -1268,9 +1256,9 @@ A2: k-'k=0 by XREAL_1:235;
 A3: (k-'k)!c =1 by A1,Th1,XREAL_1:235;
   thus (Expan_e(k,z,w)).(k)=((Coef_e(k)).k) * (z |^ k) * (w |^ 0) by A2,Def14
     .=( (Coef_e(k)).k) * (z |^ k) * 1r by COMSEQ_3:11
-    .=(1r/((k!c ) * 1r)) * (z |^ k) by A3,Def11,COMPLEX1:def 7
-    .=((z |^ k) * 1r)/(k!c ) by COMPLEX1:def 7,XCMPLX_1:75
-    .=(z ExpSeq).k by Def8,COMPLEX1:def 7;
+    .=(1r/((k!c ) * 1r)) * (z |^ k) by A3,Def11
+    .=((z |^ k) * 1r)/(k!c )
+    .=(z ExpSeq).k by Def8;
 end;
 
 theorem Th15:
@@ -1284,8 +1272,8 @@ A2: 0-'0=0 by XREAL_1:234;
   Partial_Sums(Alfa(0,z,w)).0 = Alfa(0,z,w).0 by COMSEQ_3:def 7
     .= (z ExpSeq).0 * Partial_Sums(w ExpSeq).0 by A2,Def15
     .= (z ExpSeq).0 * (w ExpSeq).0 by COMSEQ_3:def 7
-    .=1r * (w ExpSeq).0 by Th11,COMPLEX1:def 7
-    .= 1 by Th11,COMPLEX1:def 7;
+    .=1r * (w ExpSeq).0 by Th11
+    .= 1 by Th11;
   then
 A3: X[0] by A1;
 A4: for k st X[k] holds X[k+1]
@@ -1333,8 +1321,6 @@ A1: (Partial_Sums(z ExpSeq).k) * (Partial_Sums(w ExpSeq).k)
     .=Partial_Sums((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).k
   -Partial_Sums(Alfa(k,z,w)).k by COMSEQ_3:29
     .=Partial_Sums((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).k
-  +-Partial_Sums(Alfa(k,z,w)).k
-    .=Partial_Sums((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).k
   +(-Partial_Sums(Alfa(k,z,w))).k by VALUED_1:8
     .=(Partial_Sums((Partial_Sums(w ExpSeq).k) (#) (z ExpSeq))
   -Partial_Sums(Alfa(k,z,w))).k by VALUED_1:1
@@ -1348,9 +1334,8 @@ A2: l <= k;
     thus ( ( Partial_Sums(w ExpSeq).k) (#) (z ExpSeq) - (Alfa(k,z,w)) ).l
     =(( Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).l
     +(-Alfa(k,z,w)).l by VALUED_1:1
-      .=(( Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).l
-    +(-Alfa(k,z,w).l) by VALUED_1:8
       .=(( Partial_Sums(w ExpSeq).k) (#) (z ExpSeq)).l -Alfa(k,z,w).l
+              by VALUED_1:8
       .=(( Partial_Sums(w ExpSeq).k ) * ( (z ExpSeq).l ))
     -Alfa(k,z,w).l by VALUED_1:6
       .=((z ExpSeq).l) * ( Partial_Sums(w ExpSeq).k)
@@ -1365,16 +1350,16 @@ A2: l <= k;
 end;
 
 theorem Th17:
-  |. Partial_Sums((z ExpSeq)).k .| <= Partial_Sums(|.z.| ExpSeq).k &
-  Partial_Sums((|.z.| ExpSeq)).k <= Sum(|.z.| ExpSeq) &
-  |. Partial_Sums(( z ExpSeq)).k .| <= Sum(|.z.| ExpSeq)
+  |. Partial_Sums((z ExpSeq)).k .| <= Partial_Sums(|.z.| rExpSeq).k &
+  Partial_Sums((|.z.| rExpSeq)).k <= Sum(|.z.| rExpSeq) &
+  |. Partial_Sums(( z ExpSeq)).k .| <= Sum(|.z.| rExpSeq)
 proof
   defpred X[Element of NAT] means |. Partial_Sums(( z ExpSeq)).$1 .|
-  <= Partial_Sums((|.z.| ExpSeq)).$1;
+  <= Partial_Sums((|.z.| rExpSeq)).$1;
 A1: |. Partial_Sums(( z ExpSeq)).0 .| = |. ((z ExpSeq)).0 .| by COMSEQ_3:def 7
     .= |. (z |^ 0)/ (0 !c).| by Def8
     .= 1 by Th1,COMPLEX1:134,COMSEQ_3:def 1;
-  Partial_Sums((|.z.| ExpSeq)).0 = ((|.z.| ExpSeq)).0 by SERIES_1:def 1
+  Partial_Sums((|.z.| rExpSeq)).0 = ((|.z.| rExpSeq)).0 by SERIES_1:def 1
     .= ((|.z .|) |^ 0)/ (0!) by Def9
     .= 1 by NEWTON:9,18;
   then
@@ -1382,7 +1367,7 @@ A2: X[0] by A1;
 A3: for k st X[k] holds X[k+1]
   proof
     let k such that
-A4: |. Partial_Sums(( z ExpSeq)).k .| <= Partial_Sums((|.z.| ExpSeq)).k;
+A4: |. Partial_Sums(( z ExpSeq)).k .| <= Partial_Sums((|.z.| rExpSeq)).k;
 A5: |. Partial_Sums(( z ExpSeq)).(k+1) .| =|. Partial_Sums(( z ExpSeq)).k
     + ((z ExpSeq)).(k+1) .| by COMSEQ_3:def 7;
     |. Partial_Sums(( z ExpSeq)).k + ((z ExpSeq)).(k+1) .|
@@ -1390,62 +1375,63 @@ A5: |. Partial_Sums(( z ExpSeq)).(k+1) .| =|. Partial_Sums(( z ExpSeq)).k
     by COMPLEX1:142;
     then
 A6: |. Partial_Sums(( z ExpSeq)).(k+1) .|
-    <= |. Partial_Sums(( z ExpSeq)).k.| + (|.z.| ExpSeq).(k+1) by A5,Th4;
-A7: |. Partial_Sums(( z ExpSeq)).k.| + (|.z.| ExpSeq).(k+1)
-    <= Partial_Sums((|.z.| ExpSeq)).k + (|.z.| ExpSeq).(k+1) by A4,XREAL_1:8;
-    Partial_Sums((|.z.| ExpSeq)).k + (|.z.| ExpSeq).(k+1)
-    =Partial_Sums((|.z.| ExpSeq)).(k+1) by SERIES_1:def 1;
+    <= |. Partial_Sums(( z ExpSeq)).k.| + (|.z.| rExpSeq).(k+1) by A5,Th4;
+A7: |. Partial_Sums(( z ExpSeq)).k.| + (|.z.| rExpSeq).(k+1)
+    <= Partial_Sums((|.z.| rExpSeq)).k + (|.z.| rExpSeq).(k+1) by A4,XREAL_1:8;
+    Partial_Sums((|.z.| rExpSeq)).k + (|.z.| rExpSeq).(k+1)
+    =Partial_Sums((|.z.| rExpSeq)).(k+1) by SERIES_1:def 1;
     hence |. Partial_Sums(( z ExpSeq)).(k+1) .|
-    <= Partial_Sums((|.z.| ExpSeq)).(k+1) by A6,A7,XXREAL_0:2;
+    <= Partial_Sums((|.z.| rExpSeq)).(k+1) by A6,A7,XXREAL_0:2;
   end;
 A8: for k holds X[k] from NAT_1:sch 1(A2,A3);
-  hence |. Partial_Sums(( z ExpSeq)).k .| <= Partial_Sums((|.z.| ExpSeq)).k;
+  hence |. Partial_Sums(( z ExpSeq)).k .| <= Partial_Sums((|.z.| rExpSeq)).k;
   now
     let k be set such that
 A10: k in NAT;
     thus |. (z ExpSeq).|.k = |. (z ExpSeq).k .| by VALUED_1:18
-      .= (|.z.| ExpSeq).k by A10,Th4;
+      .= (|.z.| rExpSeq).k by A10,Th4;
   end;
   then
-A11: |. z ExpSeq .| = |.z.| ExpSeq by SEQ_1:8;
-  then Partial_Sums((|.z.| ExpSeq)).k <= lim(Partial_Sums((|.z.| ExpSeq )))
+A11: |. z ExpSeq .| = |.z.| rExpSeq by FUNCT_2:18;
+  then Partial_Sums((|.z.| rExpSeq)).k <= lim(Partial_Sums((|.z.| rExpSeq )))
   by SEQ_4:54;
-  hence Partial_Sums((|.z.| ExpSeq)).k <= Sum(|.z.| ExpSeq) by SERIES_1:def 3;
+  hence Partial_Sums((|.z.| rExpSeq)).k <= Sum(|.z.| rExpSeq)
+  by SERIES_1:def 3;
 A12: now
     let k;
-    lim(Partial_Sums((|.z.| ExpSeq)))=Sum(|.z.| ExpSeq) by SERIES_1:def 3;
-    hence Partial_Sums((|.z.| ExpSeq)).k <= Sum(|.z.| ExpSeq)
+    lim(Partial_Sums((|.z.| rExpSeq)))=Sum(|.z.| rExpSeq) by SERIES_1:def 3;
+    hence Partial_Sums((|.z.| rExpSeq)).k <= Sum(|.z.| rExpSeq)
     by A11,SEQ_4:54;
   end;
 A13: |. Partial_Sums(( z ExpSeq)).k .|
-  <= Partial_Sums((|.z.| ExpSeq)).k by A8;
-  Partial_Sums((|.z.| ExpSeq)).k <= Sum(|.z.| ExpSeq) by A12;
-  hence |. Partial_Sums(( z ExpSeq)).k .| <= Sum(|.z.| ExpSeq)
+  <= Partial_Sums((|.z.| rExpSeq)).k by A8;
+  Partial_Sums((|.z.| rExpSeq)).k <= Sum(|.z.| rExpSeq) by A12;
+  hence |. Partial_Sums(( z ExpSeq)).k .| <= Sum(|.z.| rExpSeq)
   by A13,XXREAL_0:2;
 end;
 
 theorem Th18:
-  1 <= Sum(|.z.| ExpSeq)
+  1 <= Sum(|.z.| rExpSeq)
 proof
   |. Partial_Sums(z ExpSeq).0 .|=|. (z ExpSeq).0 .| by COMSEQ_3:def 7
-    .=1 by Th4,COMPLEX1:134,def 7;
-  hence 1 <= Sum(|.z.| ExpSeq) by Th17;
+    .=1 by Th4,COMPLEX1:134;
+  hence 1 <= Sum(|.z.| rExpSeq) by Th17;
 end;
 
 theorem Th19:
-  0 <= (|. z .| ExpSeq).n
+  0 <= (|. z .| rExpSeq).n
 proof
-  (|. z .| ExpSeq).n = |.((z ExpSeq)).n .| by Th4;
-  hence 0 <= (|. z .| ExpSeq).n by COMPLEX1:132;
+  (|. z .| rExpSeq).n = |.((z ExpSeq)).n .| by Th4;
+  hence 0 <= (|. z .| rExpSeq).n by COMPLEX1:132;
 end;
 
 theorem Th20:
-  abs((Partial_Sums(|.z .| ExpSeq)).n) = Partial_Sums(|.z .| ExpSeq).n &
+  abs((Partial_Sums(|.z .| rExpSeq)).n) = Partial_Sums(|.z .| rExpSeq).n &
   (n <= m implies
-  abs((Partial_Sums(|.z .| ExpSeq).m-Partial_Sums(|.z .| ExpSeq).n))
-  = Partial_Sums(|.z .| ExpSeq).m-Partial_Sums(|.z .| ExpSeq).n)
+  abs((Partial_Sums(|.z .| rExpSeq).m-Partial_Sums(|.z .| rExpSeq).n))
+  = Partial_Sums(|.z .| rExpSeq).m-Partial_Sums(|.z .| rExpSeq).n)
 proof
-  for n holds 0 <= (|. z .| ExpSeq).n by Th19;
+  for n holds 0 <= (|. z .| rExpSeq).n by Th19;
   hence thesis by COMSEQ_3:9;
 end;
 
@@ -1471,29 +1457,20 @@ proof
   let p be real number such that
 A1: p>0;
   reconsider pp = p as Real by XREAL_0:def 1;
-A2: 1 <= Sum(|.z.| ExpSeq) by Th18;
-  then 0 * Sum(|.z.| ExpSeq) < 4 * Sum(|.z.| ExpSeq);
-  then
-A3: 0/(4 * Sum(|.z.| ExpSeq)) < p/(4 * Sum(|.z.| ExpSeq)) by A1;
-A4: 0 < Sum(|.w.| ExpSeq) by Th18;
-  then 0 * Sum(|.w.| ExpSeq) < 4 * Sum(|.w.| ExpSeq);
-  then
-A5: 0/(4 * Sum(|.w.| ExpSeq)) < p/(4 * Sum(|.w.| ExpSeq)) by A1;
-  set p1=min((pp/(4 * Sum(|.z.| ExpSeq))),(pp/(4 * Sum(|.w.| ExpSeq))));
-A6: p1 > 0 by A3,A5,XXREAL_0:15;
-A7: p1>0 & p1 <= p/(4 * Sum(|.z.| ExpSeq))
-  & p1 <= p/(4 * Sum(|.w.| ExpSeq)) by A3,A5,XXREAL_0:15,17;
+A2: 1 <= Sum(|.z.| rExpSeq) by Th18;
+A4: 0 < Sum(|.w.| rExpSeq) by Th18;
+  set p1=min((pp/(4 * Sum(|.z.| rExpSeq))),(pp/(4 * Sum(|.w.| rExpSeq))));
+A6: p1 > 0 by A2,A4,A1,XXREAL_0:15;
   now
     let k be set such that
 A8: k in NAT;
     thus |. (z ExpSeq).|.k = |. (z ExpSeq).k .| by VALUED_1:18
-      .= (|.z.| ExpSeq).k by A8,Th4;
+      .= (|.z.| rExpSeq).k by A8,Th4;
   end;
-  then |. z ExpSeq .| = |.z.| ExpSeq by SEQ_1:8;
-  then Partial_Sums(( |.z.| ExpSeq )) is convergent by SERIES_1:def 2;
+  then |. z ExpSeq .| = |.z.| rExpSeq by FUNCT_2:18;
   then consider n1 such that
 A9: for k,l be Element of NAT st n1 <= k & n1 <= l holds
-  abs(Partial_Sums(( |.z.| ExpSeq )).k - Partial_Sums(( |.z.| ExpSeq )).l)
+  abs(Partial_Sums(( |.z.| rExpSeq )).k - Partial_Sums(( |.z.| rExpSeq )).l)
   < p1 by A6,COMSEQ_3:4;
   consider n2 such that
 A10: for k,l be Element of NAT st n2 <= k & n2 <= l holds
@@ -1512,11 +1489,11 @@ A12:  l <= k;
       -Partial_Sums(w ExpSeq).(k-'l)) .| by A12,Def17
         .=|.(z ExpSeq).l.| * |.(Partial_Sums(w ExpSeq).k
       -Partial_Sums(w ExpSeq).(k-'l)).| by COMPLEX1:151
-        .=(|.z.| ExpSeq).l * |.(Partial_Sums(w ExpSeq).k
+        .=(|.z.| rExpSeq).l * |.(Partial_Sums(w ExpSeq).k
       -Partial_Sums(w ExpSeq).(k-'l)).| by Th4;
     end;
     hence for l be Element of NAT st l <= k holds
-    |.Conj(k,z,w).|.l =(|.z.| ExpSeq).l * |.(Partial_Sums(w ExpSeq).k
+    |.Conj(k,z,w).|.l =(|.z.| rExpSeq).l * |.(Partial_Sums(w ExpSeq).k
     -Partial_Sums(w ExpSeq).(k-'l)).|;
   end;
 A13: now
@@ -1525,29 +1502,29 @@ A13: now
       let l be Element of NAT;
       assume l <= k;
       then
-A14:  |.Conj(k,z,w).|.l =(|.z .| ExpSeq).l * |.Partial_Sums(w ExpSeq ).k
+A14:  |.Conj(k,z,w).|.l =(|.z .| rExpSeq).l * |.Partial_Sums(w ExpSeq ).k
       -Partial_Sums(w ExpSeq).(k-'l).| by A11;
 A15:  |.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).|
       <= |.Partial_Sums(w ExpSeq).k .|
       + |.Partial_Sums(w ExpSeq).(k-'l).| by COMPLEX1:143;
-      |.Partial_Sums(w ExpSeq).k .| <= Sum(|.w.| ExpSeq) by Th17;
+      |.Partial_Sums(w ExpSeq).k .| <= Sum(|.w.| rExpSeq) by Th17;
       then
 A16:  |.Partial_Sums(w ExpSeq).k .| + |.Partial_Sums(w ExpSeq).(k-'l ).|
-      <= Sum(|.w.| ExpSeq) + |.Partial_Sums(w ExpSeq).(k-'l).| by XREAL_1:8;
-      |.Partial_Sums(w ExpSeq).(k-'l).| <= Sum(|.w.| ExpSeq) by Th17;
-      then Sum(|.w.| ExpSeq) + |.Partial_Sums(w ExpSeq).(k-'l).|
-      <= Sum(|.w.| ExpSeq)+ Sum(|.w.| ExpSeq) by XREAL_1:8;
+      <= Sum(|.w.| rExpSeq) + |.Partial_Sums(w ExpSeq).(k-'l).| by XREAL_1:8;
+      |.Partial_Sums(w ExpSeq).(k-'l).| <= Sum(|.w.| rExpSeq) by Th17;
+      then Sum(|.w.| rExpSeq) + |.Partial_Sums(w ExpSeq).(k-'l).|
+      <= Sum(|.w.| rExpSeq)+ Sum(|.w.| rExpSeq) by XREAL_1:8;
       then |.Partial_Sums(w ExpSeq).k .| + |.Partial_Sums(w ExpSeq).(k-'l).|
-      <= 2 * Sum(|.w.| ExpSeq) by A16,XXREAL_0:2;
+      <= 2 * Sum(|.w.| rExpSeq) by A16,XXREAL_0:2;
       then
 A17:  |.Partial_Sums(w ExpSeq).k -Partial_Sums(w ExpSeq).(k-'l).|
-      <= 2 * Sum(|.w.| ExpSeq) by A15,XXREAL_0:2;
-      0 <= (|.z .| ExpSeq).l by Th19;
-      hence |.Conj(k,z,w).|.l <= (|.z .| ExpSeq).l * (2 * Sum(|.w.| ExpSeq))
+      <= 2 * Sum(|.w.| rExpSeq) by A15,XXREAL_0:2;
+      0 <= (|.z .| rExpSeq).l by Th19;
+      hence |.Conj(k,z,w).|.l <= (|.z .| rExpSeq).l * (2 * Sum(|.w.| rExpSeq))
       by A14,A17,XREAL_1:66;
     end;
     hence for l be Element of NAT st l <= k holds
-    |.Conj(k,z,w).|.l <= (|.z .| ExpSeq).l * (2 * Sum(|.w.| ExpSeq));
+    |.Conj(k,z,w).|.l <= (|.z .| rExpSeq).l * (2 * Sum(|.w.| rExpSeq));
   end;
   now
     let k such that
@@ -1566,7 +1543,7 @@ A23:  l <= n3;
 A24:  k-'l=k-l by A20,XREAL_1:235,XXREAL_0:2;
 A25:  0+n2 <= n1+n2 by XREAL_1:8;
 A26:  n4-l <= k-l by A18,XREAL_1:11;
-      n3+n3-n3 <= n3+n3-l by A23,REAL_2:106;
+      n3+n3-n3 <= n3+n3-l by A23,XREAL_1:12;
       then n3 <= k-l by A26,XXREAL_0:2;
       then
 A27:  n2 <= k-'l by A24,A25,XXREAL_0:2;
@@ -1576,67 +1553,58 @@ A27:  n2 <= k-'l by A24,A25,XXREAL_0:2;
       then
 A28:  |.Partial_Sums(( w ExpSeq )).k - Partial_Sums(( w ExpSeq )).(k -'l).|
       < p1 by A10,A27;
-      0 <= (|.z .| ExpSeq).l by Th19;
-      then (|.z .| ExpSeq).l * |.Partial_Sums(( w ExpSeq )).k
+      0 <= (|.z .| rExpSeq).l by Th19;
+      then (|.z .| rExpSeq).l * |.Partial_Sums(( w ExpSeq )).k
       - Partial_Sums(( w ExpSeq )).(k-'l).|
-      <= (|.z .| ExpSeq).l * p1 by A28,XREAL_1:66;
-      hence |.Conj(k,z,w).|.l <= p1 * (|.z .| ExpSeq).l by A11,A20,A23,
+      <= (|.z .| rExpSeq).l * p1 by A28,XREAL_1:66;
+      hence |.Conj(k,z,w).|.l <= p1 * (|.z .| rExpSeq).l by A11,A20,A23,
 XXREAL_0:2;
     end;
     then
 A29: Partial_Sums(|.Conj(k,z,w).|).n3
-    <= Partial_Sums(|.z .| ExpSeq).n3 * p1 by COMSEQ_3:7;
-    Partial_Sums(|.z .| ExpSeq).n3 <= Sum(|.z.| ExpSeq) by Th17;
-    then Partial_Sums(|.z .| ExpSeq).n3 * p1
-    <= Sum(|.z.| ExpSeq) * p1 by A6,XREAL_1:66;
+    <= Partial_Sums(|.z .| rExpSeq).n3 * p1 by COMSEQ_3:7;
+    Partial_Sums(|.z .| rExpSeq).n3 * p1
+    <= Sum(|.z.| rExpSeq) * p1 by A6,XREAL_1:66,Th17;
     then
 A30: Partial_Sums(|.Conj(k,z,w).|).n3
-    <= Sum(|.z.| ExpSeq) * p1 by A29,XXREAL_0:2;
-A31: Sum(|.z.| ExpSeq) * p1 <= Sum(|.z.| ExpSeq) * (p/(4 * Sum
-    (|.z.| ExpSeq))) by A2,A7,XREAL_1:66;
-A32: 0 <> Sum(|.z.| ExpSeq) & 4 <>0 by Th18;
-    Sum(|.z.| ExpSeq) * (p/(4 * Sum(|.z.| ExpSeq)))
-    =Sum(|.z.| ExpSeq) * (p * (4 * Sum(|.z.| ExpSeq))") by XCMPLX_0:def 9
-      .=(Sum(|.z.| ExpSeq) * p) * (4 * Sum(|.z.| ExpSeq))"
-      .=(Sum(|.z.| ExpSeq) * p)/(4 * Sum(|.z.| ExpSeq)) by XCMPLX_0:def 9
+    <= Sum(|.z.| rExpSeq) * p1 by A29,XXREAL_0:2;
+A31: Sum(|.z.| rExpSeq) * p1 <= Sum(|.z.| rExpSeq) * (p/(4 * Sum
+    (|.z.| rExpSeq))) by A2,XXREAL_0:17,XREAL_1:66;
+A32: 0 <> Sum(|.z.| rExpSeq) & 4 <>0 by Th18;
+    Sum(|.z.| rExpSeq) * (p/(4 * Sum(|.z.| rExpSeq)))
+       =(Sum(|.z.| rExpSeq) * p)/(4 * Sum(|.z.| rExpSeq))
       .=p/4 by A32,XCMPLX_1:92;
     then
 A33: Partial_Sums(|.Conj(k,z,w).|).n3 <= p/4 by A30,A31,XXREAL_0:2;
-    0 < p/4 & 0 < p/2 by A1;
-    then 0+p/4 < p/4 + p/4 by XREAL_1:8;
+    0+p/4 < p/4 + p/4 by XREAL_1:8,A1;
     then
 A34: Partial_Sums(|.Conj(k,z,w).|).n3 < p/2 by A33,XXREAL_0:2;
     k-'n3=k-n3 by A18,A19,XREAL_1:235,XXREAL_0:2;
     then
 A35: k=(k-'n3)+n3;
     for l be Element of NAT st l <= k holds
-    |.Conj(k,z,w).|.l <= (2 * Sum(|.w.| ExpSeq)) * (|.z .| ExpSeq).l by A13;
+    |.Conj(k,z,w).|.l <= (2 * Sum(|.w.| rExpSeq)) * (|.z .| rExpSeq).l by A13;
     then
 A36: Partial_Sums(|.Conj(k,z,w).|).(k) -Partial_Sums(|.Conj(k,z,w).|). n3
-    <= (Partial_Sums(|.z .| ExpSeq).(k) -Partial_Sums(|.z .| ExpSeq).n3)
-    * (2 * Sum(|.w.| ExpSeq)) by A20,A35,COMSEQ_3:8;
-    abs((Partial_Sums(|.z .| ExpSeq).k-Partial_Sums(|.z .| ExpSeq).n3))
+    <= (Partial_Sums(|.z .| rExpSeq).(k) -Partial_Sums(|.z .| rExpSeq).n3)
+    * (2 * Sum(|.w.| rExpSeq)) by A20,A35,COMSEQ_3:8;
+    abs((Partial_Sums(|.z .| rExpSeq).k-Partial_Sums(|.z .| rExpSeq).n3))
     <= p1 by A9,A21,A22;
     then
-A37: Partial_Sums(|.z .| ExpSeq).k-Partial_Sums(|.z .| ExpSeq).n3
-    <= p1 by A20,Th20;
-A38: 0 * Sum(|.w.| ExpSeq) < 2 * Sum(|.w.| ExpSeq) by A4;
-    then (Partial_Sums(|.z .| ExpSeq).k -Partial_Sums(|.z .| ExpSeq).n3)
-    * (2 * Sum(|.w.| ExpSeq))
-    <= p1 * (2 * Sum(|.w.| ExpSeq)) by A37,XREAL_1:66;
+A37: Partial_Sums(|.z .| rExpSeq).k-Partial_Sums(|.z .| rExpSeq).n3
+    <= p1 by A19,Th20,A18,XXREAL_0:2;
+    (Partial_Sums(|.z .| rExpSeq).k -Partial_Sums(|.z .| rExpSeq).n3)
+    * (2 * Sum(|.w.| rExpSeq))
+    <= p1 * (2 * Sum(|.w.| rExpSeq)) by A37,XREAL_1:66,A4;
     then
 A39: Partial_Sums(|.Conj(k,z,w).|).k-Partial_Sums(|.Conj(k,z,w).|).n3
-    <= p1 * (2 * Sum(|.w.| ExpSeq)) by A36,XXREAL_0:2;
-A40: (2 * Sum(|.w.| ExpSeq)) * p1
-    <= (2 * Sum(|.w.| ExpSeq)) * (p/(4 * Sum(|.w.| ExpSeq)))
-    by A7,A38,XREAL_1:66;
-A41: 0 <> Sum(|.w.| ExpSeq) & 4 <>0 by Th18;
-    (2 * Sum(|.w.| ExpSeq) ) * (p/(4 * Sum(|.w.| ExpSeq)))
-    =(2 * Sum(|.w.| ExpSeq) ) * (p * (4 * Sum
-    (|.w.| ExpSeq))") by XCMPLX_0:def 9
-      .=((2 * Sum(|.w.| ExpSeq) ) * p ) * (4 * Sum (|.w.| ExpSeq))"
-      .=((2 * p ) * Sum(|.w.| ExpSeq) ) /(4 * Sum(|.w.| ExpSeq)) by
-XCMPLX_0:def 9
+    <= p1 * (2 * Sum(|.w.| rExpSeq)) by A36,XXREAL_0:2;
+A40: (2 * Sum(|.w.| rExpSeq)) * p1
+    <= (2 * Sum(|.w.| rExpSeq)) * (p/(4 * Sum(|.w.| rExpSeq)))
+    by XXREAL_0:17,A4,XREAL_1:66;
+A41: 0 <> Sum(|.w.| rExpSeq) & 4 <>0 by Th18;
+    (2 * Sum(|.w.| rExpSeq) ) * (p/(4 * Sum(|.w.| rExpSeq)))
+       =((2 * p ) * Sum(|.w.| rExpSeq) ) /(4 * Sum(|.w.| rExpSeq))
       .= (p +p )/4 by A41,XCMPLX_1:92
       .= p/2;
     then Partial_Sums(|.Conj(k,z,w).|).k-Partial_Sums(|.Conj(k,z,w).|).n3
@@ -1694,8 +1662,10 @@ A7:       n <= k;
   hence thesis;
 end;
 
-Lm2: Sum(z ExpSeq) * Sum(w ExpSeq) = Sum((z+w) ExpSeq)
-proof
+Lm2: for z,w being complex number holds
+ Sum(z ExpSeq) * Sum(w ExpSeq) = Sum((z+w) ExpSeq)
+proof let z0,w0 be complex number;
+  reconsider z=z0, w=w0 as Element of COMPLEX by XCMPLX_0:def 2;
   deffunc U(Element of NAT) = Partial_Sums(Conj($1,z,w)).$1;
   ex seq st for k holds seq.k= U(k) from COMSEQ_1:sch 1;
   then consider seq such that
@@ -1708,21 +1678,20 @@ A1: for k holds seq.k=Partial_Sums(Conj(k,z,w)).k;
       .=(Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq)).k
     -Partial_Sums((z+w) ExpSeq).k by VALUED_1:5
       .=(Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq)).k
-    +(-Partial_Sums((z+w) ExpSeq).k)
-      .=(Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq)).k
     +(-Partial_Sums((z+w) ExpSeq)).k by VALUED_1:8
       .=(Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq)
     -Partial_Sums((z+w) ExpSeq) ).k by VALUED_1:1;
   end;
   then
 A2: seq=Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq)
-  -Partial_Sums((z+w) ExpSeq) by COMSEQ_1:6;
+  -Partial_Sums((z+w) ExpSeq) by FUNCT_2:113;
 A3: Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq) is convergent &
   lim(Partial_Sums(z ExpSeq) (#) Partial_Sums(w ExpSeq))
   =lim(Partial_Sums(z ExpSeq)) * lim(Partial_Sums(w ExpSeq))
   by COMSEQ_2:29,30;
   seq is convergent & lim(seq)=0c by A1,Th23;
-  hence Sum((z+w) ExpSeq) =Sum(z ExpSeq) * Sum(w ExpSeq) by A2,A3,COMSEQ_3:10;
+  hence Sum((z0+w0) ExpSeq) =Sum(z0 ExpSeq) * Sum(w0 ExpSeq)
+   by A2,A3,COMSEQ_3:10;
 end;
 
 begin :: Definition of Exponential Function on Complex
@@ -1730,22 +1699,24 @@ begin :: Definition of Exponential Function on Complex
 definition
   func exp -> Function of COMPLEX, COMPLEX means
   :Def18:
-  for z being Element of COMPLEX holds it.z=Sum(z ExpSeq);
+  for z being complex number holds it.z=Sum(z ExpSeq);
   existence
   proof
     deffunc U(Element of COMPLEX) = Sum($1 ExpSeq);
     consider f being Function of COMPLEX, COMPLEX such that
 A1: for x being Element of COMPLEX holds f.x = U(x) from FUNCT_2:sch 4;
     take f;
-    thus thesis by A1;
+    let z be complex number;
+     z in COMPLEX by XCMPLX_0:def 2;
+    hence thesis by A1;
   end;
   uniqueness
   proof
     let f1,f2 be Function of COMPLEX, COMPLEX;
     assume
-A5: for z being Element of COMPLEX holds f1.z=Sum(z ExpSeq);
+A5: for z being complex number holds f1.z=Sum(z ExpSeq);
     assume
-A6: for z being Element of COMPLEX holds f2.z=Sum(z ExpSeq);
+A6: for z being complex number holds f2.z=Sum(z ExpSeq);
     for z being Element of COMPLEX holds f1.z = f2.z
     proof
       let z be Element of COMPLEX;
@@ -1771,9 +1742,9 @@ definition
 end;
 
 theorem
-  for z1, z2 holds exp(z1+z2)=exp(z1) *exp(z2)
+  for z1, z2 being complex number holds exp(z1+z2)=exp(z1) *exp(z2)
 proof
-  let z1,z2;
+  let z1,z2 be complex number;
   exp(z1+z2)=Sum((z1+z2) ExpSeq) by Def18
     .=Sum(z1 ExpSeq)*Sum(z2 ExpSeq) by Lm2
     .=exp(z1)*Sum(z2 ExpSeq) by Def18
@@ -1787,10 +1758,10 @@ definition
   func sin -> Function of REAL, REAL means
   :Def20:
   for d being Element of REAL holds
-  it.d = Im(Sum([*0,d*] ExpSeq));
+  it.d = Im(Sum(d*<i> ExpSeq));
   existence
   proof
-    deffunc U(Element of REAL) = Im(Sum([*0,$1*] ExpSeq));
+    deffunc U(Element of REAL) = Im(Sum($1*<i> ExpSeq));
     consider f being Function of REAL, REAL such that
 A1: for x being Element of REAL holds f.x = U(x) from FUNCT_2:sch 4;
     take f;
@@ -1800,13 +1771,13 @@ A1: for x being Element of REAL holds f.x = U(x) from FUNCT_2:sch 4;
   proof
     let f1,f2 be Function of REAL, REAL;
     assume
-A6: for d being Element of REAL holds f1.d=Im(Sum([*0,d*] ExpSeq));
+A6: for d being Element of REAL holds f1.d=Im(Sum(d*<i> ExpSeq));
     assume
-A7: for d being Element of REAL holds f2.d=Im(Sum([*0,d*] ExpSeq));
+A7: for d being Element of REAL holds f2.d=Im(Sum(d*<i> ExpSeq));
     for d being Element of REAL holds f1.d = f2.d
     proof
       let d be Element of REAL;
-      thus f1.d=Im(Sum([*0,d*] ExpSeq)) by A6
+      thus f1.d=Im(Sum((d*<i>) ExpSeq)) by A6
         .=f2.d by A7;
     end;
     hence f1=f2 by FUNCT_2:113;
@@ -1838,10 +1809,10 @@ reserve d for Real;
 definition
   func cos -> Function of REAL, REAL means
   :Def22:
-  for d holds it.d = Re(Sum([*0,d*] ExpSeq));
+  for d holds it.d = Re(Sum(d*<i> ExpSeq));
   existence
   proof
-    deffunc U(Element of REAL) = Re(Sum([*0,$1*] ExpSeq));
+    deffunc U(Element of REAL) = Re(Sum(($1*<i>) ExpSeq));
     consider f being Function of REAL, REAL such that
 A1: for x being Element of REAL holds f.x = U(x) from FUNCT_2:sch 4;
     take f;
@@ -1851,13 +1822,13 @@ A1: for x being Element of REAL holds f.x = U(x) from FUNCT_2:sch 4;
   proof
     let f1,f2 be Function of REAL, REAL;
     assume
-A6: for d holds f1.d=Re(Sum([*0,d*] ExpSeq));
+A6: for d holds f1.d=Re(Sum(d*<i> ExpSeq));
     assume
-A7: for d holds f2.d=Re(Sum([*0,d*] ExpSeq));
+A7: for d holds f2.d=Re(Sum(d*<i> ExpSeq));
     for d holds f1.d=f2.d
     proof
       let d;
-      thus f1.d=Re(Sum([*0,d*] ExpSeq)) by A6
+      thus f1.d=Re(Sum((d*<i>) ExpSeq)) by A6
         .=f2.d by A7;
     end;
     hence f1=f2 by FUNCT_2:113;
@@ -1889,125 +1860,121 @@ canceled 2;
 theorem Th27:
   dom(sin)=REAL & dom(cos)=REAL by FUNCT_2:def 1;
 
-Lm3: Sum([*0,th*] ExpSeq)=cos.(th)+(sin.th)*<i>
+Lm3: Sum(th*<i> ExpSeq)=cos.(th)+(sin.th)*<i>
 proof
-A1: Im(Sum([*0,th*] ExpSeq))=sin.(th) by Def20;
-  Re(Sum([*0,th*] ExpSeq))=cos.(th) by Def22;
+A1: Im(Sum(th*<i> ExpSeq))=sin.(th) by Def20;
+  Re(Sum(th*<i> ExpSeq))=cos.(th) by Def22;
   hence thesis by A1,COMPLEX1:29;
 end;
 
 theorem
-  exp([*0,th*])=cos(th)+(sin th)*<i>
+  exp(th*<i>)=cos(th)+(sin th)*<i>
 proof
-  exp([*0,th*])=Sum([*0,th*] ExpSeq ) by Def18
+  exp(th*<i>)=Sum(th*<i> ExpSeq ) by Def18
     .=cos(th)+(sin th)*<i> by Lm3;
   hence thesis;
 end;
 
-Lm4: (Sum([*0,th*] ExpSeq))*' = Sum((-[*0,th*]) ExpSeq)
+Lm4: (Sum((th*<i>) ExpSeq))*' = Sum((-(th*<i>)) ExpSeq)
 proof
-  Partial_Sums(([*0,th*] ExpSeq))*' =Partial_Sums((-[*0,th*]) ExpSeq)
+  Partial_Sums(((th*<i>) ExpSeq))*' =Partial_Sums((-(th*<i>)) ExpSeq)
   proof
-A1: for n holds (([*0,th*] ExpSeq).n)*' = ((-[*0,th*]) ExpSeq).n
+A1: for n holds (((th*<i>) ExpSeq).n)*' = ((-(th*<i>)) ExpSeq).n
     proof
       defpred X[Element of NAT] means
-      (([*0,th*] ExpSeq).$1)*' = ((-[*0,th*]) ExpSeq).$1;
-      (([*0,th*] ExpSeq).0)*' =1r by Th4,COMPLEX1:115,def 7
-        .=((-[*0,th*]) ExpSeq).0 by Th4,COMPLEX1:def 7;
+      (((th*<i>) ExpSeq).$1)*' = ((-(th*<i>)) ExpSeq).$1;
+      (((th*<i>) ExpSeq).0)*' =1r by Th4,COMPLEX1:115
+        .=((-(th*<i>)) ExpSeq).0 by Th4;
       then
 A2:   X[0];
 A3:   for n st X[n] holds X[n+1]
       proof
         let n;
         assume
-A4:     (([*0,th*] ExpSeq).n)*' = ((-[*0,th*]) ExpSeq).n;
-A5:     (n+1+0*<i>) = [*n+1,0*] by COMPLEX1:27;
-        thus (([*0,th*] ExpSeq).(n+1))*'
-        =(([*0,th*] ExpSeq).n * [*0,th*]/(n+1+0*<i>))*' by Th4
-          .=(([*0,th*] ExpSeq).n * ([*0,th*]/(n+1+0*<i>)))*' by XCMPLX_1:75
-.=((-[*0,th*]) ExpSeq).n * ([*0,th*]/[*n+1,0*])*' by A4,A5,COMPLEX1:121
-          .=((-[*0,th*]) ExpSeq).n * (([*0,th*])*'/([*n+1,0*])*')
-        by COMPLEX1:123
-          .=((-[*0,th*]) ExpSeq).n * ((0+th*<i>)*'/([*n+1,0*])*')
-        by COMPLEX1:27
-          .=((-[*0,th*]) ExpSeq).n * ((0+(-th)*<i>) /(n+1+0*<i>)*') by A5,Lm1
-          .=((-[*0,th*]) ExpSeq).n * ((0+(-th)*<i>)/(n+1+(-0)*<i>)) by Lm1
-          .=((-[*0,th*]) ExpSeq).n * (-(0+th*<i>))/(n+1+0*<i>) by XCMPLX_1:75
-          .=((-[*0,th*]) ExpSeq).n * (-[*0, th*])/(n+1+0*<i>) by COMPLEX1:27
-          .=((-[*0,th*]) ExpSeq).(n+1) by Th4;
+A4:     ((th*<i> ExpSeq).n)*' = ((-(th*<i>)) ExpSeq).n;
+        thus (((th*<i>) ExpSeq).(n+1))*'
+           =(((th*<i>) ExpSeq).n * (th*<i>)/(n+1+0*<i>))*' by Th4
+          .=((th*<i> ExpSeq).n * ((th*<i>)/(n+1+0*<i>)))*'
+          .=((-(th*<i>)) ExpSeq).n * ((th*<i>)/(n+1))*' by A4,COMPLEX1:121
+          .=((-(th*<i>)) ExpSeq).n * ((0+th*<i>)*'/((n+1))*') by COMPLEX1:123
+          .=((-(th*<i>)) ExpSeq).n * ((0+(-th)*<i>) /(n+1+0*<i>)*') by Lm1
+          .=((-(th*<i>)) ExpSeq).n * ((0+(-th)*<i>)/(n+1+(-0)*<i>)) by Lm1
+          .=((-(th*<i>)) ExpSeq).n * (-(th*<i>))/(n+1+0*<i>)
+          .=((-(th*<i>)) ExpSeq).(n+1) by Th4;
       end;
       thus for n holds X[n] from NAT_1:sch 1(A2,A3);
     end;
-    defpred X[Element of NAT] means (Partial_Sums(([*0,th*] ExpSeq))*').$1
-    =Partial_Sums((-[*0,th*]) ExpSeq).$1;
-    (Partial_Sums([*0,th*] ExpSeq)*').0
-    =(Partial_Sums([*0,th*] ExpSeq).0)*' by COMSEQ_2:def 2
-      .=(([*0,th*] ExpSeq).0)*' by COMSEQ_3:def 7
-      .=1 by Th4,COMPLEX1:115,def 7
-      .=((-[*0,th*]) ExpSeq).0 by Th4
-      .=Partial_Sums((-[*0,th*]) ExpSeq).0 by COMSEQ_3:def 7;
+    defpred X[Element of NAT] means (Partial_Sums(((th*<i>) ExpSeq))*').$1
+    =Partial_Sums((-(th*<i>)) ExpSeq).$1;
+    (Partial_Sums((th*<i>) ExpSeq)*').0
+    =(Partial_Sums((th*<i>) ExpSeq).0)*' by COMSEQ_2:def 2
+      .=(((th*<i>) ExpSeq).0)*' by COMSEQ_3:def 7
+      .=1 by Th4,COMPLEX1:115
+      .=((-(th*<i>)) ExpSeq).0 by Th4
+      .=Partial_Sums((-(th*<i>)) ExpSeq).0 by COMSEQ_3:def 7;
     then
 A6: X[0];
 A7: for n st X[n] holds X[n+1]
     proof
       let n such that
-A8:   (Partial_Sums(([*0,th*] ExpSeq))*').n
-      =Partial_Sums((-[*0,th*]) ExpSeq).n;
-      thus (Partial_Sums([*0,th*] ExpSeq)*').(n+1)
-      =(Partial_Sums([*0,th*] ExpSeq).(n+1))*' by COMSEQ_2:def 2
-        .=(Partial_Sums([*0,th*] ExpSeq).n+([*0,th*] ExpSeq).(n+1))*'
+A8:   (Partial_Sums(((th*<i>) ExpSeq))*').n
+      =Partial_Sums((-(th*<i>)) ExpSeq).n;
+      thus (Partial_Sums((th*<i>) ExpSeq)*').(n+1)
+      =(Partial_Sums((th*<i>) ExpSeq).(n+1))*' by COMSEQ_2:def 2
+        .=(Partial_Sums((th*<i>) ExpSeq).n+((th*<i>) ExpSeq).(n+1))*'
       by COMSEQ_3:def 7
-        .=(Partial_Sums([*0,th*] ExpSeq).n)*'+(([*0,th*] ExpSeq).(n+1))*'
+        .=(Partial_Sums((th*<i>) ExpSeq).n)*'+(((th*<i>) ExpSeq).(n+1))*'
       by COMPLEX1:118
-        .=Partial_Sums((-[*0,th*]) ExpSeq).n+(([*0,th*] ExpSeq).(n+1))*'
+        .=Partial_Sums((-(th*<i>)) ExpSeq).n+(((th*<i>) ExpSeq).(n+1))*'
       by A8,COMSEQ_2:def 2
-        .=Partial_Sums((-[*0,th*]) ExpSeq).n+((-[*0,th*]) ExpSeq).(n+1) by A1
-        .=Partial_Sums((-[*0,th*]) ExpSeq).(n+1) by COMSEQ_3:def 7;
+        .=Partial_Sums((-(th*<i>)) ExpSeq).n+((-(th*<i>)) ExpSeq).(n+1) by A1
+        .=Partial_Sums((-(th*<i>)) ExpSeq).(n+1) by COMSEQ_3:def 7;
     end;
     for n holds X[n] from NAT_1:sch 1(A6,A7);
-    hence thesis by COMSEQ_1:6;
+    hence thesis by FUNCT_2:113;
   end;
-  hence (Sum([*0,th*] ExpSeq))*' = Sum((-[*0,th*]) ExpSeq) by COMSEQ_2:12;
+  hence (Sum((th*<i>) ExpSeq))*' = Sum((-(th*<i>)) ExpSeq) by COMSEQ_2:12;
 end;
 
 theorem
-  (exp([*0,th*]))*'=exp(-[*0,th*])
+  (exp((th*<i>)))*'=exp(-(th*<i>))
 proof
-  (exp([*0,th*]))*'=(Sum([*0,th*] ExpSeq))*' by Def18
-    .=Sum((-[*0,th*]) ExpSeq) by Lm4
-    .=exp(-[*0,th*]) by Def18;
+  (exp((th*<i>)))*'=(Sum((th*<i>) ExpSeq))*' by Def18
+    .=Sum((-(th*<i>)) ExpSeq) by Lm4
+    .=exp(-(th*<i>)) by Def18;
   hence thesis;
 end;
 
 Lm5: for th1 being real number st th = th1 holds
-|.Sum([*0,th*] ExpSeq ).| = 1 & abs(sin.th1) <= 1 & abs(cos.th1) <= 1
+|.Sum(th*<i> ExpSeq ).| = 1 & abs(sin.th1) <= 1 & abs(cos.th1) <= 1
 proof
   let th1 be real number such that
 A1: th = th1;
-A2: Sum([*0,th*] ExpSeq ) * Sum((-[*0,th*]) ExpSeq )
-  =Sum(([*0,th*]+(-[*0,th*])) ExpSeq ) by Lm2
+A2: Sum((th*<i>) ExpSeq ) * Sum((-(th*<i>)) ExpSeq )
+  =Sum(((th*<i>)+(-(th*<i>))) ExpSeq ) by Lm2
     .=1r by Th10;
-A3: |.Sum([*0,th*] ExpSeq ).| * |.Sum([*0,th*] ExpSeq ).|
-  =|.Sum([*0,th*] ExpSeq )*Sum([*0,th*] ExpSeq ).| by COMPLEX1:151
-    .=|.Sum([*0,th*] ExpSeq ) * Sum([*0,th*] ExpSeq)*'.| by COMPLEX1:155
-    .=1 by A2,Lm4,COMPLEX1:134; thus
-A4: |.Sum([*0,th*] ExpSeq ).|=1
+A3: |.Sum((th*<i>) ExpSeq ).| * |.Sum((th*<i>) ExpSeq ).|
+  =|.Sum((th*<i>) ExpSeq )*Sum((th*<i>) ExpSeq ).| by COMPLEX1:151
+    .=|.Sum((th*<i>) ExpSeq ) * Sum((th*<i>) ExpSeq)*'.| by COMPLEX1:155
+    .=1 by A2,Lm4,COMPLEX1:134;
+    thus
+A4: |.Sum(th*<i> ExpSeq ).|=1
   proof
-A5: |.Sum([*0,th*] ExpSeq ).| =1/|.Sum([*0,th*] ExpSeq ).| by A3,XCMPLX_1:74;
-A6: |.Sum([*0,th*] ExpSeq ).| <> 0 by A3;
-    |.Sum([*0,th*] ExpSeq ).| <> -1 by COMPLEX1:132;
-    hence |.Sum([*0,th*] ExpSeq ).|=1 by A5,A6,XCMPLX_1:200;
+A5: |.Sum((th*<i>) ExpSeq ).| =1/|.Sum((th*<i>) ExpSeq ).| by A3,XCMPLX_1:74;
+A6: |.Sum((th*<i>) ExpSeq ).| <> 0 by A3;
+    |.Sum((th*<i>) ExpSeq ).| <> -1 by COMPLEX1:132;
+    hence |.Sum((th*<i>) ExpSeq ).|=1 by A5,A6,XCMPLX_1:200;
   end;
-A7: abs(sin.th)=abs(Im(Sum([*0,th*] ExpSeq ))) by Def20;
-  abs(cos.th)=abs(Re(Sum([*0,th*] ExpSeq ))) by Def22;
+A7: abs(sin.th)=abs(Im(Sum((th*<i>) ExpSeq ))) by Def20;
+  abs(cos.th)=abs(Re(Sum((th*<i>) ExpSeq ))) by Def22;
   hence thesis by A1,A4,A7,COMSEQ_3:13;
 end;
 
 theorem
-  |.exp([*0,th*]).| = 1 &
+  |.exp((th*<i>)).| = 1 &
   for th being real number holds abs(sin th) <= 1 & abs(cos th) <= 1
 proof
-  thus |.exp([*0,th*]).| =|.Sum([*0,th*] ExpSeq ).| by Def18
+  thus |.exp((th*<i>)).| =|.Sum((th*<i>) ExpSeq ).| by Def18
     .=1 by Lm5;
   let th be real number;
 A1: th is Real by XREAL_0:def 1;
@@ -2021,14 +1988,14 @@ theorem Th31:
   (cos.th)^2+(sin.th)^2=1 & (cos.th)*(cos.th)+(sin.th)*(sin.th)=1
 proof
   reconsider th1=th as Real by XREAL_0:def 1;
-A1: Sum([*0,th1*] ExpSeq ) * Sum((-[*0,th1*]) ExpSeq )
-  =Sum(([*0,th1*]+(-[*0,th1*])) ExpSeq ) by Lm2
+A1: Sum((th1*<i>) ExpSeq ) * Sum((-(th1*<i>)) ExpSeq )
+  =Sum(((th1*<i>)+(-(th1*<i>))) ExpSeq ) by Lm2
     .=1r by Th10;
   thus (cos.(th))^2+(sin.(th))^2
-  =(Re(Sum([*0,th1*] ExpSeq )))^2+(sin.(th))^2 by Def22
-    .=(Re(Sum([*0,th1*] ExpSeq )))^2+(Im(Sum([*0,th1*] ExpSeq )))^2 by Def20
-    .=|.Sum([*0,th1*] ExpSeq )*Sum([*0,th1*] ExpSeq ).| by COMPLEX1:154
-    .=|.Sum([*0,th1*] ExpSeq ) * Sum([*0,th1*] ExpSeq)*'.| by COMPLEX1:155
+  =(Re(Sum((th1*<i>) ExpSeq )))^2+(sin.(th))^2 by Def22
+    .=(Re(Sum((th1*<i>) ExpSeq )))^2+(Im(Sum((th1*<i>) ExpSeq )))^2 by Def20
+    .=|.Sum((th1*<i>) ExpSeq )*Sum((th1*<i>) ExpSeq ).| by COMPLEX1:154
+    .=|.Sum((th1*<i>) ExpSeq ) * Sum((th1*<i>) ExpSeq)*'.| by COMPLEX1:155
     .=1 by A1,Lm4,COMPLEX1:134;
   hence (cos.(th))*(cos.(th))+(sin.(th))*(sin.(th)) =1;
 end;
@@ -2037,23 +2004,23 @@ theorem
   (cos(th))^2+(sin(th))^2=1 &
   (cos(th))*(cos(th))+(sin(th))*(sin(th))=1 by Th31;
 
-Lm6: 0c = [*0,0*] by ARYTM_0:def 7;
-
 theorem Th33:
   cos.0=1 & sin.0=0 & cos.(-th)=cos.th & sin.(-th)=-sin.th
 proof
-  thus cos.0 = 1 by Def22,Lm6,Th10,COMPLEX1:15;
-  thus sin.0 = 0 by Def20,Lm6,Th10,COMPLEX1:15;
+  thus cos.0 = Re(Sum(0*<i> ExpSeq)) by Def22
+    .= 1 by Th10,COMPLEX1:15;
+  thus sin.0 = Im(Sum(0*<i> ExpSeq)) by Def20
+    .= 0 by Th10,COMPLEX1:15;
   reconsider th1=th as Real by XREAL_0:def 1;
-A1: [*-0,-th1*] = -0+(-th1)*<i> by COMPLEX1:27;
-A2: [*0,th1*] = 0+th1*<i> by COMPLEX1:27;
-  hence cos.(-th) = Re( Sum((-[*0,th1*]) ExpSeq) ) by A1,Def22
-    .= Re(Sum([*0,th1*] ExpSeq)*') by Lm4
+  thus cos.(-th) = Re( Sum((-0+(-th1)*<i>) ExpSeq) ) by Def22
+    .= Re( Sum((-(th1*<i>)) ExpSeq) )
+    .= Re(Sum((th1*<i>) ExpSeq)*') by Lm4
     .= Re((cos.(th)+(sin.th)*<i>)*') by Lm3
     .= Re(cos.(th)+(-sin.th)*<i>) by Lm1
     .= cos.(th) by COMPLEX1:28;
-  thus sin.(-th) = Im( Sum((-[*0,th1*]) ExpSeq) ) by A1,A2,Def20
-    .= Im(Sum([*0,th1*] ExpSeq)*') by Lm4
+  thus sin.(-th) = Im( Sum((-0+(-th1)*<i>) ExpSeq) ) by Def20
+    .= Im( Sum((-(th1*<i>)) ExpSeq) )
+    .= Im(Sum((th1*<i>) ExpSeq)*') by Lm4
     .= Im((cos.(th)+(sin.th)*<i>)*') by Lm3
     .= Im(cos.(th)+(-sin.th)*<i>) by Lm1
     .= -sin.(th) by COMPLEX1:28;
@@ -2096,49 +2063,11 @@ definition
   end;
 end;
 
-Lm7: for p,q,r being Real st r<>0 holds
-[*p,q*]/[*r,0*]=[*p/r,q/r*]& [*p,q*]/[*0,r*]=[*q/r,-p/r*]
-proof
-  let p,q,r be Real;
-  assume
-A1: r<>0;
-A2: [*p,q*] = p+q*<i> & [*r,0*] = r+0*<i> & [*0,r*] = 0+r*<i> by COMPLEX1:27;
-A3: Re(p+q*<i>)=p & Im(p+q*<i>)=q & Re(r+0*<i>)=r & Im(r+0*<i>)=0 &
-  Re(0+r*<i>)=0 & Im(0+r*<i>)=r by COMPLEX1:28;
-  then
-A4: [*p,q*]/[*r,0*]=
-  (p* r + q* 0) / ((r)^2+ (0)^2)+((r * q - p* 0)/((r)^2 +0^2))*<i>
-  by A2,COMPLEX1:def 14
-    .=[* (p* r ) / (r*r),(r * q )/((r)^2)*] by COMPLEX1:27
-    .=[* p / r,(r * q )/(r*r)*] by A1,XCMPLX_1:92
-    .= [* p / r, q /r *] by A1,XCMPLX_1:92;
-  [*p,q*]/[*0,r*]
-  = (p*0+q*r)/ ((0)^2+ (r)^2)+((0*q - p*r) /((0)^2+ (r)^2))*<i>
-  by A2,A3,COMPLEX1:def 14
-    .=[* (q*r)/ (r*r),(- p*r) /((r)^2) *] by COMPLEX1:27
-    .=[* q/ r,((- p)*r) /(r*r) *] by A1,XCMPLX_1:92
-    .=[* q/ r,(- p) /r *] by A1,XCMPLX_1:92
-    .=[* q/ r,- p/r *] by XCMPLX_1:188;
-  hence thesis by A4;
-end;
-
-Lm8: for p,q,r being Real holds [*p,q*]*[*r,0*]=[*p*r,q*r*]&
-[*p,q*]*[*0,r*]=[*-q*r,p*r*]
-proof
-  let p,q,r be Real;
-A1: [*p,q*] = p+q*<i> & [*r,0*] = r+0*<i> & [*0,r*] = 0+r*<i> by COMPLEX1:27;
-  then
-A2: [*p,q*]*[*r,0*] = p*r-q*0+(p*0+ r*q)*<i>
-    .=[*p*r,q*r*] by COMPLEX1:27;
-  [*p,q*]*[*0,r*] = (p*0+q*r*(<i>*<i>))+p*r*<i> +q*<i>*0 by A1
-    .=[*-q*r,p*r*] by COMPLEX1:27;
-  hence thesis by A2;
-end;
-
 theorem Th35:
-  for z, k holds z|^ (2*k) = (z|^ k)|^ 2& z|^ (2*k)= (z|^ 2)|^ k
+  for z being complex number,
+   k holds z|^ (2*k) = (z|^ k)|^ 2& z|^ (2*k)= (z|^ 2)|^ k
 proof
-  let z,k;
+  let z be complex number, k;
   defpred X[Element of NAT] means
   z|^ (2*$1) = (z|^ $1)|^ 2 & z|^ (2*$1)= (z|^ 2)|^ $1;
 A1: z|^ (2*0) =1*1 by NEWTON:9
@@ -2169,7 +2098,7 @@ A6: z|^ (2*(k+1)) =((z|^ k)GeoSeq.(1+1))*z*z by A4
       .=((z|^(k+1))GeoSeq.(0+1))*(z|^(k+1)) by COMSEQ_3:def 1
       .=(z|^(k+1))GeoSeq.(0+1+1) by COMSEQ_3:def 1
       .=(z|^(k+1))|^ 2;
-    z|^ (2*(k+1))= (z|^ 2)|^ k*(1r*z*z) by A4,A5,COMPLEX1:def 7
+    z|^ (2*(k+1))= (z|^ 2)|^ k*(1r*z*z) by A4,A5
       .= (z|^ 2)|^ k*(z GeoSeq.0 *z*z) by COMSEQ_3:def 1
       .=(z|^ 2)|^ k*(z GeoSeq.(0+1) *z) by COMSEQ_3:def 1
       .=(z|^ 2)|^ k*z GeoSeq.(0+1+1) by COMSEQ_3:def 1
@@ -2180,77 +2109,68 @@ A6: z|^ (2*(k+1)) =((z|^ k)GeoSeq.(1+1))*z*z by A4
   hence thesis;
 end;
 
-Lm9: 1r = [*1,0*] by ARYTM_0:def 7,COMPLEX1:def 7;
-
 theorem Th36:
-  for th being Real holds [*0, th*] |^ (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
-  & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*]
+  for th being Real holds (th*<i>) |^ (2*k)=(-1)|^ k* (th |^ (2*k))
+  & (th*<i>) |^ (2*k+1)=(-1)|^ k* (th |^ (2*k+1))*<i>
 proof
   let th be Real;
-A1: [*(-1)|^ 0* (th |^ (2*0)),0*]=[*(-1)|^ 0* th GeoSeq.0,0*] by PREPOWER:def 1
-    .=[*(-1)|^ 0*(1),0*] by PREPOWER:4
-    .=[*(-1)GeoSeq.0,0*] by PREPOWER:def 1
-    .=[*1,0*] by PREPOWER:4;
-A2: [*0, th*] |^ (2*0+1)=[*0, th*] GeoSeq.0*[*0,th*] by COMSEQ_3:def 1
-    .=[*1,0*]*[*0,th*] by Lm9,COMSEQ_3:def 1
-    .=[*-0* th,1*th*] by Lm8
-    .=[*0,th*];
+A1: (-1)|^ 0* (th |^ (2*0))*<i>=(-1)|^ 0* th GeoSeq.0*<i> by PREPOWER:def 1
+    .=(-1)|^ 0*(1)*<i> by PREPOWER:4
+    .=(-1)GeoSeq.0*<i> by PREPOWER:def 1
+    .=1*<i> by PREPOWER:4;
+A2: (th*<i>) |^ (2*0+1)=(th*<i>) GeoSeq.0*(th*<i>) by COMSEQ_3:def 1
+    .=1*(th*<i>) by COMSEQ_3:def 1
+    .=(th*<i>);
   defpred X[Element of NAT] means
-  [*0, th*] |^ (2*$1)=[*(-1)|^ $1* (th |^ (2*$1)),0*]
-  & [*0, th*] |^ (2*$1+1)=[*0,(-1)|^ $1* (th |^ (2*$1+1))*];
-  [*0,(-1)|^ 0 * (th |^ (2*0+1))*]=[*0,(-1)|^ 0 * (th GeoSeq.(2*0+1))*]
+  (th*<i>) |^ (2*$1)=(-1)|^ $1* (th |^ (2*$1))
+  & (th*<i>) |^ (2*$1+1)=(-1)|^ $1* (th |^ (2*$1+1))*<i>;
+  (-1)|^ 0 * (th |^ (2*0+1))*<i>=(-1)|^ 0 * (th GeoSeq.(2*0+1))*<i>
   by PREPOWER:def 1
-    .= [*0,(-1)|^ 0* (th GeoSeq.0*th)*] by PREPOWER:4
-    .=[*0,(-1)|^ 0* (1*th)*] by PREPOWER:4
-    .= [*0,((-1)GeoSeq.0)* th *] by PREPOWER:def 1
-    .=[*0,(1)* th *] by PREPOWER:4
-    .=[*0,th*];
+    .= (-1)|^ 0* (th GeoSeq.0*th)*<i> by PREPOWER:4
+    .=(-1)|^ 0* (1*th)*<i> by PREPOWER:4
+    .= ((-1)GeoSeq.0)* th *<i> by PREPOWER:def 1
+    .=(1)* th *<i> by PREPOWER:4
+    .=(th*<i>);
   then
-A3: X[0] by A1,A2,Lm9,COMSEQ_3:def 1;
+A3: X[0] by A1,A2,COMSEQ_3:def 1;
 A4: for k st X[k] holds X[k+1]
   proof
     let k;
     assume
-A5: [*0, th*] |^ (2*k)=[*(-1)|^ k* (th |^ (2*k)),0*]
-    & [*0, th*] |^ (2*k+1)=[*0,(-1)|^ k* (th |^ (2*k+1))*];
-A6: [*0, th*] |^ (2*(k+1))= ([*0, th*] |^ 2)|^(k+1) by Th35
-      .=([*0, th*] |^ 2)|^ k * ([*0, th*] |^ 2) by COMSEQ_3:def 1
-      .= [*(-1)|^ k* (th |^ (2*k)),0*]* ([*0, th*]GeoSeq.(1+1)) by A5,Th35
-      .=[*(-1)|^ k* (th |^ (2*k)),0*]* ([*0, th*]GeoSeq.(0+1)*[*0, th*])
+A5: (th*<i>) |^ (2*k)=(-1)|^ k* (th |^ (2*k))
+    & (th*<i>) |^ (2*k+1)=(-1)|^ k* (th |^ (2*k+1))*<i>;
+A6: (th*<i>) |^ (2*(k+1))= ((th*<i>) |^ 2)|^(k+1) by Th35
+      .=((th*<i>) |^ 2)|^ k * ((th*<i>) |^ 2) by COMSEQ_3:def 1
+      .= (-1)|^ k* (th |^ (2*k))* ((th*<i>)GeoSeq.(1+1)) by A5,Th35
+      .=(-1)|^ k* (th |^ (2*k))* ((th*<i>)GeoSeq.(0+1)*(th*<i>))
     by COMSEQ_3:def 1
-      .=[*(-1)|^ k* (th |^ (2*k)),0*]* ([*0, th*]GeoSeq.0*[*0, th*]
-    *[*0, th*]) by COMSEQ_3:def 1
-      .= [*(-1)|^ k* (th |^ (2*k)),0*]* (1r*[*0, th*]*[*0, th*])
+      .=(-1)|^ k* (th |^ (2*k))* ((th*<i>)GeoSeq.0*(th*<i>)
+    *(th*<i>)) by COMSEQ_3:def 1
+      .= (-1)|^ k* (th |^ (2*k))* (1r*(th*<i>)*(th*<i>))
     by COMSEQ_3:def 1
-      .= [*(-1)|^ k* (th |^ (2*k)),0*]* [*-th*th, 0*th*]
-    by Lm8,COMPLEX1:def 7
-      .=[*(-1)|^ k* (th |^ (2*k))*(-th*th),0*(-th*th)*] by Lm8
-      .=[*(-1)|^ k*(-1)* (th |^ (2*k))*th*th,0*]
-      .=[*(-1)GeoSeq.k*(-1)* (th |^ (2*k))*th*th,0*] by PREPOWER:def 1
-      .=[*(-1)GeoSeq.(k+1)* (th |^ (2*k))*th*th,0*] by PREPOWER:4
-      .=[*(-1)|^(k+1)* (th |^ (2*k))*th*th,0*] by PREPOWER:def 1
-      .=[*(-1)|^(k+1)* (th GeoSeq.(2*k))*th*th,0*] by PREPOWER:def 1
-      .= [*(-1)|^(k+1)* (th GeoSeq.(2*k)*th)*th,0*]
-      .=[*(-1)|^(k+1)* (th GeoSeq.(2*k+1))*th,0*] by PREPOWER:4
-      .=[*(-1)|^(k+1)* (th GeoSeq.(2*k+1)*th),0*]
-      .=[*(-1)|^(k+1)* (th GeoSeq.(2*k+1+1)),0*] by PREPOWER:4
-      .=[*(-1)|^(k+1)* (th |^ (2*(k+1))),0*] by PREPOWER:def 1;
-    [*0, th*] |^ (2*(k+1)+1)=
-    [*0, th*]GeoSeq.(2*k+1+1)*[*0, th*] by COMSEQ_3:def 1
-      .=[*0, th*]GeoSeq.(2*k+1)*[*0, th*]*[*0, th*] by COMSEQ_3:def 1
-      .=[*0, th*]GeoSeq.(2*k+1)*([*0, th*]*[*0, th*])
-      .=[*0, th*]GeoSeq.(2*k+1)* [*-th*th, 0*th*] by Lm8
-      .=[*0* (-th*th),(-1)|^ k* (th |^ (2*k+1))* (-th*th)*] by A5,Lm8
-      .=[*0,(-1)|^ k*(-1)* (th |^ (2*k+1))*th*th*]
-      .=[*0,(-1)GeoSeq.k*(-1)* (th |^ (2*k+1))*th*th*] by PREPOWER:def 1
-      .=[*0,(-1)GeoSeq.(k+1)* (th |^ (2*k+1))*th*th*] by PREPOWER:4
-      .=[*0,(-1)|^ (k+1)* (th |^ (2*k+1))*th*th*] by PREPOWER:def 1
-      .=[*0,(-1)|^ (k+1)* (th GeoSeq.(2*k+1))*th*th*] by PREPOWER:def 1
-      .=[*0,(-1)|^ (k+1)* (th GeoSeq.(2*k+1)*th)*th*]
-      .=[*0,(-1)|^ (k+1)* (th GeoSeq.(((2*k+1)+1)))*th*] by PREPOWER:4
-      .=[*0,(-1)|^ (k+1)* (th GeoSeq.((2*k+1+1))*th)*]
-      .= [*0,(-1)|^ (k+1)* (th GeoSeq.(2*(k+1)+1))*] by PREPOWER:4
-      .=[*0,(-1)|^ (k+1)*(th |^ (2*(k+1)+1))*] by PREPOWER:def 1;
+      .=(-1)|^ k*(-1)* (th |^ (2*k))*th*th
+      .=(-1)GeoSeq.k*(-1)* (th |^ (2*k))*th*th by PREPOWER:def 1
+      .=(-1)GeoSeq.(k+1)* (th |^ (2*k))*th*th by PREPOWER:4
+      .=(-1)|^(k+1)* (th |^ (2*k))*th*th by PREPOWER:def 1
+      .=(-1)|^(k+1)* (th GeoSeq.(2*k))*th*th by PREPOWER:def 1
+      .= (-1)|^(k+1)* (th GeoSeq.(2*k)*th)*th
+      .=(-1)|^(k+1)* (th GeoSeq.(2*k+1))*th by PREPOWER:4
+      .=(-1)|^(k+1)* (th GeoSeq.(2*k+1)*th)
+      .=(-1)|^(k+1)* (th GeoSeq.(2*k+1+1)) by PREPOWER:4
+      .=(-1)|^(k+1)* (th |^ (2*(k+1))) by PREPOWER:def 1;
+    (th*<i>) |^ (2*(k+1)+1)=
+    (th*<i>)GeoSeq.(2*k+1+1)*(th*<i>) by COMSEQ_3:def 1
+      .=(th*<i>)GeoSeq.(2*k+1)*(th*<i>)*(th*<i>) by COMSEQ_3:def 1
+      .=(-1)|^ k*(-1)* (th |^ (2*k+1))*th*th*<i> by A5
+      .=(-1)GeoSeq.k*(-1)* (th |^ (2*k+1))*th*th*<i> by PREPOWER:def 1
+      .=(-1)GeoSeq.(k+1)* (th |^ (2*k+1))*th*th*<i> by PREPOWER:4
+      .=(-1)|^ (k+1)* (th |^ (2*k+1))*th*th*<i> by PREPOWER:def 1
+      .=(-1)|^ (k+1)* (th GeoSeq.(2*k+1))*th*th*<i> by PREPOWER:def 1
+      .=(-1)|^ (k+1)* (th GeoSeq.(2*k+1)*th)*th*<i>
+      .=(-1)|^ (k+1)* (th GeoSeq.(((2*k+1)+1)))*th*<i> by PREPOWER:4
+      .=(-1)|^ (k+1)* (th GeoSeq.((2*k+1+1))*th)*<i>
+      .= (-1)|^ (k+1)* (th GeoSeq.(2*(k+1)+1))*<i> by PREPOWER:4
+      .=(-1)|^ (k+1)*(th |^ (2*(k+1)+1))*<i> by PREPOWER:def 1;
     hence thesis by A6;
   end;
   for k holds X[k] from NAT_1:sch 1(A3,A4);
@@ -2268,22 +2188,14 @@ A2: for k st X[k] holds X[k+1]
     assume k!c=k!;
     hence (k+1)!c = k!*(k+1) by Th1
       .=(k+1)! by NEWTON:21;
-  end;
-  for k holds X[k] from NAT_1:sch 1(A1,A2);
+  end;    for k holds X[k] from NAT_1:sch 1(A1,A2);
   hence thesis;
-end;
-
-th37:
-  n!c = [*n!,0*]
-proof
-  n!c = n! by Th37;
-  hence thesis by ARYTM_0:def 7;
 end;
 
 theorem Th38:
   for th being Real holds
-  Partial_Sums(th P_sin).n = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*n+1) &
-  Partial_Sums(th P_cos).n = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*n)
+  Partial_Sums(th P_sin).n = Partial_Sums(Im ((th*<i>) ExpSeq)).(2*n+1) &
+  Partial_Sums(th P_cos).n = Partial_Sums(Re ((th*<i>) ExpSeq)).(2*n)
 proof
   let th be Real;
   now
@@ -2301,169 +2213,132 @@ A5: Partial_Sums(th P_cos).0= (th P_cos).0 by SERIES_1:def 1
       .=(-1)|^ 0 * (th)|^ (2*0)/((2*0)!) by Def25
       .= 1* th GeoSeq.0 / 1 by A4,NEWTON:18,PREPOWER:def 1
       .=1 by PREPOWER:4;
-A6: (Im ([*0, th*] ExpSeq)).0= Im (([*0, th*] ExpSeq).0) &
-    (Im ([*0, th*] ExpSeq)).1= Im (([*0, th*] ExpSeq).1) by COMSEQ_3:def 4;
-A7: [*0, th*] = 0+th*<i> by COMPLEX1:27;
-A8: Partial_Sums(Im ([*0, th*] ExpSeq)).(2*0+1)
-    = Partial_Sums(Im ([*0, th*] ExpSeq)).0 +
-    (Im ([*0, th*] ExpSeq)).1 by SERIES_1:def 1
-      .= (Im ([*0, th*] ExpSeq)).0+
-    (Im ([*0, th*] ExpSeq)).1 by SERIES_1:def 1
-      .= 0 + Im (([*0, th*] ExpSeq).(0+1)) by A6,Th4,COMPLEX1:15,def 7
-      .=0 + Im ((([*0, th*] ExpSeq).0)* [*0, th*] /(0+1+0*<i>)) by Th4
-      .= Im (1* [*0, th*] /1) by Th4
+A6: (Im ((th*<i>) ExpSeq)).0= Im (((th*<i>) ExpSeq).0) &
+    (Im ((th*<i>) ExpSeq)).1= Im (((th*<i>) ExpSeq).1) by COMSEQ_3:def 4;
+A7: (th*<i>) = 0+th*<i>;
+A8: Partial_Sums(Im ((th*<i>) ExpSeq)).(2*0+1)
+    = Partial_Sums(Im ((th*<i>) ExpSeq)).0 +
+    (Im ((th*<i>) ExpSeq)).1 by SERIES_1:def 1
+      .= (Im ((th*<i>) ExpSeq)).0+
+    (Im ((th*<i>) ExpSeq)).1 by SERIES_1:def 1
+      .= 0 + Im (((th*<i>) ExpSeq).(0+1)) by A6,Th4,COMPLEX1:15
+      .=0 + Im ((((th*<i>) ExpSeq).0)* (th*<i>) /(0+1+0*<i>)) by Th4
+      .= Im (1* (th*<i>) /1) by Th4
       .=th by A7,COMPLEX1:28;
     defpred X[Element of NAT] means
-    Partial_Sums(th P_sin).$1 = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*$1+1) &
-    Partial_Sums(th P_cos).$1 = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*$1);
-    Partial_Sums(Re ([*0, th*] ExpSeq)).(2*0)
-    = (Re ([*0, th*] ExpSeq)).0 by SERIES_1:def 1
-      .= Re (([*0, th*] ExpSeq).0) by COMSEQ_3:def 3
-      .=1 by Th4,COMPLEX1:15,def 7;
+    Partial_Sums(th P_sin).$1 = Partial_Sums(Im ((th*<i>) ExpSeq)).(2*$1+1) &
+    Partial_Sums(th P_cos).$1 = Partial_Sums(Re ((th*<i>) ExpSeq)).(2*$1);
+    Partial_Sums(Re ((th*<i>) ExpSeq)).(2*0)
+    = (Re ((th*<i>) ExpSeq)).0 by SERIES_1:def 1
+      .= Re (((th*<i>) ExpSeq).0) by COMSEQ_3:def 3
+      .=1 by Th4,COMPLEX1:15;
     then
 A9: X[0] by A1,A2,A3,A4,A5,A8;
 A10: for k st X[k] holds X[k+1]
     proof
       let k be Element of NAT;
       assume
-A11:  Partial_Sums(th P_sin).k = Partial_Sums(Im ([*0, th*] ExpSeq)).(2*k+1) &
-      Partial_Sums(th P_cos).k = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*k);
-A12:  Partial_Sums(Im ([*0, th*] ExpSeq)).(2*(k+1)+1)
-      = Partial_Sums(Im ([*0, th*] ExpSeq)).((2*k+1)+1) +
-      (Im ([*0, th*] ExpSeq)).(2*(k+1)+1) by SERIES_1:def 1
+A11:  Partial_Sums(th P_sin).k = Partial_Sums(Im ((th*<i>) ExpSeq)).(2*k+1) &
+      Partial_Sums(th P_cos).k = Partial_Sums(Re ((th*<i>) ExpSeq)).(2*k);
+A12:  Partial_Sums(Im ((th*<i>) ExpSeq)).(2*(k+1)+1)
+      = Partial_Sums(Im ((th*<i>) ExpSeq)).((2*k+1)+1) +
+      (Im ((th*<i>) ExpSeq)).(2*(k+1)+1) by SERIES_1:def 1
         .= Partial_Sums(th P_sin).k +
-      (Im([*0, th*] ExpSeq)).(2*(k+1))+(Im ([*0, th*] ExpSeq)).(2*(k+1)+1)
+      (Im((th*<i>) ExpSeq)).(2*(k+1))+(Im ((th*<i>) ExpSeq)).(2*(k+1)+1)
       by A11,SERIES_1:def 1
         .= Partial_Sums(th P_sin).k +
-      Im (([*0, th*] ExpSeq).(2*(k+1)))+(Im([*0, th*] ExpSeq)).(2*(k+1)+1)
+      Im (((th*<i>) ExpSeq).(2*(k+1)))+(Im((th*<i>) ExpSeq)).(2*(k+1)+1)
       by COMSEQ_3:def 4
         .=Partial_Sums(th P_sin).k +
-      Im (([*0, th*] ExpSeq).(2*(k+1)))+Im(([*0, th*] ExpSeq).(2*(k+1)+1))
+      Im (((th*<i>) ExpSeq).(2*(k+1)))+Im(((th*<i>) ExpSeq).(2*(k+1)+1))
       by COMSEQ_3:def 4
         .= Partial_Sums(th P_sin).k +
-      Im([*0, th*] |^ (2*(k+1))/((2*(k+1))!c))+
-      Im(([*0, th*] ExpSeq).(2*(k+1)+1)) by Def8
+      Im((th*<i>) |^ (2*(k+1))/((2*(k+1))!c))+
+      Im(((th*<i>) ExpSeq).(2*(k+1)+1)) by Def8
         .= Partial_Sums(th P_sin).k +
-      Im([*0, th*] |^ (2*(k+1))/((2*(k+1))!c))+
-      Im([*0, th*] |^ (2*(k+1)+1)/((2*(k+1)+1)!c)) by Def8
+      Im((th*<i>) |^ (2*(k+1))/((2*(k+1))!c))+
+      Im((th*<i>) |^ (2*(k+1)+1)/((2*(k+1)+1)!c)) by Def8
         .= Partial_Sums(th P_sin).k +
-      Im( [*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/ ((2*(k+1))!c))
-      +Im([*0, th*] |^ (2*(k+1)+1)/((2*(k+1)+1)!c)) by Th36
+      Im( (-1)|^ (k+1)* (th |^ (2*(k+1)))/ ((2*(k+1))!c))
+      +Im((th*<i>) |^ (2*(k+1)+1)/((2*(k+1)+1)!c)) by Th36
         .= Partial_Sums(th P_sin).k +
-      Im( [*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/ ((2*(k+1))!c))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c)) by Th36
-        .= Partial_Sums(th P_sin).k +
-      Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)))) / ((2*(k+1))!c))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c))
-        by ARYTM_0:def 7
+      Im( (-1)|^ (k+1)* (th |^ (2*(k+1)))/ ((2*(k+1))!c))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!c)) by Th36
         .= Partial_Sums(th P_sin).k +
       Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)))) / ((2*(k+1))!))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!c))
         by Th37
         .= Partial_Sums(th P_sin).k +
       Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)))) / ((2*(k+1))!))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!))
         by Th37
         .= Partial_Sums(th P_sin).k +
       Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)))) / ((2*(k+1))!c))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!))
         by Th37
         .= Partial_Sums(th P_sin).k +
       Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)))) / ((2*(k+1))!c))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!c))
         by Th37
         .= Partial_Sums(th P_sin).k +
-      Im( ([*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]) / ((2*(k+1))!c))
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c))
-        by ARYTM_0:def 7
+      Im( (-1)|^ (k+1)* (th |^ (2*(k+1)))/ ((2*(k+1))!))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!c))
+      by Th37
         .= Partial_Sums(th P_sin).k +
-      Im( [*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/ [*(2*(k+1))!,0*])
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/((2*(k+1)+1)!c))
-      by th37
-        .= Partial_Sums(th P_sin).k +
-      Im( [*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/ [*(2*(k+1))!,0*])
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/[*(2*(k+1)+1)!,0*])
-      by th37;
-      (2*(k+1))!<>0 by NEWTON:23;
-      then
-A13:  Partial_Sums(Im ([*0, th*] ExpSeq)).(2*(k+1)+1)
+      Im( (-1)|^ (k+1)* (th |^ (2*(k+1)))/ ((2*(k+1))!))
+      + Im( (-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>/((2*(k+1)+1)!))
+      by Th37;
+A13:  Partial_Sums(Im ((th*<i>) ExpSeq)).(2*(k+1)+1)
       = Partial_Sums(th P_sin).k +
-      Im( [*((-1)|^ (k+1)* (th |^ (2*(k+1))))/((2*(k+1))!),0/((2*(k+1))!)*])
-      + Im( [*0,(-1)|^ (k+1)* (th |^ (2*(k+1)+1))*]/[*(2*(k+1)+1)!,0*])
-      by A12,Lm7;
-      (2*(k+1)+1)!<>0 by NEWTON:23;
-      then Partial_Sums(Im ([*0, th*] ExpSeq)).(2*(k+1)+1)
-      = Partial_Sums(th P_sin).k +
-      Im([*((-1)|^ (k+1)* (th |^ (2*(k+1))))/((2*(k+1))!),
-      0/((2*(k+1))!)*])+ Im( [*0/((2*(k+1)+1)!),
-      ((-1)|^ (k+1)* (th |^ (2*(k+1)+1)))/((2*(k+1)+1)!)*]) by A13,Lm7
-        .= Partial_Sums(th P_sin).k +
-      Im(((-1)|^ (k+1)* (th |^ (2*(k+1))))/((2*(k+1))!)+
-      (0/((2*(k+1))!))*<i>)+ Im( [*0/((2*(k+1)+1)!),
-      ((-1)|^ (k+1)* (th |^ (2*(k+1)+1)))/((2*(k+1)+1)!)*]) by COMPLEX1:27
-        .= Partial_Sums(th P_sin).k +
-      Im(((-1)|^ (k+1)* (th |^ (2*(k+1))))/((2*(k+1))!)+
-      0*<i>)+ Im(0/((2*(k+1)+1)!)+
-      ((-1)|^ (k+1)* (th |^ (2*(k+1)+1)))/((2*(k+1)+1)!)*<i>) by COMPLEX1:27
-        .= Partial_Sums(th P_sin).k + 0 + Im(0/((2*(k+1)+1)!)+
-      ((-1)|^ (k+1)* (th |^ (2*(k+1)+1)))/((2*(k+1)+1)!)*<i>) by COMPLEX1:28
+      Im( (((-1)|^ (k+1)* (th |^ (2*(k+1))))/((2*(k+1))!)+0/((2*(k+1))!)*<i>))
+      + Im( ((-1)|^ (k+1)* (th |^ (2*(k+1)+1))*<i>)/((2*(k+1)+1)!))
+      by A12;
+      Partial_Sums(Im ((th*<i>) ExpSeq)).(2*(k+1)+1)
+        = Partial_Sums(th P_sin).k + 0 + Im(0/((2*(k+1)+1)!)+
+      ((-1)|^ (k+1)* (th |^ (2*(k+1)+1)))/((2*(k+1)+1)!)*<i>)
+       by COMPLEX1:28,A13
         .= Partial_Sums(th P_sin).k + (0/((2*(k+1))!)) +
       (-1)|^ (k+1)* (th |^ (2*(k+1)+1))/((2*(k+1)+1)!) by COMPLEX1:28;
       then
-A14:  Partial_Sums(Im ([*0, th*] ExpSeq)).(2*(k+1)+1)
+A14:  Partial_Sums(Im ((th*<i>) ExpSeq)).(2*(k+1)+1)
       = Partial_Sums(th P_sin).k + th P_sin.(k+1) by Def24
         .= Partial_Sums(th P_sin).(k+1) by SERIES_1:def 1;
-A15:  Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
-      = Partial_Sums(Re ([*0, th*] ExpSeq)).(2*k+1)+
-      (Re ([*0, th*] ExpSeq)).((2*k+1)+1) by SERIES_1:def 1
-        .=Partial_Sums(th P_cos).k + (Re ([*0, th*] ExpSeq)).(2*k+1)+
-      (Re ([*0, th*] ExpSeq)).((2*k+1)+1) by A11,SERIES_1:def 1
-        .= Partial_Sums(th P_cos).k + Re (([*0, th*] ExpSeq).(2*k+1))+
-      (Re ([*0, th*] ExpSeq)).((2*k+1)+1) by COMSEQ_3:def 3
-        .= Partial_Sums(th P_cos).k + Re (([*0, th*] ExpSeq).(2*k+1))+
-      Re (([*0, th*] ExpSeq).((2*k+1)+1)) by COMSEQ_3:def 3
-        .=Partial_Sums(th P_cos).k + Re ([*0, th*]|^ (2*k+1)/ ((2*k+1)!c))+
-      Re (([*0, th*] ExpSeq).((2*k+1)+1)) by Def8
-        .= Partial_Sums(th P_cos).k + Re ([*0, th*]|^ (2*k+1)/ ((2*k+1)!c))+
-      Re ([*0, th*]|^ (2*(k+1))/(((2*k+1)+1)!c)) by Def8
+A15:  Partial_Sums(Re ((th*<i>) ExpSeq)).(2*(k+1))
+      = Partial_Sums(Re ((th*<i>) ExpSeq)).(2*k+1)+
+      (Re ((th*<i>) ExpSeq)).((2*k+1)+1) by SERIES_1:def 1
+        .=Partial_Sums(th P_cos).k + (Re ((th*<i>) ExpSeq)).(2*k+1)+
+      (Re ((th*<i>) ExpSeq)).((2*k+1)+1) by A11,SERIES_1:def 1
+        .= Partial_Sums(th P_cos).k + Re (((th*<i>) ExpSeq).(2*k+1))+
+      (Re ((th*<i>) ExpSeq)).((2*k+1)+1) by COMSEQ_3:def 3
+        .= Partial_Sums(th P_cos).k + Re (((th*<i>) ExpSeq).(2*k+1))+
+      Re (((th*<i>) ExpSeq).((2*k+1)+1)) by COMSEQ_3:def 3
+        .=Partial_Sums(th P_cos).k + Re ((th*<i>)|^ (2*k+1)/ ((2*k+1)!c))+
+      Re (((th*<i>) ExpSeq).((2*k+1)+1)) by Def8
+        .= Partial_Sums(th P_cos).k + Re ((th*<i>)|^ (2*k+1)/ ((2*k+1)!c))+
+      Re ((th*<i>)|^ (2*(k+1))/(((2*k+1)+1)!c)) by Def8
         .= Partial_Sums(th P_cos).k +
-      Re ( [*0,(-1)|^ k* (th |^ (2*k+1))*]/((2*k+1)!c))+
-      Re ([*0, th*]|^ (2*(k+1))/((2*(k+1))!c)) by Th36
+      Re ( (-1)|^ k* (th |^ (2*k+1))*<i>/((2*k+1)!c))+
+      Re ((th*<i>)|^ (2*(k+1))/((2*(k+1))!c)) by Th36
         .= Partial_Sums(th P_cos).k +
-      Re ( [*0,(-1)|^ k* (th |^ (2*k+1))*]/((2*k+1)!c))+
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/((2*(k+1))!c)) by Th36
+      Re ( (-1)|^ k* (th |^ (2*k+1))*<i>/((2*k+1)!c))+
+      Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!c)) by Th36
         .= Partial_Sums(th P_cos).k +
-      Re ( [*0,(-1)|^ k* (th |^ (2*k+1))*]/[*(2*k+1)!, 0*])+
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/((2*(k+1))!c)) by th37
+      Re ( (-1)|^ k* (th |^ (2*k+1))*<i>/((2*k+1)!))+
+      Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!c)) by Th37
         .= Partial_Sums(th P_cos).k +
-      Re ( [*0,(-1)|^ k* (th |^ (2*k+1))*]/[*(2*k+1)!, 0*])+
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/[*(2*(k+1))!,0*]) by th37;
-      (2*k+1)!<>0 by NEWTON:23;
-      then
-A16:  Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
+      Re ( (-1)|^ k* (th |^ (2*k+1))*<i>/((2*k+1)!))+
+      Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!)) by Th37;
+A16:  Partial_Sums(Re ((th*<i>) ExpSeq)).(2*(k+1))
       = Partial_Sums(th P_cos).k +
-      Re ( [*0/((2*k+1)!),((-1)|^ k* (th |^ (2*k+1)))/((2*k+1)!)*]) +
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1))),0*]/[*(2*(k+1))!,0*]) by A15,Lm7;
-      (2*(k+1))! <>0 by NEWTON:23;
-      then Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
-      = Partial_Sums(th P_cos).k +
-      Re ( [*0/((2*k+1)!),(-1)|^ k* (th |^ (2*k+1))/((2*k+1)!)*])+
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!),0/((2*(k+1))!)*])
-      by A16,Lm7
-        .= Partial_Sums(th P_cos).k +
-      Re (0/((2*k+1)!)+((-1)|^ k* (th |^ (2*k+1))/((2*k+1)!))*<i>)+
-      Re ([*(-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!),0/((2*(k+1))!)*])
-      by COMPLEX1:27
-        .= Partial_Sums(th P_cos).k +
-      Re (0/((2*k+1)!)+((-1)|^ k* (th |^ (2*k+1))/((2*k+1)!))*<i>)+
+      Re ( (0/((2*k+1)!)+((-1)|^ k* (th |^ (2*k+1)))/((2*k+1)!)*<i>)) +
+      Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!)) by A15;
+      Partial_Sums(Re ((th*<i>) ExpSeq)).(2*(k+1))
+        = Partial_Sums(th P_cos).k +0/((2*k+1)!)+
       Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!)+(0/((2*(k+1))!))*<i>)
-      by COMPLEX1:27
-        .= Partial_Sums(th P_cos).k +0/((2*k+1)!)+
-      Re ((-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!)+(0/((2*(k+1))!))*<i>)
-      by COMPLEX1:28
+      by COMPLEX1:28,A16
         .= Partial_Sums(th P_cos).k +0/((2*k+1)!)+
       (-1)|^ (k+1)* (th |^ (2*(k+1)))/((2*(k+1))!) by COMPLEX1:28;
-      then Partial_Sums(Re ([*0, th*] ExpSeq)).(2*(k+1))
+      then Partial_Sums(Re ((th*<i>) ExpSeq)).(2*(k+1))
       = Partial_Sums(th P_cos).k + th P_cos.(k+1) by Def25
         .= Partial_Sums(th P_cos).(k+1) by SERIES_1:def 1;
       hence thesis by A14;
@@ -2476,72 +2351,69 @@ end;
 theorem Th39:
   for th being Real holds
   Partial_Sums(th P_sin) is convergent & Sum(th P_sin)=Im(Sum
-  ([*0,th*] ExpSeq))
+  ((th*<i>) ExpSeq))
   &Partial_Sums(th P_cos) is convergent & Sum(th P_cos)=Re(Sum
-  ([*0,th*] ExpSeq))
+  ((th*<i>) ExpSeq))
 proof
   let th be Real;
-  Sum(([*0,th*] ExpSeq))
-  =Sum(Re ([*0,th*] ExpSeq))+Sum(Im ([*0,th*] ExpSeq))*<i> by COMSEQ_3:54
-    .=[*Sum(Re ([*0,th*] ExpSeq)),Sum(Im ([*0,th*] ExpSeq))*] by COMPLEX1:27;
-  then Sum(([*0,th*] ExpSeq))=Sum(Re ([*0,th*] ExpSeq))+(Sum
-  (Im ([*0,th*] ExpSeq)))*<i> by COMPLEX1:27;
-  then Sum(Re ([*0,th*] ExpSeq))= Re (Sum(([*0,th*] ExpSeq)))&
-  Sum(Im ([*0,th*] ExpSeq))=Im (Sum(([*0,th*] ExpSeq))) by COMPLEX1:28;
+  Sum(((th*<i>) ExpSeq))
+  =Sum(Re ((th*<i>) ExpSeq))+Sum(Im ((th*<i>) ExpSeq))*<i> by COMSEQ_3:54;
+  then Sum(Re ((th*<i>) ExpSeq))= Re (Sum(((th*<i>) ExpSeq)))&
+  Sum(Im ((th*<i>) ExpSeq))=Im (Sum(((th*<i>) ExpSeq))) by COMPLEX1:28;
   then
-A1: Partial_Sums(Re ([*0,th*] ExpSeq)) is convergent &
-  lim Partial_Sums(Re ([*0,th*] ExpSeq))= Re (Sum(([*0,th*] ExpSeq)))&
-  Partial_Sums(Im ([*0,th*] ExpSeq)) is convergent &
-  lim Partial_Sums(Im ([*0,th*] ExpSeq))=Im (Sum(([*0,th*] ExpSeq)))
+A1: Partial_Sums(Re ((th*<i>) ExpSeq)) is convergent &
+  lim Partial_Sums(Re ((th*<i>) ExpSeq))= Re (Sum(((th*<i>) ExpSeq)))&
+  Partial_Sums(Im ((th*<i>) ExpSeq)) is convergent &
+  lim Partial_Sums(Im ((th*<i>) ExpSeq))=Im (Sum(((th*<i>) ExpSeq)))
   by SERIES_1:def 2,def 3;
 A2: now
     let p be real number;
     assume p>0;
     then consider n such that
-A3: for k st n <= k holds abs(Partial_Sums(Re ([*0,th*] ExpSeq)).k-
-    Re (Sum(([*0,th*] ExpSeq)))) < p by A1,SEQ_2:def 7;
+A3: for k st n <= k holds abs(Partial_Sums(Re ((th*<i>) ExpSeq)).k-
+    Re (Sum(((th*<i>) ExpSeq)))) < p by A1,SEQ_2:def 7;
     take n;
     now
       let k such that
 A4:   n <= k;
-A5:   abs(Partial_Sums(th P_cos).k-Re (Sum(([*0,th*] ExpSeq))))
-      =abs(Partial_Sums(Re ([*0,th*] ExpSeq)).(2*k)-
-      Re (Sum(([*0,th*] ExpSeq)))) by Th38;
+A5:   abs(Partial_Sums(th P_cos).k-Re (Sum(((th*<i>) ExpSeq))))
+      =abs(Partial_Sums(Re ((th*<i>) ExpSeq)).(2*k)-
+      Re (Sum(((th*<i>) ExpSeq)))) by Th38;
       2*k=k+k;
-      hence abs(Partial_Sums(th P_cos).k-Re (Sum(([*0,th*] ExpSeq))))
+      hence abs(Partial_Sums(th P_cos).k-Re (Sum(((th*<i>) ExpSeq))))
       < p by A3,A4,A5,NAT_1:12;
     end;
     hence for k st n <= k holds
-    abs(Partial_Sums(th P_cos).k-Re (Sum(([*0,th*] ExpSeq)))) < p;
+    abs(Partial_Sums(th P_cos).k-Re (Sum(((th*<i>) ExpSeq)))) < p;
   end;
   then Partial_Sums(th P_cos) is convergent by SEQ_2:def 6;
   then
-A6: lim(Partial_Sums(th P_cos))=Re(Sum ([*0,th*] ExpSeq)) by A2,SEQ_2:def 7;
+A6: lim(Partial_Sums(th P_cos))=Re(Sum ((th*<i>) ExpSeq)) by A2,SEQ_2:def 7;
 A7: now
     let p be real number;
     assume p>0;
     then consider n such that
-A8: for k st n <= k holds abs(Partial_Sums(Im ([*0,th*] ExpSeq)).k-
-    Im (Sum(([*0,th*] ExpSeq)))) < p by A1,SEQ_2:def 7;
+A8: for k st n <= k holds abs(Partial_Sums(Im ((th*<i>) ExpSeq)).k-
+    Im (Sum(((th*<i>) ExpSeq)))) < p by A1,SEQ_2:def 7;
     take n;
     now
       let k such that
 A9:   n <= k;
-A10:  abs(Partial_Sums(th P_sin).k-Im (Sum(([*0,th*] ExpSeq))))
-      =abs(Partial_Sums(Im ([*0,th*] ExpSeq)).(2*k+1)-
-      Im (Sum(([*0,th*] ExpSeq)))) by Th38;
+A10:  abs(Partial_Sums(th P_sin).k-Im (Sum(((th*<i>) ExpSeq))))
+      =abs(Partial_Sums(Im ((th*<i>) ExpSeq)).(2*k+1)-
+      Im (Sum(((th*<i>) ExpSeq)))) by Th38;
       2*k=k+k;
       then n <= 2*k by A9,NAT_1:12;
       then n<2*k+1 by NAT_1:13;
-      hence abs(Partial_Sums(th P_sin).k-Im (Sum(([*0,th*] ExpSeq))))
+      hence abs(Partial_Sums(th P_sin).k-Im (Sum(((th*<i>) ExpSeq))))
       < p by A8,A10;
     end;
     hence for k st n <= k holds
-    abs(Partial_Sums(th P_sin).k-Im (Sum(([*0,th*] ExpSeq)))) < p;
+    abs(Partial_Sums(th P_sin).k-Im (Sum(((th*<i>) ExpSeq)))) < p;
   end;
   then Partial_Sums(th P_sin) is convergent by SEQ_2:def 6;
   then lim(Partial_Sums(th P_sin))=Im(Sum
-  ([*0,th*] ExpSeq)) by A7,SEQ_2:def 7;
+  ((th*<i>) ExpSeq)) by A7,SEQ_2:def 7;
   hence thesis by A2,A6,A7,SEQ_2:def 6,SERIES_1:def 3;
 end;
 
@@ -2549,8 +2421,8 @@ theorem Th40:
   cos.th=Sum(th P_cos) & sin.th=Sum(th P_sin)
 proof
   reconsider th as Real by XREAL_0:def 1;
-A1: sin.th = Im(Sum([*0,th*] ExpSeq)) by Def20;
-  cos.th=Re(Sum([*0,th*] ExpSeq)) by Def22;
+A1: sin.th = Im(Sum((th*<i>) ExpSeq)) by Def20;
+  cos.th=Re(Sum((th*<i>) ExpSeq)) by Def22;
   hence thesis by A1,Th39;
 end;
 
@@ -2562,7 +2434,7 @@ theorem
 deffunc U(Real) = 2*$1+1;
 consider bq being Real_Sequence such that
 Lm10: for n holds bq.n= U(n) from SEQ_1:sch 1;
-bq is increasing Seq_of_Nat
+bq is increasing sequence of NAT
 proof
 A1: bq is increasing
   proof
@@ -2585,7 +2457,7 @@ A1: bq is increasing
   end;
   hence thesis by A1,SEQM_3:29;
 end;
-then reconsider bq as increasing Seq_of_Nat;
+then reconsider bq as increasing sequence of NAT;
 
 Lm11: for th,th1,th2,th3 be real number holds
 th |^ (2*n)=(th |^ n)|^ 2 & (-1)|^(2*n)=1 & (-1)|^ (2*n+1)=-1
@@ -2597,19 +2469,6 @@ A2: (-1)|^(2*n)=(1)|^(2*n) by POWER:1
     .=1 by NEWTON:15;
   thus (-1)|^ (2*n+1)=(-1)|^ (2*n)*(-1) by NEWTON:11
     .=-1 by A2;
-end;
-
-Lm12: for th,th1,th2,th3 being Real holds
-[*th,th1*]+[*th2,th3*]=[*th+th2,th1+th3*] &(5/6)^2=25/36
-proof
-  let th,th1,th2,th3 be Real;
-  thus [*th,th1*]+[*th2,th3*]=[*th+th2,th1+th3*]
-  proof
-    [*th,th1*] = th+th1*<i> & [*th2,th3*]=th2+th3*<i> by COMPLEX1:27;
-    then [*th,th1*]+[*th2,th3*] = th+th2+(th1+th3)*<i>;
-    hence thesis by COMPLEX1:27;
-  end;
-  thus (5/6)^2=25/36;
 end;
 
 theorem Th42:
@@ -2642,11 +2501,10 @@ A6:   for l st X[l] holds X[l+1]
         let l;
         assume
 A7:     rseq.l<=rseq.(l+1)& rseq.l>0;
-A8:     rseq.(l+1+1)= (l+1+1)! by A3
+        rseq.(l+1+1)= (l+1+1)! by A3
           .=(l+1)!*(l+1+1) by NEWTON:21
           .=rseq.(l+1) *(l+1+1) by A3;
-        (l+1+1)>=1 by A2;
-        hence thesis by A7,A8,REAL_2:146;
+        hence thesis by A7,A2,XREAL_1:153;
       end;
       for l holds X[l] from NAT_1:sch 1(A5,A6);
       hence thesis;
@@ -2681,8 +2539,7 @@ A4:   for m st X[m] holds X[m+1]
 A5:     th GeoSeq.(m+1)<=th GeoSeq.m &th GeoSeq.m >=0;
 A6:     th GeoSeq.(m+1+1)=th GeoSeq.(m+1)*th by PREPOWER:4;
         th GeoSeq.(m+1)=th GeoSeq.(m)*th by PREPOWER:4;
-        then th GeoSeq.(m+1)>=0 by A1,A5;
-        hence thesis by A1,A6,REAL_2:147;
+        hence thesis by A1,A6,XREAL_1:155,A5;
       end;
       for m holds X[m] from NAT_1:sch 1(A3,A4);
       hence thesis;
@@ -2694,79 +2551,56 @@ A7: th |^ k=th GeoSeq. k by PREPOWER:def 1;
   hence thesis by A1,A2,A7,SEQM_3:14;
 end;
 
-theorem
-  for th being Real holds [*th,0*]|^ n=[* th |^ n,0 *]
-proof
-  let th be Real;
-  defpred X[Element of NAT] means [*th,0*]|^ $1 =[* th |^ $1,0 *];
-  [*th,0*]|^ 0=[* 1,0 *] by Lm9,COMSEQ_3:11
-    .=[* th |^ 0,0 *] by NEWTON:9;
-  then
-A1: X[0];
-A2: for k st X[k] holds X[k+1]
-  proof
-    let k;
-    assume
-A3: [*th,0*]|^ k =[* th |^ k,0 *];
-    [*th,0*]|^ (k+1)=[*th,0*] GeoSeq.k * [*th,0*] by COMSEQ_3:def 1
-      .=[* th |^ k*th,0*th *] by A3,Lm8
-      .=[* th |^ (k+1),0 *] by NEWTON:11;
-    hence thesis;
-  end;
-  for n holds X[n] from NAT_1:sch 1(A1,A2);
-  hence thesis;
-end;
+canceled;
 
 theorem
   for th being Real holds th |^ n /(n!c)=(th|^ n) /(n!) by Th37;
 
 theorem Th46:
-  for p being Real holds Im(Sum([*p,0*] ExpSeq))=0
+  for p being real number holds Im(Sum(p ExpSeq))=0
 proof
-  let p be Real;
-A1: for n holds (Partial_Sums(Im([*p,0*] ExpSeq))).n=0
+  let p be real number;
+A1: for n holds (Partial_Sums(Im(p ExpSeq))).n=0
   proof
     let n;
-    defpred X[Element of NAT] means (Partial_Sums(Im([*p,0*] ExpSeq))).$1=0;
-    (Partial_Sums(Im([*p,0*] ExpSeq))).0=Im([*p,0*] ExpSeq).0
+    defpred X[Element of NAT] means (Partial_Sums(Im(p ExpSeq))).$1=0;
+    (Partial_Sums(Im(p ExpSeq))).0=Im(p ExpSeq).0
     by SERIES_1:def 1
-      .=Im([*p,0*] ExpSeq.0) by COMSEQ_3:def 4
-      .=0 by Th4,COMPLEX1:15,def 7;
+      .=Im(p ExpSeq.0) by COMSEQ_3:def 4
+      .=0 by Th4,COMPLEX1:15;
     then
 A2: X[0];
 A3: for k st X[k] holds X[k+1]
     proof
       let k;
-      assume (Partial_Sums(Im([*p,0*] ExpSeq))).k=0;
-      then (Partial_Sums(Im([*p,0*] ExpSeq))).(k+1)
-      =0+ (Im([*p,0*] ExpSeq)).(k+1) by SERIES_1:def 1
-        .=Im(([*p,0*] ExpSeq).(k+1)) by COMSEQ_3:def 4
-        .=Im([*p,0*] |^ (k+1) /((k+1)!c) ) by Def8
-        .=Im([*p,0*] |^ (k+1) /((k+1)!) ) by Th37
-        .=Im((p|^ (k+1))/((k+1)!)+0*<i>) by ARYTM_0:def 7
+      assume (Partial_Sums(Im(p ExpSeq))).k=0;
+      then (Partial_Sums(Im(p ExpSeq))).(k+1)
+      =0+ (Im(p ExpSeq)).(k+1) by SERIES_1:def 1
+        .=Im((p ExpSeq).(k+1)) by COMSEQ_3:def 4
+        .=Im(p |^ (k+1) /((k+1)!c) ) by Def8
+        .=Im((p|^ (k+1))/((k+1)!)+0*<i>) by Th37
         .=0 by COMPLEX1:28;
       hence thesis;
     end;
     for n holds X[n] from NAT_1:sch 1(A2,A3);
     hence thesis;
   end;
-  for n,m being Nat holds (Partial_Sums(Im([*p,0*] ExpSeq))).n=
-  (Partial_Sums(Im([*p,0*] ExpSeq))).m
+  for n,m being Nat holds (Partial_Sums(Im(p ExpSeq))).n=
+  (Partial_Sums(Im(p ExpSeq))).m
   proof
     let n,m be Nat;
-X:   n in NAT & m in NAT by ORDINAL1:def 13;
-    then (Partial_Sums(Im([*p,0*] ExpSeq))).n=0&
-    (Partial_Sums(Im([*p,0*] ExpSeq))).m=0 by A1;
+     n in NAT & m in NAT by ORDINAL1:def 13;
+    then (Partial_Sums(Im(p ExpSeq))).n=0&
+    (Partial_Sums(Im(p ExpSeq))).m=0 by A1;
     hence thesis;
   end;
-  then (Partial_Sums(Im([*p,0*] ExpSeq))) is constant by VALUED_0:24;
   then
-A4: lim Partial_Sums(Im([*p,0*] ExpSeq))=Partial_Sums(Im([*p,0*]
-  ExpSeq)).0 by SEQ_4:41
+A4: lim Partial_Sums(Im(p ExpSeq))=Partial_Sums(Im(p
+  ExpSeq)).0 by SEQ_4:41,VALUED_0:24
     .= 0 by A1;
-  Im(Sum([*p,0*] ExpSeq))
-  = Im(Sum(Re ([*p,0*] ExpSeq))+(Sum(Im ([*p,0*] ExpSeq))*<i>)) by COMSEQ_3:54
-    .= Sum(Im ([*p,0*] ExpSeq )) by COMPLEX1:28;
+  Im(Sum(p ExpSeq))
+  = Im(Sum(Re (p ExpSeq))+(Sum(Im (p ExpSeq))*<i>)) by COMSEQ_3:54
+    .= Sum(Im (p ExpSeq )) by COMPLEX1:28;
   hence thesis by A4,SERIES_1:def 3;
 end;
 
@@ -2775,12 +2609,8 @@ theorem Th47:
 proof
 A1: cos.1>=1/2
   proof
-A2: (Partial_Sums(1 P_cos))*bq is subsequence of Partial_Sums(1 P_cos)
-    by VALUED_0:def 17;
 A3: Partial_Sums(1 P_cos) is convergent & cos.1=Sum(1 P_cos) by Th39,Th40;
-    then
-A4: (Partial_Sums(1 P_cos))*bq is convergent by A2,SEQ_4:29;
-    lim ((Partial_Sums(1 P_cos))*bq )=lim(Partial_Sums(1 P_cos)) by A2,A3,
+    lim ((Partial_Sums(1 P_cos))*bq )=lim(Partial_Sums(1 P_cos)) by A3,
 SEQ_4:30;
     then
 A5: lim ((Partial_Sums(1 P_cos))*bq )= cos.1 by A3,SERIES_1:def 3;
@@ -2829,37 +2659,30 @@ A10:    (1 P_cos).(2*k+1+1)=(-1)|^ (2*(k+1)) * (1)|^ (2*(2*(k+1)))/((2*(2*
         (k+1)))!) by Def25
           .= 1 * 1|^ (2*(2*(k+1)))/((2*(2*(k+1)))!) by Lm11
           .=1/((2*(2*(k+1)))!) by NEWTON:15;
-        (1 P_cos).(2*(k+1)+1)
+B11:    (1 P_cos).(2*(k+1)+1)
         = (-1)|^ (2*(k+1)+1) * (1)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!)
         by Def25
           .=(-1) * (1)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!) by Lm11
           .=(-1) * 1/((2*(2*(k+1)+1))!) by NEWTON:15
           .=(-1)/((2*(2*(k+1)+1))!);
-        then
-A11:    (1 P_cos).(2*(k+1)+1)=-1/((2*(2*(k+1)+1))!) by XCMPLX_1:188;
         2*(2*(k+1))<2*(2*(k+1)+1) by XREAL_1:31,70;
         then
 A12:    (2*(2*(k+1)))! <= (2*(2*(k+1)+1))! by Th42;
-        (2*(2*(k+1)))!>0 by NEWTON:23;
-        then 1/((2*(2*(k+1)))!) >= 1/((2*(2*(k+1)+1))!) by A12,REAL_2:152;
+        1/((2*(2*(k+1)))!) >= 1/((2*(2*(k+1)+1))!) by A12,XREAL_1:87,NEWTON:23;
         then 1/((2*(2*(k+1)))!)-1/(2*(2*(k+1)+1)!)>=0 by XREAL_1:50;
         then ((Partial_Sums(1 P_cos))*bq).(k+1)>=((Partial_Sums(1 P_cos))*bq).
-        k by A9,A10,A11,REAL_2:105;
+        k by A9,A10,B11,XREAL_1:51;
         hence thesis by A8,XXREAL_0:2;
       end;
       for n holds X[n] from NAT_1:sch 1(A6,A7);
       hence thesis;
     end;
-    hence thesis by A4,A5,PREPOWER:2;
+    hence thesis by A3,A5,PREPOWER:2,SEQ_4:29;
   end;
 A13: sin.1>=5/6
   proof
-A14: (Partial_Sums(1 P_sin))*bq is subsequence of Partial_Sums(1 P_sin)
-    by VALUED_0:def 17;
 A15: Partial_Sums(1 P_sin) is convergent & sin.1=Sum(1 P_sin) by Th39,Th40;
-    then
-A16: (Partial_Sums(1 P_sin))*bq is convergent by A14,SEQ_4:29;
-    lim ((Partial_Sums(1 P_sin))*bq )=lim(Partial_Sums(1 P_sin)) by A14,A15,
+    lim ((Partial_Sums(1 P_sin))*bq )=lim(Partial_Sums(1 P_sin)) by A15,
 SEQ_4:30;
     then
 A17: lim ((Partial_Sums(1 P_sin))*bq )= sin.1 by A15,SERIES_1:def 3;
@@ -2911,35 +2734,33 @@ A22:    (1 P_sin).(2*k+1+1)=(-1)|^ (2*(k+1)) * (1)|^ (2*(2*(k+1))+1)/((2*
         (2*(k+1))+1)!) by Def24
           .=(1)* (1)|^ (2*(2*(k+1))+1)/((2*(2*(k+1))+1)!) by Lm11
           .=1/((2*(2*(k+1))+1)!) by NEWTON:15;
-        (1 P_sin).(2*(k+1)+1)
+B23:    (1 P_sin).(2*(k+1)+1)
         = (-1)|^ (2*(k+1)+1) * (1)|^ (2*(2*(k+1)+1)+1)/((2*(2*(k+1)+1)+1)!)
         by Def24
           .=(-1) * (1)|^ (2*(2*(k+1)+1)+1)/((2*(2*(k+1)+1)+1)!) by Lm11
           .=(-1) * 1/((2*(2*(k+1)+1)+1)!) by NEWTON:15
           .=(-1)/((2*(2*(k+1)+1)+1)!);
-        then
-A23:    (1 P_sin).(2*(k+1)+1)=-1/((2*(2*(k+1)+1)+1)!) by XCMPLX_1:188;
         2*(2*(k+1))<2*(2*(k+1)+1) by XREAL_1:31,70;
         then 2*(2*(k+1))+1<2*(2*(k+1)+1) +1 by XREAL_1:8;
         then
 A24:    (2*(2*(k+1))+1)! <= (2*(2*(k+1)+1)+1)! by Th42;
-        (2*(2*(k+1))+1)!>0 by NEWTON:23;
-        then 1/((2*(2*(k+1))+1)!) >= 1/((2*(2*(k+1)+1)+1)!) by A24,REAL_2:152;
+        1/((2*(2*(k+1))+1)!) >= 1/((2*(2*(k+1)+1)+1)!)
+         by A24,XREAL_1:87,NEWTON:23;
         then 1/((2*(2*(k+1))+1)!)-1/((2*(2*(k+1)+1)+1)!)>=0 by XREAL_1:50;
         then ((Partial_Sums(1 P_sin))*bq).(k+1)>=((Partial_Sums(1 P_sin))*bq)
-        .k by A21,A22,A23,REAL_2:105;
+        .k by A21,A22,B23,XREAL_1:51;
         hence thesis by A20,XXREAL_0:2;
       end;
       for n holds X[n] from NAT_1:sch 1(A18,A19);
       hence thesis;
     end;
-    hence thesis by A16,A17,PREPOWER:2;
+    hence thesis by A15,A17,PREPOWER:2,SEQ_4:29;
   end;
   sin.1>cos.1
   proof
 A25: (cos.(1))^2+(sin.(1))^2=1 by Th31;
-A26: (sin.(1))^2>=(25/36) by A13,Lm12,SQUARE_1:77;
-    then 1-(1-(cos.(1))^2)<=1-25/36 by A25,REAL_2:106;
+A26: (sin.(1))^2>=(5/6)^2 by A13,SQUARE_1:77;
+    then 1-(1-(cos.(1))^2)<=1-25/36 by A25,XREAL_1:12;
     then (cos.(1))^2<25/36 by XXREAL_0:2;
     then (sin.(1))^2> (cos.(1))^2 by A26,XXREAL_0:2;
     then
@@ -2951,57 +2772,57 @@ A27: sqrt(cos.(1))^2<sqrt(sin.(1))^2 by SQUARE_1:95,XREAL_1:65;
 end;
 
 theorem Th48:
-  for th being Real holds th ExpSeq=Re([*th,0*] ExpSeq)
+  for th being Real holds th rExpSeq=Re(th ExpSeq)
 proof
   let th be Real;
-  for n holds (th ExpSeq).n=Re([*th,0*] ExpSeq).n
+  for n holds (th rExpSeq).n=Re(th ExpSeq).n
   proof
     let n;
-A1: [*th,0*] |^ n /(n!c) = th |^ n /(n!c) by ARYTM_0:def 7
-       .= th |^ n /(n!) by Th37
-       .= [*(th|^ n) /(n!),0*] by ARYTM_0:def 7;
-    Re([*th,0*] ExpSeq).n= Re ([*th,0*] ExpSeq.n) by COMSEQ_3:def 3
-      .=Re([*th,0*] |^ n /(n!c )) by Def8
-      .=Re((th|^ n) /(n!)+0*<i>) by A1,COMPLEX1:27
+    Re(th ExpSeq).n= Re (th ExpSeq.n) by COMSEQ_3:def 3
+      .=Re(th |^ n /(n!c+0*<i>)) by Def8
+      .=Re((th|^ n) /(n!)+0*<i>) by Th37
       .=(th|^ n) /(n!) by COMPLEX1:28
-      .=(th ExpSeq).n by Def9;
+      .=(th rExpSeq).n by Def9;
     hence thesis;
   end;
   hence thesis by FUNCT_2:113;
 end;
 
 theorem Th49:
-  for th being Real holds (th ExpSeq) is summable &
-  Sum(th ExpSeq)=Re(Sum([*th,0*] ExpSeq))
+  for th being Real holds th rExpSeq is summable &
+  Sum(th rExpSeq)=Re(Sum(th ExpSeq))
 proof
   let th be Real;
-A1: Sum([*th,0*] ExpSeq)
-  =Sum(Re ([*th,0*] ExpSeq))+(Sum(Im ([*th,0*] ExpSeq)))*<i> by COMSEQ_3:54;
-  Sum(th ExpSeq)=Sum(Re ([*th,0*] ExpSeq)) by Th48;
-  hence thesis by A1,Th48,COMPLEX1:28;
+A1: Sum(th ExpSeq)
+  =Sum(Re (th ExpSeq))+(Sum(Im (th ExpSeq)))*<i> by COMSEQ_3:54;
+  Sum(th rExpSeq)=Sum(Re (th ExpSeq)) by Th48;
+  hence thesis by A1,COMPLEX1:28,Th48;
 end;
 
-Lm13: z ExpSeq.1=z & z ExpSeq.0=1r & |.z |^ n.|=|.z.||^n
-proof
+Lm13:
+ for z being complex number holds
+ z ExpSeq.1=z & z ExpSeq.0=1r & |.z |^ n.|=|.z.| |^n
+proof let z be complex number;
+X: z in COMPLEX by XCMPLX_0:def 2;
     z|^1=z by NEWTON:10; then
 A2: z ExpSeq.1= z/(1!c) by Def8
     .=z/1 by Th37,NEWTON:19
     .=z;
 A3: z ExpSeq.0=z|^ 0/ (0!c) by Def8
-    .=1r by Th1,COMSEQ_3:11;
-  |.z |^ n.|=|.z.||^ n
+    .=1r by Th1,COMSEQ_3:11,X;
+  |.z |^ n.|=|.z.| |^ n
   proof
-    defpred X[Element of NAT] means |.z |^ $1.|=|.z.||^ $1;
+    defpred X[Element of NAT] means |.z |^ $1.|=|.z.| |^ $1;
     |.z |^ 0 .|=1 by COMPLEX1:134,COMSEQ_3:def 1;
     then
 A4: X[0] by NEWTON:9;
 A5: for k st X[k] holds X[k+1]
     proof
       let k such that
-A6:   |.z |^ k.|=|.z.||^ k;
+A6:   |.z |^ k.|=|.z.| |^ k;
       |.z |^ (k+1).|=|.z*(z GeoSeq.k).| by COMSEQ_3:def 1
-        .=|.z.||^ k *|.z.| by A6,COMPLEX1:151
-        .=|.z.||^(k+1) by NEWTON:11;
+        .=|.z.| |^ k *|.z.| by A6,COMPLEX1:151
+        .=|.z.| |^(k+1) by NEWTON:11;
       hence thesis;
     end;
     for n holds X[n] from NAT_1:sch 1(A4,A5);
@@ -3010,92 +2831,79 @@ A6:   |.z |^ k.|=|.z.||^ k;
   hence thesis by A2,A3;
 end;
 
-Lm14: for th being Real holds Sum([*th,0*] ExpSeq)=[*Sum(th ExpSeq),0*]
+Lm14: for th being Real holds Sum(th ExpSeq)=Sum(th rExpSeq)
 proof
   let th be Real;
-A1: for n being Nat holds Im(Partial_Sums([*th,0*] ExpSeq)).n=0
+A1: for n being Nat holds Im(Partial_Sums(th ExpSeq)).n=0
   proof
-    defpred X[Nat] means Im(Partial_Sums([*th,0*] ExpSeq)).$1=0;
-    Im(Partial_Sums([*th,0*] ExpSeq)).0
-    =Im(Partial_Sums([*th,0*] ExpSeq).0) by COMSEQ_3:def 4
-      .=Im(([*th,0*] ExpSeq).0) by COMSEQ_3:def 7
-      .=0 by Lm13,COMPLEX1:15;
+    defpred X[Nat] means Im(Partial_Sums(th ExpSeq)).$1=0;
+    Im(Partial_Sums(th ExpSeq)).0
+    =Im(Partial_Sums(th ExpSeq).0) by COMSEQ_3:def 4
+      .=Im((th ExpSeq).0) by COMSEQ_3:def 7
+      .=0 by COMPLEX1:15,Lm13;
     then
 A2: X[0];
 A3: for n being Nat st X[n] holds X[n+1]
     proof
       let n being Nat such that
-A4:   Im(Partial_Sums([*th,0*] ExpSeq)).n=0;
+A4:   Im(Partial_Sums(th ExpSeq)).n=0;
 X:   n in NAT by ORDINAL1:def 13;
-A0:   (th |^(n+1))/((n+1)!c) = (th |^(n+1))/((n+1)!) by Th37
-        .=[*(th|^ (n+1)) /((n+1)!),0*] by ARYTM_0:def 7;
-      Im(Partial_Sums([*th,0*] ExpSeq)).(n+1)
-      =Im(Partial_Sums([*th,0*] ExpSeq).(n+1)) by COMSEQ_3:def 4
-        .=Im(Partial_Sums([*th,0*] ExpSeq).n+([*th,0*] ExpSeq).(n+1))
-      by COMSEQ_3:def 7,X
-        .=Im(Partial_Sums([*th,0*] ExpSeq).n)+Im(([*th,0*] ExpSeq).(n+1))
+A0:   (th |^(n+1))/((n+1)!c) =(th|^ (n+1)) /((n+1)!) by Th37;
+      Im(Partial_Sums(th ExpSeq)).(n+1)
+      =Im(Partial_Sums(th ExpSeq).(n+1)) by COMSEQ_3:def 4
+        .=Im(Partial_Sums(th ExpSeq).n+(th ExpSeq).(n+1))
+      by X,COMSEQ_3:def 7
+        .=Im(Partial_Sums(th ExpSeq).n)+Im((th ExpSeq).(n+1))
       by COMPLEX1:19
-        .=0+Im(([*th,0*] ExpSeq).(n+1)) by A4,COMSEQ_3:def 4,X
-        .=Im(([*th,0*] |^(n+1))/((n+1)!c)) by Def8
-        .=Im((th |^(n+1))/((n+1)!c)) by ARYTM_0:def 7
-        .=Im((th|^ (n+1)) /((n+1)!)+0*<i>) by A0,COMPLEX1:27
+        .=0+Im((th ExpSeq).(n+1)) by A4,X,COMSEQ_3:def 4
+        .=Im((th|^ (n+1)) /((n+1)!)+0*<i>) by A0,Def8
         .=0 by COMPLEX1:28;
       hence thesis;
     end;
     for n being Nat holds X[n] from NAT_1:sch 2(A2,A3);
     hence thesis;
   end;
-  then Im(Partial_Sums([*th,0*] ExpSeq)) is constant by VALUED_0:def 18;
-  then lim(Im(Partial_Sums([*th,0*] ExpSeq)))
-  =Im(Partial_Sums([*th,0*] ExpSeq)).0 by SEQ_4:41
+  then Im(Partial_Sums(th ExpSeq)) is constant by VALUED_0:def 18;
+  then lim(Im(Partial_Sums(th ExpSeq)))
+  =Im(Partial_Sums(th ExpSeq)).0 by SEQ_4:41
     .=0 by A1;
   then
-A5: Im(Sum([*th,0*] ExpSeq)) =0 by COMSEQ_3:41;
-  Sum([*th,0*] ExpSeq)
-  =Re(Sum([*th,0*] ExpSeq))+Im(Sum([*th,0*] ExpSeq))*<i> by COMPLEX1:29
-    .=[*Re(Sum([*th,0*] ExpSeq)),Im(Sum([*th,0*] ExpSeq))*] by COMPLEX1:27
-    .=[*Sum(th ExpSeq),0*] by A5,Th49;
+A5: Im(Sum(th ExpSeq)) =0 by COMSEQ_3:41;
+  Sum(th ExpSeq) =Re(Sum(th ExpSeq))+0*<i> by A5,COMPLEX1:29
+    .=Sum(th rExpSeq) by Th49;
   hence thesis;
 end;
 
 theorem Th50:
   for p,q being real number holds
-  Sum((p+q) ExpSeq) = (Sum(p ExpSeq))*(Sum(q ExpSeq))
+  Sum((p+q) rExpSeq) = (Sum(p rExpSeq))*(Sum(q rExpSeq))
 proof
   let p,q be real number;
   reconsider p,q as Real by XREAL_0:def 1;
-  Sum((p+q) ExpSeq)=Re(Sum([*p+q,0+0*] ExpSeq)) by Th49
-    .=Re(Sum(([*p,0*]+[*q,0*]) ExpSeq)) by Lm12
-    .=Re((Sum([*p,0*] ExpSeq)) *(Sum([*q,0*] ExpSeq))) by Lm2
-    .=Re((Re(Sum([*p,0*] ExpSeq))+Im(Sum([*p,0*] ExpSeq))*<i>)
-  *(Sum([*q,0*] ExpSeq))) by COMPLEX1:29
-    .=Re([*Re(Sum([*p,0*] ExpSeq)),Im(Sum([*p,0*] ExpSeq))*]
-  *(Sum([*q,0*] ExpSeq))) by COMPLEX1:27
-    .= Re([*Re(Sum([*p,0*] ExpSeq)),Im(Sum([*p,0*] ExpSeq))*]*
-  (Re(Sum([*q,0*] ExpSeq))+Im(Sum([*q,0*] ExpSeq))*<i>)) by COMPLEX1:29
-    .= Re([*Re(Sum([*p,0*] ExpSeq)),Im(Sum([*p,0*] ExpSeq))*]*
-  [*Re(Sum([*q,0*] ExpSeq)),Im(Sum([*q,0*] ExpSeq))*]) by COMPLEX1:27
-    .= Re([*Sum(p ExpSeq),Im(Sum([*p,0*] ExpSeq))*]*
-  [*Re(Sum([*q,0*] ExpSeq)),Im(Sum([*q,0*] ExpSeq))*]) by Th49
-    .= Re([*Sum(p ExpSeq), 0*]*
-  [*Re(Sum([*q,0*] ExpSeq)),Im(Sum([*q,0*] ExpSeq))*]) by Th46
-    .= Re([*Sum(p ExpSeq), 0*]* [*Sum(q ExpSeq),
-  Im(Sum([*q,0*] ExpSeq))*]) by Th49
-    .= Re([*Sum(p ExpSeq), 0*]* [*Sum(q ExpSeq),0*]) by Th46
-    .=Re([*(Sum(p ExpSeq))*(Sum(q ExpSeq)),0*(Sum(q ExpSeq))*]) by Lm8
-    .=Re((Sum(p ExpSeq))*(Sum(q ExpSeq))+(0*(Sum(q ExpSeq)))*<i>)
-  by COMPLEX1:27
-    .=(Sum(p ExpSeq))*(Sum(q ExpSeq)) by COMPLEX1:28;
+  Sum((p+q) rExpSeq)=Re(Sum((p+q) ExpSeq)) by Th49
+    .=Re((Sum(p ExpSeq)) *(Sum(q ExpSeq))) by Lm2
+    .=Re((Re(Sum(p ExpSeq))+Im(Sum(p ExpSeq))*<i>)*(Sum(q ExpSeq)))
+                   by COMPLEX1:29
+    .= Re((Re(Sum(p ExpSeq))+Im(Sum(p ExpSeq))*<i>)*
+      (Re(Sum(q ExpSeq))+Im(Sum(q ExpSeq))*<i>)) by COMPLEX1:29
+    .= Re((Sum(p rExpSeq)+Im(Sum(p ExpSeq))*<i>)*
+       (Re(Sum(q ExpSeq))+Im(Sum(q ExpSeq))*<i>)) by Th49
+    .= Re((Sum(p rExpSeq)+0*<i>)*
+       (Re(Sum(q ExpSeq))+Im(Sum(q ExpSeq))*<i>)) by Th46
+    .= Re(Sum(p rExpSeq)*(Sum(q rExpSeq)+Im(Sum(q ExpSeq))*<i>)) by Th49
+    .= Re(Sum(p rExpSeq)*(Sum(q rExpSeq)+0*<i>)) by Th46
+    .= Re((Sum(p rExpSeq))*(Sum(q rExpSeq))+0*<i>)
+    .= (Sum(p rExpSeq))*(Sum(q rExpSeq)) by COMPLEX1:28;
   hence thesis;
 end;
 
 definition
   func exp_R -> Function of REAL, REAL means
   :Def26:
-  for d being real number holds it.d = Sum(d ExpSeq);
+  for d being real number holds it.d = Sum(d rExpSeq);
   existence
   proof
-    deffunc U(Element of REAL) = Sum($1 ExpSeq);
+    deffunc U(Element of REAL) = Sum($1 rExpSeq);
     consider f being Function of REAL, REAL such that
 A1: for d be Element of REAL holds f.d = U(d) from FUNCT_2:sch 4;
     take f;
@@ -3107,13 +2915,13 @@ A1: for d be Element of REAL holds f.d = U(d) from FUNCT_2:sch 4;
   proof
     let f1,f2 be Function of REAL, REAL;
     assume
-A6: for d being real number holds f1.d=Sum(d ExpSeq);
+A6: for d being real number holds f1.d=Sum(d rExpSeq);
     assume
-A7: for d being real number holds f2.d=Sum(d ExpSeq);
+A7: for d being real number holds f2.d=Sum(d rExpSeq);
     for d being Element of REAL holds f1.d = f2.d
     proof
       let d be Element of REAL;
-      thus f1.d=Sum(d ExpSeq) by A6
+      thus f1.d=Sum(d rExpSeq) by A6
         .=f2.d by A7;
     end;
     hence f1=f2 by FUNCT_2:113;
@@ -3146,28 +2954,28 @@ theorem Th51:
 canceled;
 
 theorem Th53:
-  for th being Real holds exp_R.th = Re(Sum([*th,0*] ExpSeq))
+  for th being Real holds exp_R.th = Re(Sum(th ExpSeq))
 proof
   let th be Real;
-  exp_R.th = Sum(th ExpSeq) by Def26;
+  exp_R.th = Sum(th rExpSeq) by Def26;
   hence thesis by Th49;
 end;
 
 theorem
-  for th being Real holds exp([*th,0*])=[*exp_R th,0*]
+  for th being Real holds exp th=exp_R th
 proof
   let th be Real;
-  thus exp([*th,0*])=Sum([*th,0*] ExpSeq) by Def18
-    .=[*Sum(th ExpSeq),0*] by Lm14
-    .=[*exp_R th,0*] by Def26;
+  thus exp th=Sum(th ExpSeq) by Def18
+    .=Sum(th rExpSeq) by Lm14
+    .=exp_R th by Def26;
 end;
 
 Lm15: for p,q being real number holds exp_R.(p+q) = exp_R.p * exp_R.q
 proof
   let p,q be real number;
-  exp_R.(p+q) = Sum((p+q) ExpSeq) by Def26
-    .= (Sum(p ExpSeq))*(Sum(q ExpSeq)) by Th50
-    .=exp_R.p *(Sum(q ExpSeq)) by Def26
+  exp_R.(p+q) = Sum((p+q) rExpSeq) by Def26
+    .= (Sum(p rExpSeq))*(Sum(q rExpSeq)) by Th50
+    .=exp_R.p *(Sum(q rExpSeq)) by Def26
     .=exp_R.p * exp_R.q by Def26;
   hence thesis;
 end;
@@ -3177,8 +2985,8 @@ theorem
 
 Lm16: exp_R.0 =1
 proof
-  exp_R.0 = Sum(0 ExpSeq) by Def26
-    .=1 by Lm6,Th10,Th49,COMPLEX1:15;
+  exp_R.0 = Sum(0 rExpSeq) by Def26
+    .=1 by Th10,Th49,COMPLEX1:15;
   hence thesis;
 end;
 
@@ -3190,10 +2998,10 @@ theorem Th57:
 proof
   assume
 A1: th >0;
-A2: for n holds Partial_Sums(th ExpSeq).n>=1
+A2: for n holds Partial_Sums(th rExpSeq).n>=1
   proof
-    defpred X[Element of NAT] means Partial_Sums(th ExpSeq).$1>=1;
-    Partial_Sums(th ExpSeq).0=(th ExpSeq).0 by SERIES_1:def 1
+    defpred X[Element of NAT] means Partial_Sums(th rExpSeq).$1>=1;
+    Partial_Sums(th rExpSeq).0=(th rExpSeq).0 by SERIES_1:def 1
       .=th |^ 0 /(0!) by Def9
       .=1 by NEWTON:9,18;
     then
@@ -3202,25 +3010,24 @@ A4: for n st X[n] holds X[n+1]
     proof
       let n;
       assume
-A5:   Partial_Sums(th ExpSeq).n>=1;
-A6:   Partial_Sums(th ExpSeq).(n+1)
-      =Partial_Sums(th ExpSeq).n+(th ExpSeq).(n+1) by SERIES_1:def 1
-        .=Partial_Sums(th ExpSeq).n+th |^(n+1)/((n+1)!) by Def9;
+A5:   Partial_Sums(th rExpSeq).n>=1;
+A6:   Partial_Sums(th rExpSeq).(n+1)
+      =Partial_Sums(th rExpSeq).n+(th rExpSeq).(n+1) by SERIES_1:def 1
+        .=Partial_Sums(th rExpSeq).n+th |^(n+1)/((n+1)!) by Def9;
 A7:   th |^(n+1) >0 by A1,PREPOWER:13;
       (n+1)!>0 by NEWTON:23;
-      then th |^(n+1)/((n+1)!)>0 by A7;
-      then Partial_Sums(th ExpSeq).n+th |^(n+1)/((n+1)!)>Partial_Sums(th
-      ExpSeq).n by XREAL_1:31;
+      then Partial_Sums(th rExpSeq).n+th |^(n+1)/((n+1)!)>Partial_Sums(th
+      rExpSeq).n by XREAL_1:31,A7;
       hence thesis by A5,A6,XXREAL_0:2;
     end;
     for n holds X[n] from NAT_1:sch 1(A3,A4);
     hence thesis;
   end;
   th is Real by XREAL_0:def 1;
-  then th ExpSeq is summable by Th49;
-  then Partial_Sums(th ExpSeq) is convergent&
-  lim(Partial_Sums(th ExpSeq))=Sum(th ExpSeq) by SERIES_1:def 2,def 3;
-  then Sum(th ExpSeq)>=1 by A2,PREPOWER:2;
+  then th rExpSeq is summable by Th49;
+  then Partial_Sums(th rExpSeq) is convergent&
+  lim(Partial_Sums(th rExpSeq))=Sum(th rExpSeq) by SERIES_1:def 2,def 3;
+  then Sum(th rExpSeq)>=1 by A2,PREPOWER:2;
   hence thesis by Def26;
 end;
 
@@ -3228,15 +3035,14 @@ theorem Th58:
   th < 0 implies 0<exp_R.th & exp_R.th <=1
 proof
   assume th <0;
-  then -th >-0;
   then
 A1: exp_R.(-th)>=1 by Th57;
-  exp_R.(-th)*exp_R.th=exp_R.(-th+th) by Lm15
+X: exp_R.(-th)*exp_R.th=exp_R.(-th+th) by Lm15
     .=1 by Lm16;
   then
 A2: exp_R.th=1/(exp_R.(-th)) by XCMPLX_1:74;
-  hence 0<exp_R.th by A1;
-  thus exp_R.th <=1 by A1,A2,REAL_2:164;
+  thus 0<exp_R.th by A1,X;
+  thus exp_R.th <=1 by A1,A2,XREAL_1:213;
 end;
 
 theorem Th59:
@@ -3268,7 +3074,7 @@ theorem
 begin :: Differential of sin, cos, and Exponential Function
 
 definition
-  let z be Element of COMPLEX;
+  let z be complex number;
   deffunc U(Element of NAT) = (z#N($1+1))/(($1+2)!c);
   func z P_dt -> Complex_Sequence means
   :Def28:
@@ -3301,47 +3107,45 @@ definition
   end;
 end;
 
-Lm17: for p being Real holds Re([*0,p*]*z)=-p*Im z & Im([*0,p*]*z)=p*Re z
-&Re([*p,0*]*z)=p*Re z & Im([*p,0*]*z)=p*Im z
+Lm17:
+ for p being Real, z being complex number
+  holds Re(p*<i>*z)=-p*Im z & Im(p*<i>*z)=p*Re z
+&Re(p*z)=p*Re z & Im(p*z)=p*Im z
 proof
-  let p being Real;
-A1: ([*0,p*]*z) = [*0,p*]*(Re z+(Im z)*<i>) by COMPLEX1:29
-    .=[*0,p*]*[*Re z,Im z*] by COMPLEX1:27
-    .=[*-p* Im z,p*Re z*] by Lm8
-    .=-p* Im z+(p*Re z)*<i> by COMPLEX1:27;
-  ([*p,0*]*z) = [*p,0*]*(Re z+(Im z)*<i>) by COMPLEX1:29
-    .=([*p,0*]*[*Re z,Im z*]) by COMPLEX1:27
-    .=[*p* Re z,p*Im z*] by Lm8
-    .=p* Re z+(p*Im z)*<i> by COMPLEX1:27;
+  let p being Real, z be complex number;
+A1: (p*<i>*z) =p*<i>*(Re z+Im z*<i>) by COMPLEX1:29
+    .=-p* Im z+(p*Re z)*<i>;
+  (p*z) =(p*(Re z+Im z*<i>)) by COMPLEX1:29
+    .=p* Re z+(p*Im z)*<i>;
   hence thesis by A1,COMPLEX1:28;
 end;
 
 Lm18: for
-p being Real st p>0 holds Re(z/[*0,p*])=Im z /p & Im(z/[*0,p*])=-Re z /p
-&|.z/[*p,0*].|=|.z.|/p
+p being real number, z being complex number
+ st p>0 holds Re(z/(p*<i>))=Im z /p & Im(z/(p*<i>))=-Re z /p
+&|.z/p.|=|.z.|/p
 proof
-  let p be Real such that
+  let p be real number, z being complex number such that
 A1: p>0;
-  [*0,p*] = 0+p*<i> & [*p,0*] = p+0*<i> by COMPLEX1:27;
+A2: Re(0+p*<i>)=0 & Im(0+p*<i>)=p&Re(p+0*<i>)=p
+            &Im(p+0*<i>)=0 by COMPLEX1:28;
   then
-A2: Re[*0,p*]=0 & Im[*0,p*]=p&Re[*p,0*]=p&Im[*p,0*]=0 by COMPLEX1:28;
-  then
-A3: z/[*0,p*] =(Re z * 0+Im z * p)/((0)+(p)^2)+
-  ((0* Im z- Re z * p)/((0)+(p)^2))*<i> by COMPLEX1:def 14,SQUARE_1:60
-    .=[*(Im z * p)/(p*p), ((-Re z) * p)/(p*p)*] by COMPLEX1:27
-    .=[*(Im z * p)/(p*p),(-Re z) /p *] by A1,XCMPLX_1:92
-    .=[*(Im z * p)/(p*p),-Re z/p *] by XCMPLX_1:188
-    .=[*Im z /p,-Re z /p *] by A1,XCMPLX_1:92
-    .=Im z /p+(-Re z /p)*<i> by COMPLEX1:27;
-  |.z/[*p,0*].|=|.z.|/|.[*p,0*].| by COMPLEX1:153
-    .=|.z.|/sqrt((p)^2 + (0)^2) by A2,COMPLEX1:def 16
-    .=|.z.|/sqrt((p)^2);
+A3: z/(p*<i>) =
+  (Re z * 0 + Im z * p) / (0^2 + p^2) +
+  (0 * Im z - Re z * p) / (0^2 + p^2)*<i>
+        by COMPLEX1:def 14
+    .=(Im z * p)/(p*p)+ ((-Re z) * p)/(p*p)*<i>
+    .=(Im z * p)/(p*p)+(-Re z) /p *<i> by A1,XCMPLX_1:92
+    .=Im z /p+(-Re z /p)*<i> by A1,XCMPLX_1:92;
+  |.z/p.|=|.z.|/|.p.| by COMPLEX1:153
+    .=|.z.|/sqrt((p)^2) by A2;
   hence thesis by A1,A3,COMPLEX1:28,SQUARE_1:89;
 end;
 
 theorem Th61:
+ for z being complex number holds
   z P_dt is absolutely_summable
-proof
+proof let z be complex number;
   Partial_Sums(|.z P_dt.|) is bounded_above
   proof
     ex r st for n holds Partial_Sums(|.z P_dt.|).n<r
@@ -3353,7 +3157,7 @@ A1:   for n holds Partial_Sums(|.z P_dt.|).n<Partial_Sums(|.z ExpSeq.|).(n+1)
           .=|.z P_dt.0 .| by VALUED_1:18
           .=|.(z|^(0+1))/((0+2)!c).| by Def28
           .=|.z/(2!c).| by NEWTON:10
-          .=|.z/[*2,0*].| by th37,NEWTON:20;
+          .=|.z/2.| by Th37,NEWTON:20;
         then
 A2:     Partial_Sums(|.z P_dt.|).0=|.z.|/2 by Lm18;
         Partial_Sums(|.z ExpSeq.|).(0+1)
@@ -3369,9 +3173,8 @@ A3:     Partial_Sums(|.z ExpSeq.|).(0+1)-Partial_Sums(|.z P_dt.|). 0
         defpred X[Element of NAT] means
         Partial_Sums(|.z P_dt.|).$1 <Partial_Sums(|.z ExpSeq.|).($1+1);
         0 <= |.z.| by COMPLEX1:132;
-        then |.z.|/2>=0;
         then
-A5:     X[0] by A3,REAL_2:106;
+A5:     X[0] by A3,XREAL_1:49;
 A6:     for n st X[n] holds X[n+1]
         proof
           let n such that
@@ -3380,7 +3183,7 @@ A8:       Partial_Sums(|.z P_dt.|).(n+1)
           =Partial_Sums(|.z P_dt.|).n+|.z P_dt.|.(n+1) by SERIES_1:def 1
             .=Partial_Sums(|.z P_dt.|).n+|.z P_dt.(n+1).| by VALUED_1:18
 .=Partial_Sums(|.z P_dt.|).n+|.(z|^((n+1)+1))/(((n+1)+2)!c).| by Def28
-            .=Partial_Sums(|.z P_dt.|).n+|.(z|^(n+2))/[*(n+3)!,0*].| by th37;
+            .=Partial_Sums(|.z P_dt.|).n+|.(z|^(n+2))/((n+3)!).| by Th37;
           (n+3)!>0 by NEWTON:23;
           then
 A9:       Partial_Sums(|.z P_dt.|).(n+1)
@@ -3390,8 +3193,8 @@ A10:      Partial_Sums(|.z ExpSeq.|).((n+1)+1)
 SERIES_1:def 1
 .=Partial_Sums(|.z ExpSeq.|).(n+1)+|.z ExpSeq.(n+2).| by VALUED_1:18
             .=Partial_Sums(|.z ExpSeq.|).(n+1)+|.(z|^(n+2))/((n+2)!c).| by Def8
-            .=Partial_Sums(|.z ExpSeq.|).(n+1)+|.(z|^(n+2))/[*(n+2)!,0*].|
-          by th37;
+            .=Partial_Sums(|.z ExpSeq.|).(n+1)+|.(z|^(n+2))/((n+2)!).|
+          by Th37;
           (n+2)!>0 by NEWTON:23;
           then
 A11:      Partial_Sums(|.z ExpSeq.|).((n+1)+1)
@@ -3401,7 +3204,7 @@ A11:      Partial_Sums(|.z ExpSeq.|).((n+1)+1)
           then
 A12:      0<(n+2)! & (n+2)!<=(n+3)! by Th42,NEWTON:23;
           |.(z|^(n+2)).|>=0 by COMPLEX1:132;
-then |.(z|^(n+2)).|/((n+2)!)>=|.(z|^(n+2)).|/((n+3)!) by A12,REAL_2:201;
+then |.(z|^(n+2)).|/((n+2)!)>=|.(z|^(n+2)).|/((n+3)!) by A12,XREAL_1:120;
           then
 A13:      Partial_Sums(|.z P_dt.|).n+|.(z|^(n+2)).|/((n+3)!)<=
           Partial_Sums(|.z P_dt.|).n+|.(z|^(n+2)).|/((n+2)!) by XREAL_1:8;
@@ -3430,23 +3233,23 @@ A15:  for n holds Partial_Sums(|.z P_dt.|).n<r
 end;
 
 theorem Th62:
-  z*(Sum(z P_dt))=(Sum(z ExpSeq))-1r-z
-proof
-A1: for z holds z (#) (z P_dt)=(z ExpSeq)^\ 2
+ for z being complex number holds z*(Sum(z P_dt))=(Sum(z ExpSeq))-1r-z
+proof let z be complex number;
+A1: for z being complex number holds z (#) (z P_dt)=(z ExpSeq)^\ 2
   proof
-    let z;
+    let z be complex number;
     for n holds (z(#)(z P_dt)).n=((z ExpSeq)^\ 2).n
     proof
       let n;
       (z(#)(z P_dt)).n=z*(z P_dt).(n) by VALUED_1:6
         .=z*((z|^(n+1))/((n+2)!c)) by Def28;
-      then (z(#)(z P_dt)).n= (z*(z|^(n+1)))/((n+2)!c) by XCMPLX_1:75
+      then (z(#)(z P_dt)).n= (z*(z|^(n+1)))/((n+2)!c)
         .=(z|^(n+1+1))/((n+2)!c) by NEWTON:11
         .=z ExpSeq.(n+2) by Def8
         .=((z ExpSeq)^\ 2).n by NAT_1:def 3;
       hence thesis;
     end;
-    hence thesis by COMSEQ_1:6;
+    hence thesis by FUNCT_2:113;
   end;
   Sum(z ExpSeq)= Partial_Sums(z ExpSeq).1 + Sum(z ExpSeq^\(1+1)) by COMSEQ_3:61
     .=Partial_Sums(z ExpSeq).1 + Sum(z ExpSeq^\(2));
@@ -3459,11 +3262,12 @@ A2: Sum(z (#) (z P_dt))=Sum(z ExpSeq) - Partial_Sums(z ExpSeq).(0+1) by A1
     .=(Sum(z ExpSeq))-1r-z;
   reconsider BBB=z P_dt as absolutely_summable Complex_Sequence by Th61;
   BBB is summable;
-  hence thesis by A2,COMSEQ_3:57;
+  hence z*(Sum(z P_dt)) = (Sum(z ExpSeq))-1r-z by A2,COMSEQ_3:57;
 end;
 
 theorem Th63:
-  for p st p>0 holds ex q st q>0 & for z st |.z.|<q holds |.(Sum(z P_dt)).|<p
+  for p st p>0 holds ex q st q>0 &
+   for z being complex number st |.z.|<q holds |.(Sum(z P_dt)).|<p
 proof
 A1: for z holds |.(Sum(z P_dt)).| <= Sum (|.z P_dt.|)
   proof
@@ -3474,18 +3278,12 @@ A2: for k holds |.Partial_Sums(z P_dt).|.k <= Partial_Sums(|.z P_dt.|).k
       |.Partial_Sums(z P_dt).k.|=|.Partial_Sums(z P_dt).|.k by VALUED_1:18;
       hence thesis by COMSEQ_3:30;
     end;
-    z P_dt is absolutely_summable by Th61;
-    then |.z P_dt.| is summable;
-    then
-A3: Partial_Sums(|.z P_dt.|) is convergent by SERIES_1:def 2;
+B3: z P_dt is absolutely_summable by Th61;
 A4: z P_dt is summable by Th61,COMSEQ_3:64;
-    then
-A5: Partial_Sums(z P_dt) is convergent Complex_Sequence;
     reconsider PS = Partial_Sums(z P_dt) as convergent Complex_Sequence by A4;
-A6: |.PS.| is convergent;
 A7: lim|.Partial_Sums(z P_dt).|=|.lim(Partial_Sums(z P_dt)).|
-    by A5,COMSEQ_2:11;
-    lim|.Partial_Sums(z P_dt).|<=lim(Partial_Sums(|.z P_dt.|)) by A2,A3,A6,
+    by A4,COMSEQ_2:11;
+    lim|.Partial_Sums(z P_dt).|<=lim(Partial_Sums(|.z P_dt.|)) by A2,B3,
 SEQ_2:32;
     hence thesis by A7,SERIES_1:def 3;
   end;
@@ -3494,31 +3292,27 @@ A8: for z,n holds |.z P_dt.|.n<=|.z.|*|.z.| GeoSeq.n
     let z,n;
 A9: |.z P_dt.|.n=|.z P_dt.n.| by VALUED_1:18
       .=|.(z|^(n+1))/((n+2)!c).| by Def28
-      .=|.(z|^(n+1))/((n+2)!).| by Th37
-      .=|.(z|^(n+1))/[*(n+2)!,0*].| by ARYTM_0:def 7;
+      .=|.(z|^(n+1))/((n+2)!).| by Th37;
     (n+2)!>0 by NEWTON:23;
     then
 A10: |.z P_dt.|.n=|.(z#N(n+1)).|/((n+2)!) by A9,Lm18
-      .=|.z.||^(n+1)/((n+2)!) by Lm13;
-A11: |.z.|*|.z.| GeoSeq.n=|.z.|* (|.z.||^ n) by PREPOWER:def 1
-      .=|.z.||^(n+1) by NEWTON:11;
+      .=|.z.| |^(n+1)/((n+2)!) by Lm13;
+A11: |.z.|*|.z.| GeoSeq.n=|.z.|* (|.z.| |^ n) by PREPOWER:def 1
+      .=|.z.| |^(n+1) by NEWTON:11;
 A12: (n+2)!>=1 by Th42,NEWTON:18;
-    |.z.|>=0 by COMPLEX1:132;
-    then |.z.||^(n+1) >=0 by POWER:3;
-    then |.z.||^(n+1)/1>=|.z.||^(n+1)/((n+2)!) by A12,REAL_2:201;
+    |.z.| |^(n+1) >=0 by POWER:3,COMPLEX1:132;
+    then |.z.| |^(n+1)/1>=|.z.| |^(n+1)/((n+2)!) by A12,XREAL_1:120;
     hence thesis by A10,A11;
   end;
-  let p;
+  let p0 be real number;
   assume
-A13: p>0;
-  then
-A14: p+1>0;
-  reconsider p as Real by XREAL_0:def 1;
+A13: p0>0;
+  reconsider p = p0 as Real by XREAL_0:def 1;
   consider q such that
 A15: q=p/(p+1);
   p+1>p by XREAL_1:31;
   then
-A16: q <1 by A13,A15,REAL_2:142;
+A16: q <1 by A13,A15,XREAL_1:191;
 A17: for z st |.z.|<q holds |.(Sum(z P_dt)).|<p
   proof
     let z;
@@ -3548,11 +3342,11 @@ A22: for n holds |.z P_dt.|.n<=(|.z.|(#)|.z.| GeoSeq).n
     then
 A23: (|.z P_dt.|) is summable
     & Sum(|.z P_dt.|)<=Sum(|.z.|(#)|.z.| GeoSeq) by A21,A22,SERIES_1:24;
-A24: Sum(|.z.|(#)|.z.| GeoSeq) =|.z.|/(1- |.z.|) by A20,A21,XCMPLX_1:100;
+A24: Sum(|.z.|(#)|.z.| GeoSeq) =|.z.|/(1- |.z.|) by A20,SERIES_1:13;
     |.z.|/(1- |.z.|)<p
     proof
-A25:  |.z.|*(p+1)<(p/(p+1))*(p+1) by A14,A15,A18,XREAL_1:70;
-      (p/(p+1))*(p+1)=p by A14,XCMPLX_1:88;
+A25:  |.z.|*(p+1)<(p/(p+1))*(p+1) by A13,A15,A18,XREAL_1:70;
+      (p/(p+1))*(p+1)=p by A13,XCMPLX_1:88;
       then
 A26:  p*|.z.|+|.z.|-p*|.z.|<p-p*|.z.| by A25,XREAL_1:11;
 A27:  1- |.z.|>0 by A19,XREAL_1:52;
@@ -3564,15 +3358,19 @@ A27:  1- |.z.|>0 by A19,XREAL_1:52;
     hence thesis by XXREAL_0:2;
   end;
   take q;
-  thus thesis by A13,A15,A17;
+  thus q>0 by A13,A15;
+  let z being complex number;
+   z in COMPLEX by XCMPLX_0:def 2;
+  hence |.z.|<q implies |.(Sum(z P_dt)).|<p0 by A17;
 end;
 
 theorem Th64:
+ for z,z1 being complex number holds
   (Sum((z1+z) ExpSeq))-(Sum(z1 ExpSeq))
   =(Sum(z1 ExpSeq))*z+z*(Sum(z P_dt))*(Sum(z1 ExpSeq))
-proof
+proof let z,z1 be complex number;
   (Sum((z1+z) ExpSeq))-(Sum(z1 ExpSeq))
-  =(Sum(z1 ExpSeq))*(Sum(z ExpSeq))-(Sum(z1 ExpSeq))*1r by Lm2,COMPLEX1:def 7
+  =(Sum(z1 ExpSeq))*(Sum(z ExpSeq))-(Sum(z1 ExpSeq))*1r by Lm2
     .=(Sum(z1 ExpSeq))*(((Sum(z ExpSeq))-1r)-z+z)
     .=(Sum(z1 ExpSeq))* (z*(Sum(z P_dt))+z) by Th62
     .=(Sum(z1 ExpSeq))*z +z*(Sum(z P_dt))*(Sum(z1 ExpSeq));
@@ -3581,87 +3379,70 @@ end;
 
 theorem Th65:
   for p,q being Real holds cos.(p+q)-cos.p=
-  -q*sin.p -q*Im((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
+  -q*sin.p -q*Im((Sum(q*<i> P_dt))* (cos.p+(sin.p)*<i>))
 proof
   let p,q be Real;
-  cos.(p+q)-cos.p=cos.(p+q)-Re(Sum([*0,p*] ExpSeq)) by Def22
-    .=Re(Sum([*0,p+q*] ExpSeq))-Re(Sum([*0,p*] ExpSeq)) by Def22
-    .=Re(Sum([*0+0,p+q*] ExpSeq)-Sum([*0,p*] ExpSeq)) by COMPLEX1:48
-    .=Re(Sum(([*0,p*]+[*0,q*]) ExpSeq)-Sum([*0,p*] ExpSeq)) by Lm12
-    .=Re((Sum([*0,p*] ExpSeq))*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by Th64
-    .=Re((cos.p+(sin.p)*<i>)*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by Lm3
-    .=Re([*cos.p,sin.p*]*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by COMPLEX1:27
-    .= Re([*cos.p,sin.p*]*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))* (cos.p+(sin.p)*<i>)) by Lm3
-    .= Re([*cos.p,sin.p*]*[*0,q*]+[*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
-  by COMPLEX1:27
-    .= Re([*cos.p,sin.p*]*[*0,q*])+
-  Re([*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*]) by COMPLEX1:19
-    .=Re[*-q*sin.p,q*cos.p*]+Re([*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
-  by Lm8
-    .=Re(-q*sin.p+q*cos.p*<i>)+Re([*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
-  by COMPLEX1:27
-.=-q*sin.p+Re([*0,q*]*((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])) by COMPLEX1:28
-    .=-q*sin.p+-q*Im((Sum([*0,q*] P_dt))* [*cos.p,sin.p*]) by Lm17
-    .=-q*sin.p-q*Im((Sum([*0,q*] P_dt))* [*cos.p,sin.p*]);
+  cos.(p+q)-cos.p=cos.(p+q)-Re(Sum(p*<i> ExpSeq)) by Def22
+    .=Re(Sum((p+q)*<i> ExpSeq))-Re(Sum(p*<i> ExpSeq)) by Def22
+    .=Re(Sum((p*<i>+q*<i>) ExpSeq)-Sum(p*<i> ExpSeq)) by COMPLEX1:48
+    .=Re((Sum(p*<i> ExpSeq))*(q*<i>)+q*<i>*(Sum((q*<i>) P_dt))*
+         (Sum(p*<i> ExpSeq)))
+     by Th64
+    .=Re((cos.p+(sin.p)*<i>)*(q*<i>)
+      +q*<i>*(Sum(q*<i> P_dt))*(Sum(p*<i> ExpSeq))) by Lm3
+    .= Re((cos.p+(sin.p)*<i>)*(q*<i>)
+  +q*<i>*(Sum(q*<i> P_dt))* (cos.p+(sin.p)*<i>)) by Lm3
+    .=Re(-q*sin.p+q*cos.p*<i>)+Re(q*<i>*(Sum(q*<i> P_dt))*
+       (cos.p+(sin.p)*<i>)) by COMPLEX1:19
+    .=-q*sin.p+ Re(q*<i>*((Sum(q*<i> P_dt))* (cos.p+(sin.p)*<i>)))
+                        by COMPLEX1:28
+    .=-q*sin.p  -q*Im((Sum(q*<i> P_dt))* (cos.p+(sin.p)*<i>)) by Lm17;
   hence thesis;
 end;
 
 theorem Th66:
   for p,q being Real holds sin.(p+q)-sin.p=
-  q*cos.p+q*Re((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
+  q*cos.p+q*Re((Sum((q*<i>) P_dt))* (cos.p+sin.p*<i>))
 proof
   let p,q be Real;
-  sin.(p+q)-sin.p=sin.(p+q)-Im(Sum([*0,p*] ExpSeq)) by Def20
-    .=Im(Sum([*0,p+q*] ExpSeq))-Im(Sum([*0,p*] ExpSeq)) by Def20
-    .=Im(Sum([*0+0,p+q*] ExpSeq)-Sum([*0,p*] ExpSeq)) by COMPLEX1:48
-    .=Im(Sum(([*0,p*]+[*0,q*]) ExpSeq)-Sum([*0,p*] ExpSeq)) by Lm12
-    .=Im((Sum([*0,p*] ExpSeq))*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by Th64
-    .=Im((cos.p+(sin.p)*<i>)*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by Lm3
-    .=Im([*cos.p,sin.p*]*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))*(Sum([*0,p*] ExpSeq))) by COMPLEX1:27
-    .= Im([*cos.p,sin.p*]*[*0,q*]
-  +[*0,q*]*(Sum([*0,q*] P_dt))* (cos.p+(sin.p)*<i>)) by Lm3
-    .= Im([*cos.p,sin.p*]*[*0,q*]+[*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
-  by COMPLEX1:27
-    .= Im([*cos.p,sin.p*]*[*0,q*])+
-  Im([*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*]) by COMPLEX1:19
-    .=Im[*-q*sin.p,q*cos.p*]+Im([*0,q*]*(Sum([*0,q*] P_dt))* [*cos.p,sin.p*])
-  by Lm8
-    .=Im(-q*sin.p+(q*cos.p)*<i>)+Im([*0,q*]*(Sum([*0,q*] P_dt))
-  * [*cos.p,sin.p*]) by COMPLEX1:27
-    .=q*cos.p+Im([*0,q*]*((Sum([*0,q*] P_dt))* [*cos.p,sin.p*])) by COMPLEX1:28
-    .=q*cos.p+q*Re((Sum([*0,q*] P_dt))* [*cos.p,sin.p*]) by Lm17;
+  sin.(p+q)-sin.p=sin.(p+q)-Im(Sum((p*<i>) ExpSeq)) by Def20
+    .=Im(Sum(((p+q)*<i>) ExpSeq))-Im(Sum((p*<i>) ExpSeq)) by Def20
+    .=Im(Sum(((p*<i>)+(q*<i>)) ExpSeq)-Sum((p*<i>) ExpSeq)) by COMPLEX1:48
+    .=Im((Sum((p*<i>) ExpSeq))*(q*<i>)
+  +(q*<i>)*(Sum((q*<i>) P_dt))*(Sum((p*<i>) ExpSeq))) by Th64
+    .=Im((cos.p+(sin.p)*<i>)*(q*<i>)
+  +(q*<i>)*(Sum((q*<i>) P_dt))*(Sum((p*<i>) ExpSeq))) by Lm3
+    .= Im((cos.p+sin.p*<i>)*(q*<i>)
+  +(q*<i>)*(Sum((q*<i>) P_dt))* (cos.p+(sin.p)*<i>)) by Lm3
+    .=Im(-q*sin.p+(q*cos.p)*<i>)+Im((q*<i>)*(Sum((q*<i>) P_dt))
+  * (cos.p+sin.p*<i>)) by COMPLEX1:19
+    .=q*cos.p+Im((q*<i>)*((Sum((q*<i>) P_dt))* (cos.p+sin.p*<i>)))
+    by COMPLEX1:28
+    .=q*cos.p+q*Re((Sum((q*<i>) P_dt))* (cos.p+sin.p*<i>)) by Lm17;
   hence thesis;
 end;
 
 theorem Th67:
   for p,q being Real holds exp_R.(p+q)-exp_R.p=
-  q * (exp_R.p)+q*exp_R.p*Re((Sum([*q,0*] P_dt)))
+  q * (exp_R.p)+q*exp_R.p*Re((Sum(q P_dt)))
 proof
   let p,q be Real;
-  exp_R.(p+q)-exp_R.p=exp_R.(p+q)-Re(Sum([*p,0*] ExpSeq)) by Th53
-    .=Re(Sum([*p+q,0*] ExpSeq))-Re(Sum([*p,0*] ExpSeq)) by Th53
-    .=Re(Sum([*p+q,0+0*] ExpSeq)-Sum([*p,0*] ExpSeq)) by COMPLEX1:48
-    .=Re(Sum(([*p,0*]+[*q,0*]) ExpSeq)-Sum([*p,0*] ExpSeq)) by Lm12
-    .=Re((Sum([*p,0*] ExpSeq))*[*q,0*]
-  +[*q,0*]*(Sum([*q,0*] P_dt))*(Sum([*p,0*] ExpSeq))) by Th64
-    .=Re((Sum([*p,0*] ExpSeq))*[*q,0*])+
-  Re([*q,0*]*(Sum([*q,0*] P_dt))*(Sum([*p,0*] ExpSeq))) by COMPLEX1:19
-    .=q*Re(Sum([*p,0*] ExpSeq))+
-  Re([*q,0*]*(Sum([*q,0*] P_dt))*(Sum([*p,0*] ExpSeq))) by Lm17
-    .=q* (exp_R.p)+ Re([*q,0*]*((Sum([*q,0*] P_dt))*(Sum([*p,0*] ExpSeq))))
+  exp_R.(p+q)-exp_R.p=exp_R.(p+q)-Re(Sum(p ExpSeq)) by Th53
+    .=Re(Sum((p+q) ExpSeq))-Re(Sum(p ExpSeq)) by Th53
+    .=Re(Sum((p+q) ExpSeq)-Sum(p ExpSeq)) by COMPLEX1:48
+    .=Re((Sum(p ExpSeq))*q
+  +q*(Sum(q P_dt))*(Sum(p ExpSeq))) by Th64
+    .=Re((Sum(p ExpSeq))*q)+
+  Re(q*(Sum(q P_dt))*(Sum(p ExpSeq))) by COMPLEX1:19
+    .=q*Re(Sum(p ExpSeq))+
+  Re(q*(Sum(q P_dt))*(Sum(p ExpSeq))) by Lm17
+    .=q* (exp_R.p)+ Re(q*((Sum(q P_dt))*(Sum(p ExpSeq))))
   by Th53
-    .=q* (exp_R.p)+ q*Re((Sum([*q,0*] P_dt))*(Sum([*p,0*] ExpSeq))) by Lm17
-    .=q* (exp_R.p)+ q*Re((Sum([*q,0*] P_dt))*[*Sum(p ExpSeq),0*]) by Lm14
-    .=q* (exp_R.p)+q*Re((Sum([*q,0*] P_dt))*[*exp_R.p,0*]) by Def26
-    .=q* (exp_R.p)+q*(exp_R.p*Re((Sum([*q,0*] P_dt)))) by Lm17
-    .=q* (exp_R.p)+q*exp_R.p*Re((Sum([*q,0*] P_dt)));
+    .=q* (exp_R.p)+ q*Re((Sum(q P_dt))*(Sum(p ExpSeq))) by Lm17
+    .=q* (exp_R.p)+ q*Re((Sum(q P_dt))*Sum(p rExpSeq)) by Lm14
+    .=q* (exp_R.p)+q*Re((Sum(q P_dt))*(exp_R.p+0*<i>)) by Def26
+    .=q* (exp_R.p)+q*(exp_R.p*Re((Sum(q P_dt)))) by Lm17
+    .=q* (exp_R.p)+q*exp_R.p*Re((Sum(q P_dt)));
   hence thesis;
 end;
 
@@ -3670,7 +3451,7 @@ theorem Th68:
 proof
   reconsider p as Real by XREAL_0:def 1;
   deffunc U(Element of REAL) =
-  - $1* Im((Sum([*0,$1*] P_dt))* [*cos.p,sin.p*]);
+  - $1* Im((Sum($1*<i> P_dt))* (cos.p+sin.p*<i>));
   consider Cr being Function of REAL, REAL such that
 A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
   Cr is REST-like
@@ -3680,7 +3461,7 @@ A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
     proof
       let hy1;
 A7:   for n holds ((hy1")(#)(Cr/*hy1)).n
-      =-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*])
+      =-Im((Sum((hy1.n)*<i> P_dt))* (cos.p+sin.p*<i>))
       proof
         let n;
 A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
@@ -3689,21 +3470,22 @@ A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
         rng hy1 c= dom Cr;
         then
 A9:     ((hy1")(#)(Cr/*hy1)).n= (hy1.n)"*(Cr.(hy1.n)) by A8,FUNCT_2:185
-          .=(hy1.n)"*( -(hy1.n)* Im((Sum([*0,(hy1.n)*] P_dt))*
-        [*cos.p,sin.p*])) by A2
-          .=-(hy1.n)"*(hy1.n)* Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]);
+          .=(hy1.n)"*( -(hy1.n)* Im((Sum((hy1.n)*<i> P_dt))*
+        (cos.p+sin.p*<i>))) by A2
+          .=-(hy1.n)"*(hy1.n)* Im((Sum((hy1.n)*<i> P_dt))*(cos.p+sin.p*<i>));
         hy1 is non-zero by FDIFF_1:def 1;
         then hy1.n<>0 by SEQ_1:7;
         then ((hy1")(#)(Cr/*hy1)).n
-        =-1*Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*])
+        =-1*Im((Sum((hy1.n)*<i> P_dt))* (cos.p+sin.p*<i>))
         by A9,XCMPLX_0:def 7
-          .=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]);
+          .=-Im((Sum((hy1.n)*<i> P_dt))* (cos.p+sin.p*<i>));
         hence thesis;
       end;
-      deffunc U(Real) = -Im((Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*]);
+      deffunc U(Real) = -Im((Sum((hy1.$1)*<i> P_dt))*(cos.p+(sin.p)*<i>));
       consider rseq such that
 A10:  for n holds rseq.n= U(n) from SEQ_1:sch 1;
-      deffunc U(Element of NAT) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
+      deffunc U(Element of NAT) =
+       (Sum((hy1.$1)*<i> P_dt))*(cos.p+(sin.p)*<i>);
       consider cq1 such that
 A11:  for n holds cq1.n=U(n) from COMSEQ_1:sch 1;
 A12:  cq1 is convergent & lim(cq1)=0c
@@ -3715,26 +3497,24 @@ A14:      q>0;
           ex k st for m st k<=m holds |.cq1.m-0c.|<q
           proof
             consider r such that
-A15:        r>0 & for z st |.z.|<r holds |.(Sum (z P_dt)).|<q by A14,Th63;
+A15:        r>0 & for z being complex number
+             st |.z.|<r holds |.(Sum (z P_dt)).|<q by A14,Th63;
             hy1 is convergent&lim(hy1)=0 by FDIFF_1:def 1;
             then consider k such that
 A16:        for m st k<=m holds abs(hy1.m-0)<r by A15,SEQ_2:def 7;
 A17:        now
               let m such that
 A18:          k<=m;
-A19:          |.cq1.m-0c.|= |.(Sum([*0,(hy1.m)*] P_dt))* [*cos.p,sin.p*]
+A19:          |.cq1.m-0c.|= |.(Sum((hy1.m)*<i> P_dt))* (cos.p+(sin.p)*<i>)
               .| by A11
-.= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.[*cos.p,sin.p*].| by COMPLEX1:151
-.= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.cos.p+(sin.p)*<i>.| by COMPLEX1:27
-.= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.Sum([*0,p*] ExpSeq ).| by Lm3
-                .=|.(Sum([*0,(hy1.m)*] P_dt)).|*1 by Lm5
-                .=|.(Sum([*0,(hy1.m)*] P_dt)).|;
+.= |.(Sum((hy1.m)*<i> P_dt)).|* |.cos.p+(sin.p)*<i>.| by COMPLEX1:151
+.= |.(Sum((hy1.m)*<i> P_dt)).|* |.Sum(p*<i> ExpSeq ).| by Lm3
+                .=|.(Sum((hy1.m)*<i> P_dt)).|*1 by Lm5
+                .=|.(Sum((hy1.m)*<i> P_dt)).|;
 A20:          abs(hy1.m-0)<r by A16,A18;
-              [*0,(hy1.m)*] = 0+(hy1.m)*<i> by COMPLEX1:27;
-              then Re[*0,(hy1.m)*]=0 & Im[*0,(hy1.m)*]=hy1.m by COMPLEX1:28;
-              then |.[*0,(hy1.m)*].|
-              = sqrt((0)^2 + (hy1.m)^2) by COMPLEX1:def 16
-                .=abs(hy1.m) by COMPLEX1:158;
+              (hy1.m)*<i> = 0+(hy1.m)*<i>;
+              then Re((hy1.m)*<i>)=0 & Im((hy1.m)*<i>)=hy1.m by COMPLEX1:28;
+              then |.(hy1.m)*<i>.| =abs(hy1.m) by COMPLEX1:158;
               hence |.cq1.m-0c.|<q by A15,A19,A20;
             end;
             take k;
@@ -3745,22 +3525,22 @@ A20:          abs(hy1.m-0)<r by A16,A18;
         then cq1 is convergent by COMSEQ_2:def 4;
         hence thesis by A13,COMSEQ_2:def 5;
       end;
-      then
-A21:  -cq1 is convergent by COMSEQ_2:21;
 A22:  lim(-cq1)=-0c by A12,COMSEQ_2:22;
 A23:  for n holds Im(-cq1).n= rseq.n
       proof
-A24:    for n holds Im(-cq1).n=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*])
+A24:    for n holds Im(-cq1).n=-Im((Sum((hy1.n)*<i> P_dt))*
+            (cos.p+(sin.p)*<i>))
         proof
           let n;
           Im(-cq1).n=Im((-cq1).n) by COMSEQ_3:def 4
             .=Im(-cq1.n) by VALUED_1:8
-            .=Im(-(Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by A11
-            .=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by COMPLEX1:34;
+            .=Im(-(Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>)) by A11
+            .=-Im((Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>))
+             by COMPLEX1:34;
           hence thesis;
         end;
         let n;
-        rseq.n=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by A10;
+        rseq.n=-Im((Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>)) by A10;
         hence thesis by A24;
       end;
       rseq=(hy1")(#)(Cr/*hy1)
@@ -3768,13 +3548,13 @@ A24:    for n holds Im(-cq1).n=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*])
         for n holds rseq.n=((hy1")(#)(Cr/*hy1)).n
         proof
           let n;
-          rseq.n=-Im((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by A10;
+          rseq.n=-Im((Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>)) by A10;
           hence thesis by A7;
         end;
         hence thesis by FUNCT_2:113;
       end;
       then (hy1")(#)(Cr/*hy1)=Im(-cq1) by A23,FUNCT_2:113;
-      hence thesis by A21,A22,COMPLEX1:12,COMSEQ_3:41;
+      hence thesis by A12,A22,COMPLEX1:12,COMSEQ_3:41;
     end;
     hence thesis by FDIFF_1:def 3;
   end;
@@ -3807,8 +3587,8 @@ A32: for r st r in ].p-1,p+1 .[ holds cos.r - cos.p = PL.(r-p) + PR.(r-p)
       let r;
       r=p+(r-p);
       then cos.r - cos.p
-      =-(r-p)*sin.p -(r-p)*Im((Sum([*0,(r-p)*] P_dt))* [*cos.p,sin.p*]) by Th65
-        .=-(r-p)*sin.p+(-(r-p)*Im((Sum([*0,(r-p)*] P_dt))*[*cos.p,sin.p*]))
+      =-(r-p)*sin.p -(r-p)*Im((Sum((r-p)*<i> P_dt))* (cos.p+sin.p*<i>))
+       by Th65
         .=-(r-p)*sin.p+Cr.(r-p) by A2
         .=PL.(r-p) + PR.(r-p) by A26;
       hence thesis;
@@ -3827,7 +3607,8 @@ theorem Th69:
   sin is_differentiable_in p & diff(sin,p)=cos.p
 proof
   reconsider p as Real by XREAL_0:def 1;
-  deffunc U(Element of REAL) = $1 *Re((Sum([*0,$1*] P_dt))* [*cos.p,sin.p*]);
+  deffunc U(Element of REAL)
+   = $1 *Re((Sum($1*<i> P_dt))* (cos.p+(sin.p)*<i>));
   consider Cr being Function of REAL, REAL such that
 A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
   Cr is REST-like
@@ -3837,7 +3618,7 @@ A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
     proof
       let hy1;
 A7:   for n holds ((hy1")(#)(Cr/*hy1)).n
-      =Re((Sum([*0,hy1.n*] P_dt))* [*cos.p,sin.p*])
+      =Re((Sum(hy1.n*<i> P_dt))* (cos.p+(sin.p)*<i>))
       proof
         let n;
 A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
@@ -3846,20 +3627,22 @@ A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
         rng hy1 c= dom Cr;
         then
 A9:     ((hy1")(#)(Cr/*hy1)).n= (hy1.n)"*(Cr.(hy1.n)) by A8,FUNCT_2:185
-          .=(hy1.n)"*( (hy1.n)*Re((Sum([*0,hy1.n*] P_dt))*
-        [*cos.p,sin.p*])) by A2
-          .=(hy1.n)"*(hy1.n)* Re((Sum([*0,hy1.n*] P_dt))* [*cos.p,sin.p*]);
+          .=(hy1.n)"*( (hy1.n)*Re((Sum(hy1.n*<i> P_dt))*
+        (cos.p+(sin.p)*<i>))) by A2
+          .=(hy1.n)"*(hy1.n)* Re((Sum(hy1.n*<i> P_dt))* (cos.p+(sin.p)*<i>));
         hy1 is non-zero by FDIFF_1:def 1;
         then hy1.n<>0 by SEQ_1:7;
         then ((hy1")(#)(Cr/*hy1)).n
-        =1*Re((Sum([*0,hy1.n*] P_dt))* [*cos.p,sin.p*]) by A9,XCMPLX_0:def 7
-          .=Re((Sum([*0,hy1.n*] P_dt))* [*cos.p,sin.p*]);
+        =1*Re((Sum(hy1.n*<i> P_dt))* (cos.p+(sin.p)*<i>))
+         by A9,XCMPLX_0:def 7
+          .=Re((Sum(hy1.n*<i> P_dt))* (cos.p+(sin.p)*<i>));
         hence thesis;
       end;
-      deffunc U(Real) = Re((Sum([*0,hy1.$1*] P_dt))* [*cos.p,sin.p*]);
+      deffunc U(Real) = Re((Sum(hy1.$1*<i> P_dt))* (cos.p+(sin.p)*<i>));
       consider rseq such that
 A10:  for n holds rseq.n= U(n) from SEQ_1:sch 1;
-      deffunc U(Element of NAT) = (Sum([*0,(hy1.$1)*] P_dt))* [*cos.p,sin.p*];
+      deffunc U(Element of NAT)
+      = (Sum((hy1.$1)*<i> P_dt))* (cos.p+(sin.p)*<i>);
       consider cq1 such that
 A11:  for n holds cq1.n= U(n) from COMSEQ_1:sch 1;
 A12:  cq1 is convergent & lim(cq1)=0c
@@ -3871,7 +3654,8 @@ A14:      q>0;
           ex k st for m st k<=m holds |.cq1.m-0c.|<q
           proof
             consider r such that
-A15:        r>0 & for z st |.z.|<r holds |.(Sum (z P_dt)).|<q by A14,Th63;
+A15:        r>0 &
+ for z being complex number st |.z.|<r holds |.(Sum (z P_dt)).|<q by A14,Th63;
             hy1 is convergent&lim(hy1)=0 by FDIFF_1:def 1;
             then consider k such that
 A16:        for m st k<=m holds abs(hy1.m-0)<r by A15,SEQ_2:def 7;
@@ -3879,21 +3663,18 @@ A17:        now
               let m such that
 A18:          k<=m;
 A19:          |.
-              cq1.m-0c.|= |.(Sum([*0,(hy1.m)*] P_dt))* [*cos.p,sin.p*].| by A11
-                .= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.[*cos.p,sin.p*].|
+              cq1.m-0c.|= |.(Sum((hy1.m)*<i> P_dt))* (cos.p+(sin.p)*<i>).|
+               by A11
+                .= |.(Sum((hy1.m)*<i> P_dt)).|* |.cos.p+(sin.p)*<i>.|
               by COMPLEX1:151
-                .= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.cos.p+(sin.p)*<i>.|
-              by COMPLEX1:27
-                .= |.(Sum([*0,(hy1.m)*] P_dt)).|* |.Sum([*0,p*] ExpSeq ).|
+                .= |.(Sum((hy1.m)*<i> P_dt)).|* |.Sum(p*<i> ExpSeq ).|
               by Lm3
-                .=|.(Sum([*0,(hy1.m)*] P_dt)).|*1 by Lm5
-                .=|.(Sum([*0,(hy1.m)*] P_dt)).|;
+                .=|.(Sum((hy1.m)*<i> P_dt)).|*1 by Lm5
+                .=|.(Sum((hy1.m)*<i> P_dt)).|;
 A20:          abs(hy1.m-0)<r by A16,A18;
-              [*0,(hy1.m)*] = 0+(hy1.m)*<i> by COMPLEX1:27;
-              then Re[*0,(hy1.m)*]=0 & Im[*0,(hy1.m)*]=hy1.m by COMPLEX1:28;
-              then |.[*0,(hy1.m)*].|
-              = sqrt((0)^2 + (hy1.m)^2) by COMPLEX1:def 16
-                .=abs(hy1.m) by COMPLEX1:158;
+              (hy1.m)*<i> = 0+(hy1.m)*<i>;
+              then Re((hy1.m)*<i>)=0 & Im((hy1.m)*<i>)=hy1.m by COMPLEX1:28;
+              then |.(hy1.m)*<i>.| =abs(hy1.m) by COMPLEX1:158;
               hence |.cq1.m-0c.|<q by A15,A19,A20;
             end;
             take k;
@@ -3908,7 +3689,7 @@ A21:  for n holds Re(cq1).n= rseq.n
       proof
         let n;
         Re(cq1).n=Re((cq1).n) by COMSEQ_3:def 3
-          .=Re((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by A11;
+          .=Re((Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>)) by A11;
         hence thesis by A10;
       end;
       rseq=(hy1")(#)(Cr/*hy1)
@@ -3916,7 +3697,7 @@ A21:  for n holds Re(cq1).n= rseq.n
         for n holds rseq.n=((hy1")(#)(Cr/*hy1)).n
         proof
           let n;
-          rseq.n=Re((Sum([*0,(hy1.n)*] P_dt))* [*cos.p,sin.p*]) by A10;
+          rseq.n=Re((Sum((hy1.n)*<i> P_dt))* (cos.p+(sin.p)*<i>)) by A10;
           hence thesis by A7;
         end;
         hence thesis by FUNCT_2:113;
@@ -3954,7 +3735,8 @@ A28: for r st r in ].p-1,p+1 .[ holds sin.r - sin.p = PL.(r-p) + PR.(r-p)
       let r;
       r=p+(r-p);
       then sin.r - sin.p
-      =(r-p)*cos.p +(r-p)*Re((Sum([*0,(r-p)*] P_dt))* [*cos.p,sin.p*]) by Th66
+      =(r-p)*cos.p +(r-p)*Re((Sum((r-p)*<i> P_dt))* (cos.p+sin.p*<i>))
+       by Th66
         .=(r-p)*cos.p +Cr.(r-p) by A2
         .=PL.(r-p) + PR.(r-p) by A24;
       hence thesis;
@@ -3971,7 +3753,7 @@ end;
 theorem Th70:
   exp_R is_differentiable_in p & diff(exp_R,p)=exp_R.p
 proof
-  deffunc U(Element of REAL) = $1 * exp_R.p*Re((Sum([*$1,0*] P_dt)));
+  deffunc U(Element of REAL) = $1 * exp_R.p*Re((Sum($1 P_dt)));
   consider Cr being Function of REAL, REAL such that
 A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
   Cr is REST-like
@@ -3980,7 +3762,7 @@ A2: for th be Real holds Cr.th = U(th) from FUNCT_2:sch 4;
     (hy1")(#)(Cr/*hy1) is convergent & lim ((hy1")(#)(Cr/*hy1)) = 0
     proof
       let hy1;
-A7:   for n holds ((hy1")(#)(Cr/*hy1)).n =exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)))
+A7:   for n holds ((hy1")(#)(Cr/*hy1)).n =exp_R.p*Re((Sum((hy1.n) P_dt)))
       proof
         let n;
 A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
@@ -3989,19 +3771,19 @@ A8:     ((hy1")(#)(Cr/*hy1)).n=(hy1".n)*((Cr/*hy1).n) by SEQ_1:12
         rng hy1 c= dom Cr;
         then
 A9:     ((hy1")(#)(Cr/*hy1)).n= (hy1.n)"*(Cr.(hy1.n)) by A8,FUNCT_2:185
-          .=(hy1.n)"*((hy1.n)*exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)))) by A2
-          .=(hy1.n)"*(hy1.n)* (exp_R.p*Re((Sum([*(hy1.n),0*] P_dt))));
+          .=(hy1.n)"*((hy1.n)*exp_R.p*Re((Sum((hy1.n) P_dt)))) by A2
+          .=(hy1.n)"*(hy1.n)* (exp_R.p*Re((Sum((hy1.n) P_dt))));
         hy1 is non-zero by FDIFF_1:def 1;
         then hy1.n<>0 by SEQ_1:7;
         then ((hy1")(#)(Cr/*hy1)).n
-        =1*(exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)))) by A9,XCMPLX_0:def 7
-          .=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)));
+        =1*(exp_R.p*Re((Sum((hy1.n) P_dt)))) by A9,XCMPLX_0:def 7
+          .=exp_R.p*Re((Sum((hy1.n) P_dt)));
         hence thesis;
       end;
-      deffunc U(Real) = exp_R.p*Re((Sum([*(hy1.$1),0*] P_dt)));
+      deffunc U(Real) = exp_R.p*Re((Sum((hy1.$1) P_dt)));
       consider rseq such that
 A10:  for n holds rseq.n= U(n) from SEQ_1:sch 1;
-      deffunc U(Element of NAT) = (Sum([*(hy1.$1),0*] P_dt))*[*exp_R.p,0*];
+      deffunc U(Element of NAT) = Sum((hy1.$1) P_dt)*exp_R.p;
       consider cq1 such that
 A11:  for n holds cq1.n= U(n) from COMSEQ_1:sch 1;
 A12:  cq1 is convergent & lim(cq1)=0c
@@ -4013,36 +3795,32 @@ A14:      q>0;
           ex k st for m st k<=m holds |.cq1.m-0c.|<q
           proof
             exp_R.p>0 by Th59;
-            then q/exp_R.p>0 by A14;
             then consider r such that
-A15:        r>0 & for z st |.z.|<r holds |.(Sum(z P_dt)).|<q/exp_R.p by Th63;
+A15:        r>0 &
+for z being complex number st |.z.|<r holds |.(Sum(z P_dt)).|<q/exp_R.p
+by Th63,A14;
             hy1 is convergent&lim(hy1)=0 by FDIFF_1:def 1;
             then consider k such that
 A16:        for m st k<=m holds abs(hy1.m-0)<r by A15,SEQ_2:def 7;
 A17:        now
               let m such that
 A18:          k<=m;
-A19:          |.cq1.m-0c.|= |.(Sum([*(hy1.m),0*] P_dt))* [*exp_R.p,0*].|
+A19:          |.cq1.m-0c.|= |.(Sum((hy1.m) P_dt))* exp_R.p.|
               by A11
-                .= |.(Sum([*(hy1.m),0*] P_dt)).|* |.[*exp_R.p,0*].|
+                .= |.(Sum((hy1.m) P_dt)).|* |.exp_R.p.|
               by COMPLEX1:151
-                .= |.(Sum([*(hy1.m),0*] P_dt)).|*
+                .= |.(Sum((hy1.m) P_dt)).|*
 
-sqrt((Re [*exp_R.p,0*])^2 + (Im [*exp_R.p,0*])^2) by COMPLEX1:def 16;
-              [*exp_R.p,0*] = exp_R.p+0*<i> by COMPLEX1:27;
+sqrt((Re(exp_R.p))^2 + (Im(exp_R.p))^2);
+              exp_R.p = exp_R.p+0*<i>;
               then
-A20:          Re[*exp_R.p,0*]=exp_R.p & Im[*exp_R.p,0*]=0 by COMPLEX1:28;
+A20:          Re(exp_R.p)=exp_R.p & Im(exp_R.p)=0 by COMPLEX1:28;
 A21:          exp_R.p>0 by Th59;
               then
-A22:          |.cq1.m-0c.| =|.(Sum([*(hy1.m),0*] P_dt)).|* ( exp_R.p)
+A22:          |.cq1.m-0c.| =|.(Sum((hy1.m) P_dt)).|* ( exp_R.p)
               by A19,A20,SQUARE_1:89;
 A23:          abs(hy1.m-0)<r by A16,A18;
-              [*(hy1.m),0*] = (hy1.m)+0*<i> by COMPLEX1:27;
-              then Re[*(hy1.m),0*]=hy1.m & Im[*(hy1.m),0*]=0 by COMPLEX1:28;
-              then |.[*(hy1.m),0*].|= sqrt( (hy1.m)^2+(0)^2 ) by
-COMPLEX1:def 16
-                .=abs(hy1.m) by COMPLEX1:158;
-              then |.cq1.m-0c.|<q/exp_R.p * exp_R.p by A15,A21,A22,A23,
+              |.cq1.m-0c.|<q/exp_R.p * exp_R.p by A15,A21,A22,A23,
 XREAL_1:70;
               hence |.cq1.m-0c.|<q by A21,XCMPLX_1:88;
             end;
@@ -4056,16 +3834,16 @@ XREAL_1:70;
       end;
 A24:  for n holds Re(cq1).n= rseq.n
       proof
-A25:    for n holds Re(cq1).n=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)))
+A25:    for n holds Re(cq1).n=exp_R.p*Re((Sum((hy1.n) P_dt)))
         proof
           let n;
           Re(cq1).n=Re(cq1.n) by COMSEQ_3:def 3
-            .=Re((Sum([*(hy1.n),0*] P_dt))*[*exp_R.p,0*]) by A11
-            .=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt))) by Lm17;
+            .=Re((Sum((hy1.n) P_dt))*exp_R.p) by A11
+            .=exp_R.p*Re((Sum((hy1.n) P_dt))) by Lm17;
           hence thesis;
         end;
         let n;
-        rseq.n=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt))) by A10;
+        rseq.n=exp_R.p*Re((Sum((hy1.n) P_dt))) by A10;
         hence thesis by A25;
       end;
       rseq=(hy1")(#)(Cr/*hy1)
@@ -4073,7 +3851,7 @@ A25:    for n holds Re(cq1).n=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt)))
         for n holds rseq.n=((hy1")(#)(Cr/*hy1)).n
         proof
           let n;
-          rseq.n=exp_R.p*Re((Sum([*(hy1.n),0*] P_dt))) by A10;
+          rseq.n=exp_R.p*Re((Sum((hy1.n) P_dt))) by A10;
           hence thesis by A7;
         end;
         hence thesis by FUNCT_2:113;
@@ -4112,7 +3890,7 @@ A32: for r st r in ].p-1,p+1 .[ holds exp_R.r - exp_R.p = PL.(r-p) + PR.(r-p)
       reconsider p as Real by XREAL_0:def 1;
       r=p+(r-p);
       then exp_R.r - exp_R.p =(r-p)* (exp_R.p)+(r-p)*exp_R.p*
-      Re((Sum([*(r-p),0*] P_dt))) by Th67
+      Re((Sum((r-p) P_dt))) by Th67
         .=(r-p)* (exp_R.p)+Cr.(r-p) by A2
         .=PL.(r-p) + PR.(r-p) by A28;
       hence thesis;
@@ -4129,27 +3907,27 @@ end;
 theorem Th71:
   exp_R is_differentiable_on REAL & diff(exp_R,th)=exp_R.th
 proof
-  REAL is open Subset of REAL &
+  [#]REAL is open Subset of REAL &
   REAL c=dom exp_R & for r st r in REAL holds exp_R is_differentiable_in r
-  by Th70,FCONT_3:4,FUNCT_2:def 1;
+  by Th70,FUNCT_2:def 1;
   hence thesis by Th70,FDIFF_1:16;
 end;
 
 theorem Th72:
   cos is_differentiable_on REAL & diff(cos,th)=-sin.th
 proof
-  REAL is open Subset of REAL&
+  [#]REAL is open Subset of REAL&
   REAL c=dom cos & for r st r in REAL holds cos is_differentiable_in r
-  by Th68,FCONT_3:4,FUNCT_2:def 1;
+  by Th68,FUNCT_2:def 1;
   hence thesis by Th68,FDIFF_1:16;
 end;
 
 theorem Th73:
   sin is_differentiable_on REAL & diff(sin,th)=cos.th
 proof
-  REAL is open Subset of REAL&
+  [#]REAL is open Subset of REAL&
   REAL c=dom sin & for r st r in REAL holds sin is_differentiable_in r
-  by Th69,FCONT_3:4,FUNCT_2:def 1;
+  by Th69,FUNCT_2:def 1;
   hence thesis by Th69,FDIFF_1:16;
 end;
 
@@ -4159,14 +3937,10 @@ proof
   assume th in [.0,1 .];
   then
 A1: 0<=th & th<=1 by XXREAL_1:1;
-A2: (Partial_Sums(th P_cos))*bq is subsequence of Partial_Sums(th P_cos)
-  by VALUED_0:def 17;
   th is Real by XREAL_0:def 1;
   then
 A3: Partial_Sums(th P_cos) is convergent & cos.th=Sum (th P_cos) by Th39,Th40;
-  then
-A4: (Partial_Sums(th P_cos))*bq is convergent by A2,SEQ_4:29;
-  lim ((Partial_Sums(th P_cos))*bq )=lim(Partial_Sums(th P_cos)) by A2,A3,
+  lim ((Partial_Sums(th P_cos))*bq )=lim(Partial_Sums(th P_cos)) by A3,
 SEQ_4:30;
   then
 A5: lim ((Partial_Sums(th P_cos))*bq )= cos.th by A3,SERIES_1:def 3;
@@ -4186,14 +3960,13 @@ A6: ((Partial_Sums(th P_cos))*bq).0=(Partial_Sums(th P_cos)).(bq.0)
       .= 1/1 + (-1)|^ 1 * (th)|^ (2*1)/((2*1)!) by NEWTON:9,18
       .= 1+ (-1)* (th)|^ (2*1)/((2*1)!) by NEWTON:10
       .= 1+ (-1)*(th*th)/((2*1)!) by NEWTON:100
-      .= 1+(-(th*th))/2 by NEWTON:20
-      .= 1-(th^2)/2;
+      .= 1-(th^2)/2 by NEWTON:20;
 A7: 1 - 1/2 = 1/2;
     defpred X[Element of NAT] means ((Partial_Sums(th P_cos))*bq).$1 >= 1/2;
     th^2 <= 1^2 by A1,SQUARE_1:77;
     then (th^2)/2<=1/2 by XREAL_1:74;
     then
-A8: X[0] by A6,A7,REAL_2:106;
+A8: X[0] by A6,A7,XREAL_1:12;
 A9: for k st X[k] holds X[k+1]
     proof
       let k;
@@ -4217,41 +3990,29 @@ A12:  (th P_cos).(2*k+1+1)=(-1)|^ (2*(k+1)) * (th)|^ (2*(2*(k+1)))/((2*(
       2*(k+1)))!) by Def25
         .=(1)* (th)|^ (2*(2*(k+1)))/((2*(2*(k+1)))!) by Lm11
         .=(th)|^ (2*(2*(k+1)))/((2*(2*(k+1)))!);
-      (th P_cos).(2*(k+1)+1)
+B13:   (th P_cos).(2*(k+1)+1)
       = (-1)|^ (2*(k+1)+1) * (th)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!)
       by Def25
         .=((-1) * (th)|^ (2*(2*(k+1)+1)))/((2*(2*(k+1)+1))!) by Lm11;
-      then
-A13:  (th P_cos).(2*(k+1)+1)
-      =(-1) * ((th)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!)) by XCMPLX_1:75
-        .=-(th)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!);
 A14:  2*(2*(k+1))<2*(2*(k+1)+1) by XREAL_1:31,70;
       then
 A15:  (2*(2*(k+1)))! <= (2*(2*(k+1)+1))! by Th42;
 A16:  (th)|^ (2*(2*(k+1)+1)) <= (th)|^ (2*(2*(k+1))) by A1,A14,Th43;
 A17:  0 <= (th)|^ (2*(2*(k+1)+1)) by POWER:3;
 A18:  (2*(2*(k+1)))!>0 & (2*(2*(k+1)+1))! >0 by NEWTON:23;
-      then
-A19:  1/((2*(2*(k+1)+1))!)<=1/((2*(2*(k+1)))!) by A15,REAL_2:152;
-      0<1/((2*(2*(k+1)+1))!) by A18;
-      then
+A19:  1/((2*(2*(k+1)+1))!)<=1/((2*(2*(k+1)))!) by A15,XREAL_1:87,NEWTON:23;
 A20:  (th)|^ (2*(2*(k+1)+1))*(1/((2*(2*(k+1)+1))!))<=
-      (th)|^ (2*(2*(k+1)))*(1/((2*(2*(k+1)))!)) by A16,A17,A19,XREAL_1:68;
-A21:  (th)|^ (2*(2*(k+1)+1))*(1/((2*(2*(k+1)+1))!))
-      =((th)|^ (2*(2*(k+1)+1))*1)/((2*(2*(k+1)+1))!) by XCMPLX_1:75
-        .=(th)|^ (2*(2*(k+1)+1))/((2*(2*(k+1)+1))!);
-      (th)|^ (2*(2*(k+1)))*(1/((2*(2*(k+1)))!))
-      =(th)|^ (2*(2*(k+1)))*1/((2*(2*(k+1)))!) by XCMPLX_1:75;
-      then ((th)|^ (2*(2*(k+1)))*1)/((2*(2*(k+1)))!)-
-      ((th)|^ (2*(2*(k+1)+1))*1)/((2*(2*(k+1)+1))!)>=0 by A20,A21,XREAL_1:50;
+      (th)|^ (2*(2*(k+1)))*(1/((2*(2*(k+1)))!)) by A16,A17,A19,XREAL_1:68,A18;
+      ((th)|^ (2*(2*(k+1)))*1)/((2*(2*(k+1)))!)-
+      ((th)|^ (2*(2*(k+1)+1))*1)/((2*(2*(k+1)+1))!)>=0 by A20,XREAL_1:50;
       then ((Partial_Sums(th P_cos))*bq).(k+1)>=((Partial_Sums(th P_cos))*bq
-      ).k by A11,A12,A13,REAL_2:105;
+      ).k by A11,A12,B13,XREAL_1:51;
       hence thesis by A10,XXREAL_0:2;
     end;
     for n holds X[n] from NAT_1:sch 1(A8,A9);
     hence thesis;
   end;
-  hence thesis by A4,A5,PREPOWER:2;
+  hence thesis by A3,A5,PREPOWER:2,SEQ_4:29;
 end;
 
 definition
@@ -4339,17 +4100,18 @@ proof
   tan|[.0,1 .] is_continuous_in th
   proof
     let th be real number;
-    assume th in dom(tan|[.0,1 .]);
+    assume
+B1:   th in dom(tan|[.0,1 .]);
     then
 A1: th in [.0,1 .] by RELAT_1:86;
     dom sin = REAL by FUNCT_2:def 1;
     then
 X:  th in dom sin by XREAL_0:def 1;
-A2: th is Real by XREAL_0:def 1;
-    then sin is_differentiable_in th by Th73,FCONT_3:4,FDIFF_1:16;
+A2: th in [#]REAL by XREAL_0:def 1;
+    then sin is_differentiable_in th by Th73,FDIFF_1:16;
     then
 A3: sin is_continuous_in th by FDIFF_1:32;
-    cos is_differentiable_in th by A2,Th72,FCONT_3:4,FDIFF_1:16;
+    cos is_differentiable_in th by A2,Th72,FDIFF_1:16;
     then
 A4: cos is_continuous_in th by FDIFF_1:32;
     cos.(th) <> 0 by A1,Th74;
@@ -4364,7 +4126,7 @@ A5: tan is_continuous_in th by A3,A4,X,FCONT_1:11;
         assume
 A6:     rng rseq c= dom (tan|[.0,1 .]) & rseq is convergent & lim rseq = th;
         then
-A7:     rng rseq c= dom tan by Lm19,Th75,XBOOLE_1:1;
+        rng rseq c= dom tan by Lm19,Th75,XBOOLE_1:1;
         then
 A8:     tan/*rseq is convergent & tan.th
         = lim (tan/*rseq) by A5,A6,FCONT_1:def 1;
@@ -4379,14 +4141,15 @@ A9:         (tan|[.0,1 .]).(rseq.k1)=tan.(rseq.k1) by A6,Lm19;
             (tan|[.0,1 .]).(rseq.k1)=((tan|[.0,1 .])/*rseq).k1
             by A6,FUNCT_2:185;
             hence ((tan|[.0,1 .])/*rseq).k1=(tan/*rseq).k1
-             by A7,A9,FUNCT_2:185;
+             by A6,A9,FUNCT_2:185,Lm19,Th75,XBOOLE_1:1;
           end;
           hence thesis by FUNCT_2:113;
         end;
         hence (tan|[.0,1 .])/*rseq is convergent
-        & (tan|[.0,1 .]).th = lim ((tan|[.0,1 .])/*rseq) by A1,A8,Lm19;
+        & (tan|[.0,1 .]).th = lim ((tan|[.0,1 .])/*rseq)
+         by B1,A8,Lm19;
       end;
-      hence thesis by A1,Lm19;
+      hence thesis by B1;
     end;
     hence thesis by FCONT_1:def 1;
   end;
@@ -4432,12 +4195,10 @@ A8:         th1<=th& th<= th2 by XXREAL_1:1;
         end;
         then
 A9:     tan is_differentiable_on ].th1,th2.[ by Lm20,FDIFF_1:34;
-Y:      [. 0,1 .] c= dom tan by Th75;
-        then
-X:      [.th1,th2.] c= dom tan by A5,XBOOLE_1:1;
-        tan|[.th1,th2.] is continuous by A5,Th76,Y,FCONT_1:17;
+        tan|[.th1,th2.] is continuous by A5,Th76,FCONT_1:17;
         then consider r such that
-A10:    r in ].th1,th2.[ & diff(tan,r)=0 by A1,A4,A9,X,ROLLE:1;
+A10:    r in ].th1,th2.[ & diff(tan,r)=0
+ by A1,A4,A9,A5,XBOOLE_1:1,Th75,ROLLE:1;
         take th=r;
         thus th in ].0,1 .[ & diff(tan,(th))=0 by A5,A10;
       end;
@@ -4468,12 +4229,10 @@ A15:        th2<=th& th<= th1 by XXREAL_1:1;
         end;
         then
 A16:    tan is_differentiable_on ].th2,th1 .[ by Lm20,FDIFF_1:34;
-Y:      [. 0,1 .] c= dom tan by Th75;
-        then
-X:      [.th2,th1.] c= dom tan by A12,XBOOLE_1:1;
-        tan|[.th2,th1.] is continuous by A12,Th76,Y,FCONT_1:17;
+        tan|[.th2,th1.] is continuous by A12,Th76,FCONT_1:17;
         then consider r such that
-A17:    r in ].th2,th1 .[ & diff(tan,r)=0 by A1,A11,A16,X,ROLLE:1;
+A17:    r in ].th2,th1 .[ & diff(tan,r)=0
+ by A1,A11,A16,A12,XBOOLE_1:1,Th75,ROLLE:1;
         take th=r;
         thus th in ].0,1 .[ & diff(tan,(th))=0 by A12,A17;
       end;
@@ -4490,9 +4249,8 @@ proof
 A1: tan.0=(sin.0)* (cos.0)" by Th75,RFUNCT_1:def 4
     .=0 by Th33;
   1 in [.0,1 .] by XXREAL_1:1;
-  then tan.1=(sin.1)* (cos.1)" by Th75,RFUNCT_1:def 4
-    .=(sin.1)/(cos.1) by XCMPLX_0:def 9;
-  hence thesis by A1,Th47,REAL_2:142;
+  then tan.1 =(sin.1)/(cos.1) by Th75,RFUNCT_1:def 4;
+  hence thesis by A1,Th47,XREAL_1:189;
 end;
 
 begin :: Existence of Circle Ratio
@@ -4564,23 +4322,16 @@ theorem Th79:
   cos.(th1+th2)=(cos.(th1)) *(cos.(th2))-(sin.(th1)) * (sin.(th2))
 proof
   reconsider th1,th2 as Real by XREAL_0:def 1;
-A1: [*0,th1*] = 0+th1*<i> & [*0,th2*] = 0+th2*<i> by COMPLEX1:27;
-A2: [*0+0, th1+th2*] = 0+0+(th1+th2)*<i> by COMPLEX1:27;
-A3: [*cos.(th1),sin.(th1)*] = cos.th1+(sin.th1)*<i> &
-  [*cos.(th2),sin.(th2)*] = cos.th2+(sin.th2)*<i> by COMPLEX1:27;
-A4: Sum([*0,th1*] ExpSeq ) * Sum([*0,th2*] ExpSeq )
-  =Sum(([*0,th1*]+[*0,th2*]) ExpSeq ) by Lm2
-    .=cos.(th1+th2)+(sin.(th1+th2))*<i> by A1,A2,Lm3
-    .=[*cos.(th1+th2),sin.(th1+th2)*] by COMPLEX1:27;
-  Sum(([*0,th1*] ExpSeq) ) * Sum(([*0,th2*] ExpSeq) )
-  =(cos.(th1)+(sin.th1)*<i>)* Sum(([*0,th2*] ExpSeq) ) by Lm3
-    .=[*cos.(th1),sin.(th1)*]* Sum(([*0,th2*] ExpSeq) ) by COMPLEX1:27
-    .=[*cos.(th1),sin.(th1)*]*(cos.(th2)+(sin.th2)*<i>) by Lm3
-    .=(cos.(th1)) *( cos.(th2))-(sin.(th1)) * (sin.(th2))+
-  ((sin.(th1)) * (cos.(th2))+(cos.(th1)) * (sin.(th2)))*<i> by A3
-    .=[*(cos.(th1)) *( cos.(th2))-(sin.(th1)) * (sin.(th2)),
-  (sin.(th1)) * (cos.(th2))+(cos.(th1)) * (sin.(th2))*] by COMPLEX1:27;
-  hence thesis by A4,ARYTM_0:12;
+A2: (th1+th2)*<i> = 0+0+(th1+th2)*<i>;
+A4: Sum(th1*<i> ExpSeq ) * Sum(th2*<i> ExpSeq )
+  =Sum((th1*<i>+th2*<i>) ExpSeq ) by Lm2
+    .=cos.(th1+th2)+(sin.(th1+th2))*<i> by A2,Lm3;
+  Sum((th1*<i> ExpSeq) ) * Sum((th2*<i> ExpSeq) )
+  =(cos.(th1)+(sin.th1)*<i>)* Sum((th2*<i> ExpSeq) ) by Lm3
+    .=(cos.(th1)+sin.(th1)*<i>)*(cos.(th2)+(sin.th2)*<i>) by Lm3
+    .=((cos.(th1)) *( cos.(th2))-(sin.(th1)) * (sin.(th2))+
+  ((sin.(th1)) * (cos.(th2))+(cos.(th1)) * (sin.(th2)))*<i>);
+  hence thesis by A4,COMPLEX1:163;
 end;
 
 theorem
@@ -4634,12 +4385,10 @@ proof
     .=sin.th;
   thus cos.(th+2 * PI)=cos.(th) * 1 - sin.(th) * 0 by Th79,Th81
     .=cos.th;
-  thus sin.(PI/2-th) =sin.(PI/2+(-th))
-    .=(sin.(PI/2) )* (cos.(-th))
+  thus sin.(PI/2-th) =(sin.(PI/2) )* (cos.(-th))
   + (cos.(PI/2)) *( sin.(-th)) by Th79
     .=cos.(th) by Th33,Th81;
-  thus cos.(PI/2-th) =cos.(PI/2+(-th))
-    .=(cos.(PI/2)) * (cos.(-th))
+  thus cos.(PI/2-th) =(cos.(PI/2)) * (cos.(-th))
   - ( sin.(PI/2)) *( sin.(-th)) by Th79
     .=0 - 1 * (-sin.(th)) by Th33,Th81
     .=sin.(th);
@@ -4674,23 +4423,18 @@ A2: 0<=th & th<=1 by XXREAL_1:1;
       end;
       suppose
 A3:     0<th;
-A4:     sin is_differentiable_on ].0,th.[ by Th73,FDIFF_1:34;
-X: REAL c= dom sin by Th27;
-Y: [.0,th .] c= dom sin by Th27;
         sin|REAL is continuous by Th73,FDIFF_1:33;
-        then sin|[.0,th.] is continuous by X,FCONT_1:17;
+        then sin|[.0,th.] is continuous by FCONT_1:17;
         then consider r be Real such that
 A5:     r in ].0,th.[ & diff(sin,r)=(sin.th-sin.0)/(th-0)
- by A3,A4,Y,ROLLE:3;
-A6:     diff(sin,r)=cos.r by Th73;
+ by A3,Th73,FDIFF_1:34,Th27,ROLLE:3;
         0<r & r < th by A5,XXREAL_1:4;
         then 0<r & r <1 by A2,XXREAL_0:2;
         then r in [.0,1 .] by XXREAL_1:1;
         then
 A7:     cos.r >0 by Th74;
-        sin.th-sin.0= cos.r* th by A3,A5,A6,XCMPLX_1:88;
-        then sin.th-sin.0 >0 by A3,A7;
-        hence sin.th>=sin.0 by REAL_2:106;
+        sin.th-sin.0 >0 by A3,A7,A5,Th73;
+        hence sin.th>=sin.0 by XREAL_1:49;
       end;
     end;
     hence thesis;
@@ -4703,18 +4447,16 @@ theorem Th85:
 proof
   assume that
 A1: th in ].0,PI/2.[ & cos.th <= 0;
-X: REAL c= dom cos by Th27;
   cos|REAL is continuous by Th72,FDIFF_1:33;
   then
-A2: cos|[.0,th.] is continuous by X,FCONT_1:17;
+A2: cos|[.0,th.] is continuous by FCONT_1:17;
 A3: 0 < th by A1,XXREAL_1:4;
 A4: th is Real by XREAL_0:def 1;
 A5: [.cos.0,cos.th .] \/ [.cos.th,cos.0 .] = [.cos.th,cos.0 .]
   by A1,Th33,XXREAL_1:222;
-X: [.0,th .] c= dom cos by Th27;
   0 in [.cos.th,cos.0 .] by A1,Th33,XXREAL_1:1;
   then ex th2 be Real st th2 in [.0,th .] & cos.th2 = 0
-  by A2,A3,A4,A5,X,FCONT_2:16;
+  by A2,A3,A4,A5,Th27,FCONT_2:16;
   then consider th2 be Real such that
 A6: th2 in [.0,th .] & 0 < th & cos.th2 = 0 by A3;
 A7: 0 <= th2 & th2 <= th & th < PI/2 by A1,A6,XXREAL_1:1,4;
@@ -4729,10 +4471,9 @@ A9: 0 < th2/2 & th2/2 < 1 by A8,XXREAL_0:2;
   0 = cos.(th2/2 + th2/2) by A6
     .= (cos.(th2/2))^2 - (sin.(th2/2)) * (sin.(th2/2)) by Th79
     .= ((cos.(th2/2)) - (sin.(th2/2))) * ((cos.(th2/2)) + (sin.(th2/2)));
-  then cos.(th2/2) - sin.(th2/2) = 0 or
-  cos.(th2/2) + sin.(th2/2) = 0;
   then
-A10: cos.(th2/2) = sin.(th2/2) or cos.(th2/2) = -sin.(th2/2);
+B10:    cos.(th2/2) - sin.(th2/2) = 0 or
+cos.(th2/2) + sin.(th2/2) = 0;
 A11: th2/2 in ].0,1 .[ by A9,XXREAL_1:4;
 A12: ].0,1 .[ c= [.0,1 .] by XXREAL_1:25;
   then
@@ -4742,7 +4483,7 @@ A14: sin.(th2/2) >= -0 by A11,A12,Lm22;
   proof
     4*0 < 4*(th2/2) & 4*(th2/2) < 4*1 by A9,XREAL_1:70;
     hence (2*th2) in ].0,4.[ by XXREAL_1:4;
-    (sin.(th2/2)) * (cos.(th2/2))"=1 by A10,A13,A14,XCMPLX_0:def 7;
+    (sin.(th2/2)) * (cos.(th2/2))"=1 by B10,A13,A14,XCMPLX_0:def 7;
     hence tan.((2*th2)/4) =1 by A11,Th75,RFUNCT_1:def 4;
   end;
   then 2*th2 =PI by Def32;
@@ -4761,8 +4502,7 @@ canceled;
 theorem
   sin(a-b) = sin(a)*cos(b)-cos(a)*sin(b)
 proof
-  thus sin(a-b)=sin.(a+(-b))
-    .=(sin.a) *(cos.(-b))+(cos.a) * (sin.(-b)) by Th79
+  thus sin(a-b) =(sin.a) *(cos.(-b))+(cos.a) * (sin.(-b)) by Th79
     .=(sin.a) *(cos.b)+(cos.a) * (sin.(-b)) by Th33
     .=(sin.a) *(cos.b)+(cos.a) * -(sin.b) by Th33
     .=(sin a) *(cos b)-(cos a) * (sin b);
@@ -4771,8 +4511,7 @@ end;
 theorem
   cos(a-b) = cos(a)*cos(b)+sin(a)*sin(b)
 proof
-  thus cos(a-b)=cos.(a+(-b))
-    .=(cos.a) *(cos.(-b))-(sin.(a)) * (sin.(-b)) by Th79
+  thus cos(a-b) =(cos.a) *(cos.(-b))-(sin.(a)) * (sin.(-b)) by Th79
     .=(cos.a) *(cos.b)-(sin.a) * (sin.(-b)) by Th33
     .=(cos.a) *(cos.b)-(sin.a) * -(sin.b) by Th33
     .=(cos a) *(cos b)+(sin a) * (sin b);

@@ -19,7 +19,8 @@ environ
  requirements REAL, NUMERALS, SUBSET, BOOLE, ARITHM;
  definitions RELAT_2, ORDERS_1;
  theorems TARSKI, FUNCT_1, GRFUNC_1, ZFMISC_1, SUBSET_1, FUNCT_2, PROB_1,
-      MCART_1, EQREL_1, RELAT_1, RELSET_1, XBOOLE_0, XREAL_1, XXREAL_0;
+      MCART_1, EQREL_1, RELAT_1, RELSET_1, XBOOLE_0, XREAL_1, XXREAL_0,
+      NAT_1;
  schemes EQREL_1, RELSET_1, FUNCT_2, XBOOLE_0;
 
 begin
@@ -125,23 +126,16 @@ consider P being Function of Borel_Sets,REAL such that
 Lm1: for D st D in Borel_Sets holds
 (0 in D implies P.D = 1) & (not 0 in D implies P.D = 0) by PROB_1:60;
 
-Lm2: for A holds (0 in A implies P.A = 1) & (not 0 in A implies P.A = 0)
-proof
-  let A;
-  A in Borel_Sets by PROB_1:def 10;
-  hence thesis by Lm1;
-end;
-
 Lm3: for A holds 0 <= P.A
 proof
   let A;
   now per cases;
     suppose 0 in A;
-      then P.A = 1 by Lm2;
+      then P.A = 1 by Lm1;
       hence 0 <= P.A;
     end;
     suppose not 0 in A;
-      hence 0 <= P.A by Lm2;
+      hence 0 <= P.A by Lm1;
     end;
   end;
   hence thesis;
@@ -163,23 +157,23 @@ A1: A misses B;
     suppose
 A2:   0 in A & not 0 in B;
       then
-A3:   P.A = 1 & P.B = 0 by Lm2;
+A3:   P.A = 1 & P.B = 0 by Lm1;
       0 in A \/ B by A2,XBOOLE_0:def 3;
-      hence P.(A \/ B) = P.A + P.B by A3,Lm2;
+      hence P.(A \/ B) = P.A + P.B by A3,Lm1;
     end;
     suppose
 A4:   not 0 in A & 0 in B;
       then
-A5:   P.A = 0 & P.B = 1 by Lm2;
+A5:   P.A = 0 & P.B = 1 by Lm1;
       0 in A \/ B by A4,XBOOLE_0:def 3;
-      hence P.(A \/ B) = P.A + P.B by A5,Lm2;
+      hence P.(A \/ B) = P.A + P.B by A5,Lm1;
     end;
     suppose
 A6:   not 0 in A & not 0 in B;
       then
-A7:   P.A = 0 & P.B = 0 by Lm2;
+A7:   P.A = 0 & P.B = 0 by Lm1;
       not 0 in (A \/ B) by A6,XBOOLE_0:def 3;
-      hence P.(A \/ B)=P.A + P.B by A7,Lm2;
+      hence P.(A \/ B)=P.A + P.B by A7,Lm1;
     end;
   end;
   hence thesis;
@@ -200,7 +194,10 @@ A2: now
 A3:   for n holds 0 in ASeq.n;
 A4:   now
         let n;
-A5:     ASeq.n in Borel_Sets by PROB_1:def 9;
+X:      rng ASeq c= Borel_Sets by PROB_1:def 9;
+        ASeq.n in rng ASeq by NAT_1:52;
+        then
+A5:     ASeq.n in Borel_Sets by X;
         0 in ASeq.n by A3;
         then P.(ASeq.n) = 1 by A5,Lm1;
         hence (P * ASeq).n = 1 by A2;
@@ -213,7 +210,7 @@ A5:     ASeq.n in Borel_Sets by PROB_1:def 9;
       then
 A6:   P * ASeq is convergent & lim (P * ASeq) = 1 by PROB_1:3;
 A7:   0 in Intersection ASeq by A3,PROB_1:29;
-      for n holds ASeq.n in Borel_Sets by PROB_1:def 9;
+      rng ASeq c= Borel_Sets by PROB_1:def 9;
       then Intersection ASeq in Borel_Sets by PROB_1:def 8;
       hence P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq
       by A6,A7,Lm1;
@@ -232,7 +229,10 @@ A9:     not 0 in ASeq.m by A8;
           then ASeq.n c= ASeq.m by A1,PROB_1:def 6;
           then
 A10:      not 0 in ASeq.n by A9;
-          ASeq.n in Borel_Sets by PROB_1:def 9;
+X:      rng ASeq c= Borel_Sets by PROB_1:def 9;
+        ASeq.n in rng ASeq by NAT_1:52;
+        then
+          ASeq.n in Borel_Sets by X;
           then P.(ASeq.n) = 0 by A10,Lm1;
           hence thesis by A2;
         end;
@@ -241,7 +241,7 @@ A10:      not 0 in ASeq.n by A9;
       then
 A11:  P * ASeq is convergent & lim (P * ASeq) = 0 by PROB_1:3;
 A12:  not 0 in Intersection ASeq by A8,PROB_1:29;
-      for n holds ASeq.n in Borel_Sets by PROB_1:def 9;
+      rng ASeq c= Borel_Sets by PROB_1:def 9;
       then Intersection ASeq in Borel_Sets by PROB_1:def 8;
 
 hence P * ASeq is convergent & lim (P * ASeq) = P.Intersection ASeq by A11,A12
@@ -369,7 +369,7 @@ definition
   redefine func p`1 -> Element of Obs Q;
   coherence by MCART_1:10;
   func p`2 -> Event of Borel_Sets;
-  coherence by MCART_1:10,PROB_1:48;
+  coherence by MCART_1:10;
 end;
 
 canceled 15;
@@ -392,7 +392,7 @@ definition
   coherence
   proof
     reconsider x = p`2` as Event of Borel_Sets by PROB_1:50;
-    x in Borel_Sets by PROB_1:def 10;
+    x in Borel_Sets;
     hence thesis by ZFMISC_1:106;
   end;
 end;

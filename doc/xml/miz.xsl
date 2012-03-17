@@ -7,7 +7,7 @@
 <!-- provided the included .xsl files are available in the same directory -->
 <xsl:stylesheet version="1.0" extension-element-prefixes="dc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
   <xsl:output method="html"/>
-  <!-- $Revision: 1.65 $ -->
+  <!-- $Revision: 1.69 $ -->
   <!--  -->
   <!-- File: mhtml_main.xsltxt - html-ization of Mizar XML, main file -->
   <!--  -->
@@ -150,9 +150,21 @@
   <xsl:variable name="lbydlicgipref">
     <xsl:value-of select="concat($lbydlicgi,&quot;?url=&quot;,$lbydliurl)"/>
   </xsl:variable>
+  <!-- URL of the MizAR root dir -->
+  <xsl:param name="ltptproot">
+    <xsl:text>http://octopi.mizar.org/~mptp/</xsl:text>
+  </xsl:param>
   <!-- URL of the TPTP-processor CGI -->
+  <xsl:param name="ltptpcgi">
+    <xsl:value-of select="concat($ltptproot,&quot;cgi-bin/&quot;)"/>
+  </xsl:param>
+  <!-- URL of the showby CGI -->
   <xsl:param name="lbytptpcgi">
-    <xsl:text>http://octopi.mizar.org/~mptp/cgi-bin/showby.cgi</xsl:text>
+    <xsl:value-of select="concat($ltptpcgi,&quot;showby.cgi&quot;)"/>
+  </xsl:param>
+  <!-- URL of the showtmpfile CGI -->
+  <xsl:param name="ltmpftptpcgi">
+    <xsl:value-of select="concat($ltptpcgi,&quot;showtmpfile.cgi&quot;)"/>
   </xsl:param>
   <!-- tells if by action is fetched through AJAX; default is off -->
   <xsl:param name="ajax_by">
@@ -161,6 +173,14 @@
   <!-- temporary dir with  the tptp by files, needs to be passed as a param -->
   <xsl:param name="lbytmpdir">
     <xsl:text/>
+  </xsl:param>
+  <!-- additional params for lbytptpcgi, needs to be passed as a param -->
+  <xsl:param name="lbycgiparams">
+    <xsl:text/>
+  </xsl:param>
+  <!-- add links to tptp files for thms -->
+  <xsl:param name="thms_tptp_links">
+    <xsl:text>0</xsl:text>
   </xsl:param>
   <!-- tells if linkage of proof elements is done; default is off -->
   <xsl:param name="proof_links">
@@ -4798,7 +4818,7 @@
               <xsl:value-of select="concat($lbydlicgipref,$anamelc,&quot;/&quot;,$line,&quot;_&quot;,$col,&quot;.dli&quot;)"/>
             </xsl:when>
             <xsl:when test="$linkby=3">
-              <xsl:value-of select="concat($lbytptpcgi,&quot;?article=&quot;,$anamelc,&quot;&amp;lc=&quot;,$line,&quot;_&quot;,$col,&quot;&amp;tmp=&quot;,$lbytmpdir)"/>
+              <xsl:value-of select="concat($lbytptpcgi,&quot;?article=&quot;,$anamelc,&quot;&amp;lc=&quot;,$line,&quot;_&quot;,$col,&quot;&amp;tmp=&quot;,$lbytmpdir,$lbycgiparams)"/>
             </xsl:when>
           </xsl:choose>
         </xsl:variable>
@@ -6260,6 +6280,12 @@
           <xsl:with-param name="nr" select="$nr1"/>
         </xsl:call-template>
       </xsl:if>
+      <xsl:if test="$thms_tptp_links = 1">
+        <xsl:call-template name="tptp_for_thm">
+          <xsl:with-param name="line" select="Proposition[1]/@line"/>
+          <xsl:with-param name="col" select="Proposition[1]/@col"/>
+        </xsl:call-template>
+      </xsl:if>
       <xsl:element name="br"/>
     </xsl:element>
     <xsl:choose>
@@ -6351,6 +6377,38 @@
             <xsl:value-of select="$tptp_file"/>
           </xsl:attribute>
         </xsl:element>
+      </xsl:element>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template name="tptp_for_thm">
+    <xsl:param name="line"/>
+    <xsl:param name="col"/>
+    <xsl:variable name="tptp_file" select="concat(&quot;problems/&quot;,$anamelc,&quot;/&quot;,$anamelc,&quot;__&quot;,$line,&quot;_&quot;,$col)"/>
+    <xsl:text> ::</xsl:text>
+    <xsl:element name="a">
+      <xsl:attribute name="href">
+        <xsl:value-of select="concat($ltmpftptpcgi,&quot;?file=&quot;,$tptp_file,&quot;&amp;tmp=&quot;,$lbytmpdir)"/>
+      </xsl:attribute>
+      <xsl:attribute name="target">
+        <xsl:value-of select="concat(&quot;MizarTPTP&quot;,$lbytmpdir)"/>
+      </xsl:attribute>
+      <xsl:element name="img">
+        <xsl:attribute name="src">
+          <xsl:value-of select="concat($ltptproot,&quot;TPTP.gif&quot;)"/>
+        </xsl:attribute>
+        <xsl:attribute name="height">
+          <xsl:text>17</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="width">
+          <xsl:text>17</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="alt">
+          <xsl:text>Show TPTP problem</xsl:text>
+        </xsl:attribute>
+        <xsl:attribute name="title">
+          <xsl:text>Show TPTP problem</xsl:text>
+        </xsl:attribute>
       </xsl:element>
     </xsl:element>
   </xsl:template>

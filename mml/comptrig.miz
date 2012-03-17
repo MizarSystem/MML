@@ -7,9 +7,8 @@
 environ
 
  vocabularies COMPLEX1, ARYTM_1, SQUARE_1, ABSVALUE, GROUP_1, FUNCT_1, POWER,
-      RCOMP_1, SIN_COS, ARYTM_3, FDIFF_1, PRE_TOPC, BOOLE, RELAT_1,
-      PARTFUN1, COMPTRIG, ARYTM, XCMPLX_0, ZF_LANG, SEQM_3,
-      ORDINAL2;
+      RCOMP_1, SIN_COS, ARYTM_3, FDIFF_1, PRE_TOPC, BOOLE, RELAT_1, PARTFUN1,
+      COMPTRIG, ARYTM, XCMPLX_0, ZF_LANG, SEQM_3, ORDINAL2;
  notations TARSKI, XBOOLE_0, SUBSET_1, ORDINAL1, NUMBERS, ARYTM_0, XCMPLX_0,
       XREAL_0, COMPLEX1, REAL_1, SQUARE_1, NAT_1, NEWTON, POWER, RELAT_1,
       FUNCT_1, RFUNCT_2, FCONT_1, FDIFF_1, SEQ_1, PARTFUN1, PARTFUN2, RCOMP_1,
@@ -18,13 +17,13 @@ environ
       RFUNCT_2, FCONT_1, FDIFF_1, COMSEQ_3, BINARITH, SIN_COS, SEQ_1, BINOP_2,
       POWER, RVSUM_1;
  registrations RELSET_1, NUMBERS, XCMPLX_0, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
-      PARTFUN2, NEWTON, SIN_COS, XBOOLE_0, VALUED_0, FCONT_1;
+      NEWTON, SIN_COS, XBOOLE_0, VALUED_0, FCONT_1, FUNCT_1;
  requirements NUMERALS, BOOLE, SUBSET, REAL, ARITHM;
  definitions RFUNCT_2, SQUARE_1, COMPLEX1, XCMPLX_0;
- theorems REAL_2, NAT_1, SQUARE_1, POWER, ABSVALUE, RELAT_1, FUNCT_1,
-      RFUNCT_2, PARTFUN1, FCONT_1, FCONT_2, RCOMP_1, FDIFF_1, ROLLE, COMPLEX1,
-      SIN_COS, SIN_COS2, XBOOLE_0, XCMPLX_1, ARYTM_0, XREAL_1, XXREAL_0,
-      NEWTON, XCMPLX_0, XXREAL_1, XBOOLE_1;
+ theorems NAT_1, SQUARE_1, POWER, ABSVALUE, RELAT_1, FUNCT_1, RFUNCT_2,
+      PARTFUN1, FCONT_2, RCOMP_1, FDIFF_1, ROLLE, COMPLEX1, SIN_COS, SIN_COS2,
+      XBOOLE_0, XCMPLX_1, ARYTM_0, XREAL_1, XXREAL_0, NEWTON, XCMPLX_0,
+      XXREAL_1, XBOOLE_1;
  schemes NAT_1;
 
 begin
@@ -50,8 +49,7 @@ A6: now
 A7: k <> 0 and
 A8: R[k];
     reconsider k1=k+1 as non empty Element of NAT;
-    k > 0 by A7;
-    then k+1 > 0+1 by XREAL_1:8;
+    k+1 > 0+1 by XREAL_1:8,A7;
     then consider n be non empty Nat such that
 A9: n < k1 and
 A10: P[n] by A2,A8;
@@ -112,8 +110,7 @@ proof
   assume that
 A1: x >= 0 and
 A2: n <> 0;
-  n > 0 by A2;
-  then n >= 0+1 by NAT_1:13;
+  n >= 0+1 by NAT_1:13,A2;
   hence (n-root x) |^ n = x by A1,POWER:5;
 end;
 
@@ -122,8 +119,7 @@ registration
   coherence
   proof
     PI in ].0, 4.[ by SIN_COS:def 32;
-    then 0 < PI by XXREAL_1:4;
-    hence thesis;
+    hence thesis by XXREAL_1:4;
   end;
 end;
 
@@ -131,48 +127,28 @@ begin
 
 canceled 3;
 
-Lm1: 0 < PI/2
-proof
   PI in ].0, 4.[ by SIN_COS:def 32;
-  then 0 < PI & PI < 4 by XXREAL_1:4;
-  then 0/2 < PI/2;
-  hence 0 < PI/2;
-end;
+  then
+Lm0: 0 < PI & PI < 4 by XXREAL_1:4;
 
-Lm2: PI/2 < PI
-proof
-  0 + PI/2 < PI/2 + PI/2 by Lm1,XREAL_1:8;
-  hence PI/2 < PI;
-end;
+Lx2: 0 + PI/2 < PI/2 + PI/2 by Lm0,XREAL_1:8;
 
-Lm3: PI < 2*PI
-proof
-  0 + PI < PI + PI by Lm2,XREAL_1:8;
-  hence PI < 2*PI;
-end;
+Lx3: 0 + PI < PI + PI by Lm0,XREAL_1:8;
 
-Lm4: PI/2 < 3/2*PI
-proof
-  0+PI/2 < PI+PI/2 by Lm2,XREAL_1:8;
-  hence PI/2 < 3/2*PI;
-end;
+Lx4: 0+PI/2 < PI+PI/2 by Lm0,XREAL_1:8;
 
-Lm5: -PI/2 < 0 by Lm1;
+Lm6: PI/2+PI/2 < PI+PI/2 by Lx2,XREAL_1:8;
 
-Lm6: PI/2+PI/2 < PI+PI/2 by Lm2,XREAL_1:8;
+ 3/2*PI+PI/2 = 2*PI;
+ then
+Lm7: 3/2*PI < 2*PI by Lm6,XREAL_1:8;
 
-Lm7: 3/2*PI < 2*PI
-proof
-  3/2*PI+PI/2 = 2*PI;
-  hence 3/2*PI < 2*PI by Lm6,XREAL_1:8;
-end;
-
-Lm8: 0 < 3/2*PI by Lm6;
+Lm8: 0 < 3/2*PI by Lm0;
 
 theorem
   0 < PI/2 & PI/2 < PI & 0 < PI & -PI/2 < PI/2 & PI < 2*PI &
   PI/2 < 3/2*PI & -PI/2 < 0 & 0 < 2*PI & PI < 3/2*PI & 3/2*PI < 2*PI &
-  0 < 3/2*PI by Lm2,Lm3,Lm4,Lm6,Lm7;
+  0 < 3/2*PI by XREAL_1:8,Lx3,Lx4,Lx2;
 
 theorem Th22:
   for a,b,c,x be real number st x in ].a,c.[ holds
@@ -238,8 +214,7 @@ A1: x-PI in ].0,PI.[ by XXREAL_1:4;
     .= -sin.(PI+-x) by SIN_COS:33
     .= --sin.(-x) by SIN_COS:83
     .= -sin.x by SIN_COS:33;
-  then -sin.x > 0 by A1,Th23;
-  hence sin.x < 0;
+  hence sin.x < 0 by A1,Th23;
 end;
 
 theorem Th26:
@@ -309,8 +284,7 @@ A1: x-PI in ].PI/2,3/2*PI.[ by XXREAL_1:4;
     .= cos.(PI+-x) by SIN_COS:33
     .= -cos.(-x) by SIN_COS:83
     .= -cos.x by SIN_COS:33;
-  then -cos.x < -0 by A1,Th29;
-  hence cos.x > 0;
+  hence cos.x > 0 by A1,Th29;
 end;
 
 theorem Th32:
@@ -346,7 +320,7 @@ A3: cos x = 0;
 A4: cos.x = 0 by A3,SIN_COS:def 23;
   then not x in ].-PI/2,PI/2.[ & not x in ].PI/2,3/2*PI.[ by Th27,Th29;
   then (-PI/2 >= x or x >= PI/2) & (PI/2 >= x or x >= 3/2*PI) by XXREAL_1:4;
-  then x = PI/2 or x = 3/2*PI or x > 3/2* PI by A1,Lm5,XXREAL_0:1;
+  then x = PI/2 or x = 3/2*PI or x > 3/2* PI by A1,Lm0,XXREAL_0:1;
   then x = PI/2 or x = 3/2*PI or x in ].3/2* PI,2*PI.[ by A2,XXREAL_1:4;
   hence x = PI/2 or x = 3/2*PI by A4,Th31;
 end;
@@ -354,7 +328,6 @@ end;
 theorem Th35:
   sin|].-PI/2,PI/2.[ is increasing
 proof
-X: ].-PI/2,PI/2.[ c= dom sin by SIN_COS:27;
 A1: sin is_differentiable_on ].-PI/2,PI/2.[
   proof
     ].-PI/2,PI/2.[ is open by RCOMP_1:25;
@@ -367,13 +340,12 @@ A1: sin is_differentiable_on ].-PI/2,PI/2.[
     then 0 < cos.x by Th27;
     hence diff(sin,x) > 0 by SIN_COS:73;
   end;
-  hence thesis by A1,Lm5,X,ROLLE:9;
+  hence thesis by A1,Lm0,SIN_COS:27,ROLLE:9;
 end;
 
 theorem Th36:
   sin|].PI/2,3/2*PI.[ is decreasing
 proof
-X: ].PI/2,3/2*PI.[ c= dom sin by SIN_COS:27;
 A1: sin is_differentiable_on ].PI/2,3/2*PI.[
   proof
     ].PI/2,3/2*PI.[ is open by RCOMP_1:25;
@@ -386,13 +358,12 @@ A1: sin is_differentiable_on ].PI/2,3/2*PI.[
     then 0 > cos.x by Th29;
     hence diff(sin,x) < 0 by SIN_COS:73;
   end;
-  hence thesis by A1,Lm4,X,ROLLE:10;
+  hence thesis by A1,Lx4,SIN_COS:27,ROLLE:10;
 end;
 
 theorem Th37:
   cos|].0,PI.[ is decreasing
 proof
-X: ].0,PI.[ c= dom cos by SIN_COS:27;
 A1: cos is_differentiable_on ].0,PI.[
   proof
     ].0,PI.[ is open by RCOMP_1:25;
@@ -406,13 +377,12 @@ A1: cos is_differentiable_on ].0,PI.[
     then 0-sin.x < 0;
     hence diff(cos,x) < 0 by SIN_COS:72;
   end;
-  hence thesis by A1,Lm2,X,ROLLE:10;
+  hence thesis by A1,Lm0,SIN_COS:27,ROLLE:10;
 end;
 
 theorem Th38:
   cos|].PI,2*PI.[ is increasing
 proof
-X: ].PI,2*PI.[ c= dom cos by SIN_COS:27;
 A1: cos is_differentiable_on ].PI,2*PI.[
   proof
     ].PI,2*PI.[ is open by RCOMP_1:25;
@@ -425,7 +395,7 @@ A1: cos is_differentiable_on ].PI,2*PI.[
     then 0-sin.x > 0 by Th25,XREAL_1:52;
     hence diff(cos,x) > 0 by SIN_COS:72;
   end;
-  hence thesis by A1,Lm3,X,ROLLE:9;
+  hence thesis by A1,Lx3,SIN_COS:27,ROLLE:9;
 end;
 
 theorem
@@ -759,12 +729,11 @@ proof
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
 A2:   sin|[.-PI/2,PI/2.] is continuous;
-X: [.-PI/2,PI/2 .] c= dom sin by SIN_COS:27;
       y1 in [.-1,1 .] \/ [.1,sin.(-PI/2).] by A1,XBOOLE_0:def 3;
       then y1 in [.sin.(-PI/2),sin.(PI/2).] \/ [.sin.(PI/2),sin.(-PI/2).]
       by SIN_COS:33,81;
       then consider x be Real such that x in [.-PI/2,PI/2 .] and
-A3:   y1 = sin.x by A2,X,FCONT_2:16;
+A3:   y1 = sin.x by A2,SIN_COS:27,FCONT_2:16;
       take x;
       thus x in dom sin & y = sin.x by A3,SIN_COS:27;
     end;
@@ -785,11 +754,10 @@ proof
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
 A2:   cos|[.0,PI.] is continuous;
-X:    [.0,PI.] c= dom cos by SIN_COS:27;
       y1 in [.cos.0,cos.PI.] \/ [.cos.PI,cos.0 .]
       by A1,SIN_COS:33,81,XBOOLE_0:def 3;
       then consider x be Real such that x in [.0,PI.] and
-A3:   y1 = cos.x by A2,X,FCONT_2:16;
+A3:   y1 = cos.x by A2,SIN_COS:27,FCONT_2:16;
       take x;
       thus x in dom cos & y = cos.x by A3,SIN_COS:27;
     end;
@@ -810,7 +778,7 @@ proof
       assume
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
-A2:   sin1|[.-PI/2,PI/2.] is continuous by FCONT_1:16;
+A2:   sin1|[.-PI/2,PI/2.] is continuous;
 X:    dom sin1 = [.-PI/2,PI/2 .] /\ REAL by RELAT_1:90,SIN_COS:27
            .= [.-PI/2,PI/2 .] by XBOOLE_1:28;
       -PI/2 in [.-PI/2,PI/2.] & PI/2 in [.-PI/2,PI/2.] by XXREAL_1:1;
@@ -824,8 +792,7 @@ A3:   x in [.-PI/2,PI/2 .] and
 A4:   y1 = sin1.x by A2,X,FCONT_2:16;
       take x;
       x in REAL /\ [.-PI/2,PI/2 .] by A3,XBOOLE_0:def 4;
-      then x in dom sin /\ [.-PI/2,PI/2 .] by SIN_COS:27;
-      hence x in dom sin1 & y = sin1.x by A4,FUNCT_1:68;
+      hence x in dom sin1 & y = sin1.x by A4,FUNCT_1:68,SIN_COS:27;
     end;
     thus (ex x be set st x in dom sin1 & y = sin1.x) implies y in [.-1,1 .]
     proof
@@ -852,21 +819,20 @@ proof
       assume
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
-A2:   sin1|[.PI/2,3/2*PI.] is continuous  by FCONT_1:16;
+A2:   sin1|[.PI/2,3/2*PI.] is continuous;
 X:    dom sin1 = [.PI/2,3/2*PI .] /\ REAL by RELAT_1:90,SIN_COS:27
            .= [.PI/2,3/2*PI .] by XBOOLE_1:28;
-      PI/2 in [.PI/2,3/2*PI.] & 3/2*PI in [.PI/2,3/2*PI.] by Lm4,XXREAL_1:1;
+      PI/2 in [.PI/2,3/2*PI.] & 3/2*PI in [.PI/2,3/2*PI.] by Lx4,XXREAL_1:1;
       then sin1.(PI/2) = sin.(PI/2) & sin1.(3/2*PI) = sin.(3/2*PI)
       by FUNCT_1:72;
       then y1 in [.sin1.(PI/2),sin1.(3/2*PI).] \/
       [.sin1.(3/2*PI),sin1.(PI/2).] by A1,SIN_COS:81,XBOOLE_0:def 3;
       then consider x be Real such that
 A3:   x in [.PI/2,3/2*PI.] and
-A4:   y1 = sin1.x by A2,Lm4,X,FCONT_2:16;
+A4:   y1 = sin1.x by A2,Lx4,X,FCONT_2:16;
       take x;
       x in REAL /\ [.PI/2,3/2*PI.] by A3,XBOOLE_0:def 4;
-      then x in dom sin /\ [.PI/2,3/2*PI.] by SIN_COS:27;
-      hence x in dom sin1 & y = sin1.x by A4,FUNCT_1:68;
+      hence x in dom sin1 & y = sin1.x by A4,FUNCT_1:68,SIN_COS:27;
     end;
     thus (ex x be set st x in dom sin1 & y = sin1.x) implies y in [.-1,1 .]
     proof
@@ -893,7 +859,7 @@ proof
       assume
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
-A2:   cos1|[.0,PI.] is continuous  by FCONT_1:16;
+A2:   cos1|[.0,PI.] is continuous;
 X:    dom cos1 = [.0,PI .] /\ REAL by RELAT_1:90,SIN_COS:27
            .= [.0,PI .] by XBOOLE_1:28;
       0 in [.0,PI.] & PI in [.0,PI.] by XXREAL_1:1;
@@ -905,8 +871,7 @@ A3:   x in [.0,PI.] and
 A4:   y1 = cos1.x by A2,X,FCONT_2:16;
       take x;
       x in REAL /\ [.0,PI.] by A3,XBOOLE_0:def 4;
-      then x in dom cos /\ [.0,PI.] by SIN_COS:27;
-      hence x in dom cos1 & y = cos1.x by A4,FUNCT_1:68;
+      hence x in dom cos1 & y = cos1.x by A4,FUNCT_1:68,SIN_COS:27;
     end;
     thus (ex x be set st x in dom cos1 & y = cos1.x) implies y in [.-1,1 .]
     proof
@@ -933,20 +898,19 @@ proof
       assume
 A1:   y in [.-1,1 .];
       then reconsider y1=y as Real;
-A2:   cos1|[.PI,2*PI.] is continuous  by FCONT_1:16;
+A2:   cos1|[.PI,2*PI.] is continuous;
 X:    dom cos1 = [.PI,2*PI .] /\ REAL by RELAT_1:90,SIN_COS:27
            .= [.PI,2*PI .] by XBOOLE_1:28;
-      PI in [.PI,2*PI.] & 2*PI in [.PI,2*PI.] by Lm3,XXREAL_1:1;
+      PI in [.PI,2*PI.] & 2*PI in [.PI,2*PI.] by Lx3,XXREAL_1:1;
       then cos1.PI = cos.PI & cos1.(2*PI) = cos.(2*PI) by FUNCT_1:72;
       then y1 in [.cos1.PI,cos1.(2*PI).] \/ [.cos1.(2*PI),cos1.PI.]
       by A1,SIN_COS:81,XBOOLE_0:def 3;
       then consider x be Real such that
 A3:   x in [.PI,2*PI.] and
-A4:   y1 = cos1.x by A2,Lm3,X,FCONT_2:16;
+A4:   y1 = cos1.x by A2,Lx3,X,FCONT_2:16;
       take x;
       x in REAL /\ [.PI,2*PI.] by A3,XBOOLE_0:def 4;
-      then x in dom cos /\ [.PI,2*PI.] by SIN_COS:27;
-      hence x in dom cos1 & y = cos1.x by A4,FUNCT_1:68;
+      hence x in dom cos1 & y = cos1.x by A4,FUNCT_1:68,SIN_COS:27;
     end;
     thus (ex x be set st x in dom cos1 & y = cos1.x) implies y in [.-1,1 .]
     proof
@@ -980,9 +944,7 @@ A1:   z <> 0;
       then
 A2:   |.z.| <> 0 by COMPLEX1:131;
 A3:   |.z.| >= 0 by COMPLEX1:132;
-      Re z <= |.z.| by COMPLEX1:140;
-      then
-A4:   Re z/|.z.| <= 1 by A2,A3,REAL_2:117;
+A4:   Re z/|.z.| <= 1 by A3,XREAL_1:187,COMPLEX1:140;
       reconsider z1=z as complex number;
       now per cases;
         suppose
@@ -994,7 +956,7 @@ reconsider cos1 as one-to-one PartFunc of 0PI,REAL by Th41,RFUNCT_2:82;
           reconsider r = cos1".(Re z/|.z.|) as Real;
           take r;
           Re z >= -|.z.| by Th3;
-          then -1 <= Re z/|.z.| by A2,A3,REAL_2:117;
+          then -1 <= Re z/|.z.| by COMPLEX1:132,XREAL_1:195;
           then
 A6:       Re z/|.z.| in rng cos1 by A4,Th50,XXREAL_1:1;
           then Re z/|.z.| in dom (cos1") by FUNCT_1:55;
@@ -1030,7 +992,7 @@ A11:      sin.r >= 0 by Th23,SIN_COS:33,81;
           hence z = |.z.|*cos r + |.z.|*sin r*<i> by A9,COMPLEX1:29;
           thus 0 <= r by A7,XXREAL_1:1;
           r <= PI by A7,XXREAL_1:1;
-          hence r < 2*PI by Lm3,XXREAL_0:2;
+          hence r < 2*PI by Lx3,XXREAL_0:2;
         end;
         suppose
 A12:      Im z < 0;
@@ -1045,7 +1007,7 @@ A13:          Re z/|.z.| <> 1 by XCMPLX_1:58;
               reconsider r = cos1".(Re z/|.z.|) as Real;
               take r;
               Re z >= -|.z.| by Th3;
-              then -1 <= Re z/|.z.| by A2,A3,REAL_2:117;
+              then -1 <= Re z/|.z.| by COMPLEX1:132,XREAL_1:195;
               then
 A14:          Re z/|.z.| in rng cos1 by A4,Th51,XXREAL_1:1;
               then
@@ -1079,27 +1041,23 @@ A20:          sin.r <= 0 by Th25,SIN_COS:81;
               then sin.r = (-abs(Im z))/|.z.|;
               then -abs(Im z) = |.z.|*sin.r by A1,COMPLEX1:131,XCMPLX_1:88;
               then
-A21:          --Im z = |.z.|*sin.r by A12,ABSVALUE:def 1
+              --Im z = |.z.|*sin.r by A12,ABSVALUE:def 1
                 .= |.z.|*sin r by SIN_COS:def 21;
-              z1 = Re z + (Im z)*<i> by COMPLEX1:29
-                .= [*Re z,Im z*] by COMPLEX1:27;
-              hence z = |.z.|*cos r + |.z.|*sin r*<i> by A18,A21,COMPLEX1:27;
+              hence z = |.z.|*cos r + |.z.|*sin r*<i> by A18,COMPLEX1:29;
               thus 0 <= r by A16,XXREAL_1:1;
 A22:          r <> 2*PI
               proof
-A23:            dom cos = REAL by SIN_COS:27;
-A24:            cos1" is one-to-one by FUNCT_1:62;
                 1 in rng cos1 by Th51,XXREAL_1:1;
                 then
 A25:            1 in dom (cos1") by FUNCT_1:55;
                 assume
 A26:            r = 2*PI;
-A27:            2*PI in [.PI,2*PI.] by Lm3,XXREAL_1:1;
+A27:            2*PI in [.PI,2*PI.] by Lx3,XXREAL_1:1;
                 then
-A28:            2*PI in dom cos1 by A23,RELAT_1:86;
+A28:            2*PI in dom cos1 by SIN_COS:27,RELAT_1:86;
                 cos1.(2*PI) = 1 by A27,FUNCT_1:72,SIN_COS:81;
                 then cos1".1 = 2*PI by A28,FUNCT_1:54;
-                hence contradiction by A13,A15,A24,A25,A26,FUNCT_1:def 8;
+                hence contradiction by A13,A15,A25,A26,FUNCT_1:def 8;
               end;
               r <= 2*PI by A16,XXREAL_1:1;
               hence r < 2*PI by A22,XXREAL_0:1;
@@ -1114,7 +1072,7 @@ A30:          Im z = 0;
               thus z = |.z.|*cos r+|.z.|*sin r*<i>
               by A29,A30,COMPLEX1:29,SIN_COS:34;
               thus 0 <= r;
-              thus r < 2*PI by Lm7;
+              thus r < 2*PI by Lm0;
             end;
           end;
           hence thesis;
@@ -1141,22 +1099,20 @@ A34:  x < 2*PI and
 A35:  z = |.z.|*cos y + |.z.|*sin y*<i> and
 A36:  0 <= y and
 A37:  y < 2*PI;
-      z = [*|.z.|*cos x,|.z.|*sin x*] &
-      z = [*|.z.|*cos y,|.z.|*sin y*] by A32,A35,COMPLEX1:27;
-      then |.z.|*cos x = |.z.|*cos y & |.z.|*sin x = |.z.|*sin y by ARYTM_0:12;
+      |.z.|*cos x = |.z.|*cos y & |.z.|*sin x = |.z.|*sin y
+               by COMPLEX1:163,A32,A35;
       then cos x = cos y & sin x = sin y by A31,XCMPLX_1:5;
       then
 A38:  cos x = cos y & sin x = sin.y by SIN_COS:def 21;
       then cos x = cos.y & sin.x = sin.y by SIN_COS:def 21,def 23;
       then
 A39:  cos.x = cos.y & sin.x = sin.y by SIN_COS:def 23;
-A40:  dom cos = REAL by SIN_COS:27;
       now per cases;
         suppose x <= PI & y <= PI;
           then x in [.0,PI.] & y in [.0,PI.] by A33,A36,XXREAL_1:1;
           then
 A41:      x in [.0,PI.] /\ dom cos & y in [.0,PI.] /\ dom cos
-          by A40,XBOOLE_0:def 4;
+          by SIN_COS:27,XBOOLE_0:def 4;
           assume x <> y;
           then x < y or y < x by XXREAL_0:1;
           hence contradiction by A39,A41,Th41,RFUNCT_2:44;
@@ -1165,7 +1121,7 @@ A41:      x in [.0,PI.] /\ dom cos & y in [.0,PI.] /\ dom cos
           then x in [.PI,2*PI.] & y in [.PI,2*PI.] by A34,A37,XXREAL_1:1;
           then
 A42:      x in [.PI,2*PI.] /\ dom cos & y in [.PI,2*PI.] /\ dom cos
-          by A40,XBOOLE_0:def 4;
+          by SIN_COS:27,XBOOLE_0:def 4;
           assume x <> y;
           then x < y or y < x by XXREAL_0:1;
           hence contradiction by A39,A42,Th42,RFUNCT_2:43;
@@ -1210,11 +1166,8 @@ A3: x > -0;
 A4: |. (x+0*<i>) .| <> 0 by COMPLEX1:131;
 A5: (x+0*<i>) = |. (x+0*<i>) .|*cos Arg (x+0*<i>)+
     |. (x+0*<i>) .|*sin Arg (x+0*<i>)*<i> by A3,Def1;
-    then |. (x+0*<i>) .|*cos Arg (x+0*<i>) = x &
-    |. (x+0*<i>) .|*sin Arg (x+0*<i>) = 0 by COMPLEX1:163;
-    then sin Arg (x+0*<i>) = 0 by A4;
+    then sin Arg (x+0*<i>) = 0 by A4,COMPLEX1:163;
     then Arg (x+0*<i>) = 0 or |. (x+0*<i>) .|*-1 = x by A2,A5,Th33,SIN_COS:82;
-    then Arg (x+0*<i>) = 0 or -|. (x+0*<i>) .| = x;
     then Arg (x+0*<i>) = 0 or |. (x+0*<i>) .| < 0 by A3;
     hence Arg x = 0 by COMPLEX1:132;
   end;
@@ -1233,9 +1186,7 @@ A2: 0 <= Arg (x+0*<i>) & Arg (x+0*<i>) < 2*PI by Th52;
 A3: |. (x+0*<i>) .| <> 0 by A1,COMPLEX1:131;
 A4: (x+0*<i>) = |. (x+0*<i>) .|*cos Arg (x+0*<i>)+
   |. (x+0*<i>) .|*sin Arg (x+0*<i>)*<i> by A1,Def1;
-  then |. (x+0*<i>) .|*cos Arg (x+0*<i>) = x &
-  |. (x+0*<i>) .|*sin Arg (x+0*<i>) = 0 by COMPLEX1:163;
-  then sin Arg (x+0*<i>) = 0 by A3;
+  then sin Arg (x+0*<i>) = 0 by A3,COMPLEX1:163;
   then Arg (x+0*<i>) = PI or |. (x+0*<i>) .|*1 = x by A2,A4,Th33,SIN_COS:34;
   hence thesis by A1,COMPLEX1:132;
 end;
@@ -1246,21 +1197,16 @@ proof
   let x be Real;
   assume
 A1: x > 0;
-  then
-A2: x > -0;
 A3: 0 <= Arg (0+x*<i>) & Arg (0+x*<i>) < 2*PI by Th52;
 A4: 0+x*<i> <> 0 by A1;
   then
 A5: |.0+x*<i>.| <> 0 by COMPLEX1:131;
 A6: (0+x*<i>) = |. (0+x*<i>) .|*cos Arg (0+x*<i>)+
   |. (0+x*<i>) .|*sin Arg (0+x*<i>)*<i> by A4,Def1;
-  then |.0+x*<i>.|*cos Arg (0+x*<i>) = 0 &
-  |. (0+x*<i>) .|*sin Arg (0+x*<i>) = x by COMPLEX1:163;
-  then cos Arg (0+x*<i>) = 0 by A5;
+  then cos Arg (0+x*<i>) = 0 by A5,COMPLEX1:163;
   then Arg (0+x*<i>) = PI/2 or |. (0+x*<i>) .|*-1 = x
   by A3,A6,Th34,SIN_COS:82;
-  then Arg (0+x*<i>) = PI/2 or -|. (0+x*<i>) .| = x;
-  then Arg (0+x*<i>) = PI/2 or |. (0+x*<i>) .| < 0 by A2;
+  then Arg (0+x*<i>) = PI/2 or |. (0+x*<i>) .| < 0 by A1;
   hence thesis by COMPLEX1:132;
 end;
 
@@ -1276,9 +1222,7 @@ A3: (0+x*<i>) <> 0 by A1;
 A4: |. (0+x*<i>) .| <> 0 by COMPLEX1:131;
 A5: (0+x*<i>) = |. (0+x*<i>) .|*cos Arg (0+x*<i>)+
   |. (0+x*<i>) .|*sin Arg (0+x*<i>)*<i> by A3,Def1;
-  then |. (0+x*<i>) .|*cos Arg (0+x*<i>) = 0 &
-  |. (0+x*<i>) .|*sin Arg (0+x*<i>) = x by COMPLEX1:163;
-  then cos Arg (0+x*<i>) = 0 by A4;
+  then cos Arg (0+x*<i>) = 0 by A4,COMPLEX1:163;
   then Arg (0+x*<i>) = 3/2*PI or |. (0+x*<i>) .|*1 = x
   by A2,A5,Th34,SIN_COS:82;
   hence thesis by A1,COMPLEX1:132;
@@ -1306,17 +1250,16 @@ A1: Arg z in ].0,PI/2.[;
 A2: Arg z > 0 & Arg z < PI/2 by XXREAL_1:4;
     then
 A3: z <> 0 by Def1;
-    then z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
     then
-A4: Re z = |.z.|*cos Arg z & Im z = |.z.|*sin Arg z by COMPLEX1:28;
+B4:  z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
 A5: |.z.| > 0 by A3,COMPLEX1:133;
     cos Arg z > 0 by A1,SIN_COS:86;
-    hence Re z > 0 by A4,A5;
-    Arg z < PI by A2,Lm2,XXREAL_0:2;
+    hence Re z > 0 by B4,A5,COMPLEX1:28;
+    Arg z < PI by A2,Lx2,XXREAL_0:2;
     then Arg z in ].0,PI.[ by A2,XXREAL_1:4;
     then sin.Arg z > 0 by Th23;
     then sin Arg z > 0 by SIN_COS:def 21;
-    hence Im z > 0 by A4,A5;
+    hence Im z > 0 by B4,A5,COMPLEX1:28;
   end;
   assume that
 A6: Re z > 0 and
@@ -1328,8 +1271,7 @@ A8: z <> 0+0*<i> by A6,COMPLEX1:163;
 A9: |.z.| > 0 by COMPLEX1:133;
 A10: 0 <= Arg z & Arg z < 2*PI by Th52;
   z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by A8,Def1;
-  then |.z.|*cos Arg z > 0 & |.z.|*sin Arg z > 0 by A6,A7,COMPLEX1:28;
-  then cos Arg z > 0 & sin Arg z > 0 by A9;
+  then cos Arg z > 0 & sin Arg z > 0 by A9,A6,A7,COMPLEX1:28;
   then
 A11: cos.Arg z > 0 & sin.Arg z > 0 by SIN_COS:def 21,def 23;
   then not Arg z in [.PI,2*PI.] & not Arg z in [.PI/2,3/2*PI.] by Th26,Th30;
@@ -1351,20 +1293,19 @@ A1: Arg z in ].PI/2,PI.[;
 A2: Arg z > PI/2 & Arg z < PI by XXREAL_1:4;
     then
 A3: z <> 0 by Def1;
-    then z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
     then
-A4: Re z = |.z.|*cos Arg z & Im z = |.z.|*sin Arg z by COMPLEX1:28;
+B4:  z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
 A5: |.z.| > 0 by A3,COMPLEX1:133;
     PI/2 < Arg z & Arg z < PI by A1,XXREAL_1:4;
     then PI/2 < Arg z & Arg z < 3/2*PI by Lm6,XXREAL_0:2;
     then Arg z in ].PI/2,3/2*PI.[ by XXREAL_1:4;
     then cos.Arg z < 0 by Th29;
     then cos Arg z < 0 by SIN_COS:def 23;
-    hence Re z < 0 by A4,A5;
+    hence Re z < 0 by B4,A5,COMPLEX1:28;
     Arg z in ].0,PI.[ by A2,XXREAL_1:4;
     then sin.Arg z > 0 by Th23;
     then sin Arg z > 0 by SIN_COS:def 21;
-    hence Im z > 0 by A4,A5;
+    hence Im z > 0 by B4,A5,COMPLEX1:28;
   end;
   assume that
 A6: Re z < 0 and
@@ -1376,8 +1317,7 @@ A8: z <> 0+0*<i> by A6,COMPLEX1:163;
 A9: |.z.| > 0 by COMPLEX1:133;
 A10: 0 <= Arg z & Arg z < 2*PI by Th52;
   z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by A8,Def1;
-  then |.z.|*cos Arg z < 0 & |.z.|*sin Arg z > 0 by A6,A7,COMPLEX1:28;
-  then cos Arg z < 0 & sin Arg z > 0 by A9;
+  then cos Arg z < 0 & sin Arg z > 0 by A9,A6,A7,COMPLEX1:28;
   then cos.Arg z < 0 & sin.Arg z > 0 by SIN_COS:def 21,def 23;
   then not Arg z in [.PI,2*PI.] & not Arg z in [.-PI/2,PI/2.] by Th26,Th28;
   then Arg z < PI & (Arg z < -PI/2 or Arg z > PI/2) by A10,XXREAL_1:1;
@@ -1396,21 +1336,20 @@ A1: Arg z in ].PI,3/2*PI.[;
 A2: Arg z > PI & Arg z < 3/2*PI by XXREAL_1:4;
     then
 A3: z <> 0 by Def1;
-    then z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
     then
-A4: Re z = |.z.|*cos Arg z & Im z = |.z.|*sin Arg z by COMPLEX1:28;
+B4:  z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
 A5: |.z.| > 0 by A3,COMPLEX1:133;
     PI < Arg z & Arg z < 3/2*PI by A1,XXREAL_1:4;
-    then PI/2 < Arg z & Arg z < 3/2*PI by Lm2,XXREAL_0:2;
+    then PI/2 < Arg z & Arg z < 3/2*PI by Lx2,XXREAL_0:2;
     then Arg z in ].PI/2,3/2*PI.[ by XXREAL_1:4;
     then cos.Arg z < 0 by Th29;
     then cos Arg z < 0 by SIN_COS:def 23;
-    hence Re z < 0 by A4,A5;
+    hence Re z < 0 by B4,A5,COMPLEX1:28;
     Arg z < 2*PI by A2,Lm7,XXREAL_0:2;
     then Arg z in ].PI,2*PI.[ by A2,XXREAL_1:4;
     then sin.Arg z < 0 by Th25;
     then sin Arg z < 0 by SIN_COS:def 21;
-    hence Im z < 0 by A4,A5;
+    hence Im z < 0 by B4,A5,COMPLEX1:28;
   end;
   assume that
 A6: Re z < 0 and
@@ -1422,8 +1361,7 @@ A8: z <> 0+0*<i> by A6,COMPLEX1:163;
 A9: |.z.| > 0 by COMPLEX1:133;
 A10: 0 <= Arg z & Arg z < 2*PI by Th52;
   z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by A8,Def1;
-  then |.z.|*cos Arg z < 0 & |.z.|*sin Arg z < 0 by A6,A7,COMPLEX1:28;
-  then cos Arg z < 0 & sin Arg z < 0 by A9;
+  then cos Arg z < 0 & sin Arg z < 0 by A9,A6,A7,COMPLEX1:28;
   then cos.Arg z < 0 & sin.Arg z < 0 by SIN_COS:def 21,def 23;
   then not Arg z in [.0,PI.] & not Arg z in [.-PI/2,PI/2.] &
   not Arg z in [.3/2*PI,2*PI.] by Th24,Th28,Th32;
@@ -1445,18 +1383,17 @@ A1: Arg z in ].3/2*PI,2*PI.[;
 A2: Arg z > 3/2*PI & Arg z < 2*PI by XXREAL_1:4;
     then
 A3: z <> 0 by Def1;
-    then z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
     then
-A4: Re z = |.z.|*cos Arg z & Im z = |.z.|*sin Arg z by COMPLEX1:28;
+B4:  z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by Def1;
 A5: |.z.| > 0 by A3,COMPLEX1:133;
     cos.Arg z > 0 by A1,Th31;
     then cos Arg z > 0 by SIN_COS:def 23;
-    hence Re z > 0 by A4,A5;
+    hence Re z > 0 by B4,A5,COMPLEX1:28;
     Arg z > PI by A2,Lm6,XXREAL_0:2;
     then Arg z in ].PI,2*PI.[ by A2,XXREAL_1:4;
     then sin.Arg z < 0 by Th25;
     then sin Arg z < 0 by SIN_COS:def 21;
-    hence Im z < 0 by A4,A5;
+    hence Im z < 0 by B4,A5,COMPLEX1:28;
   end;
   assume that
 A6: Re z > 0 and
@@ -1468,12 +1405,11 @@ A8: z <> 0+0*<i> by A6,COMPLEX1:163;
 A9: |.z.| > 0 by COMPLEX1:133;
 A10: 0 <= Arg z & Arg z < 2*PI by Th52;
   z = |.z.|*cos Arg z+|.z.|*sin Arg z*<i> by A8,Def1;
-  then |.z.|*cos Arg z > 0 & |.z.|*sin Arg z < 0 by A6,A7,COMPLEX1:28;
-  then cos Arg z > 0 & sin Arg z < 0 by A9;
+  then cos Arg z > 0 & sin Arg z < 0 by A9,A6,A7,COMPLEX1:28;
   then cos.Arg z > 0 & sin.Arg z < 0 by SIN_COS:def 21,def 23;
   then not Arg z in [.0,PI.] & not Arg z in [.PI/2,3/2*PI.] by Th24,Th30;
   then Arg z > PI & (Arg z < PI/2 or Arg z > 3/2*PI) by A10,XXREAL_1:1;
-  hence thesis by A10,Lm2,XXREAL_0:2,XXREAL_1:4;
+  hence thesis by A10,Lx2,XXREAL_0:2,XXREAL_1:4;
 end;
 
 theorem Th63:
@@ -1488,7 +1424,7 @@ A1: Im z > 0;
   by A1,Th55,Th59,Th60;
   then PI/2 < Arg z & Arg z < PI or 0 < Arg z & Arg z < PI/2 or
   Arg z = PI/2 by XXREAL_1:4;
-  then 0 < Arg z & Arg z < PI by Lm2,XXREAL_0:2;
+  then 0 < Arg z & Arg z < PI by Lx2,XXREAL_0:2;
   then Arg z in ].0,PI.[ by XXREAL_1:4;
   then sin.Arg z > 0 by Th23;
   hence thesis by SIN_COS:def 21;
@@ -1560,7 +1496,7 @@ A1: Re z < 0;
   by A1,Th54,Th60,Th61;
   then PI/2 < Arg z & Arg z < PI or PI < Arg z & Arg z < 3/2*PI or
   Arg z = PI by XXREAL_1:4;
-  then PI/2 < Arg z & Arg z < 3/2*PI by Lm2,Lm6,XXREAL_0:2;
+  then PI/2 < Arg z & Arg z < 3/2*PI by Lx2,Lm6,XXREAL_0:2;
   then Arg z in ].PI/2,3/2*PI.[ by XXREAL_1:4;
   then cos.Arg z < 0 by Th29;
   hence thesis by SIN_COS:def 23;
@@ -1673,7 +1609,6 @@ proof
   let n,k be Nat;
   assume
 A1: n <> 0;
-  then n > 0;
   then
 A2: n >= 0+1 by NAT_1:13;
   per cases;

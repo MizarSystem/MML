@@ -8,20 +8,20 @@ environ
 
  vocabularies TARSKI, BOOLE, SUPINF_1, RLVECT_1, ARYTM_1, SETFAM_1, PROB_1,
       SUBSET_1, FINSUB_1, FUNCT_1, SUPINF_2, RELAT_1, FUNCOP_1, CARD_4, PROB_2,
-      MEASURE1, ARYTM;
+      MEASURE1, ARYTM, GRCAT_1, REALSET1;
  notations TARSKI, XBOOLE_0, ENUMSET1, ZFMISC_1, SUBSET_1, NUMBERS, XXREAL_0,
       REAL_1, RELAT_1, FINSUB_1, FUNCT_1, RELSET_1, PARTFUN1, FUNCT_2, NAT_1,
-      SETFAM_1, FUNCOP_1, PROB_1, PROB_2, CARD_4, SUPINF_1, SUPINF_2;
+      SETFAM_1, FUNCOP_1, PROB_1, PROB_2, VALUED_0, SUPINF_1, SUPINF_2;
  constructors ENUMSET1, PARTFUN1, FUNCOP_1, FINSUB_1, REAL_1, NAT_1, PROB_2,
       SUPINF_2, SUPINF_1;
  registrations XBOOLE_0, SUBSET_1, ORDINAL1, RELSET_1, FUNCT_2, NUMBERS,
-      MEMBERED, PROB_1;
+      MEMBERED, PROB_1, FUNCT_1, VALUED_0;
  requirements NUMERALS, REAL, SUBSET, BOOLE, ARITHM;
  definitions SUPINF_2, TARSKI, FINSUB_1, PROB_2, PROB_1, XBOOLE_0, SUBSET_1,
       FUNCT_1, RELAT_1;
  theorems TARSKI, FUNCT_1, FUNCT_2, ENUMSET1, ZFMISC_1, NAT_1, SETFAM_1,
       SUPINF_2, RELAT_1, RELSET_1, FUNCOP_1, FINSUB_1, PROB_2, PROB_1,
-      SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, CARD_4;
+      SUBSET_1, XBOOLE_0, XBOOLE_1, XXREAL_0, CARD_3, ORDINAL1, VALUED_0;
  schemes FUNCT_2, XBOOLE_0;
 
 begin :: Some useful theorems about sets and R_eal numbers
@@ -99,7 +99,7 @@ proof
 end;
 
 theorem
-  for A,B,C being Subset of X holds {A,B,C} is non empty Subset-Family of X
+  for A,B,C being Subset of X holds {A,B,C} is Subset-Family of X
 proof
   let A,B,C be Subset of X;
   set D = {A,B,C};
@@ -458,14 +458,20 @@ definition
   compatibility by SUPINF_2:58;
 end;
 
-canceled;
+canceled 2;
 
-theorem Th23:
-  for S being Field_Subset of X holds ex M being Function of S,ExtREAL st
-  M is nonnegative & M.{} = 0.&
-  for A,B being Element of S st A misses B holds M.(A \/ B) = M.A + M.B
+definition
+  let X be set, S be Field_Subset of X;
+  let F be Function of S,ExtREAL;
+  attr F is additive means
+:Def5: for A,B being Element of S st A misses B holds F.(A \/ B) = F.A + F.B;
+end;
+
+registration
+  let X be set, S be Field_Subset of X;
+ cluster nonnegative additive zeroed Function of S,ExtREAL;
+  existence
 proof
-  let S be Field_Subset of X;
   reconsider M = S --> 0. as Function of S,ExtREAL;
 A1: M is nonnegative
   proof
@@ -485,16 +491,14 @@ A5: A \/ B is Element of S by FINSUB_1:def 1;
     hence thesis by A5,FUNCOP_1:13;
   end;
   take M;
-  thus thesis by A1,A2,A3;
+ thus thesis by A1,A3,A2,Def5,VALUED_0:def 19;
+end;
 end;
 
 definition
   let X be set, S be Field_Subset of X;
-  mode Measure of S -> Function of S,ExtREAL means
-    :Def5:
-    it is nonnegative & it.{} = 0. &
-    for A,B being Element of S st A misses B holds it.(A \/ B) = it.A + it.B;
-  existence by Th23;
+  mode Measure of S
+   is nonnegative additive zeroed Function of S,ExtREAL;
 end;
 
 canceled;
@@ -511,8 +515,7 @@ A1: A c= B;
   then M.(A \/ C) = M.A + M.C by Def5;
   then
 A2: M.B = M.A + M.C by A1,XBOOLE_1:45;
-  M is nonnegative by Def5;
-  then 0.<= M.A & 0.<= M.C by Def4;
+  0.<= M.A & 0.<= M.C by Def4;
   hence thesis by A2,SUPINF_2:20;
 end;
 
@@ -529,8 +532,7 @@ A1: A c= B & M.A < +infty;
   then M.(A \/ C) = M.A + M.C by Def5;
   then
 A2: M.B = M.A + M.C by A1,XBOOLE_1:45;
-  M is nonnegative by Def5;
-  then 0.<= M.A & 0.<= M.C & M.A < +infty by A1,Def4;
+  0.<= M.A & 0.<= M.C & M.A < +infty by A1,Def4;
   hence thesis by A2,Th5;
 end;
 
@@ -570,8 +572,7 @@ A1: A misses C by XBOOLE_1:79;
 A2: M.(A \/ B) = M.(A \/ C) by XBOOLE_1:39
     .= M.A + M.C by A1,Def5;
 A3: C c= B by XBOOLE_1:36;
-  M is nonnegative by Def5;
-  then 0.<= M.A & 0.<= M.C & M.A <= M.A & M.C <= M.B by A3,Def4,Th25;
+  0.<= M.A & 0.<= M.C & M.A <= M.A & M.C <= M.B by A3,Def4,Th25;
   hence thesis by A2,Th4;
 end;
 
@@ -594,7 +595,7 @@ definition
   proof
     reconsider A = {} as Element of S by PROB_1:10;
     take A;
-    thus thesis by Def5;
+    thus thesis by VALUED_0:def 19;
   end;
 end;
 
@@ -608,8 +609,7 @@ proof
   B be measure_zero of M;
   assume
 A1: A c= B;
-  M is nonnegative by Def5;
-  then 0.<= M.A & M.A <= M.B by A1,Def4,Th25;
+  0.<= M.A & M.A <= M.B by A1,Def4,Th25;
   then 0.<= M.A & M.A <= 0.by Def7;
   then M.A = 0.by XXREAL_0:1;
   hence thesis by Def7;
@@ -623,8 +623,6 @@ theorem
 proof
   let S be Field_Subset of X, M be Measure of S, A,B be measure_zero of M;
 A1: M.A = 0.& M.B = 0.by Def7;
-  M is nonnegative by Def5;
-  then
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= 0.+ 0.by A1,Th27;
   then M.(A \/ B) <= 0.by SUPINF_2:18;
@@ -646,8 +644,6 @@ proof
   let S be Field_Subset of X, M be Measure of S, A be Element of S,
   B be measure_zero of M;
 A1: M.B = 0.by Def7;
-  M is nonnegative by Def5;
-  then
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th27;
   then
@@ -1067,14 +1063,15 @@ A3: M c= F;
     consider f being SetSequence of X such that
 A4: M = rng f by SUPINF_2:def 14;
 A5: (Intersection Complement f)` = union M by A4,CARD_3:def 4;
-    for n being Element of NAT holds (Complement f).n in F
+    for n being Nat holds (Complement f).n in F
     proof
-      let n be Element of NAT;
-      reconsider n as Element of NAT;
+      let n be Nat;
+      reconsider n as Element of NAT by ORDINAL1:def 13;
 A6:   f.n in M by A4,FUNCT_2:6;
       (Complement f).n = (f.n)` by PROB_1:def 4;
       hence thesis by A1,A3,A6,PROB_1:def 1;
     end;
+    then rng Complement f c= F by NAT_1:53;
     then Intersection Complement f in F by A2,PROB_1:def 8;
     hence union M in F by A1,A5,PROB_1:def 1;
   end;
@@ -1086,10 +1083,10 @@ A6:   f.n in M by A4,FUNCT_2:6;
 A7: F is compl-closed and
 A8: F is sigma-additive;
     let f be SetSequence of X such that
-A9: for n being Element of NAT holds f.n in F;
+A9:  rng f c= F;
     dom Complement f = NAT by FUNCT_2:def 1;
     then reconsider M = rng Complement f as non empty countable Subset-Family
-    of X by CARD_4:45,RELAT_1:65;
+    of X by CARD_3:127,RELAT_1:65;
 A10: Intersection f = (union M)` by CARD_3:def 4;
     M c= F
     proof
@@ -1100,7 +1097,8 @@ A11:  n in NAT and
 A12:  e = (Complement f).n by FUNCT_2:17;
       reconsider n as Element of NAT by A11;
 A13:  e = (f.n)` by A12,PROB_1:def 4;
-      f.n in F by A9;
+      f.n in rng f by NAT_1:52;
+      then f.n in F by A9;
       hence thesis by A7,A13,PROB_1:def 1;
     end;
     then union M in F by A8,Def9;
@@ -1313,20 +1311,32 @@ A1: for A being Element of S holds
   thus thesis by A1;
 end;
 
-theorem Th58:
-  for S being SigmaField of X ex M being Function of S,ExtREAL st
-  M is nonnegative & M.{} = 0. & for F being Sep_Sequence of S holds
-  SUM(M*F) = M.(union rng F)
-proof
+definition
+  let X be set;
   let S be SigmaField of X;
+  let F be Function of S,ExtREAL;
+  canceled;
+ attr F is sigma-additive means
+:Def11: for s being Sep_Sequence of S holds SUM(F*s) = F.(union rng s);
+end;
+
+registration
+  let X be set;
+  let S be SigmaField of X;
+  cluster nonnegative sigma-additive zeroed Function of S,ExtREAL;
+  existence
+proof
   consider M being Function of S,ExtREAL such that
 A1: for A being Element of S holds M.A = 0. by Th57;
   take M;
   for A being Element of S holds 0.<= M.A by A1;
   hence
 A2: M is nonnegative by Def4;
-  {} is Element of S by PROB_1:10;
-  hence M.{} = 0. by A1;
+ {} is Element of S by PROB_1:10;
+   then
+X: M.{} = 0. by A1;
+  thus M is sigma-additive
+  proof
   let F be Sep_Sequence of S;
   union rng F is Element of S by Th53;
   then
@@ -1343,17 +1353,16 @@ A5: for r being Element of NAT st 0 <= r holds (M*F).r = 0.
 A6: SUM(M*F) = Ser(M*F).0 by A4,SUPINF_2:67;
   Ser(M*F).0 = (M*F).0 by SUPINF_2:63;
   hence thesis by A3,A5,A6;
+ end;
+ thus thesis by X,VALUED_0:def 19;
+end;
 end;
 
 definition
   let X be set;
   let S be SigmaField of X;
-  canceled;
-  mode sigma_Measure of S -> Function of S,ExtREAL means
-    :Def11:
-    it is nonnegative & it.{} = 0.& for F being Sep_Sequence of S holds
-    SUM(it*F) = it.(union rng F);
-  existence by Th58;
+  mode sigma_Measure of S is
+   nonnegative sigma-additive zeroed Function of S,ExtREAL;
 end;
 
 registration
@@ -1363,14 +1372,13 @@ registration
   coherence;
 end;
 
-canceled;
+canceled 2;
 
 theorem Th60:
   for S being SigmaField of X,
   M being sigma_Measure of S holds M is Measure of S
 proof
   let S be SigmaField of X, M be sigma_Measure of S;
-A1: M is nonnegative & M.{} = 0.by Def11;
   for A,B being Element of S holds (A misses B implies M.(A \/ B) = M.A + M.B)
   proof
     let A,B be Element of S;
@@ -1473,12 +1481,13 @@ A16:  for r being Element of NAT holds (M*F).r = M.(F.r)
         assume 1 + 1 <= r;
         then 1 < r by NAT_1:13;
         then F.r = {} by A5;
-        hence thesis by A1,A16;
+        then (M*F).r = M.{} by A16;
+        hence thesis by VALUED_0:def 19;
       end;
       hence thesis by A5,A16;
     end;
     set H = M*F;
-A17: H is nonnegative by A1,Th54;
+A17: H is nonnegative by Th54;
 A18: 0 + 1 = 0 + 1;
     set y1 = Ser H.1;
     set n2 = 1 + 1;
@@ -1491,7 +1500,7 @@ A18: 0 + 1 = 0 + 1;
     then SUM(M*F) = M.A + M.B by A15,A17,SUPINF_2:67;
     hence thesis by A14,Def11;
   end;
-  hence thesis by A1,Def5;
+  hence thesis by Def5;
 end;
 
 theorem
@@ -1579,7 +1588,7 @@ canceled;
     then consider A being Element of S such that
 A1: A = {};
     take A;
-    thus thesis by A1,Def11;
+    thus thesis by A1,VALUED_0:def 19;
   end;
 end;
 
@@ -1594,8 +1603,7 @@ proof
   B be measure_zero of M;
   assume
 A1: A c= B;
-  M is nonnegative by Def11;
-  then 0.<= M.A & M.A <= M.B by A1,Def4,Th62;
+  0.<= M.A & M.A <= M.B by A1,Def4,Th62;
   then 0.<= M.A & M.A <= 0.by Def13;
   then M.A = 0.by XXREAL_0:1;
   hence thesis by Def13;
@@ -1609,8 +1617,6 @@ theorem
 proof
   let S be SigmaField of X, M be sigma_Measure of S, A,B be measure_zero of M;
 A1: M.A = 0.& M.B = 0.by Def13;
-  M is nonnegative by Def11;
-  then
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= 0.+ 0.by A1,Th64;
   then M.(A \/ B) <= 0.by SUPINF_2:18;
@@ -1632,8 +1638,6 @@ proof
   let S be SigmaField of X, M be sigma_Measure of S, A be Element of S,
   B be measure_zero of M;
 A1: M.B = 0.by Def13;
-  M is nonnegative by Def11;
-  then
 A2: 0.<= M.(A \/ B) & 0.<= M.(A /\ B) & 0.<= M.(A \ B) by Def4;
   M.(A \/ B) <= M.A + 0.by A1,Th64;
   then

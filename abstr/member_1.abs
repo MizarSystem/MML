@@ -1,0 +1,1623 @@
+:: Collective Operations on Number-Membered Sets
+::  by Artur Korni{\l}owicz
+:: 
+:: Received December 19, 2008
+:: Copyright (c) 2008 Association of Mizar Users
+
+environ
+
+ vocabularies MEMBERED, XCMPLX_0, ARYTM, INT_1, ORDINAL2, COMPLEX1, RAT_1,
+      MEMBER_1, ARYTM_1, RELAT_1, MSUALG_3, FUZZY_2, ARYTM_3, BOOLE, SUPINF_1,
+      ASYMPT_0, ZF_LANG, XREAL_0;
+ notations TARSKI, XBOOLE_0, SUBSET_1, ENUMSET1, NUMBERS, XCMPLX_0, XREAL_0,
+      RAT_1, INT_1, ORDINAL1, MEMBERED, BINOP_2, XXREAL_3, XXREAL_0, SUPINF_2,
+      EXTREAL1;
+ constructors XCMPLX_0, RAT_1, MEMBERED, ENUMSET1, BINOP_2, XXREAL_3, SUPINF_2,
+      EXTREAL1, SUPINF_1;
+ registrations XREAL_0, INT_1, RAT_1, ORDINAL1, MEMBERED, XCMPLX_0, NAT_1,
+      XXREAL_3, XBOOLE_0, XXREAL_0;
+ requirements BOOLE, SUBSET, NUMERALS, ARITHM, REAL;
+
+
+begin
+
+reserve w, w1, w2 for Element of ExtREAL;
+reserve c, c1, c2 for Element of COMPLEX;
+reserve A, B, C, D for complex-membered set;
+reserve F, G, H, I for ext-real-membered set;
+reserve a, b, s, t, z for complex number;
+reserve f, g, h, i, j for ext-real number;
+reserve r for real number;
+reserve e for set;
+
+registration
+  cluster -infty" -> zero;
+  cluster +infty" -> zero;
+end;
+
+registration
+  let a, b, c, d be complex number;
+  cluster {a,b,c,d} -> complex-membered;
+end;
+
+registration
+  let a, b, c, d be ext-real number;
+  cluster {a,b,c,d} -> ext-real-membered;
+end;
+
+registration :: for ext-real numbers
+  let r be real number;
+  cluster -r -> real;
+  cluster r" -> real;
+  let s be real number;
+  cluster r+s -> real;
+  cluster r-s -> real;
+  cluster r*s -> real;
+  cluster r/s -> real;
+end;
+
+theorem :: MEMBER_1:1
+  (-f)" = -f";
+
+theorem :: MEMBER_1:2
+  (f*g)" = f"*g";
+
+theorem :: MEMBER_1:3
+  -f = -g implies f = g;
+
+theorem :: MEMBER_1:4
+  r+f = r+g implies f = g;
+
+theorem :: MEMBER_1:5
+  r-f = r-g implies f = g;
+
+theorem :: MEMBER_1:6
+  r <> 0 & r*f = r*g implies f = g;
+
+definition
+  let F be ext-real-membered set;
+  func --F -> ext-real-membered set equals
+:: MEMBER_1:def 1
+  {-w: w in F};
+  involutiveness;
+end;
+
+theorem :: MEMBER_1:7
+  f in F iff -f in --F;
+
+theorem :: MEMBER_1:8
+  -f in F iff f in --F;
+
+registration
+  let F be empty set;
+  cluster --F -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  cluster --F -> non empty;
+end;
+
+theorem :: MEMBER_1:9
+  F c= G iff --F c= --G;
+
+theorem :: MEMBER_1:10
+  --F = --G implies F = G;
+
+theorem :: MEMBER_1:11
+  -- (F \/ G) = (--F) \/ (--G);
+
+theorem :: MEMBER_1:12
+  -- (F /\ G) = (--F) /\ (--G);
+
+theorem :: MEMBER_1:13
+  -- (F \ G) = (--F) \ (--G);
+
+theorem :: MEMBER_1:14
+  -- (F \+\ G) = (--F) \+\ (--G);
+
+theorem :: MEMBER_1:15
+  --{f} = {-f};
+
+theorem :: MEMBER_1:16
+  --{f,g} = {-f,-g};
+
+definition
+  let A be complex-membered set;
+  func --A -> complex-membered set equals
+:: MEMBER_1:def 2
+  {-c: c in A};
+  involutiveness;
+end;
+
+theorem :: MEMBER_1:17
+  a in A iff -a in --A;
+
+theorem :: MEMBER_1:18
+  -a in A iff a in --A;
+
+registration
+  let A be empty set;
+  cluster --A -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  cluster --A -> non empty;
+end;
+
+registration
+  let A be real-membered set;
+  cluster --A -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  cluster --A -> rational-membered;
+end;
+
+registration
+  let A be integer-membered set;
+  cluster --A -> integer-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  identify --A with --F when A = F;
+end;
+
+theorem :: MEMBER_1:19
+  A c= B iff --A c= --B;
+
+theorem :: MEMBER_1:20
+  --A = --B implies A = B;
+
+theorem :: MEMBER_1:21
+  -- (A \/ B) = (--A) \/ (--B);
+
+theorem :: MEMBER_1:22
+  -- (A /\ B) = (--A) /\ (--B);
+
+theorem :: MEMBER_1:23
+  -- (A \ B) = (--A) \ (--B);
+
+theorem :: MEMBER_1:24
+  -- (A \+\ B) = (--A) \+\ (--B);
+
+theorem :: MEMBER_1:25
+  --{a} = {-a};
+
+theorem :: MEMBER_1:26
+  --{a,b} = {-a,-b};
+
+definition
+  let F be ext-real-membered set;
+  func F"" -> ext-real-membered set equals
+:: MEMBER_1:def 3
+  {w": w in F};
+end;
+
+theorem :: MEMBER_1:27
+  f in F implies f" in F"";
+
+registration
+  let F be empty set;
+  cluster F"" -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  cluster F"" -> non empty;
+end;
+
+theorem :: MEMBER_1:28
+  F c= G implies F"" c= G"";
+
+theorem :: MEMBER_1:29
+  (F \/ G)"" = (F"") \/ (G"");
+
+theorem :: MEMBER_1:30
+  (F /\ G)"" c= (F"") /\ (G"");
+
+theorem :: MEMBER_1:31
+  --(F"") = (--F)"";
+
+theorem :: MEMBER_1:32
+  {f}"" = {f"};
+
+theorem :: MEMBER_1:33
+  {f,g}"" = {f",g"};
+
+definition
+  let A be complex-membered set;
+  func A"" -> complex-membered set equals
+:: MEMBER_1:def 4
+  {c": c in A};
+  involutiveness;
+end;
+
+theorem :: MEMBER_1:34
+  a in A iff a" in A"";
+
+theorem :: MEMBER_1:35
+  a" in A iff a in A"";
+
+registration
+  let A be empty set;
+  cluster A"" -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  cluster A"" -> non empty;
+end;
+
+registration
+  let A be real-membered set;
+  cluster A"" -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  cluster A"" -> rational-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  identify A"" with F"" when A = F;
+end;
+
+theorem :: MEMBER_1:36
+  A c= B iff A"" c= B"";
+
+theorem :: MEMBER_1:37
+  A"" = B"" implies A = B;
+
+theorem :: MEMBER_1:38
+  (A \/ B)"" = (A"") \/ (B"");
+
+theorem :: MEMBER_1:39
+  (A /\ B)"" = (A"") /\ (B"");
+
+theorem :: MEMBER_1:40
+  (A \ B)"" = (A"") \ (B"");
+
+theorem :: MEMBER_1:41
+  (A \+\ B)"" = (A"") \+\ (B"");
+
+theorem :: MEMBER_1:42
+  --(A"") = (--A)"";
+
+theorem :: MEMBER_1:43
+  {a}"" = {a"};
+
+theorem :: MEMBER_1:44
+  {a,b}"" = {a",b"};
+
+definition
+  let F, G be ext-real-membered set;
+  func F++G equals
+:: MEMBER_1:def 5
+  {w1+w2: w1 in F & w2 in G};
+  commutativity;
+end;
+
+theorem :: MEMBER_1:45
+  f in F & g in G implies f+g in F++G;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F++G -> empty;
+  cluster G++F -> empty;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F++G -> non empty;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F++G -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:46
+  F c= G & H c= I implies F++H c= G++I;
+
+theorem :: MEMBER_1:47
+  F ++ (G \/ H) = (F++G) \/ (F++H);
+
+theorem :: MEMBER_1:48
+  F ++ (G /\ H) c= (F++G) /\ (F++H);
+
+theorem :: MEMBER_1:49
+  {f}++{g} = {f+g};
+
+theorem :: MEMBER_1:50
+  {f}++{g,h} = {f+g,f+h};
+
+theorem :: MEMBER_1:51
+  {f,g}++{h,i} = {f+h,f+i,g+h,g+i};
+
+definition
+  let A, B be complex-membered set;
+  func A++B equals
+:: MEMBER_1:def 6
+  {c1+c2: c1 in A & c2 in B};
+  commutativity;
+end;
+
+theorem :: MEMBER_1:52
+  a in A & b in B implies a+b in A++B;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A++B -> empty;
+  cluster B++A -> empty;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A++B -> non empty;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A++B -> complex-membered;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A++B -> real-membered;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A++B -> rational-membered;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A++B -> integer-membered;
+end;
+
+registration
+  let A, B be natural-membered set;
+  cluster A++B -> natural-membered;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A++B with F++G when A = F, B = G;
+end;
+
+theorem :: MEMBER_1:53
+  A c= B & C c= D implies A++C c= B++D;
+
+theorem :: MEMBER_1:54
+  A ++ (B \/ C) = (A++B) \/ (A++C);
+
+theorem :: MEMBER_1:55
+  A ++ (B /\ C) c= (A++B) /\ (A++C);
+
+theorem :: MEMBER_1:56
+  (A++B)++C = A++(B++C);
+
+theorem :: MEMBER_1:57
+  {a}++{b} = {a+b};
+
+theorem :: MEMBER_1:58
+  {a}++{s,t} = {a+s,a+t};
+
+theorem :: MEMBER_1:59
+  {a,b}++{s,t} = {a+s,a+t,b+s,b+t};
+
+definition
+  let F, G be ext-real-membered set;
+  func F--G equals
+:: MEMBER_1:def 7
+  F ++ --G;
+end;
+
+theorem :: MEMBER_1:60
+  F--G = {w1-w2: w1 in F & w2 in G};
+
+theorem :: MEMBER_1:61
+  f in F & g in G implies f-g in F--G;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F--G -> empty;
+  cluster G--F -> empty;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F--G -> non empty;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F--G -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:62
+  F c= G & H c= I implies F--H c= G--I;
+
+theorem :: MEMBER_1:63
+  F -- (G \/ H) = (F--G) \/ (F--H);
+
+theorem :: MEMBER_1:64
+  F -- (G /\ H) c= (F--G) /\ (F--H);
+
+theorem :: MEMBER_1:65
+  --(F++G) = (--F) -- G;
+
+theorem :: MEMBER_1:66
+  --(F--G) = (--F) ++ G;
+
+theorem :: MEMBER_1:67
+  {f}--{g} = {f-g};
+
+theorem :: MEMBER_1:68
+  {f}--{h,i} = {f-h,f-i};
+
+theorem :: MEMBER_1:69
+  {f,g}--{h} = {f-h,g-h};
+
+theorem :: MEMBER_1:70
+  {f,g}--{h,i} = {f-h,f-i,g-h,g-i};
+
+definition
+  let A, B be complex-membered set;
+  func A--B equals
+:: MEMBER_1:def 8
+  A ++ --B;
+end;
+
+theorem :: MEMBER_1:71
+  A--B = {c1-c2: c1 in A & c2 in B};
+
+theorem :: MEMBER_1:72
+  a in A & b in B implies a-b in A--B;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A--B -> empty;
+  cluster B--A -> empty;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A--B -> non empty;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A--B -> complex-membered;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A--B -> real-membered;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A--B -> rational-membered;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A--B -> integer-membered;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A--B with F--G when A = F, B = G;
+end;
+
+theorem :: MEMBER_1:73
+  A c= B & C c= D implies A--C c= B--D;
+
+theorem :: MEMBER_1:74
+  A -- (B \/ C) = (A--B) \/ (A--C);
+
+theorem :: MEMBER_1:75
+  A -- (B /\ C) c= (A--B) /\ (A--C);
+
+theorem :: MEMBER_1:76
+  --(A++B) = (--A) -- B;
+
+theorem :: MEMBER_1:77
+  --(A--B) = (--A) ++ B;
+
+theorem :: MEMBER_1:78
+  A++(B--C) = A++B--C;
+
+theorem :: MEMBER_1:79
+  A--(B++C) = A--B--C;
+
+theorem :: MEMBER_1:80
+  A--(B--C) = A--B++C;
+
+theorem :: MEMBER_1:81
+  {a}--{b} = {a-b};
+
+theorem :: MEMBER_1:82
+  {a}--{s,t} = {a-s,a-t};
+
+theorem :: MEMBER_1:83
+  {a,b}--{s} = {a-s,b-s};
+
+theorem :: MEMBER_1:84
+  {a,b}--{s,t} = {a-s,a-t,b-s,b-t};
+
+definition
+  let F, G be ext-real-membered set;
+  func F**G equals
+:: MEMBER_1:def 9
+  {w1*w2: w1 in F & w2 in G};
+  commutativity;
+end;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F**G -> empty;
+  cluster G**F -> empty;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F**G -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:85
+  f in F & g in G implies f*g in F**G;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F**G -> non empty;
+end;
+
+theorem :: MEMBER_1:86
+  (F**G)**H = F**(G**H);
+
+theorem :: MEMBER_1:87
+  F c= G & H c= I implies F**H c= G**I;
+
+theorem :: MEMBER_1:88
+  F ** (G \/ H) = (F**G) \/ (F**H);
+
+theorem :: MEMBER_1:89
+  F ** (G /\ H) c= (F**G) /\ (F**H);
+
+theorem :: MEMBER_1:90
+  F**--G = --(F**G);
+
+theorem :: MEMBER_1:91
+  (F**G)"" = (F"") ** (G"");
+
+theorem :: MEMBER_1:92
+  {f}**{g} = {f*g};
+
+theorem :: MEMBER_1:93
+  {f}**{h,i} = {f*h,f*i};
+
+theorem :: MEMBER_1:94
+  {f,g}**{h,i} = {f*h,f*i,g*h,g*i};
+
+definition
+  let A, B be complex-membered set;
+  func A**B equals
+:: MEMBER_1:def 10
+  {c1*c2: c1 in A & c2 in B};
+  commutativity;
+end;
+
+theorem :: MEMBER_1:95
+  a in A & b in B implies a*b in A**B;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A**B -> empty;
+  cluster B**A -> empty;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A**B -> non empty;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A**B -> complex-membered;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A**B -> real-membered;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A**B -> rational-membered;
+end;
+
+registration
+  let A, B be integer-membered set;
+  cluster A**B -> integer-membered;
+end;
+
+registration
+  let A, B be natural-membered set;
+  cluster A**B -> natural-membered;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A**B with F**G when A = F, B = G;
+end;
+
+theorem :: MEMBER_1:96
+  (A**B)**C = A**(B**C);
+
+theorem :: MEMBER_1:97
+  A c= B & C c= D implies A**C c= B**D;
+
+theorem :: MEMBER_1:98
+  A ** (B \/ C) = (A**B) \/ (A**C);
+
+theorem :: MEMBER_1:99
+  A ** (B /\ C) c= (A**B) /\ (A**C);
+
+theorem :: MEMBER_1:100
+  A**--B = --(A**B);
+
+theorem :: MEMBER_1:101
+  A**(B++C) c= A**B ++ A**C;
+
+theorem :: MEMBER_1:102
+  A**(B--C) c= A**B -- A**C;
+
+theorem :: MEMBER_1:103
+  (A**B)"" = (A"") ** (B"");
+
+theorem :: MEMBER_1:104
+  {a}**{b} = {a*b};
+
+theorem :: MEMBER_1:105
+  {a}**{s,t} = {a*s,a*t};
+
+theorem :: MEMBER_1:106
+  {a,b}**{s,t} = {a*s,a*t,b*s,b*t};
+
+definition
+  let F, G be ext-real-membered set;
+  func F///G equals
+:: MEMBER_1:def 11
+  F**(G"");
+end;
+
+theorem :: MEMBER_1:107
+  F///G = {w1/w2: w1 in F & w2 in G};
+
+theorem :: MEMBER_1:108
+  f in F & g in G implies f/g in F///G;
+
+registration
+  let F be empty set;
+  let G be ext-real-membered set;
+  cluster F///G -> empty;
+  cluster G///F -> empty;
+end;
+
+registration
+  let F, G be ext-real-membered non empty set;
+  cluster F///G -> non empty;
+end;
+
+registration
+  let F, G be ext-real-membered set;
+  cluster F///G -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:109
+  F c= G & H c= I implies F///H c= G///I;
+
+theorem :: MEMBER_1:110
+  (F \/ G) /// H = (F///H) \/ (G///H);
+
+theorem :: MEMBER_1:111
+  (F /\ G) /// H c= (F///H) /\ (G///H);
+
+theorem :: MEMBER_1:112
+  F /// (G \/ H) = (F///G) \/ (F///H);
+
+theorem :: MEMBER_1:113
+  F /// (G /\ H) c= (F///G) /\ (F///H);
+
+theorem :: MEMBER_1:114
+  (F**G)///H = F**(G///H);
+
+theorem :: MEMBER_1:115
+  (F///G)**H = (F**H)///G;
+
+theorem :: MEMBER_1:116
+  (F///G)///H = F///(G**H);
+
+theorem :: MEMBER_1:117
+  {f}///{g} = {f/g};
+
+theorem :: MEMBER_1:118
+  {f}///{h,i} = {f/h,f/i};
+
+theorem :: MEMBER_1:119
+  {f,g}///{h} = {f/h,g/h};
+
+theorem :: MEMBER_1:120
+  {f,g}///{h,i} = {f/h,f/i,g/h,g/i};
+
+definition
+  let A, B be complex-membered set;
+  func A///B equals
+:: MEMBER_1:def 12
+  A**(B"");
+end;
+
+theorem :: MEMBER_1:121
+  A///B = {c1/c2: c1 in A & c2 in B};
+
+theorem :: MEMBER_1:122
+  a in A & b in B implies a/b in A///B;
+
+registration
+  let A be empty set;
+  let B be complex-membered set;
+  cluster A///B -> empty;
+  cluster B///A -> empty;
+end;
+
+registration
+  let A, B be complex-membered non empty set;
+  cluster A///B -> non empty;
+end;
+
+registration
+  let A, B be complex-membered set;
+  cluster A///B -> complex-membered;
+end;
+
+registration
+  let A, B be real-membered set;
+  cluster A///B -> real-membered;
+end;
+
+registration
+  let A, B be rational-membered set;
+  cluster A///B -> rational-membered;
+end;
+
+registration
+  let A, B be real-membered set, F, G be ext-real-membered set;
+  identify A///B with F///G when A = F, B = G;
+end;
+
+theorem :: MEMBER_1:123
+  A c= B & C c= D implies A///C c= B///D;
+
+theorem :: MEMBER_1:124
+  A /// (B \/ C) = (A///B) \/ (A///C);
+
+theorem :: MEMBER_1:125
+  A /// (B /\ C) c= (A///B) /\ (A///C);
+
+theorem :: MEMBER_1:126
+  A///--B = --(A///B);
+
+theorem :: MEMBER_1:127
+  (--A)///B = --(A///B);
+
+theorem :: MEMBER_1:128
+  (A++B)///C c= A///C ++ B///C;
+
+theorem :: MEMBER_1:129
+  (A--B)///C c= A///C -- B///C;
+
+theorem :: MEMBER_1:130
+  (A**B)///C = A**(B///C);
+
+theorem :: MEMBER_1:131
+  (A///B)**C = (A**C)///B;
+
+theorem :: MEMBER_1:132
+  (A///B)///C = A///(B**C);
+
+theorem :: MEMBER_1:133
+  A///(B///C) = (A**C)///B;
+
+theorem :: MEMBER_1:134
+  {a}///{b} = {a/b};
+
+theorem :: MEMBER_1:135
+  {a}///{s,t} = {a/s,a/t};
+
+theorem :: MEMBER_1:136
+  {a,b}///{s} = {a/s,b/s};
+
+theorem :: MEMBER_1:137
+  {a,b}///{s,t} = {a/s,a/t,b/s,b/t};
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f++F equals
+:: MEMBER_1:def 13
+  {f}++F;
+end;
+
+theorem :: MEMBER_1:138
+  g in G implies f+g in f++G;
+
+theorem :: MEMBER_1:139
+  f++F = {f+w: w in F};
+
+theorem :: MEMBER_1:140
+  e in f++F implies ex w st e = f+w & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f++F -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f++F -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f++F -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:141
+  r++F c= r++G implies F c= G;
+
+theorem :: MEMBER_1:142
+  r++F = r++G implies F = G;
+
+theorem :: MEMBER_1:143
+  r ++ (F /\ G) = (r++F) /\ (r++G);
+
+theorem :: MEMBER_1:144
+  (f++F) \ (f++G) c= f ++ (F \ G);
+
+theorem :: MEMBER_1:145
+  r ++ (F \ G) = (r++F) \ (r++G);
+
+theorem :: MEMBER_1:146
+  r ++ (F \+\ G) = (r++F) \+\ (r++G);
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a++A equals
+:: MEMBER_1:def 14
+  {a}++A;
+end;
+
+theorem :: MEMBER_1:147
+  b in A implies a+b in a++A;
+
+theorem :: MEMBER_1:148
+  a++A = {a+c: c in A};
+
+theorem :: MEMBER_1:149
+  e in a++A implies ex c st e = a+c & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a++A -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a++A -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a++A -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a++A -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a++A -> rational-membered;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a++A -> integer-membered;
+end;
+
+registration
+  let A be natural-membered set;
+  let a be natural number;
+  cluster a++A -> natural-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a++A with f++F when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:150
+  A c= B iff a++A c= a++B;
+
+theorem :: MEMBER_1:151
+  a++A = a++B implies A = B;
+
+theorem :: MEMBER_1:152
+  0++A = A;
+
+theorem :: MEMBER_1:153
+  (a+b)++A = a++(b++A);
+
+theorem :: MEMBER_1:154
+  a++(A++B) = (a++A)++B;
+
+theorem :: MEMBER_1:155
+  a ++ (A /\ B) = (a++A) /\ (a++B);
+
+theorem :: MEMBER_1:156
+  a ++ (A \ B) = (a++A) \ (a++B);
+
+theorem :: MEMBER_1:157
+  a ++ (A \+\ B) = (a++A) \+\ (a++B);
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f--F equals
+:: MEMBER_1:def 15
+  {f}--F;
+end;
+
+theorem :: MEMBER_1:158
+  g in G implies f-g in f--G;
+
+theorem :: MEMBER_1:159
+  f--F = {f-w: w in F};
+
+theorem :: MEMBER_1:160
+  e in f--F implies ex w st e = f-w & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f--F -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f--F -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f--F -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:161
+  r--F c= r--G implies F c= G;
+
+theorem :: MEMBER_1:162
+  r--F = r--G implies F = G;
+
+theorem :: MEMBER_1:163
+  r -- (F/\G) = (r--F) /\ (r--G);
+
+theorem :: MEMBER_1:164
+  r -- (F\G) = (r--F) \ (r--G);
+
+theorem :: MEMBER_1:165
+  r -- (F\+\G) = (r--F) \+\ (r--G);
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a--A equals
+:: MEMBER_1:def 16
+  {a}--A;
+end;
+
+theorem :: MEMBER_1:166
+  b in A implies a-b in a--A;
+
+theorem :: MEMBER_1:167
+  a--A = {a-c: c in A};
+
+theorem :: MEMBER_1:168
+  e in a--A implies ex c st e = a-c & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a--A -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a--A -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a--A -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a--A -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a--A -> rational-membered;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a--A -> integer-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a--A with f--F when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:169
+  A c= B iff a--A c= a--B;
+
+theorem :: MEMBER_1:170
+  a--A = a--B implies A = B;
+
+theorem :: MEMBER_1:171
+  a -- (A/\B) = (a--A) /\ (a--B);
+
+theorem :: MEMBER_1:172
+  a -- (A\B) = (a--A) \ (a--B);
+
+theorem :: MEMBER_1:173
+  a -- (A\+\B) = (a--A) \+\ (a--B);
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func F--f equals
+:: MEMBER_1:def 17
+  F--{f};
+end;
+
+theorem :: MEMBER_1:174
+  g in G implies g-f in G--f;
+
+theorem :: MEMBER_1:175
+  F--f = {w-f: w in F};
+
+theorem :: MEMBER_1:176
+  e in F--f implies ex w st e = w-f & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster F--f -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster F--f -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster F--f -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:177
+  F -- f = -- (f -- F);
+
+theorem :: MEMBER_1:178
+  f -- F = -- (F -- f);
+
+theorem :: MEMBER_1:179
+  (F/\G) -- r = (F--r) /\ (G--r);
+
+theorem :: MEMBER_1:180
+  (F\G) -- r = (F--r) \ (G--r);
+
+theorem :: MEMBER_1:181
+  (F\+\G) -- r = (F--r) \+\ (G--r);
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func A--a equals
+:: MEMBER_1:def 18
+  A--{a};
+end;
+
+theorem :: MEMBER_1:182
+  b in A implies b-a in A--a;
+
+theorem :: MEMBER_1:183
+  A--a = {c-a: c in A};
+
+theorem :: MEMBER_1:184
+  e in A--a implies ex c st e = c-a & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster A--a -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster A--a -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster A--a -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster A--a -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster A--a -> rational-membered;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster A--a -> integer-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify A--a with F--f when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:185
+  A c= B iff A--a c= B--a;
+
+theorem :: MEMBER_1:186
+  A--a = B--a implies A = B;
+
+theorem :: MEMBER_1:187
+  A -- a = -- (a -- A);
+
+theorem :: MEMBER_1:188
+  a -- A = -- (A -- a);
+
+theorem :: MEMBER_1:189
+  (A/\B) -- a = (A--a) /\ (B--a);
+
+theorem :: MEMBER_1:190
+  (A\B) -- a = (A--a) \ (B--a);
+
+theorem :: MEMBER_1:191
+  (A\+\B) -- a = (A--a) \+\ (B--a);
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f**F equals
+:: MEMBER_1:def 19
+  {f}**F;
+end;
+
+theorem :: MEMBER_1:192
+  g in G implies f*g in f**G;
+
+theorem :: MEMBER_1:193
+  f**F = {f*w: w in F};
+
+theorem :: MEMBER_1:194
+  e in f**F implies ex w st e = f*w & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f**F -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f**F -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f**F -> ext-real-membered;
+end;
+
+theorem :: MEMBER_1:195
+  r <> 0 implies r ** (F/\G) = (r**F) /\ (r**G);
+
+theorem :: MEMBER_1:196
+  (f**F) \ (f**G) c= f ** (F \ G);
+
+theorem :: MEMBER_1:197
+  r <> 0 implies r ** (F\G) = (r**F) \ (r**G);
+
+theorem :: MEMBER_1:198
+  r <> 0 implies r ** (F\+\G) = (r**F) \+\ (r**G);
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a**A equals
+:: MEMBER_1:def 20
+  {a}**A;
+end;
+
+theorem :: MEMBER_1:199
+  b in A implies a*b in a**A;
+
+theorem :: MEMBER_1:200
+  a**A = {a*c: c in A};
+
+theorem :: MEMBER_1:201
+  e in a**A implies ex c st e = a*c & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a**A -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a**A -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a**A -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a**A -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a**A -> rational-membered;
+end;
+
+registration
+  let A be integer-membered set;
+  let a be integer number;
+  cluster a**A -> integer-membered;
+end;
+
+registration
+  let A be natural-membered set;
+  let a be natural number;
+  cluster a**A -> natural-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a**A with f**F when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:202
+  a <> 0 & a**A c= a**B implies A c= B;
+
+theorem :: MEMBER_1:203
+  a <> 0 & a**A = a**B implies A = B;
+
+theorem :: MEMBER_1:204
+  a <> 0 implies a ** (A/\B) = (a**A) /\ (a**B);
+
+theorem :: MEMBER_1:205
+  a <> 0 implies a ** (A\B) = (a**A) \ (a**B);
+
+theorem :: MEMBER_1:206
+  a <> 0 implies a ** (A\+\B) = (a**A) \+\ (a**B);
+
+theorem :: MEMBER_1:207
+  0**A c= {0};
+
+theorem :: MEMBER_1:208
+  A <> {} implies 0**A = {0};
+
+theorem :: MEMBER_1:209
+  1**A = A;
+
+theorem :: MEMBER_1:210
+  (a*b)**A = a**(b**A);
+
+theorem :: MEMBER_1:211
+  a**(A**B) = (a**A)**B;
+
+theorem :: MEMBER_1:212
+  (a+b)**A c= a**A ++ b**A;
+
+theorem :: MEMBER_1:213
+  (a-b)**A c= a**A -- b**A;
+
+theorem :: MEMBER_1:214
+  a**(B++C) = a**B++a**C;
+
+theorem :: MEMBER_1:215
+  a**(B--C) = a**B--a**C;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func f///F equals
+:: MEMBER_1:def 21
+  {f}///F;
+end;
+
+theorem :: MEMBER_1:216
+  g in G implies f/g in f///G;
+
+theorem :: MEMBER_1:217
+  f///F = {f/w: w in F};
+
+theorem :: MEMBER_1:218
+  e in f///F implies ex w st e = f/w & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster f///F -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster f///F -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster f///F -> ext-real-membered;
+end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func a///A equals
+:: MEMBER_1:def 22
+  {a}///A;
+end;
+
+theorem :: MEMBER_1:219
+  b in A implies a/b in a///A;
+
+theorem :: MEMBER_1:220
+  a///A = {a/c: c in A};
+
+theorem :: MEMBER_1:221
+  e in a///A implies ex c st e = a/c & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster a///A -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster a///A -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster a///A -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster a///A -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster a///A -> rational-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify a///A with f///F when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:222
+  a <> 0 & a///A c= a///B implies A c= B;
+
+theorem :: MEMBER_1:223
+  a <> 0 & a///A = a///B implies A = B;
+
+theorem :: MEMBER_1:224
+  a <> 0 implies a /// (A/\B) = (a///A) /\ (a///B);
+
+theorem :: MEMBER_1:225
+  a <> 0 implies a /// (A\B) = (a///A) \ (a///B);
+
+theorem :: MEMBER_1:226
+  a <> 0 implies a /// (A\+\B) = (a///A) \+\ (a///B);
+
+theorem :: MEMBER_1:227
+  (a+b)///A c= a///A ++ b///A;
+
+theorem :: MEMBER_1:228
+  (a-b)///A c= a///A -- b///A;
+
+definition
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  func F///f equals
+:: MEMBER_1:def 23
+  F///{f};
+end;
+
+theorem :: MEMBER_1:229
+  g in G implies g/f in G///f;
+
+theorem :: MEMBER_1:230
+  F///f = {w/f: w in F};
+
+theorem :: MEMBER_1:231
+  e in F///f implies ex w st e = w/f & w in F;
+
+registration
+  let F be empty set;
+  let f be ext-real number;
+  cluster F///f -> empty;
+end;
+
+registration
+  let F be ext-real-membered non empty set;
+  let f be ext-real number;
+  cluster F///f -> non empty;
+end;
+
+registration
+  let F be ext-real-membered set;
+  let f be ext-real number;
+  cluster F///f -> ext-real-membered;
+end;
+
+definition
+  let A be complex-membered set;
+  let a be complex number;
+  func A///a equals
+:: MEMBER_1:def 24
+  A///{a};
+end;
+
+theorem :: MEMBER_1:232
+  b in A implies b/a in A///a;
+
+theorem :: MEMBER_1:233
+  A///a = {c/a: c in A};
+
+theorem :: MEMBER_1:234
+  e in A///a implies ex c st e = c/a & c in A;
+
+registration
+  let A be empty set;
+  let a be complex number;
+  cluster A///a -> empty;
+end;
+
+registration
+  let A be complex-membered non empty set;
+  let a be complex number;
+  cluster A///a -> non empty;
+end;
+
+registration
+  let A be complex-membered set;
+  let a be complex number;
+  cluster A///a -> complex-membered;
+end;
+
+registration
+  let A be real-membered set;
+  let a be real number;
+  cluster A///a -> real-membered;
+end;
+
+registration
+  let A be rational-membered set;
+  let a be rational number;
+  cluster A///a -> rational-membered;
+end;
+
+registration
+  let A be real-membered set, F be ext-real-membered set;
+  let a be real number, f be ext-real number;
+  identify A///a with F///f when a = f, A = F;
+end;
+
+theorem :: MEMBER_1:235
+  a <> 0 & A///a c= B///a implies A c= B;
+
+theorem :: MEMBER_1:236
+  a <> 0 & A///a = B///a implies A = B;
+
+theorem :: MEMBER_1:237
+  a <> 0 implies (A/\B) /// a = (A///a) /\ (B///a);
+
+theorem :: MEMBER_1:238
+  a <> 0 implies (A\B) /// a = (A///a) \ (B///a);
+
+theorem :: MEMBER_1:239
+  a <> 0 implies (A\+\B) /// a = (A///a) \+\ (B///a);
+
+theorem :: MEMBER_1:240
+  (A++B)///a = A///a ++ B///a;
+
+theorem :: MEMBER_1:241
+  (A--B)///a = A///a -- B///a;

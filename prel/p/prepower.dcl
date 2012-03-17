@@ -41,11 +41,11 @@
 <Adjective nr="23"/>
 <Adjective nr="24"/>
 <Adjective nr="25"/>
-<Adjective nr="34">
+<Adjective nr="35">
 <Func kind="K" nr="86"/>
 <Func kind="K" nr="82"/>
 </Adjective>
-<Adjective nr="36"/>
+<Adjective nr="37"/>
 </Cluster>
 </RCluster>
 <FCluster aid="PREPOWER" nr="1">
@@ -94,7 +94,7 @@
 </Typ>
 <Typ kind="M" nr="1">
 <Cluster>
-<Adjective nr="35"/>
+<Adjective nr="36"/>
 </Cluster>
 </Typ>
 </ArgTypes>

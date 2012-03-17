@@ -8,18 +8,19 @@ environ
 
  vocabularies RELAT_1, FUNCT_1, FINSEQ_1, FINSEQ_2, FUNCT_4, MATRIX_2, BOOLE,
       PARTFUN1, SETFAM_1, FUNCT_6, MSUALG_6, FRAENKEL, TARSKI, RFUNCT_3,
-      UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4,
-      BORSUK_1, PROB_1, FINSET_1, SQUARE_1, BINTREE1, CARD_3, VALUED_0,
-      MONOID_0, QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1, ARYTM, CAT_1;
+      UNIALG_1, FUNCOP_1, FUNCT_2, PRALG_3, ORDINAL1, FINSEQ_4, BORSUK_1,
+      PROB_1, FINSET_1, SQUARE_1, BINTREE1, CARD_3, VALUED_0, MONOID_0,
+      QC_LANG1, GROUP_1, ARYTM_1, COMPUT_1, ARYTM, CAT_1;
  notations TARSKI, XBOOLE_0, ZFMISC_1, SUBSET_1, NUMBERS, XCMPLX_0, XXREAL_0,
       RELAT_1, RELSET_1, FUNCT_1, FINSEQ_1, FINSEQ_2, SETFAM_1, SEQ_1,
-      FRAENKEL, FUNCT_2, FUNCOP_1, XXREAL_2, VALUED_0,
-      FUNCT_4, CARD_3, PROB_1, PRE_CIRC, FINSEQ_3, FINSEQ_4,
-      PARTFUN1, RFUNCT_3, PRALG_3, UNIALG_1, FUNCT_6, FUNCT_7, FINSET_1,
-      NEWTON, SEQM_3, NAT_D, NAT_1, RECDEF_1, BINARITH;
+      FRAENKEL, FUNCT_2, FUNCOP_1, XXREAL_2, VALUED_0, FUNCT_4, CARD_3, PROB_1,
+      PRE_CIRC, FINSEQ_3, FINSEQ_4, PARTFUN1, RFUNCT_3, PRALG_3, UNIALG_1,
+      FUNCT_6, FUNCT_7, MIDSP_3,
+      FINSET_1, NEWTON, SEQM_3, NAT_D, NAT_1, RECDEF_1,
+      BINARITH;
  constructors SETFAM_1, DOMAIN_1, FUNCT_4, REAL_1, NAT_1, PROB_1, FINSEQ_3,
       FINSEQ_4, NEWTON, RFUNCT_3, NAT_D, PRE_CIRC, FUNCT_7, PRALG_3, SEQ_1,
-      RECDEF_1, XXREAL_2, BINARITH;
+      RECDEF_1, XXREAL_2, BINARITH, MIDSP_3;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, ORDINAL1, PARTFUN1,
       FUNCOP_1, FINSET_1, FRAENKEL, XXREAL_0, XREAL_0, NAT_1, MEMBERED,
       FINSEQ_1, FINSEQ_2, PRE_CIRC, FUNCT_7, ALTCAT_1, FUNCT_2, VALUED_0,
@@ -30,9 +31,9 @@ environ
  theorems TARSKI, NAT_1, ZFMISC_1, RELAT_1, RELSET_1, FINSEQ_1, FUNCOP_1,
       PARTFUN1, FINSEQ_2, MSUALG_1, FINSEQ_4, FUNCT_6, FUNCT_1, RFUNCT_3,
       FUNCT_2, GRFUNC_1, FUNCT_7, FUNCT_4, FINSEQ_3, SUBSET_1, PRALG_3,
-      SETFAM_1, CARD_5, PRE_CIRC, UNIALG_1, FUNCT_5, CARD_1, CARD_3, FRAENKEL,
-      NEWTON, BINARITH, REAL_2, JORDAN2B, WSIERP_1, XBOOLE_0, XBOOLE_1,
-      ORDINAL1, XXREAL_0, VALUED_0, CARD_2, XXREAL_2, XREAL_0, NAT_D;
+      SETFAM_1, CARD_5, UNIALG_1, FUNCT_5, CARD_1, CARD_3, NEWTON, JORDAN2B,
+      WSIERP_1, XBOOLE_0, XBOOLE_1, ORDINAL1, XXREAL_0, VALUED_0, XXREAL_2,
+      XREAL_0, NAT_D, XREAL_1;
  schemes NAT_1, FUNCT_2, RECDEF_1, MONOID_1, PARTFUN2;
 
 begin :: Preliminaries
@@ -43,18 +44,6 @@ reserve i, j, k, c, m, n for Element of NAT,
   R for Relation,
   f, g for Function,
   p, q for FinSequence;
-
-definition
-  let X be non empty set, n be Element of NAT, p be Element of n-tuples_on X,
-  i be Element of NAT, x be Element of X;
-  redefine func p+*(i,x) -> Element of n-tuples_on X;
-  coherence
-  proof dom (p+*(i,x)) = dom p by FUNCT_7:32;
-    then len (p+*(i,x)) = len p by FINSEQ_3:31
-      .= n by FINSEQ_2:109;
-    hence p+*(i,x) is Element of n-tuples_on X by FINSEQ_2:110;
-  end;
-end;
 
 canceled 2;
 
@@ -92,7 +81,7 @@ A5: a in dom f;
     suppose
 A6:   a = i;
       hence (f+*(i,z)).a = z by A5,FUNCT_7:33
-        .= g+*(i,z).a by A1,A2,A3,A5,A6,FUNCT_7:33;
+        .= (g+*(i,z)).a by A1,A2,A3,A5,A6,FUNCT_7:33;
     end;
     suppose
 A7:   a <> i;
@@ -628,11 +617,12 @@ A2: x in dom R & y in dom R;
 end;
 
 registration
-  cluster {} -> homogeneous;
+  cluster empty -> homogeneous Relation;
   coherence
-  proof
+  proof let R be Relation such that
+Z:  R is empty;
     let x,y be FinSequence;
-    assume x in dom {}; thus thesis;
+    assume x in dom R; thus thesis by Z;
   end;
 end;
 
@@ -985,19 +975,15 @@ definition
 end;
 
 registration
-  cluster {} -> with_the_same_arity;
+  cluster empty -> with_the_same_arity Relation;
   coherence
-  proof
-    let f, g be Function; thus thesis;
+  proof let R be Relation such that
+Z:  R is empty;
+    let f, g be Function; thus thesis by Z;
   end;
 end;
 
 registration
-  cluster with_the_same_arity FinSequence;
-  existence
-  proof
-    take {}; thus thesis;
-  end;
   let X be set;
   cluster with_the_same_arity FinSequence of X;
   existence
@@ -5550,7 +5536,7 @@ A8:     i-'j = 0;
         then i <= j by NAT_D:36;
         then i < j+1 by NAT_1:13;
         then
-A9:     i-(j+1) < 0 by REAL_2:105;
+A9:     i-(j+1) < 0 by XREAL_1:51;
         thus g.<*i,i-'j*> = 0 by A1,A8
           .= i-'(j+1) by A9,XREAL_0:def 2;
       end;

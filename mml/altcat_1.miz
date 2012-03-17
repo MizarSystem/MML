@@ -14,12 +14,12 @@ environ
       FUNCOP_1, FRAENKEL, PBOOLE;
  constructors PARTFUN1, BINOP_1, FRAENKEL, MULTOP_1, PBOOLE, REALSET2;
  registrations XBOOLE_0, SUBSET_1, RELAT_1, FUNCT_1, FUNCT_2, FUNCOP_1,
-      FRAENKEL, STRUCT_0, TEX_2, REALSET1;
+      FRAENKEL, STRUCT_0, TEX_2, REALSET1, RELSET_1;
  requirements BOOLE, SUBSET;
  definitions TARSKI, FRAENKEL, STRUCT_0, XBOOLE_0, FUNCOP_1, BINOP_1;
  theorems FUNCT_1, ZFMISC_1, PBOOLE, DOMAIN_1, MULTOP_1, MCART_1, FUNCT_2,
-      FRAENKEL, TARSKI, FUNCOP_1, CARD_5, RELAT_1, REALSET1,
-      STRUCT_0, RELSET_1, XBOOLE_0, XBOOLE_1, PARTFUN1;
+      TARSKI, FUNCOP_1, RELAT_1, REALSET1, STRUCT_0, RELSET_1, XBOOLE_0,
+      XBOOLE_1, CARD_1;
  schemes FUNCT_1;
 
 begin :: Preliminaries
@@ -66,17 +66,7 @@ proof
     let f be set;
     assume f in Funcs({},{});
     then reconsider f' = f as Function of {},{} by FUNCT_2:121;
-    now
-      let x,y be set;
-      hereby
-        assume [x,y] in f';
-        then
-A1:     x in dom f' by RELAT_1:def 4;
-        hence x in {} by FUNCT_2:def 1;
-        thus x = y by A1,FUNCT_2:def 1;
-      end;
-      thus x in {} & x = y implies [x,y] in f';
-    end;
+    for x,y being set holds [x,y] in f' iff x in {} & x = y;
     then f' = id {} by RELAT_1:def 10;
     hence f in { id {} } by TARSKI:def 1;
   end;
@@ -643,14 +633,14 @@ registration
   cluster strict pseudo-functional (non empty AltCatStr);
   existence
   proof
-A1: 0 in 1 by CARD_5:1,TARSKI:def 1;
+A1: 0 in 1 by CARD_1:87,TARSKI:def 1;
     dom([0,0] .--> Funcs(0,0)) = {[0,0]} by FUNCOP_1:19
-      .= [: 1,1 :] by CARD_5:1,ZFMISC_1:35;
+      .= [: 1,1 :] by CARD_1:87,ZFMISC_1:35;
     then reconsider m = [0,0] .--> Funcs(0,0) as ManySortedSet of [: 1,1 :]
     by PBOOLE:def 3;
 A2: dom([0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0))) = {[0,0,0]}
     by FUNCOP_1:19;
-A3: {[0,0,0]} = [: 1,1,1 :] by CARD_5:1,MCART_1:39;
+A3: {[0,0,0]} = [: 1,1,1 :] by CARD_1:87,MCART_1:39;
     then reconsider c = [0,0,0] .--> FuncComp(Funcs(0,0),Funcs(0,0))
     as ManySortedSet of [: 1,1,1 :] by A2,PBOOLE:def 3;
     reconsider c as ManySortedFunction of [: 1,1,1 :];
@@ -670,13 +660,13 @@ A8:   {|m|}.i = {|m|}.(0,0,0) by A5,MULTOP_1:def 1
         .= m.(0,0) by A1,Def5;
       then rng ci c= {|m|}.i by A4,A6,Th14;
       hence c.i is Function of {|m,m|}.i, {|m|}.i by A4,A7,A8,FUNCT_2:def 1
-      ,RELSET_1:11;
+,RELSET_1:11;
     end;
     then reconsider c as BinComp of m by PBOOLE:def 18;
     take C = AltCatStr(#1,m,c#);
     thus C is strict;
     let o1,o2,o3 be object of C;
-A9: o1 = 0 & o2 = 0 & o3 = 0 by CARD_5:1,TARSKI:def 1;
+A9: o1 = 0 & o2 = 0 & o3 = 0 by CARD_1:87,TARSKI:def 1;
     then
 A10: dom FuncComp(Funcs(0,0),Funcs(0,0)) = [:<^o2,o3^>,<^o1,o2^>:]
     by A4,PBOOLE:def 3;
@@ -783,7 +773,7 @@ A17:    j2 in Funcs(x1,x2) and j = [j1,j2] by A15,ZFMISC_1:103;
         hence {|M|}.i <> {} by A1,A5,A13;
       end;
       hence c.i is Function of {|M,M|}.i, {|M|}.i by A11,A12,A14,FUNCT_2:def 1
-      ,RELSET_1:11;
+,RELSET_1:11;
     end;
     then reconsider c as BinComp of M by PBOOLE:def 18;
     set C = AltCatStr(#A,M,c#);
@@ -989,16 +979,12 @@ A1: C is quasi-functional semi-functional transitive;
     let o1,o2,o3 be object of C;
     set c = (the Comp of C).(o1,o2,o3), f =
     FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set);
-    <^o1,o3^> = {} implies <^o2,o3^> = {} or <^o1,o2^> = {} by A1,Def4;
-    then <^o1,o3^> = {} implies [:<^o2,o3^>,<^o1,o2^>:] = {} by ZFMISC_1:113;
-    then
-A2: dom c = [:<^o2,o3^>,<^o1,o2^>:] by FUNCT_2:def 1;
     per cases;
     suppose <^o2,o3^> = {} or <^o1,o2^> = {};
       then
 A3:   [:<^o2,o3^>,<^o1,o2^>:] = {} by ZFMISC_1:113;
-      hence c = {} by A2
-        .= f by A3,RELAT_1:110;
+      hence c = {}
+        .= f by A3;
     end;
     suppose
 A4:   <^o2,o3^> <> {} & <^o1,o2^> <> {};
@@ -1246,7 +1232,7 @@ end;
 theorem Th27:
   EnsCat 1 is pseudo-discrete trivial
 proof
-A1: the carrier of EnsCat 1 = { {} } by Def16,CARD_5:1;
+A1: the carrier of EnsCat 1 = { {} } by Def16,CARD_1:87;
   hereby
     let i be object of EnsCat 1;
     i = {} by A1,TARSKI:def 1;
@@ -1338,7 +1324,7 @@ A19:    {|M,M|}.i = {|M,M|}.(i1,i2,i3) by A5,MULTOP_1:def 1
           .= {} by A18,ZFMISC_1:113;
         {} c= {|M|}.i by XBOOLE_1:2;
         hence c.i is Function of {|M,M|}.i, {|M|}.i by A13,A19,FUNCT_2:def 1
-        ,RELAT_1:60,RELSET_1:11;
+,RELAT_1:60,RELSET_1:11;
       end;
     end;
     c is Function-yielding
@@ -1434,7 +1420,7 @@ A37:    [:<^j1,k1^>,<^i1,j1^>:] = {} by ZFMISC_1:113;
         (the Comp of C1).(i1,j1,k1) is Function of
         [:<^j1,k1^>,<^i1,j1^>:],<^i1,k1^>;
         hence (the Comp of C1).(i,j,k) = (the Comp of C2).(i,j,k)
-        by A35,A36,A37,PARTFUN1:58;
+        by A35,A36,A37;
       end;
     end;
     hence C1 = C2 by A22,A24,A28,Th10;
@@ -1463,9 +1449,7 @@ proof
   then <^o1,o2^> = {} or <^o2,o3^> = {} by Def20;
   then
 A1: [:<^o2,o3^>,<^o1,o2^>:] = {} by ZFMISC_1:113;
-  then dom((the Comp of DiscrCat A).(o1,o2,o3)) =
-  [:<^o2,o3^>,<^o1,o2^>:] by FUNCT_2:def 1;
-  hence (the Comp of DiscrCat A).(o1,o2,o3) = {} by A1;
+  thus (the Comp of DiscrCat A).(o1,o2,o3) = {} by A1;
 end;
 
 theorem Th29:
@@ -1496,7 +1480,7 @@ A2:     o1 = o2 & o2 = o3;
 A3:     <^o2,o3^> = {id o1} & <^o1,o2^> = {id o1} by Def22;
         then
 A4:     <^o1,o2^> c= Funcs(o1,o2) & <^o2,o3^> c= Funcs(o2,o3) by A1,A2,
-        ZFMISC_1:37;
+ZFMISC_1:37;
         thus (the Comp of C).(o1,o2,o3) = (id o1,id o1) :-> id o1 by A2,Th29
           .= FuncComp({id o1},{id o1}) by Th15
 
@@ -1511,7 +1495,7 @@ A6:     [:<^o2,o3^>,<^o1,o2^>:] = {} by ZFMISC_1:113;
         thus (the Comp of C).(o1,o2,o3) = {} by A5,Th28
 
 .= FuncComp(Funcs(o1,o2),Funcs(o2,o3))|([:<^o2,o3^>,<^o1,o2^>:] qua set)
-        by A6,RELAT_1:110;
+        by A6;
       end;
     end;
     thus C is pseudo-discrete

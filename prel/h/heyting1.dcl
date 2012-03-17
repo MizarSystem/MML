@@ -11,9 +11,12 @@
 <ArticleID name="MCART_1"/>
 <ArticleID name="RELSET_1"/>
 <ArticleID name="FUNCT_2"/>
+<ArticleID name="FINSET_1"/>
 <ArticleID name="FINSUB_1"/>
 <ArticleID name="RELAT_2"/>
+<ArticleID name="ORDINAL1"/>
 <ArticleID name="PARTFUN1"/>
+<ArticleID name="CARD_1"/>
 <ArticleID name="STRUCT_0"/>
 <ArticleID name="LATTICES"/>
 <ArticleID name="FILTER_0"/>
@@ -28,7 +31,7 @@
 </ArgTypes>
 <Typ kind="M" nr="2">
 <Cluster/>
-<Func kind="K" nr="125">
+<Func kind="K" nr="138">
 <LocusVar nr="1"/>
 </Func>
 </Typ>
@@ -42,12 +45,12 @@
 <Cluster/>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="129">
+<Func kind="K" nr="142">
 <LocusVar nr="1"/>
 </Func>
 <Cluster>
-<Adjective nr="41"/>
-<Adjective nr="58"/>
+<Adjective nr="53"/>
+<Adjective nr="70"/>
 </Cluster>
 </FCluster>
 </Registrations>

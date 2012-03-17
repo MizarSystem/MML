@@ -62,24 +62,7 @@
 </Cluster>
 </Typ>
 </ArgTypes>
-<Func kind="K" nr="133">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="53">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="FINTOPO6" nr="2">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="32" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="151">
+<Func kind="K" nr="152">
 <LocusVar nr="1"/>
 <Func kind="K" nr="133">
 <LocusVar nr="1"/>
@@ -89,7 +72,7 @@
 <Adjective nr="1"/>
 </Cluster>
 </FCluster>
-<FCluster aid="FINTOPO6" nr="3">
+<FCluster aid="FINTOPO6" nr="2">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -120,7 +103,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster aid="FINTOPO6" nr="4">
+<FCluster aid="FINTOPO6" nr="3">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -149,24 +132,7 @@
 </Func>
 </Typ>
 </FCluster>
-<FCluster aid="FINTOPO6" nr="5">
-<ArgTypes>
-<Typ kind="G" nr="6">
-<Cluster>
-<Adjective nr="32" value="false"/>
-</Cluster>
-</Typ>
-</ArgTypes>
-<Func kind="K" nr="133">
-<LocusVar nr="1"/>
-</Func>
-<Cluster>
-<Adjective nr="56">
-<LocusVar nr="1"/>
-</Adjective>
-</Cluster>
-</FCluster>
-<FCluster aid="FINTOPO6" nr="6">
+<FCluster aid="FINTOPO6" nr="4">
 <ArgTypes>
 <Typ kind="G" nr="6">
 <Cluster>
@@ -202,6 +168,31 @@
 <Typ kind="G" nr="6">
 <Cluster>
 <Adjective nr="32" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="53">
+<LocusVar nr="1"/>
+</Adjective>
+</Cluster>
+</CCluster>
+<CCluster aid="FINTOPO6" nr="2">
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster>
+<Adjective nr="32" value="false"/>
 <Adjective nr="46"/>
 </Cluster>
 </Typ>
@@ -216,6 +207,31 @@
 <Cluster>
 <Adjective nr="32" value="false"/>
 <Adjective nr="46"/>
+</Cluster>
+</CCluster>
+<CCluster aid="FINTOPO6" nr="3">
+<ArgTypes>
+<Typ kind="G" nr="6">
+<Cluster>
+<Adjective nr="32" value="false"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Cluster>
+<Adjective nr="1"/>
+</Cluster>
+<Typ kind="M" nr="2">
+<Cluster/>
+<Func kind="K" nr="10">
+<Func kind="U" nr="1">
+<LocusVar nr="1"/>
+</Func>
+</Func>
+</Typ>
+<Cluster>
+<Adjective nr="56">
+<LocusVar nr="1"/>
+</Adjective>
 </Cluster>
 </CCluster>
 </Registrations>

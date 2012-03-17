@@ -24,4 +24,19 @@
 <Adjective nr="1" value="false"/>
 </Cluster>
 </FCluster>
+<FCluster aid="CLASSES1" nr="2">
+<ArgTypes>
+<Typ kind="M" nr="1">
+<Cluster>
+<Adjective nr="12"/>
+</Cluster>
+</Typ>
+</ArgTypes>
+<Func kind="K" nr="46">
+<LocusVar nr="1"/>
+</Func>
+<Cluster>
+<Adjective nr="10"/>
+</Cluster>
+</FCluster>
 </Registrations>

@@ -12,7 +12,7 @@ environ
       XCMPLX_0, ARYTM;
  notations TARSKI, XBOOLE_0, SUBSET_1, SQUARE_1, RELAT_1, FUNCT_1, SEQ_1,
       SIN_COS, FUNCT_2, ARYTM_0,
-      ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, REAL_1, COMPLEX1,
+      ORDINAL1, NUMBERS, XCMPLX_0, XXREAL_0, COMPLEX1, REAL_1,
       FINSEQ_1, RVSUM_1, STRUCT_0, PRE_TOPC, EUCLID, COMPTRIG, COMPLEX2,
       EUCLID_2, TOPREAL1, TOPMETR, RCOMP_1;
  constructors ARYTM_0, REAL_1, SQUARE_1, BINOP_2, RCOMP_1, SIN_COS, COMPTRIG,
@@ -42,45 +42,25 @@ end;
 definition
   let p be Point of TOP-REAL 2;
   func euc2cpx(p) -> Element of COMPLEX equals
-  [* p`1,p`2 *];
-  correctness;
+   p`1 +p`2 *<i>;
+  correctness by XCMPLX_0:def 2;
 end;
 
 theorem Th1:
   euc2cpx(cpx2euc(z))=z
 proof
   (|[Re z,Im z]|)`1=Re z & (|[Re z,Im z]|)`2=Im z by EUCLID:56;
-  hence euc2cpx(cpx2euc(z))= Re z + (Im z)*<i> by COMPLEX1:27
-    .=z by COMPLEX1:29;
+  hence euc2cpx(cpx2euc(z)) =z by COMPLEX1:29;
 end;
 
 theorem Th2:
   cpx2euc(euc2cpx(p))=p
 proof
-  [* p`1,p`2 *] = p`1+(p`2)*<i> by COMPLEX1:27;
-  then Re [* p`1,p`2 *] = p`1 & Im [* p`1,p`2 *] = p`2 by COMPLEX1:28;
+  Re (p`1+p`2*<i>) = p`1 & Im(p`1+p`2*<i>) = p`2 by COMPLEX1:28;
   hence cpx2euc(euc2cpx(p))=p by EUCLID:57;
 end;
 
-theorem
-  for p ex z being Element of COMPLEX st p = cpx2euc(z)
-proof
-  let p;
-  set z = [* p`1 , p`2 *];
-  take z;
-  z=euc2cpx(p);
-  hence thesis by Th2;
-end;
-
-theorem
-  for z ex p st z=euc2cpx(p)
-proof
-  let z;
-  set p = |[ Re z,Im z ]|;
-  take p;
-  p=cpx2euc(z);
-  hence thesis by Th1;
-end;
+canceled 2;
 
 theorem
   for z1,z2 st cpx2euc(z1)=cpx2euc(z2) holds z1=z2
@@ -102,21 +82,13 @@ A1: euc2cpx(p1)=euc2cpx(p2);
   hence p1=p2 by A1,Th2;
 end;
 
-canceled;
-
-theorem Th8:
-  Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2
-proof
-  euc2cpx(p)= p`1+(p`2)*<i> by COMPLEX1:27;
-  hence thesis by COMPLEX1:28;
-end;
+canceled 2;
 
 theorem Th9:
-  cpx2euc([* x1,x2 *])= |[x1,x2]|
+  cpx2euc(x1+x2*<i>)= |[x1,x2]|
 proof
-  [* x1,x2 *] = x1+x2*<i> by COMPLEX1:27;
-  then Re ([* x1,x2 *])=x1 & Im ([* x1,x2 *])=x2 by COMPLEX1:28;
-  hence cpx2euc([* x1,x2 *])= |[x1,x2]|;
+  Re (x1+x2*<i>)=x1 & Im (x1+x2*<i>)=x2 by COMPLEX1:28;
+  hence cpx2euc(x1+x2*<i>)= |[x1,x2]|;
 end;
 
 theorem Th10:
@@ -137,35 +109,24 @@ proof
 end;
 
 theorem Th12:
-  [* (p1+p2)`1,(p1+p2)`2 *] = [* p1`1+p2`1,p1`2+p2`2 *]
+  (p1+p2)`1+(p1+p2)`2*<i> = p1`1+p2`1+(p1`2+p2`2)*<i>
 proof
-A1: [* p1`1+p2`1,p1`2+p2`2 *] = p1`1+p2`1+(p1`2+p2`2)*<i> by COMPLEX1:27;
-  [* (p1+p2)`1,(p1+p2)`2 *] = (p1+p2)`1+((p1+p2)`2)*<i> by COMPLEX1:27;
-  then
-A2: Re [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`1
-  & Im [* (p1+p2)`1,(p1+p2)`2 *]=(p1+p2)`2 by COMPLEX1:28;
+A2: Re((p1+p2)`1+(p1+p2)`2*<i>)=(p1+p2)`1
+  & Im((p1+p2)`1+(p1+p2)`2*<i>)=(p1+p2)`2 by COMPLEX1:28;
   (p1+p2)=|[p1`1+p2`1 , p1`2+p2`2]| by EUCLID:59;
   then
-A3: Re [* (p1+p2)`1,(p1+p2)`2 *]=p1`1+p2`1
-  & Im [* (p1+p2)`1,(p1+p2)`2 *]=p1`2+p2`2 by A2,EUCLID:56;
-  Re ([* p1`1+p2`1,p1`2+p2`2 *])=p1`1+p2`1
-  & Im ([* p1`1+p2`1,p1`2+p2`2 *])=p1`2+p2`2 by A1,COMPLEX1:28;
+A3: Re((p1+p2)`1+(p1+p2)`2*<i>)=p1`1+p2`1
+  & Im((p1+p2)`1+(p1+p2)`2*<i>)=p1`2+p2`2 by A2,EUCLID:56;
+  Re (p1`1+p2`1+(p1`2+p2`2)*<i>)=p1`1+p2`1
+  & Im (p1`1+p2`1+(p1`2+p2`2)*<i>)=p1`2+p2`2 by COMPLEX1:28;
   hence thesis by A3,COMPLEX1:9;
 end;
 
 theorem Th13:
   euc2cpx(p1+p2)=euc2cpx(p1)+euc2cpx(p2)
 proof
-A1: [* p1`1+p2`1,p1`2+p2`2 *] = p1`1+p2`1+(p1`2+p2`2)*<i> by COMPLEX1:27;
-  euc2cpx(p1+p2)=[* p1`1+p2`1,p1`2+p2`2 *] by Th12;
-  then
-A2: Re euc2cpx(p1+p2)=p1`1+p2`1
-  & Im euc2cpx(p1+p2)=p1`2+p2`2 by A1,COMPLEX1:28;
-A3: Re euc2cpx(p1)=p1`1 & Im euc2cpx(p1)=p1`2 by Th8;
-  Re euc2cpx(p2)=p2`1 & Im euc2cpx(p2)=p2`2 by Th8;
-  then Re(euc2cpx(p1)+euc2cpx(p2))=p1`1+p2`1
-  & Im(euc2cpx(p1)+euc2cpx(p2))=p1`2+p2`2 by A3,COMPLEX1:19;
-  hence thesis by A2,COMPLEX1:9;
+  euc2cpx(p1+p2)= p1`1+p2`1+(p1`2+p2`2)*<i> by Th12;
+  hence thesis;
 end;
 
 theorem Th14:
@@ -186,28 +147,24 @@ proof
 end;
 
 theorem Th16:
-  [* (-p)`1,(-p)`2 *]=[* -(p`1),-(p`2) *]
+  (-p)`1+(-p)`2*<i>= -(p`1)+(-(p`2))*<i>
 proof
-A1: [* -(p`1),-(p`2) *] = -(p`1)+(-(p`2))*<i> by COMPLEX1:27;
-  [* (-p)`1,(-p)`2 *] = (-p)`1+((-p)`2)*<i> by COMPLEX1:27;
-  then
-A2: Re [* (-p)`1,(-p)`2 *]=(-p)`1
-  & Im [* (-p)`1,(-p)`2 *]=(-p)`2 by COMPLEX1:28;
+A1: -(p`1)+(-(p`2))*<i> = -(p`1)+(-(p`2))*<i>;
+A2: Re((-p)`1+(-p)`2*<i>)=(-p)`1
+  & Im((-p)`1+(-p)`2*<i>)=(-p)`2 by COMPLEX1:28;
   -p=|[-p`1, -p`2]| by EUCLID:63;
   then
-A3: Re [* (-p)`1,(-p)`2 *]=-(p`1)
-  & Im [* (-p)`1,(-p)`2 *]=-(p`2) by A2,EUCLID:56;
-  Re [* -(p`1),-(p`2) *]=-(p`1)
-  & Im [* -(p`1),-(p`2) *]=-(p`2) by A1,COMPLEX1:28;
+A3: Re((-p)`1+(-p)`2*<i>)=-(p`1)
+  & Im((-p)`1+(-p)`2*<i>)=-(p`2) by A2,EUCLID:56;
+  Re(-(p`1)+-(p`2)*<i>)=-(p`1)
+  & Im(-(p`1)+-(p`2)*<i>)=-(p`2) by A1,COMPLEX1:28;
   hence thesis by A3,COMPLEX1:9;
 end;
 
 theorem Th17:
   euc2cpx(-p)= -euc2cpx(p)
 proof
-  Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by Th8;
-  then -euc2cpx(p) = -(p`1)+(-(p`2))*<i> by COMPLEX1:def 11
-    .=[* -(p`1),-(p`2) *] by COMPLEX1:27;
+  -euc2cpx(p) = -(p`1)+(-(p`2))*<i>;
   hence thesis by Th16;
 end;
 
@@ -237,39 +194,35 @@ theorem
   euc2cpx(p)=0c implies p=0.REAL 2 by Th2,Th20;
 
 theorem
-  cpx2euc(([* r,0 *])*z)=r*(cpx2euc(z))
+  cpx2euc(r*z)=r*(cpx2euc(z))
 proof
-  [* r,0 *] = r+0 *<i> by COMPLEX1:27;
+  r = r+0 *<i>;
   then
-A1: Re [* r,0 *] = r & Im [* r,0 *] = 0 by COMPLEX1:28;
+A1: Re r = r & Im r = 0 by COMPLEX1:28;
   then
-A2: Re ([* r,0 *]*z) = r * Re z - 0 * Im z by COMPLEX1:24
+A2: Re (r*z) = r * Re z - 0 * Im z by COMPLEX1:24
     .= r * Re z;
-A3: Im ([* r,0 *]*z) = r * Im z + 0 * Re z by A1,COMPLEX1:24
+A3: Im (r*z) = r * Im z + 0 * Re z by A1,COMPLEX1:24
     .= r * Im z;
   (cpx2euc(z))`1=Re z & (cpx2euc(z))`2=Im z by EUCLID:56;
   hence thesis by A2,A3,EUCLID:61;
 end;
 
-theorem
-  (r+ 0 *<i>)*(r1+r2*<i>) = r*r1 + (r*r2)*<i>;
+canceled;
 
 theorem
-  euc2cpx(r*p)=([* r,0 *])*euc2cpx(p)
+  euc2cpx(r*p)= r*euc2cpx(p)
 proof
   r*p = |[r*p`1,r*p`2]| by EUCLID:61;
   then (r*p)`1=r*p`1 & (r*p)`2=r*p`2 by EUCLID:56;
-  then euc2cpx(r*p)= r*p`1+(r*p`2)*<i> by COMPLEX1:27
-    .= (r+ 0 * <i>)*(p`1+p`2*<i>)
-    .= [* r,0 *]*(p`1+p`2*<i>) by COMPLEX1:27
-    .=[* r,0 *]*[* p`1,p`2 *] by COMPLEX1:27;
+  then euc2cpx(r*p) = (r+ 0 * <i>)*(p`1+p`2*<i>);
   hence thesis;
 end;
 
 theorem Th26:
   |.euc2cpx(p).|=sqrt ((p`1)^2+(p`2)^2)
 proof
-  Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by Th8;
+  Re euc2cpx(p)=p`1 & Im euc2cpx(p)=p`2 by COMPLEX1:28;
   hence thesis;
 end;
 
@@ -303,8 +256,7 @@ proof
   hence thesis by JGRAPH_3:10;
 end;
 
-theorem
-  |.cpx2euc(z).|=|.z.| by Th29;
+canceled;
 
 theorem Th31:
   |.euc2cpx(p).|=|.p.|
@@ -340,15 +292,15 @@ end;
 canceled;
 
 theorem
-  for x1,x2 being Real,p st x1= (|.p.|)*cos (Arg(p)) & x2=(|.p.|)*sin (Arg(p))
+  for x1,x2 being Real,p st x1= |.p.|*cos (Arg p) & x2=|.p.|*sin (Arg p)
   holds p = |[ x1,x2 ]|
 proof
   let x1,x2 be Real,p;
   assume x1= (|.p.|)*cos (Arg(p)) & x2=(|.p.|)*sin (Arg(p));
   then x1= (|.euc2cpx(p).|)*cos (Arg(euc2cpx(p))) &
   x2=(|.euc2cpx(p).|)*sin (Arg(euc2cpx(p))) by Th31;
-  then euc2cpx(p)= [* x1,x2 *] by COMPLEX2:19;
-  then p=cpx2euc([* x1,x2 *]) by Th2;
+  then euc2cpx(p)=  x1 +x2 *<i> by COMPLEX2:19;
+  then p=cpx2euc(x1 +x2 *<i>) by Th2;
   hence p= |[ x1,x2 ]| by Th9;
 end;
 
@@ -373,10 +325,10 @@ proof
   let p;
   assume Arg p=0;
   then
-A1: euc2cpx(p)=[* |.euc2cpx(p).|,0 *] & Im euc2cpx(p) =0 by COMPLEX2:24,34;
-A2: cpx2euc([* |.euc2cpx(p).|,0 *])=|[|.euc2cpx(p).|,0 ]| by Th9;
+A1: euc2cpx(p)=|.euc2cpx(p).|+0 *<i> & Im euc2cpx(p) =0 by COMPLEX2:24,34;
+A2: cpx2euc(|.euc2cpx(p).|+0 *<i>)=|[|.euc2cpx(p).|,0 ]| by Th9;
   |.euc2cpx(p).|=|.p.| by Th31;
-  hence p=|[ |.p.|,0 ]| & p`2=0 by A1,A2,Th2,Th8;
+  hence p=|[ |.p.|,0 ]| & p`2=0 by A1,A2,Th2,COMPLEX1:28;
 end;
 
 theorem Th38:
@@ -406,7 +358,7 @@ theorem
   for p holds Arg p in ].0,PI.[ iff p`2 > 0
 proof
   let p;
-  Im euc2cpx(p)=p`2 by Th8;
+  Im euc2cpx(p)=p`2 by COMPLEX1:28;
   hence thesis by COMPLEX2:27;
 end;
 
@@ -476,10 +428,8 @@ theorem Th48:
   Re (x .|. y) = (Re x)*(Re y)+(Im x)*(Im y)
 proof
   let x,y be Element of COMPLEX;
-  x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
-  by COMPLEX2:42
-    .= (Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
-  by COMPLEX1:27;
+  x .|. y =(Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
+  by COMPLEX2:42;
   hence thesis by COMPLEX1:28;
 end;
 
@@ -488,10 +438,8 @@ theorem Th49:
   Im (x .|. y) = -((Re x)*(Im y))+(Im x)*(Re y)
 proof
   let x,y be Element of COMPLEX;
-  x .|. y =[* (Re x)*(Re y)+(Im x)*(Im y),-((Re x)*(Im y))+(Im x)*(Re y) *]
-  by COMPLEX2:42
-    .= (Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
-  by COMPLEX1:27;
+  x .|. y = (Re x)*(Re y)+(Im x)*(Im y)+(-((Re x)*(Im y))+(Im x)*(Re y))*<i>
+  by COMPLEX2:42;
   hence thesis by COMPLEX1:28;
 end;
 
@@ -519,8 +467,8 @@ theorem Th51:
   for p1,p2 holds |(p1,p2)| = Re ((euc2cpx(p1)) .|. (euc2cpx(p2)))
 proof
   let p1,p2;
-A1: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by Th8;
-A2: p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by Th8;
+A1: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by COMPLEX1:28;
+A2: p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by COMPLEX1:28;
   thus |(p1,p2)| = p1`1*p2`1+p1`2*p2`2 by Th50
     .= Re ((euc2cpx(p1)) .|. (euc2cpx(p2))) by A1,A2,Th48;
 end;
@@ -551,8 +499,8 @@ A1: p1<>0.REAL 2 & p2<>0.REAL 2;
   then
 A2: euc2cpx(p1)<> 0c by Th2,Th20;
 A3: euc2cpx(p2)<> 0c by A1,Th2,Th20;
-A4: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by Th8;
-  p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by Th8;
+A4: p1`1=Re euc2cpx(p1) & p1`2= Im euc2cpx(p1) by COMPLEX1:28;
+  p2`1=Re euc2cpx(p2) & p2`2= Im euc2cpx(p2) by COMPLEX1:28;
   then
 A5: Im ((euc2cpx(p1)) .|. (euc2cpx(p2))) = -(p1`1*p2`2)+p1`2*p2`1 by A4,Th49;
 A6: |.euc2cpx(p1).|=|.p1.| by Th31;
